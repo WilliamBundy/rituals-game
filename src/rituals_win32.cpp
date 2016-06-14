@@ -11,7 +11,7 @@
  *		- Rendering primitives with magic
  *		- Possibly some sort of particle system too?
  * 2. Write 2D physics sim code
- * 		- Just circles and AABBs
+ * 		- Just_ circles and AABBs
  * 3. Write a console thing?
  * 4. Learn to multithread the SHIT out of this
  *
@@ -88,6 +88,7 @@ typedef size_t usize;
 //local imports
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
+#include "rituals_renderer.cpp"
 
 // game assets struct
 struct Game_Assets
@@ -105,146 +106,32 @@ struct Game_Assets
 // Camera, turning screen points (mouse clicks) into camera points
 // Turning all this into a SpriteBatch style thing.
 //
-#define _ti 2
-#define _tcx(px, sz) ((px + 32*_ti) / (real)sz)
-#define _tcy(px, sz) ((sz-px) / (real)sz)
-real vertices[] = {
-     0.5f,  0.5f,   1.0f, 1.0f, // _tcx(32, 512),  _tcy(0, 512),  // Top Right
-     0.5f, -0.5f,   1.0f, 0.0f, // _tcx(32, 512),  _tcy(32, 512),  // Bottom Right
-    -0.5f, -0.5f,   0.0f, 0.0f, // _tcx(0, 512),  _tcy(32, 512),  // Bottom Left
-    -0.5f,  0.5f,   0.0f, 1.0f, // _tcx(0 , 512),  _tcy(0, 512)   // Top Left 
-};  
 
-GLuint indices[] = {  // Note that we start from 0!
-    0, 1, 3,   // First Triangle
-    1, 2, 3   // Second Triangle
-		
-};  
+Sprite* sp;
+isize sprite_count;
+Renderer* renderer;
 
-GLuint shader_program, vbo, vao, texture, ebo;
-isize color_loc, texture_loc;
-
-
-real t = 0;
 void update()
 {
-	glViewport(0, 0, 1280, 720);
-	glUseProgram(shader_program);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	//t += 1.0f;
-	//real color = sinf(t * Math_Deg2Rad);
-	//color = color * color; 
-	//color = color / 2 + 0.5;
-	glUniform4f(color_loc, 1.0f, 1.0f, 1.0f, 1.0f);
-
-	//okay, let's write a naive renderer first
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	renderer_setup(renderer);
+	//for(isize i = 0; i < sprite_count; ++i) {
+	for(isize i = 0; i < 2; ++i) {
+		renderer_draw_sprite(renderer, sp + i);
+	}
+	b = 1;
 }
 
-void load_assets()
+void load_assets(Game* game)
 {
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	//Texture coords
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);  
-
-	//Texture coords
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
-	glBindVertexArray(0);
-
-	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vertex_shader_src = 
-#include "vert.glsl"
-		;
-	glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
-	glCompileShader(vertex_shader);
-
-	{
-		GLint success;
-		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-		GLsizei log_size;
-		char shader_log[4096];
-		glGetShaderInfoLog(vertex_shader, 4096, &log_size, shader_log); 
-
-		if(!success) {
-			printf("Error compiling vertex shader \n%s \n", shader_log);
-		} else {
-			printf("Vertex shader compiled successfully\n");
-		}
-	}	
-	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	const char* fragment_shader_src = 
-#include "frag.glsl"
-		;
-	glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
-	glCompileShader(fragment_shader);
-	{
-		GLint success;
-		GLchar infoLog[512];
-		glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-		if(!success) {
-			printf("Error compiling frag shader %.*s \n", 512, infoLog);
-		} else {
-			printf("Frag shader compiled successfully\n");
-		}
-	}	
-
-	shader_program = glCreateProgram();
-	glAttachShader(shader_program, vertex_shader);
-	glAttachShader(shader_program, fragment_shader);
-	glLinkProgram(shader_program);
-
-	glUseProgram(shader_program);
-
-
-	color_loc = glGetUniformLocation(shader_program, "local_color");
-	texture_loc = glGetUniformLocation(shader_program, "local_texture");
-
-	glDeleteShader(vertex_shader);
-	glDeleteShader(fragment_shader);
-
-
-	int w, h, n;
-	char file[File_Path_Max_Length];
-	const char* base_path = SDL_GetBasePath();
-	isize len = snprintf(file, File_Path_Max_Length, "%s%s", base_path, "small.png");
-	uint8* data = (uint8*)stbi_load(file, &w, &h, &n, STBI_rgb_alpha);
-
-
-	//GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	STBI_FREE(data);
-
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	renderer = Arena_Push_Struct(game->play_arena, Renderer);
+	renderer_init(renderer);
+	renderer->texture = ogl_load_texture("graphics.png");
+	sp = Arena_Push_Array(game->play_arena, Sprite, 100);
+	for(isize i = 0; i < 1; ++i) {
+		Sprite* s = sp + sprite_count++;
+		s->tr.position = v2(i * 32, i * 32);
+		s->tr.angle = i * (360 / 100 * Math_Deg2Rad);
+	}
 }
 
 int main(int argc, char** argv)
@@ -354,10 +241,10 @@ int main(int argc, char** argv)
 
 
 
-	load_assets();
+	load_assets(game);
 
 	bool running = true;
-	SDL_Event evt;
+	SDL_Event event;
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
@@ -384,11 +271,41 @@ int main(int argc, char** argv)
 				*t = State_Pressed;
 			}
 		}
-		while(SDL_PollEvent(&evt)) {
-			if(evt.type == SDL_QUIT) {
-				running = false;
-			}	
+		while(SDL_PollEvent(&event)) {
+			//TODO(will) handle text input
+			switch(event.type) {
+				case SDL_QUIT:
+					running = false;
+					break;
+				case SDL_WINDOWEVENT:
+					SDL_GetWindowSize(game->window, &game->width, &game->height);
+					glViewport(0, 0, game->width, game->height);
+					break;
+				case SDL_KEYDOWN:
+					if(!event.key.repeat) {
+						game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
+						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
+							game->input->keycodes[event.key.keysym.sym] = State_Just_Pressed;
+						}
+					}
+					break;
+				case SDL_KEYUP:
+					if(!event.key.repeat) {
+						game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
+						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
+							game->input->keycodes[event.key.keysym.sym] = State_Just_Released;
+						}
+					}
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					game->input->mouse[event.button.button] = State_Just_Pressed;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					game->input->mouse[event.button.button] = State_Just_Released;
+					break;
+			}
 		}
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		update();
 		SDL_GL_SwapWindow(window);

@@ -10,7 +10,8 @@ uniform sampler2D local_texture;
 
 void main()
 {
-	color = texture(local_texture, f_texcoords) * local_color;
+	//color = texture(local_texture, f_texcoords) * local_color;
+	color = vec4(1.0, 1.0, 1.0, 1.0);
 }
 
 )shader"
