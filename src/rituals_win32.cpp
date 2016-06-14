@@ -109,10 +109,10 @@ struct Game_Assets
 #define _tcx(px, sz) ((px + 32*_ti) / (real)sz)
 #define _tcy(px, sz) ((sz-px) / (real)sz)
 real vertices[] = {
-     0.5f,  0.5f, 1.0f,   1.0f, 0.5f, 0.5f,   _tcx(32, 512), _tcy(32, 512),   // Top Right
-     0.5f, -0.5f, 1.0f,   0.5f, 1.0f, 0.5f,   _tcx(32, 512), _tcy(64, 512),   // Bottom Right
-    -0.5f, -0.5f, 1.0f,   0.5f, 0.5f, 1.0f,   _tcx(0, 512),  _tcy(64, 512),   // Bottom Left
-    -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.5f,   _tcx(0, 512),  _tcy(32, 512)   // Top Left 
+     0.5f,  0.5f,   1.0f, 1.0f, // _tcx(32, 512),  _tcy(0, 512),  // Top Right
+     0.5f, -0.5f,   1.0f, 0.0f, // _tcx(32, 512),  _tcy(32, 512),  // Bottom Right
+    -0.5f, -0.5f,   0.0f, 0.0f, // _tcx(0, 512),  _tcy(32, 512),  // Bottom Left
+    -0.5f,  0.5f,   0.0f, 1.0f, // _tcx(0 , 512),  _tcy(0, 512)   // Top Left 
 };  
 
 GLuint indices[] = {  // Note that we start from 0!
@@ -140,7 +140,8 @@ void update()
 	//color = color / 2 + 0.5;
 	glUniform4f(color_loc, 1.0f, 1.0f, 1.0f, 1.0f);
 
-	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, 10);
+	//okay, let's write a naive renderer first
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
@@ -158,14 +159,13 @@ void load_assets()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	//Texture coords
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);  
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	//Texture coords
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
 
@@ -178,10 +178,13 @@ void load_assets()
 
 	{
 		GLint success;
-		GLchar infoLog[512];
 		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+		GLsizei log_size;
+		char shader_log[4096];
+		glGetShaderInfoLog(vertex_shader, 4096, &log_size, shader_log); 
+
 		if(!success) {
-			printf("Error compiling vertex shader %.*s \n", 512, infoLog);
+			printf("Error compiling vertex shader \n%s \n", shader_log);
 		} else {
 			printf("Vertex shader compiled successfully\n");
 		}
@@ -222,10 +225,9 @@ void load_assets()
 	int w, h, n;
 	char file[File_Path_Max_Length];
 	const char* base_path = SDL_GetBasePath();
-	isize len = snprintf(file, File_Path_Max_Length, "%s%s", base_path, "terrain.png");
+	isize len = snprintf(file, File_Path_Max_Length, "%s%s", base_path, "small.png");
 	uint8* data = (uint8*)stbi_load(file, &w, &h, &n, STBI_rgb_alpha);
 
-	printf("texture %s:  %d %d %d  \n", data == NULL ? "failed":"succeeded", w, h, n);
 
 	//GLuint texture;
 	glGenTextures(1, &texture);

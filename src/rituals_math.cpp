@@ -28,24 +28,24 @@ union Color
 	uint32 rgba;
 };
 
-struct Vector2 
+struct Vec2 
 {
 	real x, y;
 };
 
-struct Vector3
+struct Vec3
 {
 	real x, y, z;
 };
 
-struct Vector4
+struct Vec4
 {
 	real x, y, z, w;
 };
 
-Vector4 color_to_v4(Color* c)
+Vec4 color_to_v4(Color* c)
 {
-	Vector4 v;
+	Vec4 v;
 	v.x = clamp_01(c->r / 255.0f);
 	v.y = clamp_01(c->g / 255.0f);
 	v.z = clamp_01(c->b / 255.0f);
@@ -53,7 +53,7 @@ Vector4 color_to_v4(Color* c)
 	return v;
 }
 
-Color v4_to_color(Vector4* v)
+Color v4_to_color(Vec4* v)
 {
 	Color c = {0};
 	c.r = (uint8)(clamp_01(v->x) * 255);	
@@ -63,80 +63,80 @@ Color v4_to_color(Vector4* v)
 	return c;
 }
 
-static inline Vector2 v2(real x, real y)
+static inline Vec2 v2(real x, real y)
 {
-	return Vector2{x, y};
+	return Vec2{x, y};
 }
-static inline Vector2 operator-(Vector2 a)
+static inline Vec2 operator-(Vec2 a)
 {
-	return Vector2{-a.x, -a.y};
-}
-
-static inline Vector2 operator-(Vector2 a, Vector2 b)
-{
-	return Vector2{a.x - b.x, a.y - b.y};
+	return Vec2{-a.x, -a.y};
 }
 
-static inline Vector2 operator+(Vector2 a, Vector2 b)
+static inline Vec2 operator-(Vec2 a, Vec2 b)
 {
-	return Vector2{a.x + b.x, a.y + b.y};
+	return Vec2{a.x - b.x, a.y - b.y};
 }
 
-static inline Vector2 operator*(Vector2 a, real s)
+static inline Vec2 operator+(Vec2 a, Vec2 b)
 {
-	return Vector2{a.x * s, a.y * s};
+	return Vec2{a.x + b.x, a.y + b.y};
 }
 
-static inline Vector2 operator*(real s, Vector2 a)
+static inline Vec2 operator*(Vec2 a, real s)
 {
-	return Vector2{a.x * s, a.y * s};
+	return Vec2{a.x * s, a.y * s};
 }
 
-static inline Vector2& operator+=(Vector2& a, Vector2 b)
+static inline Vec2 operator*(real s, Vec2 a)
+{
+	return Vec2{a.x * s, a.y * s};
+}
+
+static inline Vec2& operator+=(Vec2& a, Vec2 b)
 {
 	a = a + b;
 	return a;
 }
 
-static inline Vector2& operator-=(Vector2& a, Vector2 b)
+static inline Vec2& operator-=(Vec2& a, Vec2 b)
 {
 	a = a - b;
 	return a;
 }
 
-static inline Vector2& operator*=(Vector2& a, real b)
+static inline Vec2& operator*=(Vec2& a, real b)
 {
 	a = a * b;
 	return a;
 }
 
-inline Vector2 v2_perpendicular(Vector2 v)
+inline Vec2 v2_perpendicular(Vec2 v)
 {
-	return Vector2 {
+	return Vec2 {
 		-v.y, v.x
 	};
 }
 
-inline real v2_dot(Vector2 a, Vector2 b)
+inline real v2_dot(Vec2 a, Vec2 b)
 {
 	return a.x * b.x + a.y * b.y;
 }
 
-inline real v2_cross(Vector2 a, Vector2 b)
+inline real v2_cross(Vec2 a, Vec2 b)
 {
 	return a.x * b.y - a.y * b.x;
 }
 
-inline Vector2 v2_from_angle(real normal)
+inline Vec2 v2_from_angle(real normal)
 {
-	return Vector2 {
+	return Vec2 {
 		cosf(normal), sinf(normal)
 	};
 }
 
 struct AABB
 {
-	Vector2 center;
+	Vec2 center;
 	real hw, hh;
 };
 
@@ -208,3 +208,74 @@ static inline Rect2i aabb_to_intrect(AABB* b)
 	return rect_to_intrect(&r);
 }
 
+struct Transform
+{
+	Vec2 position;
+	Vec2 center;
+	real angle;
+	real scale_x;
+	real scale_y;
+};
+
+union Mat2
+{
+	struct {
+		real a1, b1, a2, b2;
+	};
+	real e[4];
+};
+
+union Mat3
+{
+	struct {
+		real a1, b1, c1, a2, b2, c2, a3, b3, c3;
+	};
+	real e[9];
+};
+
+Vec2 mul_mat3_vec2_affline(Mat3* m, Vec2* v)
+{
+	real rx = m->a1 * v->x + m->a2 * v->y + m->a3;
+	real ry = m->b1 * v->x + m->b2 * v->y + m->b3;
+	return v2(rx, ry);
+}
+
+//TODO(will) apply scale from transform
+Vec2 apply_transform_vec2(Transform* tr, Vec2* v)
+{
+	real x = v->x - tr->center.x;
+	real y = v->y - tr->center.y;
+	real lcos = cosf(tr->angle);
+	real lsin = sinf(tr->angle);
+	real rx =  lcos * x + lsin * y + tr->position.x;
+	real ry = -lsin * x + lcos * y + tr->position.y;
+	rx += tr->center.x;
+	ry += tr->center.y;
+	return v2(rx, ry);
+}
+
+Vec2 undo_transform_vec2(Transform* tr, Vec2* v)
+{
+	real x = v->x - tr->center.x;
+	real y = v->y - tr->center.y;
+	real lcos = cosf(-tr->angle);
+	real lsin = sinf(-tr->angle);
+	real rx =  lcos * x + lsin * y - tr->position.x;
+	real ry = -lsin * x + lcos * y - tr->position.y;
+	rx += tr->center.x;
+	ry += tr->center.y;
+	return v2(rx, ry);
+}
+	
+
+Mat3 transform_to_mat3(Transform* tr)
+{
+	Mat3 m = {0};
+	m.a1 = cosf(tr->angle);
+	m.a2 = sinf(tr->angle);
+	m.a3 = tr->position.x;
+	m.b1 = -m.a2;
+	m.b2 = m.a1;
+	m.b3 = tr->position.y;
+	return m;
+}
