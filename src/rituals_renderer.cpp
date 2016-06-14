@@ -179,6 +179,10 @@ void renderer_draw_sprite(Renderer* renderer, Sprite* s)
 {
 
 	//set all the uniforms
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, renderer->texture);
+	glBindVertexArray(renderer->vao);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer->ebo);
 	int32 t = 0;
 	glUniform2f(renderer->translation_loc, s->tr.position.x, s->tr.position.y);
 	glUniform4f(renderer->color_loc, 1.0f,1.0f,1.0f,1.0f);
