@@ -6,20 +6,14 @@
 
 struct Sprite
 {
-	usize id;
-
-isize texture_id;
-	Rect2 texture_region;
-	Transform tr;
+	Vec2 position;
+	Vec2 center;
+	real angle;
+	Vec2 scale;
+	Rect2 texture;
+	Vec4 color;
+	uint32 id;
 };
-
-struct Sprite_s
-{
-	real x, y, cx, cy, tx, ty, tw, th, a, sx, sy, c;
-	uint32 color, hash, texture, userdata;
-};
-
-
 
 struct Renderer
 {
@@ -28,6 +22,8 @@ struct Renderer
 	Vec4 ortho;
 
 	real* sprite_data;
+	isize data_index, sprite_count;
+
 
 	isize last_sprite_id; 
 	
@@ -36,37 +32,49 @@ struct Renderer
 
 void sprite_init(Sprite* s, Renderer* renderer)
 {
-	s->id = renderer->last_sprite_id++;
-	s->texture_id = renderer->texture;
-	s->texture_region = Rect2{
-		0, 0, 1.0f, 1.0f
-	};
-	s->tr.position = v2(0, 0);
-	s->tr.angle = 0;
-	s->tr.center = v2(0, 0);
-	s->tr.scale_x = 1.0f;
-	s->tr.scale_y = 1.0f;
 }
 
 
-void renderer_init(Renderer* renderer, Game* game)
+#define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
+void renderer_init(Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->last_sprite_id = 0;
+	renderer->sprite_data = Arena_Push_Array(arena, real, Megabytes(1) / sizeof(real)); 
 	glGenVertexArrays(1, &renderer->vao);
-	glBindVertexArray(renderer->vao);
-
+ 
 	glGenBuffers(1, &renderer->vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(real), vertices, GL_STATIC_DRAW);
 
-	/* /Vertex position
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(real) * 4, (GLvoid*)0);
+	usize stride = sizeof(real) * 15;
+	//position
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(0));
 	glEnableVertexAttribArray(0);  
+	glVertexAttribDivisor(0, 4);
 
-	//Texture coords
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(2));
 	glEnableVertexAttribArray(1);
-	*/
+	glVertexAttribDivisor(1, 4);
+
+	//angle
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, stride, _gl_offset(4));
+	glEnableVertexAttribArray(2);
+	glVertexAttribDivisor(2, 4);
+
+	//scale
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(5));
+	glEnableVertexAttribArray(3);
+	glVertexAttribDivisor(3, 4);
+
+	//texcoords
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(7));
+	glEnableVertexAttribArray(4);
+	glVertexAttribDivisor(4, 4);
+
+	//color
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(11));
+	glEnableVertexAttribArray(5);
+	glVertexAttribDivisor(5, 4);
+
+
 
 	glBindVertexArray(0);
 
@@ -120,17 +128,7 @@ void renderer_init(Renderer* renderer, Game* game)
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
-	renderer->color_loc = glGetUniformLocation(renderer->shader_program, "local_color");
-	renderer->translation_loc = glGetUniformLocation(
-			renderer->shader_program, "translation");
-	renderer->rotation_loc = glGetUniformLocation(
-			renderer->shader_program, "angle");
 	renderer->screen_loc = glGetUniformLocation(renderer->shader_program, "screen");
-	renderer->scale_loc = glGetUniformLocation(renderer->shader_program, "scale");
-	renderer->center_loc = glGetUniformLocation(renderer->shader_program, "center");
-	printf("Adding stuff: %d \n", glGetError());
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
@@ -170,42 +168,46 @@ GLuint ogl_load_texture(char* filename)
 	return texture;
 }
 
-bool b = 0;
-#define _glerror if(!b) {printf("%d: %d \n", t++, glGetError());}
 void renderer_start(Renderer* renderer, Game* game)
 {
-	int32 t = 0;
-	
+	renderer->data_index = 0;
+	renderer->sprite_count = 0;
 	glUseProgram(renderer->shader_program);
+	glUniform4f(renderer->screen_loc, 0, 0, game->width, game->height);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderer->texture);
-	glBindVertexArray(renderer->vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer->ebo);
-	//glUniform4f(renderer->screen_loc, renderer->ortho.x,
-	//		renderer->ortho.y, renderer->ortho.z, renderer->ortho.w);
-	glUniform4f(renderer->screen_loc, 0, 0, game->width, game->height);
-	glVertexAttribDivisor(
 }
+
+#define _renderer_push(f) renderer->sprite_data[renderer->data_index++] = f
 
 void renderer_push_sprite(Renderer* renderer, Sprite* s)
 {
+	renderer->sprite_count++;
 
-	//set all the uniforms
-	int32 t = 0;
-	
-	glUniform2f(renderer->translation_loc, s->tr.position.x, s->tr.position.y);
-	glUniform2f(renderer->center_loc, s->tr.center.x, s->tr.center.y);
-	glUniform2f(renderer->scale_loc, s->tr.scale_x, s->tr.scale_y);
-	glUniform4f(renderer->color_loc, 1.0f,1.0f,1.0f,1.0f);
-	glUniform1f(renderer->rotation_loc, s->tr.angle);
-
-	//glDrawArrays(GL_TRIANGLES, 0, 3) ;
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	//glBindVertexArray(0);
-	
+	_renderer_push(s->position.x);
+	_renderer_push(s->position.y);
+	_renderer_push(s->center.x);
+	_renderer_push(s->center.y);
+	_renderer_push(s->angle);
+	_renderer_push(s->scale.x);
+	_renderer_push(s->scale.y);
+	_renderer_push(s->texture.x);
+	_renderer_push(s->texture.y);
+	_renderer_push(s->texture.w);
+	_renderer_push(s->texture.h);
+	_renderer_push(s->color.x);
+	_renderer_push(s->color.y);
+	_renderer_push(s->color.z);
+	_renderer_push(s->color.w);
 }
 
 void renderer_draw(Renderer* renderer)
 {
+	glBindVertexArray(renderer->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
+	glBufferData(GL_ARRAY_BUFFER, renderer->data_index * sizeof(real), renderer->sprite_data, GL_STREAM_DRAW);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count);
+	glBindVertexArray(0);
 }
 

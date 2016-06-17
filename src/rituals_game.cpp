@@ -220,6 +220,8 @@ enum Button_State
 
 struct Game_Input
 {
+	isize num_keys_down;
+	isize num_mouse_down;
 	int8* scancodes;
 	int8* keycodes;
 	int8* mouse;

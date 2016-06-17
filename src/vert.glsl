@@ -1,22 +1,32 @@
 R"shader(
 #version 330 core
-layout (location = 0) in vec2 v_position;
-layout (location = 1) in vec2 v_texcoords;
+layout (location = 0) in vec2 v_translate;
+layout (location = 1) in vec2 v_center;
+layout (location = 2) in float v_angle;
+layout (location = 3) in vec2 v_scale;
+layout (location = 4) in vec4 v_texcoords;
+layout (location = 5) in vec4 v_color;
 
 out vec2 f_texcoords;
 
-uniform vec2 center;
-uniform vec2 scale;
-uniform vec2 translation;
-uniform float angle;
 uniform vec4 screen;
-//uniform mat3 local_cameramatrix;
 
 void main()
 {
+	float[4] coords_arr = {
+		-0.5, -10.5,
+		0.5, 0.5
+	};
+	vec2 coords = vec2(
+		coords_arr[gl_VertexID & 2],
+		coords_arr[((gl_VertexID & 1) << 1) ^ 3]
+	);
+
+
+	/*	
 	//1: apply scale to position
 	// p' = p + (p - center) * scale
-	vec2 p = vec2(
+	//vec2 p = vec2(
 		v_position.x + (v_position.x - center.x) * scale.x,
 		v_position.y + (v_position.y - center.y) * scale.y);
 	mat2 tr = mat2(
@@ -40,13 +50,15 @@ void main()
 		0, screen.z, 0, screen.w,
 		0, 0, 0.001998001998001998, -0.998001998001998,
 		0, 0, 0, 1
-	);*/
+	);
 
 
 	vec2 p2 = tr * p;
 	p2 += translation;
 	gl_Position = vec4(p2, 0, 1) * ortho;
 	f_texcoords = v_texcoords;
+*/
+	f_texcoords = v_texcoords.xy;
 }
 
 )shader"

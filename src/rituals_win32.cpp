@@ -113,6 +113,9 @@ Renderer* renderer;
 
 void update(Game* game)
 {
+	renderer_start(renderer, game);
+	renderer_draw(renderer);
+#if 0
 	sp->tr.position = v2(
 			game->input->mouse_x,
 			game->input->mouse_y);
@@ -127,13 +130,15 @@ void update(Game* game)
 	renderer_draw(renderer);
 	//b = 1;
 	//renderer_draw_sprite(renderer, NULL);
+#endif
 }
 
 void load_assets(Game* game)
 {
 	renderer = Arena_Push_Struct(game->play_arena, Renderer);
-	renderer_init(renderer);
+	renderer_init(renderer, game->play_arena);
 	renderer->texture = ogl_load_texture("data/graphics.png");
+#if 0
 	sp = Arena_Push_Array(game->play_arena, Sprite, 1000);
 	for(isize i = 0; i < 1000; ++i) {
 		Sprite* s = sp + sprite_count++;
@@ -144,6 +149,7 @@ void load_assets(Game* game)
 		s->tr.scale_x = rand_range(&game->r, 50, 100);
 		s->tr.scale_y = s->tr.scale_x;
 	}
+#endif
 }
 
 
@@ -151,15 +157,15 @@ void update_screen(Game* game, Renderer* renderer)
 {
 	SDL_GetWindowSize(game->window, &game->width, &game->height);
 	glViewport(0, 0, game->width, game->height);
-	renderer->ortho = v4(
-		2 / (game->width - 0),  -1 * (0 + game->width) / (game->width - 0),
-		2 / (0-game->height), -1 * (0 + game->height) / (0 - game->height)
-	);
+//	renderer->ortho = v4(
+//		2 / (game->width - 0),  -1 * (0 + game->width) / (game->width - 0),
+//		2 / (0-game->height), -1 * (0 + game->height) / (0 - game->height)
+//	);
 }
 
 int main(int argc, char** argv)
 {
-	printf("Size of sprites? %d ", Megabytes(1) / 64);
+	printf("sz spr %d \n", sizeof(Sprite));
 	stbi_set_flip_vertically_on_load(1);
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -206,7 +212,6 @@ int main(int argc, char** argv)
 
 	int ret = SDL_GL_SetSwapInterval(-1);
 	
-//#ifdef DEBUG
 	{
 #define _check_gl_attribute(attr, val) int _##attr##_val; \
 	int _##attr##_success = SDL_GL_GetAttribute(attr, &_##attr##_val); \
@@ -242,7 +247,6 @@ int main(int argc, char** argv)
 		}
 
 	}	
-//#endif 
 
 	// Game initializiation
 	Game* game = Allocate(Game, 1);
@@ -279,6 +283,10 @@ int main(int argc, char** argv)
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 
+		if(game->input->num_keys_down < 0) game->input->num_keys_down = 0;
+		if(game->input->num_mouse_down < 0) game->input->num_mouse_down = 0;
+
+		if(game->input->num_keys_down > 0)
 		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
 			int8* t = game->input->scancodes + i;
 			if(*t == State_Just_Released) {
@@ -293,6 +301,7 @@ int main(int argc, char** argv)
 				*t = State_Pressed;
 			}
 		}
+		if(game->input->num_mouse_down > 0)
 		for(int64 i = 0; i < 16; ++i) {
 			int8* t = game->input->mouse + i;
 			if(*t == State_Just_Released) {
@@ -301,6 +310,8 @@ int main(int argc, char** argv)
 				*t = State_Pressed;
 			}
 		}
+
+
 		while(SDL_PollEvent(&event)) {
 			//TODO(will) handle text input
 			switch(event.type) {
@@ -311,6 +322,7 @@ int main(int argc, char** argv)
 					update_screen(game, renderer);
 					break;
 				case SDL_KEYDOWN:
+					game->input->num_keys_down++;
 					if(!event.key.repeat) {
 						game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
@@ -319,6 +331,7 @@ int main(int argc, char** argv)
 					}
 					break;
 				case SDL_KEYUP:
+					game->input->num_keys_down--;
 					if(!event.key.repeat) {
 						game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
@@ -327,9 +340,11 @@ int main(int argc, char** argv)
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
+					game->input->num_mouse_down++;
 					game->input->mouse[event.button.button] = State_Just_Pressed;
 					break;
 				case SDL_MOUSEBUTTONUP:
+					game->input->num_mouse_down--;
 					game->input->mouse[event.button.button] = State_Just_Released;
 					break;
 			}
@@ -344,7 +359,7 @@ int main(int argc, char** argv)
 		update(game);
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-		if(frame_ticks > 17) printf("Slow frame! %d\n", frame_ticks);
+		//if(frame_ticks > 17) printf("Slow frame! %d\n", frame_ticks);
 	}
 
 	SDL_Quit();
