@@ -111,33 +111,31 @@ Sprite* sp;
 isize sprite_count;
 Renderer* renderer;
 
+
 void update(Game* game)
 {
 	renderer_start(renderer, game);
-	renderer_draw(renderer);
-#if 0
-	sp->tr.position = v2(
-			game->input->mouse_x,
-			game->input->mouse_y);
 
-	renderer_start(renderer, game);
+	Sprite s;
+	sprite_init(&s);
+	s.angle = 45 * Math_Deg2Rad;
+	s.position = v2(0.1f, 0.1f);
+	//s.texture.w = renderer->texture_width;
+	//s.texture.h = renderer->texture_height;
 
-	for(isize i = 0; i < sprite_count; ++i) {
-		(sp+i)->tr.angle += 0.05f;
-		renderer_push_sprite(renderer, sp + i);
-	}
+	renderer_push_sprite(renderer, &s);
 
 	renderer_draw(renderer);
-	//b = 1;
-	//renderer_draw_sprite(renderer, NULL);
-#endif
 }
 
 void load_assets(Game* game)
 {
 	renderer = Arena_Push_Struct(game->play_arena, Renderer);
 	renderer_init(renderer, game->play_arena);
-	renderer->texture = ogl_load_texture("data/graphics.png");
+	isize w, h;
+	renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
+	renderer->texture_width = (real)w;
+	renderer->texture_height = (real)h;
 #if 0
 	sp = Arena_Push_Array(game->play_arena, Sprite, 1000);
 	for(isize i = 0; i < 1000; ++i) {

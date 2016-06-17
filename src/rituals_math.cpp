@@ -165,6 +165,13 @@ union Rectangle
 	Rect2i intrect;
 };
 
+static inline Rect2 rect2(real x, real y, real w, real h)
+{
+	return Rect2{
+		x, y, w, h
+	};
+}
+
 static inline Rect2 intrect_to_rect(Rect2i* ir)
 {
 	Rect2 rr = {0};

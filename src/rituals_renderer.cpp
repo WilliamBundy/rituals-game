@@ -17,8 +17,11 @@ struct Sprite
 
 struct Renderer
 {
-	GLuint shader_program, vbo, vao, texture ;
-	isize translation_loc, rotation_loc, color_loc, screen_loc, scale_loc, center_loc;
+	GLuint shader_program, vbo, vao, texture;
+	real texture_width, texture_height;
+
+
+	isize screen_loc, texture_size_loc;
 	Vec4 ortho;
 
 	real* sprite_data;
@@ -30,19 +33,29 @@ struct Renderer
 };
 
 
-void sprite_init(Sprite* s, Renderer* renderer)
+void sprite_init(Sprite* s)
 {
+	s->position = v2(0, 0);
+	s->center = v2(0, 0);
+	s->angle = 0;
+	s->scale = v2(1.4, 1.4);
+	s->texture = rect2(0, 0, 1, 1);
+	s->color = v4(1, 1, 1, 1);
+	s->id = 0;
 }
 
 
 #define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
+int32 t = 0;
+#define _glerror printf("OpenGL Error at #%d: %0x\n", t++, glGetError());
 void renderer_init(Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->last_sprite_id = 0;
 	renderer->sprite_data = Arena_Push_Array(arena, real, Megabytes(1) / sizeof(real)); 
 	glGenVertexArrays(1, &renderer->vao);
- 
+	glBindVertexArray(renderer->vao);
 	glGenBuffers(1, &renderer->vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
 
 	usize stride = sizeof(real) * 15;
 	//position
@@ -73,8 +86,6 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(11));
 	glEnableVertexAttribArray(5);
 	glVertexAttribDivisor(5, 4);
-
-
 
 	glBindVertexArray(0);
 
@@ -129,6 +140,7 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 	glDeleteShader(fragment_shader);
 
 	renderer->screen_loc = glGetUniformLocation(renderer->shader_program, "screen");
+	renderer->texture_size_loc = glGetUniformLocation(renderer->shader_program, "texture_size");
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
@@ -152,7 +164,7 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 }
 	
 
-GLuint ogl_load_texture(char* filename)
+GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 {
 	int w, h, n;
 	char file[File_Path_Max_Length];
@@ -164,6 +176,9 @@ GLuint ogl_load_texture(char* filename)
 	if(texture == NULL) {
 		printf("There was an error loading %s \n", filename);
 	}
+	if(w_o != NULL) *w_o = w;
+	if(h_o != NULL) *h_o = h;
+
 	STBI_FREE(data);
 	return texture;
 }
@@ -174,6 +189,7 @@ void renderer_start(Renderer* renderer, Game* game)
 	renderer->sprite_count = 0;
 	glUseProgram(renderer->shader_program);
 	glUniform4f(renderer->screen_loc, 0, 0, game->width, game->height);
+	glUniform2f(renderer->texture_size_loc, renderer->texture_width, renderer->texture_height);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderer->texture);
