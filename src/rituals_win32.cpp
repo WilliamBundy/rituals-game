@@ -111,31 +111,55 @@ Sprite* sp;
 isize sprite_count;
 Renderer* renderer;
 
-void update()
+void update(Game* game)
 {
-	renderer_setup(renderer);
-	//for(isize i = 0; i < sprite_count; ++i) {
-	for(isize i = 0; i < 2; ++i) {
-		renderer_draw_sprite(renderer, sp + i);
+	sp->tr.position = v2(
+			game->input->mouse_x,
+			game->input->mouse_y);
+
+	renderer_start(renderer, game);
+
+	for(isize i = 0; i < sprite_count; ++i) {
+		(sp+i)->tr.angle += 0.05f;
+		renderer_push_sprite(renderer, sp + i);
 	}
-	b = 1;
+
+	renderer_draw(renderer);
+	//b = 1;
+	//renderer_draw_sprite(renderer, NULL);
 }
 
 void load_assets(Game* game)
 {
 	renderer = Arena_Push_Struct(game->play_arena, Renderer);
 	renderer_init(renderer);
-	renderer->texture = ogl_load_texture("graphics.png");
-	sp = Arena_Push_Array(game->play_arena, Sprite, 100);
-	for(isize i = 0; i < 1; ++i) {
+	renderer->texture = ogl_load_texture("data/graphics.png");
+	sp = Arena_Push_Array(game->play_arena, Sprite, 1000);
+	for(isize i = 0; i < 1000; ++i) {
 		Sprite* s = sp + sprite_count++;
-		s->tr.position = v2(i * 32, i * 32);
-		s->tr.angle = i * (360 / 100 * Math_Deg2Rad);
+		s->tr.position = v2(
+				rand_range(&game->r, 0, game->width),
+				rand_range(&game->r, 0, game->height));
+		s->tr.angle = i;
+		s->tr.scale_x = rand_range(&game->r, 50, 100);
+		s->tr.scale_y = s->tr.scale_x;
 	}
+}
+
+
+void update_screen(Game* game, Renderer* renderer)
+{
+	SDL_GetWindowSize(game->window, &game->width, &game->height);
+	glViewport(0, 0, game->width, game->height);
+	renderer->ortho = v4(
+		2 / (game->width - 0),  -1 * (0 + game->width) / (game->width - 0),
+		2 / (0-game->height), -1 * (0 + game->height) / (0 - game->height)
+	);
 }
 
 int main(int argc, char** argv)
 {
+	printf("Size of sprites? %d ", Megabytes(1) / 64);
 	stbi_set_flip_vertically_on_load(1);
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -172,6 +196,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	printf("%s \n", SDL_GetError());
 	SDL_GLContext glctx = SDL_GL_CreateContext(window);
 
 	if(ogl_LoadFunctions() == ogl_LOAD_FAILED) {
@@ -222,6 +247,7 @@ int main(int argc, char** argv)
 	// Game initializiation
 	Game* game = Allocate(Game, 1);
 	{
+		game->window = window;
 		game->meta_arena = Allocate(Memory_Arena, 1);
 		init_memory_arena(game->meta_arena, isz(Memory_Arena) * 10);
 		game->game_arena = new_memory_arena(Kilobytes(64), game->meta_arena);
@@ -237,11 +263,15 @@ int main(int argc, char** argv)
 		game->input->keycodes = Arena_Push_Array(game->game_arena, int8, SDL_NUM_SCANCODES);
 		game->input->mouse = Arena_Push_Array(game->game_arena, int8, 16);
 
+		init_random(&game->r, time(NULL));
+		//TODO(will) load window settings from file
+		game->width = 1280;
+		game->height = 720;
+
 	}
 
-
-
 	load_assets(game);
+	update_screen(game, renderer);
 
 	bool running = true;
 	SDL_Event event;
@@ -278,8 +308,7 @@ int main(int argc, char** argv)
 					running = false;
 					break;
 				case SDL_WINDOWEVENT:
-					SDL_GetWindowSize(game->window, &game->width, &game->height);
-					glViewport(0, 0, game->width, game->height);
+					update_screen(game, renderer);
 					break;
 				case SDL_KEYDOWN:
 					if(!event.key.repeat) {
@@ -305,11 +334,17 @@ int main(int argc, char** argv)
 					break;
 			}
 		}
+		
+		int mx, my;
+		SDL_GetMouseState(&mx, &my);
+		game->input->mouse_x = mx;
+		game->input->mouse_y = my;
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		update();
+		update(game);
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
+		if(frame_ticks > 17) printf("Slow frame! %d\n", frame_ticks);
 	}
 
 	SDL_Quit();

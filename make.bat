@@ -67,7 +67,7 @@ cl ^
 	/EHsc ^
 	/link ^
 	/LIBPATH:%LIBRARIES% ^
-	/SUBSYSTEM:WINDOWS ^
+	/SUBSYSTEM:CONSOLE ^
 	/NOLOGO ^
 	/INCREMENTAL:NO
 pushd bin

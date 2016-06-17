@@ -43,6 +43,14 @@ struct Vec4
 	real x, y, z, w;
 };
 
+Vec4 v4(real x, real y, real z, real w)
+{
+	return Vec4{
+		x, y, z, w
+	};
+}
+
+
 Vec4 color_to_v4(Color* c)
 {
 	Vec4 v;
