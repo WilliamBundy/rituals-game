@@ -33,12 +33,12 @@ struct Renderer
 };
 
 
-void sprite_init(Sprite* s)
+void init_sprite(Sprite* s)
 {
 	s->position = v2(0, 0);
 	s->center = v2(0, 0);
 	s->angle = 0;
-	s->scale = v2(1.4, 1.4);
+	s->scale = v2(100, 100);
 	s->texture = rect2(0, 0, 1, 1);
 	s->color = v4(1, 1, 1, 1);
 	s->id = 0;
@@ -51,7 +51,7 @@ int32 t = 0;
 void renderer_init(Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->last_sprite_id = 0;
-	renderer->sprite_data = Arena_Push_Array(arena, real, Megabytes(1) / sizeof(real)); 
+	renderer->sprite_data = Arena_Push_Array(arena, real, Megabytes(8) / sizeof(real)); 
 	glGenVertexArrays(1, &renderer->vao);
 	glBindVertexArray(renderer->vao);
 	glGenBuffers(1, &renderer->vbo);

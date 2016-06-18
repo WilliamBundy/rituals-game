@@ -985,10 +985,11 @@ __gl_h_	src/thirdparty/gl_core_3_3.h	22;"	d
 __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
-_check_gl_attribute	src/rituals_win32.cpp	214;"	d	file:
+_check_gl_attribute	src/rituals_win32.cpp	211;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	62;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	48;"	d	file:
 _glerror	src/rituals_renderer.cpp	50;"	d	file:
+_num_sprites	src/rituals_win32.cpp	112;"	d	file:
 _passthru_macro	src/rituals_game.cpp	61;"	d	file:
 _renderer_push	src/rituals_renderer.cpp	198;"	d	file:
 _rotate_left	src/rituals_game.cpp	/^static inline uint64 _rotate_left(const uint64 t, int64 k)$/;"	f	file:
@@ -1495,6 +1496,7 @@ img_x	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__
 img_y	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon3
 init_memory_arena	src/rituals_game.cpp	/^void init_memory_arena(Memory_Arena* arena, usize size)$/;"	f
 init_random	src/rituals_game.cpp	/^void init_random(Random* r, uint64 seed) $/;"	f
+init_sprite	src/rituals_renderer.cpp	/^void init_sprite(Sprite* s)$/;"	f
 input	src/rituals_game.cpp	/^	Game_Input* input;$/;"	m	struct:Game	file:
 int16	src/rituals_game.cpp	/^_generate_sort_and_search_for_numeric_type(int16);$/;"	v
 int16	src/rituals_win32.cpp	/^typedef int16_t int16;$/;"	t	file:
@@ -1633,7 +1635,6 @@ spec_start	src/thirdparty/stb_image.h	/^   int            spec_start;$/;"	m	stru
 sprite_count	src/rituals_renderer.cpp	/^	isize data_index, sprite_count;$/;"	m	struct:Renderer	file:
 sprite_count	src/rituals_win32.cpp	/^isize sprite_count;$/;"	v
 sprite_data	src/rituals_renderer.cpp	/^	real* sprite_data;$/;"	m	struct:Renderer	file:
-sprite_init	src/rituals_renderer.cpp	/^void sprite_init(Sprite* s)$/;"	f
 start_temp_arena	src/rituals_game.cpp	/^void start_temp_arena(Memory_Arena* arena)$/;"	f
 start_x	src/thirdparty/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon17
 start_y	src/thirdparty/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon17

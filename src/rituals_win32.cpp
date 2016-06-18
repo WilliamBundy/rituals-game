@@ -109,6 +109,7 @@ struct Game_Assets
 
 Sprite* sp;
 isize sprite_count;
+#define _num_sprites (10000)
 Renderer* renderer;
 
 
@@ -116,14 +117,11 @@ void update(Game* game)
 {
 	renderer_start(renderer, game);
 
-	Sprite s;
-	sprite_init(&s);
-	s.angle = 45 * Math_Deg2Rad;
-	s.position = v2(0.1f, 0.1f);
-	//s.texture.w = renderer->texture_width;
-	//s.texture.h = renderer->texture_height;
-
-	renderer_push_sprite(renderer, &s);
+	for(isize i = 0; i < sprite_count; ++i) {
+		Sprite* s = sp + i;
+		s->angle += 1 * Math_Deg2Rad;
+		renderer_push_sprite(renderer, s);
+	}
 
 	renderer_draw(renderer);
 }
@@ -136,18 +134,18 @@ void load_assets(Game* game)
 	renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
 	renderer->texture_width = (real)w;
 	renderer->texture_height = (real)h;
-#if 0
-	sp = Arena_Push_Array(game->play_arena, Sprite, 1000);
-	for(isize i = 0; i < 1000; ++i) {
+	
+	sp = Arena_Push_Array(game->play_arena, Sprite, _num_sprites);
+	for(isize i = 0; i < _num_sprites; ++i) {
 		Sprite* s = sp + sprite_count++;
-		s->tr.position = v2(
+		init_sprite(s);
+		s->position = v2(
 				rand_range(&game->r, 0, game->width),
 				rand_range(&game->r, 0, game->height));
-		s->tr.angle = i;
-		s->tr.scale_x = rand_range(&game->r, 50, 100);
-		s->tr.scale_y = s->tr.scale_x;
+		s->angle = i;
+		s->scale.x = rand_range(&game->r, 50, 100);
+		s->scale.y = s->scale.x;
 	}
-#endif
 }
 
 
@@ -163,7 +161,6 @@ void update_screen(Game* game, Renderer* renderer)
 
 int main(int argc, char** argv)
 {
-	printf("sz spr %d \n", sizeof(Sprite));
 	stbi_set_flip_vertically_on_load(1);
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -357,7 +354,7 @@ int main(int argc, char** argv)
 		update(game);
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-		//if(frame_ticks > 17) printf("Slow frame! %d\n", frame_ticks);
+		if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
 	}
 
 	SDL_Quit();
