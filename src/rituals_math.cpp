@@ -165,6 +165,13 @@ union Rectangle
 	Rect2i intrect;
 };
 
+static inline bool aabb_intersect(AABB* a, AABB* b)
+{
+	if(fabsf(b->center.x - a->center.x) > (b->hw + a->hw)) return false;
+	if(fabsf(b->center.y - a->center.y) > (b->hh + a->hh)) return false;
+	return true;
+}
+
 static inline Rect2 rect2(real x, real y, real w, real h)
 {
 	return Rect2{

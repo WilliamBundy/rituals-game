@@ -3,14 +3,13 @@ R"shader(
 in vec2 f_texcoords;
 in vec4 f_color;
 
-out vec4 color;
 
 uniform sampler2D local_texture;
 
 
 void main()
 {
-	color = texture(local_texture, f_texcoords) * f_color;
+	gl_FragColor = texture(local_texture, f_texcoords) * f_color * f_color.aaaa;
 
 }
 

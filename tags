@@ -985,13 +985,13 @@ __gl_h_	src/thirdparty/gl_core_3_3.h	22;"	d
 __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
-_check_gl_attribute	src/rituals_win32.cpp	211;"	d	file:
+_check_gl_attribute	src/rituals_win32.cpp	223;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	62;"	d	file:
-_gl_offset	src/rituals_renderer.cpp	48;"	d	file:
-_glerror	src/rituals_renderer.cpp	50;"	d	file:
-_num_sprites	src/rituals_win32.cpp	112;"	d	file:
+_gl_offset	src/rituals_renderer.cpp	50;"	d	file:
+_glerror	src/rituals_renderer.cpp	52;"	d	file:
+_num_sprites	src/rituals_win32.cpp	102;"	d	file:
 _passthru_macro	src/rituals_game.cpp	61;"	d	file:
-_renderer_push	src/rituals_renderer.cpp	198;"	d	file:
+_renderer_push	src/rituals_renderer.cpp	213;"	d	file:
 _rotate_left	src/rituals_game.cpp	/^static inline uint64 _rotate_left(const uint64 t, int64 k)$/;"	f	file:
 _splitmix64	src/rituals_game.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 a	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
@@ -1001,6 +1001,7 @@ a2	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon2	file
 a2	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon3	file:
 a3	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon3	file:
 aabb	src/rituals_math.cpp	/^	AABB aabb;$/;"	m	union:Rectangle	file:
+aabb_intersect	src/rituals_math.cpp	/^static inline bool aabb_intersect(AABB* a, AABB* b)$/;"	f	file:
 aabb_to_intrect	src/rituals_math.cpp	/^static inline Rect2i aabb_to_intrect(AABB* b)$/;"	f	file:
 aabb_to_rect	src/rituals_math.cpp	/^static inline Rect2 aabb_to_rect(AABB* b)$/;"	f	file:
 all_a	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
@@ -1559,6 +1560,7 @@ nomore	src/thirdparty/stb_image.h	/^   int            nomore;      \/\/ flag if 
 num_bits	src/thirdparty/stb_image.h	/^   int num_bits;$/;"	m	struct:__anon10
 num_keys_down	src/rituals_game.cpp	/^	isize num_keys_down;$/;"	m	struct:Game_Input	file:
 num_mouse_down	src/rituals_game.cpp	/^	isize num_mouse_down;$/;"	m	struct:Game_Input	file:
+offset	src/rituals_renderer.cpp	/^	Vec2 offset;$/;"	m	struct:Renderer	file:
 offset	src/thirdparty/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon14
 ogl_LOAD_FAILED	src/thirdparty/gl_core_3_3.h	/^	ogl_LOAD_FAILED = 0,$/;"	e	enum:ogl_LoadStatus
 ogl_LOAD_SUCCEEDED	src/thirdparty/gl_core_3_3.h	/^	ogl_LOAD_SUCCEEDED = 1,$/;"	e	enum:ogl_LoadStatus
@@ -1618,13 +1620,14 @@ rgb	src/thirdparty/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon6
 rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon12
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon6
-scale	src/rituals_renderer.cpp	/^	Vec2 scale;$/;"	m	struct:Sprite	file:
 scale_x	src/rituals_math.cpp	/^	real scale_x;$/;"	m	struct:Transform	file:
 scale_y	src/rituals_math.cpp	/^	real scale_y;$/;"	m	struct:Transform	file:
 scan_n	src/thirdparty/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon6
 scancodes	src/rituals_game.cpp	/^	int8* scancodes;$/;"	m	struct:Game_Input	file:
+screen	src/rituals_renderer.cpp	/^	AABB screen;$/;"	m	struct:Renderer	file:
 screen_loc	src/rituals_renderer.cpp	/^	isize screen_loc, texture_size_loc;$/;"	m	struct:Renderer	file:
 shader_program	src/rituals_renderer.cpp	/^	GLuint shader_program, vbo, vao, texture;$/;"	m	struct:Renderer	file:
+size	src/rituals_renderer.cpp	/^	Vec2 size;$/;"	m	struct:Sprite	file:
 size	src/thirdparty/stb_image.h	/^   stbi_uc  size[257];$/;"	m	struct:__anon5
 size	src/thirdparty/stb_image.h	/^   stbi_uc  size[288];$/;"	m	struct:__anon9
 size	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15

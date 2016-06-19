@@ -10,7 +10,7 @@ layout (location = 1) in vec2 v_center;
 layout (location = 2) in float v_angle;
 
 //Amount to scale sprite by
-layout (location = 3) in vec2 v_scale;
+layout (location = 3) in vec2 v_size;
 
 //x, y, w, h of texture rectangle in 0->1 form
 layout (location = 4) in vec4 v_texcoords;
@@ -44,11 +44,11 @@ void main()
 		texcoords_arr[((gl_VertexID & 1) << 1) ^ 3]
 	);
 
-	//coords.x *= v_scale.x * v_texcoords.z;
-	//coords.y *= v_scale.y * v_texcoords.w;
+	//coords.x *= v_size.x * v_texcoords.z;
+	//coords.y *= v_size.y * v_texcoords.w;
 	coords -= v_center;
-	coords.x *= v_scale.x;
-	coords.y *= v_scale.y;
+	coords.x *= v_size.x;
+	coords.y *= v_size.y;
 	vec2 rot = vec2(cos(v_angle), sin(v_angle));
 	mat2 rotmat = mat2 (
 		rot.x, rot.y,

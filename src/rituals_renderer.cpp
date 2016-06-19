@@ -9,7 +9,7 @@ struct Sprite
 	Vec2 position;
 	Vec2 center;
 	real angle;
-	Vec2 scale;
+	Vec2 size;
 	Rect2 texture;
 	Vec4 color;
 	uint32 id;
@@ -18,7 +18,9 @@ struct Sprite
 struct Renderer
 {
 	GLuint shader_program, vbo, vao, texture;
+	AABB screen;
 	real texture_width, texture_height;
+	Vec2 offset;
 
 
 	isize screen_loc, texture_size_loc;
@@ -38,7 +40,7 @@ void init_sprite(Sprite* s)
 	s->position = v2(0, 0);
 	s->center = v2(0, 0);
 	s->angle = 0;
-	s->scale = v2(100, 100);
+	s->size = v2(100, 100);
 	s->texture = rect2(0, 0, 1, 1);
 	s->color = v4(1, 1, 1, 1);
 	s->id = 0;
@@ -50,6 +52,7 @@ int32 t = 0;
 #define _glerror printf("OpenGL Error at #%d: %0x\n", t++, glGetError());
 void renderer_init(Renderer* renderer, Memory_Arena* arena)
 {
+	renderer->offset = v2(0, 0);
 	renderer->last_sprite_id = 0;
 	renderer->sprite_data = Arena_Push_Array(arena, real, Megabytes(8) / sizeof(real)); 
 	glGenVertexArrays(1, &renderer->vao);
@@ -72,7 +75,7 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 	glEnableVertexAttribArray(2);
 	glVertexAttribDivisor(2, 4);
 
-	//scale
+	//size
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(5));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, 4);
@@ -88,6 +91,10 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 	glVertexAttribDivisor(5, 4);
 
 	glBindVertexArray(0);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	const char* vertex_shader_src = 
@@ -187,8 +194,16 @@ void renderer_start(Renderer* renderer, Game* game)
 {
 	renderer->data_index = 0;
 	renderer->sprite_count = 0;
+	renderer->screen = {
+		renderer->offset,
+		game->width / 2.0f, game->height / 2.0f
+	};
+	renderer->screen.center += v2(renderer->screen.hw, renderer->screen.hh);
+
 	glUseProgram(renderer->shader_program);
-	glUniform4f(renderer->screen_loc, 0, 0, game->width, game->height);
+	glUniform4f(renderer->screen_loc, 
+			renderer->offset.x, renderer->offset.y, 
+			game->width + renderer->offset.x, game->height + renderer->offset.y);
 	glUniform2f(renderer->texture_size_loc, renderer->texture_width, renderer->texture_height);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -199,6 +214,14 @@ void renderer_start(Renderer* renderer, Game* game)
 
 void renderer_push_sprite(Renderer* renderer, Sprite* s)
 {
+#if 0
+	//do quick rectangle inclusion test
+	AABB sprite = {
+		s->position,
+		s->size.x , s->size.y 
+	};
+	if(!aabb_intersect(&renderer->screen, &sprite)) return;
+#endif
 	renderer->sprite_count++;
 
 	_renderer_push(s->position.x);
@@ -206,8 +229,8 @@ void renderer_push_sprite(Renderer* renderer, Sprite* s)
 	_renderer_push(s->center.x);
 	_renderer_push(s->center.y);
 	_renderer_push(s->angle);
-	_renderer_push(s->scale.x);
-	_renderer_push(s->scale.y);
+	_renderer_push(s->size.x);
+	_renderer_push(s->size.y);
 	_renderer_push(s->texture.x);
 	_renderer_push(s->texture.y);
 	_renderer_push(s->texture.w);

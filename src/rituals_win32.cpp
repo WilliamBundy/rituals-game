@@ -97,16 +97,6 @@ struct Game_Assets
 };
 //actual game code
 
-
-//
-// OpenGL things to do:
-// Textures
-// Instancing
-// Understanding when to use VAOs v. Uniforms when instancing
-// Camera, turning screen points (mouse clicks) into camera points
-// Turning all this into a SpriteBatch style thing.
-//
-
 Sprite* sp;
 isize sprite_count;
 #define _num_sprites (10000)
@@ -123,6 +113,22 @@ void update(Game* game)
 		renderer_push_sprite(renderer, s);
 	}
 
+	real move = 10;
+	if(game->input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
+		renderer->offset.x -= move;
+	}
+
+	if(game->input->scancodes[SDL_SCANCODE_RIGHT] == State_Pressed) {
+		renderer->offset.x += move;
+	}
+
+	if(game->input->scancodes[SDL_SCANCODE_UP] == State_Pressed) {
+		renderer->offset.y -= move;
+	}
+
+	if(game->input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
+		renderer->offset.y += move;
+	}
 	renderer_draw(renderer);
 }
 
@@ -140,11 +146,12 @@ void load_assets(Game* game)
 		Sprite* s = sp + sprite_count++;
 		init_sprite(s);
 		s->position = v2(
-				rand_range(&game->r, 0, game->width),
-				rand_range(&game->r, 0, game->height));
+				rand_range(&game->r, -10000, 10000),
+				rand_range(&game->r, -10000, 10000));
 		s->angle = i;
-		s->scale.x = rand_range(&game->r, 50, 100);
-		s->scale.y = s->scale.x;
+		s->size.x = rand_range(&game->r, 50, 100);
+		s->size.y = s->size.x * 2;
+		s->color.w = rand_range(&game->r, 0.5f, 1);
 	}
 }
 
@@ -180,9 +187,14 @@ int main(int argc, char** argv)
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	
+
+	int32 window_display_index = 0;
+#if 1
+	window_display_index = 1;
+#endif
 	SDL_Window* window = SDL_CreateWindow("Rituals", 
-			SDL_WINDOWPOS_CENTERED, 
-			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED_DISPLAY(window_display_index), 
+			SDL_WINDOWPOS_CENTERED_DISPLAY(window_display_index),
 			1280, 720, 
 			SDL_WINDOW_OPENGL | 
 			SDL_WINDOW_RESIZABLE |
@@ -205,7 +217,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	int ret = SDL_GL_SetSwapInterval(-1);
+	int ret = SDL_GL_SetSwapInterval(1);
 	
 	{
 #define _check_gl_attribute(attr, val) int _##attr##_val; \
