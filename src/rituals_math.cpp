@@ -147,8 +147,16 @@ inline Vec2 v2_from_angle(real normal)
 
 struct AABB
 {
+	
 	Vec2 center;
-	real hw, hh;
+	union {
+		struct {
+			real hw, hh;
+		};
+		struct {
+			Vec2 hext;
+		};
+	};
 };
 
 struct Rect2

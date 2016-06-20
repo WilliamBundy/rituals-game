@@ -47,7 +47,11 @@ void generate_tilemap(Tilemap* tilemap)
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
 			if(next_random(&game->r) > .5) {
-				tilemap->tiles[i * tilemap->w + j] = 4;
+				if(next_random(&game->r) < 0.2f) {
+					tilemap->tiles[i * tilemap->w + j] = 8;
+				} else {
+					tilemap->tiles[i * tilemap->w + j] = 4;
+				}
 			} else {
 				tilemap->tiles[i * tilemap->w + j] = 3;
 			}

@@ -47,7 +47,6 @@ void main()
 
 	//coords.x *= v_size.x * v_texcoords.z;
 	//coords.y *= v_size.y * v_texcoords.w;
-	coords -= v_center;
 	coords.x *= v_size.x;
 	coords.y *= v_size.y;
 	vec2 rot = vec2(cos(v_angle), sin(v_angle));
@@ -56,7 +55,8 @@ void main()
 		-rot.y, rot.x
 	);
 	coords *= rotmat;
-	coords += v_translate + v_center;
+	coords += v_translate;
+	coords -= v_center;
 	mat4 ortho = mat4(
 		2 / (screen.z - screen.x), 0, 0, -1 * (screen.x + screen.z) / (screen.z - screen.x),
 		0, 2 / (screen.y - screen.w), 0, -1 * (screen.y + screen.w) / (screen.y - screen.w),

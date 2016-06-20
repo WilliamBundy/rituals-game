@@ -4,22 +4,6 @@
  *
  */ 
 
-/* PROJECT TODO
- * 
- * 1. Get stuff on screen with OpenGL
- *		- Rendering quads as triangle strips
- *		- Rendering primitives with magic
- *		- Possibly some sort of particle system too?
- * 2. Write 2D physics sim code
- * 		- Just_ circles and AABBs
- * 3. Write a console thing?
- * 4. Learn to multithread the SHIT out of this
- *
- */
-
-
-
-
 //platform imports
 #include <windows.h>
 
@@ -93,51 +77,95 @@ typedef size_t usize;
 #include "rituals_simulation.cpp"
 
 Tilemap map;
-Vec2 offset;
 
 Simulator sim;
 
+void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
+{
+	for(isize i = 0; i < tilemap->h; ++i) {
+		for(isize j = 0; j < tilemap->w; ++j) {
+			Tile_Info* t = tilemap->info + tilemap->tiles[i * tilemap->w + j];
+			if(t->solid) {
+				if(sim->entities_count + 1 > sim->entities_capacity) {
+					Log_Error("Trying to add too many static entities");
+					continue;
+				}
+				Entity* e = sim->entities + sim->entities_count++;
+				init_entity(e);
+				e->body.center = v2(
+						j * 32 + 16,
+						i * 32 + 16);
+				e->body.hw = 16; 
+				e->body.hh = 16;
+				e->is_static = true;
+			}
+		}
+	}
+	
+}
+
+
+
+usize current_time = 0, prev_time = 0;
+real accumulator = 0;
+
+#define Time_Step (1.0f/60.0f)
 void update()
 {
-
-	sim_update(&sim, 1.0f / 60.0f);
-	sim.entities->body.center = v2(input->mouse_x, input->mouse_y);
-
 	renderer_start();
-	Sprite s; 
-	init_sprite(&s);
-	s.texture = Get_Texure_Coordinates(0, 0, 32, 32);
-	s.size = v2(30, 30);
 
-	real movespeed = 10;
+	real movespeed = 100;
+	Vec2 move_impulse = v2(0, 0);
 	if(input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
-		offset.x -= movespeed;
+		move_impulse.x -= movespeed;
 	}
 	if(input->scancodes[SDL_SCANCODE_RIGHT] == State_Pressed) {
-		offset.x += movespeed;
+		move_impulse.x += movespeed;
 	}
 	if(input->scancodes[SDL_SCANCODE_UP] == State_Pressed) {
-		offset.y -= movespeed;
+		move_impulse.y -= movespeed;
 	}
 	if(input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
-		offset.y += movespeed;
+		move_impulse.y += movespeed;
 	}
-	//render_tilemap(&map, -offset, 1.0f); // v2(input->mouse_x, input->mouse_y), 1.0f);
-	for(isize i = 0; i < 10; ++i) {
-		s.position = v2(i * 40 + 100, 100);
-		renderer_push_sprite(&s);
+	Entity* player = sim.entities;
+
+	current_time = SDL_GetTicks();
+	real dt = (current_time - prev_time) / 1000.0;
+	dt = clamp(dt, 0, 1.2f);
+	accumulator += dt;
+	prev_time = current_time;
+
+	while(accumulator >= Time_Step) {
+		accumulator -= Time_Step;
+		player->velocity += move_impulse;
+		sim_update(&sim, Time_Step);
 	}
+
+
+	Vec2 offset = player->body.center - v2(game->width / 2, game->height / 2);
+	if(offset.x < 0) offset.x = 0;
+	else if((offset.x + game->width) > map.w * 32) offset.x = map.w * 32 - game->width;
+	if(offset.y < 0) offset.y = 0;
+	else if((offset.y + game->height) > map.h * 32) offset.y = map.h * 32 - game->height;
+
+	renderer->offset = offset;
+
+	render_tilemap(&map, v2(16, 16), 1.0f);
 
 	for(isize i = 0; i < sim.entities_count; ++i) {
 		Entity* e = sim.entities + i;
+		if(e->is_static) continue;
 		e->sprite.position = e->body.center;
-		e->sprite.size = v2(e->body.hw * 2, e->body.hh * 2);
+		if(!e->use_custom_size) {
+			e->sprite.size = v2(e->body.hw * 2, e->body.hh * 2);
+		}
+		
+		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
 	}
 
-
 	renderer_draw();
-
 }
 
 void load_assets()
@@ -146,31 +174,40 @@ void load_assets()
 	renderer->texture = ogl_load_texture("data/terrain.png", &w, &h);
 	renderer->texture_width = w;
 	renderer->texture_height = h;
-	init_tilemap(&map, 32, 32, game->play_arena);
+	init_tilemap(&map, 64, 64,  game->play_arena);
 
-	add_tile_info(&map, Get_Texure_Coordinates(0, 0, 0, 0), true);
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 0, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 1, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 2, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 3, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 4, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 0, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 1, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 2, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 3, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texure_Coordinates(32 * 4, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texture_Coordinates(0, 0, 0, 0), true);
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 0, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 1, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 2, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 3, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 4, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 0, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 1, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 3, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
 	generate_tilemap(&map);
-	init_simulator(&sim, 512, game->play_arena);
+	init_simulator(&sim, 256 * 256, game->play_arena);
 
-	for(isize i = 0; i < 16; ++i) {
+	for(isize i = 0; i < 200; ++i) {
 		Entity* e = sim.entities + sim.entities_count++;
 		init_entity(e);
-		e->sprite.texture = Get_Texure_Coordinates(32 * 3, 64, 32, 32);
+		e->sprite.texture = Get_Texture_Coordinates(32 * 3, 64, 32, 32);
 		e->body.hw = e->body.hh = 16;
 		e->body.center = v2(
-				rand_range(&game->r, 0, 800),
-				rand_range(&game->r, 0, 800));
+				rand_range(&game->r, 0, map.w * 32),
+				rand_range(&game->r, 0, map.h * 32));
 	}
+
+	Entity* player = sim.entities;
+	player->body.center = v2(map.w * 16, map.h * 16);
+	player->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
+	player->body.hext = v2(5, 13);
+	player->sprite.size = v2(32, 32);
+	player->use_custom_size = true;
+	player->sprite.center = v2(0,3);
+	generate_statics_for_tilemap(&sim, &map);
 	sim_refresh_sorted(&sim);
 }
 
@@ -313,7 +350,8 @@ int main(int argc, char** argv)
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	//glClearColor(1, 1, 1, 1);
 
-
+	current_time = SDL_GetTicks();
+	prev_time = current_time;
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 

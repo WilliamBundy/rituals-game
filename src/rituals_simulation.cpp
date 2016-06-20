@@ -9,6 +9,10 @@ struct Entity
 	Vec2 velocity, force;
 	real inv_mass;
 	Sprite sprite;
+	
+	//rolled into flags
+	bool is_static;
+	bool use_custom_size;
 };
 
 #define _entity_get_min_x(e) (e->body.center.x - e->body.hw)
@@ -24,6 +28,7 @@ void init_entity(Entity* e)
 	e->inv_mass = 1.0f;
 	e->velocity = v2(0, 0);
 	e->force = v2(0, 0);
+	e->is_static = false;
 }
 
 struct Simulator
@@ -94,15 +99,25 @@ void sim_update(Simulator* sim, real dt)
 					
 					Vec2 overlap;
 					aabb_overlap(&a->body, &b->body, &overlap);
-					overlap *= 0.5f;
-					a->body.center -= overlap;
-					b->body.center += overlap;
+
+					if(a->is_static && b->is_static) continue;
+					if(a->is_static && !b->is_static) {
+						b->body.center += overlap;
+					} else if(!a->is_static && b->is_static) {
+						a->body.center -= overlap;
+					} else {
+						overlap *= 0.5f;
+						a->body.center -= overlap;
+						b->body.center += overlap;
+					}
+
 				}
 			}
 		}
 
 		for(isize i = 0; i < 2; ++i) {
 			//TODO(will) check if it's (sum2 - sum1 ** 2) / count or sum2 - (sum1 ** 2) / count ?
+			//seems to be correct
 			variance.e[i] = center_sum2.e[i] - center_sum1.e[i] * center_sum1.e[i] / sim->entities_count;
 		}
 		
@@ -114,10 +129,13 @@ void sim_update(Simulator* sim, real dt)
 
 		for(isize i = 0; i < sim->entities_count; ++i) {
 			a = sim->entities + i;
+			if(a->is_static) continue;
+			//TODO(will) sort entities by static, skip block of statics
 			Vec2 new_vel = a->velocity + (dt * a->force);
-			new_vel *= damping;
-			Vec2 new_pos = a->body.center + (dt * new_vel);
-			a->body.center = new_pos;
+			Vec2 dpos = (a->velocity + new_vel) * 0.5f;
+			a->body.center += dpos * dt;
+			a->velocity = new_vel;
+			a->velocity *= damping;
 		}
 
 	}

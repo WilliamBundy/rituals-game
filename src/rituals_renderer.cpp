@@ -189,7 +189,7 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 	return texture;
 }
 
-#define Get_Texure_Coordinates(x, y, w, h) rect2((x) / renderer->texture_width, (y) / renderer->texture_height, (w) / renderer->texture_width, (h) / renderer->texture_height)
+#define Get_Texture_Coordinates(x, y, w, h) rect2((x) / renderer->texture_width, (y) / renderer->texture_height, (w) / renderer->texture_width, (h) / renderer->texture_height)
 
 void renderer_start()
 {
