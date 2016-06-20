@@ -28,9 +28,12 @@ union Color
 	uint32 rgba;
 };
 
-struct Vec2 
+union Vec2 
 {
-	real x, y;
+	struct {
+		real x, y;
+	};
+	real e[2];
 };
 
 struct Vec3
@@ -171,6 +174,32 @@ static inline bool aabb_intersect(AABB* a, AABB* b)
 	if(fabsf(b->center.y - a->center.y) > (b->hh + a->hh)) return false;
 	return true;
 }
+
+static inline void aabb_overlap(AABB* a, AABB* b, Vec2* s)
+{
+	s->x = (a->hw + b->hw) - fabsf(b->center.x - a->center.x);
+	s->y = (a->hh + b->hh) - fabsf(b->center.y - a->center.y);
+	if(s->x > s->y) {
+		s->x = 0;
+		if(a->center.y > b->center.y) {
+			s->y *= -1;
+		}
+	} else {
+		s->y = 0;
+		if(a->center.x > b->center.x) {
+			s->x *= -1;
+		}
+	}
+}
+
+
+static inline AABB aabb(Vec2 c, real hw, real hh)
+{
+	return AABB{
+		c, hw, hh
+	};
+}
+
 
 static inline Rect2 rect2(real x, real y, real w, real h)
 {

@@ -89,86 +89,101 @@ typedef size_t usize;
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
 #include "rituals_renderer.cpp"
+#include "rituals_tilemap.cpp"
+#include "rituals_simulation.cpp"
 
-// game assets struct
-struct Game_Assets
+Tilemap map;
+Vec2 offset;
+
+Simulator sim;
+
+void update()
 {
 
-};
-//actual game code
+	sim_update(&sim, 1.0f / 60.0f);
+	sim.entities->body.center = v2(input->mouse_x, input->mouse_y);
 
-Sprite* sp;
-isize sprite_count;
-#define _num_sprites (10000)
-Renderer* renderer;
+	renderer_start();
+	Sprite s; 
+	init_sprite(&s);
+	s.texture = Get_Texure_Coordinates(0, 0, 32, 32);
+	s.size = v2(30, 30);
 
-
-void update(Game* game)
-{
-	renderer_start(renderer, game);
-
-	for(isize i = 0; i < sprite_count; ++i) {
-		Sprite* s = sp + i;
-		s->angle += 1 * Math_Deg2Rad;
-		renderer_push_sprite(renderer, s);
+	real movespeed = 10;
+	if(input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
+		offset.x -= movespeed;
+	}
+	if(input->scancodes[SDL_SCANCODE_RIGHT] == State_Pressed) {
+		offset.x += movespeed;
+	}
+	if(input->scancodes[SDL_SCANCODE_UP] == State_Pressed) {
+		offset.y -= movespeed;
+	}
+	if(input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
+		offset.y += movespeed;
+	}
+	//render_tilemap(&map, -offset, 1.0f); // v2(input->mouse_x, input->mouse_y), 1.0f);
+	for(isize i = 0; i < 10; ++i) {
+		s.position = v2(i * 40 + 100, 100);
+		renderer_push_sprite(&s);
 	}
 
-	real move = 10;
-	if(game->input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
-		renderer->offset.x -= move;
+	for(isize i = 0; i < sim.entities_count; ++i) {
+		Entity* e = sim.entities + i;
+		e->sprite.position = e->body.center;
+		e->sprite.size = v2(e->body.hw * 2, e->body.hh * 2);
+		renderer_push_sprite(&e->sprite);
 	}
 
-	if(game->input->scancodes[SDL_SCANCODE_RIGHT] == State_Pressed) {
-		renderer->offset.x += move;
-	}
 
-	if(game->input->scancodes[SDL_SCANCODE_UP] == State_Pressed) {
-		renderer->offset.y -= move;
-	}
+	renderer_draw();
 
-	if(game->input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
-		renderer->offset.y += move;
-	}
-	renderer_draw(renderer);
 }
 
-void load_assets(Game* game)
+void load_assets()
 {
-	renderer = Arena_Push_Struct(game->play_arena, Renderer);
-	renderer_init(renderer, game->play_arena);
 	isize w, h;
-	renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
-	renderer->texture_width = (real)w;
-	renderer->texture_height = (real)h;
-	
-	sp = Arena_Push_Array(game->play_arena, Sprite, _num_sprites);
-	for(isize i = 0; i < _num_sprites; ++i) {
-		Sprite* s = sp + sprite_count++;
-		init_sprite(s);
-		s->position = v2(
-				rand_range(&game->r, -10000, 10000),
-				rand_range(&game->r, -10000, 10000));
-		s->angle = i;
-		s->size.x = rand_range(&game->r, 50, 100);
-		s->size.y = s->size.x * 2;
-		s->color.w = rand_range(&game->r, 0.5f, 1);
+	renderer->texture = ogl_load_texture("data/terrain.png", &w, &h);
+	renderer->texture_width = w;
+	renderer->texture_height = h;
+	init_tilemap(&map, 32, 32, game->play_arena);
+
+	add_tile_info(&map, Get_Texure_Coordinates(0, 0, 0, 0), true);
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 0, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 1, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 2, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 3, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 4, 32, 32, 32), false); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 0, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 1, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 2, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 3, 64, 32, 32), true); 
+	add_tile_info(&map, Get_Texure_Coordinates(32 * 4, 64, 32, 32), true); 
+	generate_tilemap(&map);
+	init_simulator(&sim, 512, game->play_arena);
+
+	for(isize i = 0; i < 16; ++i) {
+		Entity* e = sim.entities + sim.entities_count++;
+		init_entity(e);
+		e->sprite.texture = Get_Texure_Coordinates(32 * 3, 64, 32, 32);
+		e->body.hw = e->body.hh = 16;
+		e->body.center = v2(
+				rand_range(&game->r, 0, 800),
+				rand_range(&game->r, 0, 800));
 	}
+	sim_refresh_sorted(&sim);
 }
 
 
-void update_screen(Game* game, Renderer* renderer)
+void update_screen()
 {
 	SDL_GetWindowSize(game->window, &game->width, &game->height);
 	glViewport(0, 0, game->width, game->height);
-//	renderer->ortho = v4(
-//		2 / (game->width - 0),  -1 * (0 + game->width) / (game->width - 0),
-//		2 / (0-game->height), -1 * (0 + game->height) / (0 - game->height)
-//	);
 }
 
 int main(int argc, char** argv)
 {
-	stbi_set_flip_vertically_on_load(1);
+	//stbi_set_flip_vertically_on_load(1);
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 
@@ -256,7 +271,7 @@ int main(int argc, char** argv)
 	}	
 
 	// Game initializiation
-	Game* game = Allocate(Game, 1);
+	game = Allocate(Game, 1);
 	{
 		game->window = window;
 		game->meta_arena = Allocate(Memory_Arena, 1);
@@ -278,15 +293,27 @@ int main(int argc, char** argv)
 		//TODO(will) load window settings from file
 		game->width = 1280;
 		game->height = 720;
+		
+
+		game->renderer = Arena_Push_Struct(game->game_arena, Renderer);
+		renderer_init(game->renderer, game->play_arena);
+
+		renderer = game->renderer;
+
+
+		input = game->input;
 
 	}
 
-	load_assets(game);
-	update_screen(game, renderer);
+	load_assets();
+	update_screen();
 
 	bool running = true;
 	SDL_Event event;
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	//glClearColor(1, 1, 1, 1);
+
+
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 
@@ -326,7 +353,7 @@ int main(int argc, char** argv)
 					running = false;
 					break;
 				case SDL_WINDOWEVENT:
-					update_screen(game, renderer);
+					update_screen();
 					break;
 				case SDL_KEYDOWN:
 					game->input->num_keys_down++;
@@ -356,17 +383,19 @@ int main(int argc, char** argv)
 					break;
 			}
 		}
-		
+	
 		int mx, my;
 		SDL_GetMouseState(&mx, &my);
-		game->input->mouse_x = mx;
-		game->input->mouse_y = my;
+		input->mouse_x = mx;
+		input->mouse_y = my;
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		update(game);
+
+		update();
+
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-		if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
+		//if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
 	}
 
 	SDL_Quit();

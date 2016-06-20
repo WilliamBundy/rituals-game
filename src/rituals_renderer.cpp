@@ -22,7 +22,6 @@ struct Renderer
 	real texture_width, texture_height;
 	Vec2 offset;
 
-
 	isize screen_loc, texture_size_loc;
 	Vec4 ortho;
 
@@ -190,7 +189,9 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 	return texture;
 }
 
-void renderer_start(Renderer* renderer, Game* game)
+#define Get_Texure_Coordinates(x, y, w, h) rect2((x) / renderer->texture_width, (y) / renderer->texture_height, (w) / renderer->texture_width, (h) / renderer->texture_height)
+
+void renderer_start()
 {
 	renderer->data_index = 0;
 	renderer->sprite_count = 0;
@@ -204,7 +205,6 @@ void renderer_start(Renderer* renderer, Game* game)
 	glUniform4f(renderer->screen_loc, 
 			renderer->offset.x, renderer->offset.y, 
 			game->width + renderer->offset.x, game->height + renderer->offset.y);
-	glUniform2f(renderer->texture_size_loc, renderer->texture_width, renderer->texture_height);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderer->texture);
@@ -212,7 +212,7 @@ void renderer_start(Renderer* renderer, Game* game)
 
 #define _renderer_push(f) renderer->sprite_data[renderer->data_index++] = f
 
-void renderer_push_sprite(Renderer* renderer, Sprite* s)
+void renderer_push_sprite(Sprite* s)
 {
 #if 0
 	//do quick rectangle inclusion test
@@ -241,12 +241,13 @@ void renderer_push_sprite(Renderer* renderer, Sprite* s)
 	_renderer_push(s->color.w);
 }
 
-void renderer_draw(Renderer* renderer)
+void renderer_draw()
 {
 	glBindVertexArray(renderer->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-	glBufferData(GL_ARRAY_BUFFER, renderer->data_index * sizeof(real), renderer->sprite_data, GL_STREAM_DRAW);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count);
+	glBufferData(GL_ARRAY_BUFFER, renderer->data_index * sizeof(real),
+			renderer->sprite_data, GL_STREAM_DRAW);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count * 4);
 	glBindVertexArray(0);
 }
 

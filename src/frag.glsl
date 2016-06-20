@@ -10,7 +10,6 @@ uniform sampler2D local_texture;
 void main()
 {
 	gl_FragColor = texture(local_texture, f_texcoords) * f_color * f_color.aaaa;
-
 }
 
 )shader"

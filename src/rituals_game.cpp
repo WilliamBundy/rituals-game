@@ -230,12 +230,12 @@ struct Game_Input
 };
 
 // Game struct
-typedef struct Game_Assets Game_Assets;
-typedef struct Debug_Log Debug_Log;
+//typedef struct Debug_Log Debug_Log;
+typedef struct Renderer Renderer;
 struct Game
 {
 	SDL_Window* window;
-	SDL_Renderer* renderer;
+	Renderer* renderer;
 	int32 width;
 	int32 height;
 
@@ -251,8 +251,12 @@ struct Game
 
 	Random r;
 
-	Debug_Log* log;
+	//Debug_Log* log;
 	Game_Input* input;
-	Game_Assets* assets;
 };
+
+Game* game;
+Renderer* renderer;
+Game_Input* input;
+
 

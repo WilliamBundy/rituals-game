@@ -22,7 +22,6 @@ out vec2 f_texcoords;
 out vec4 f_color;
 
 uniform vec4 screen;
-uniform vec2 texture_size;
 
 void main()
 {
@@ -36,7 +35,9 @@ void main()
 	);
 
 	float[4] texcoords_arr = float[](
-		v_texcoords.x, v_texcoords.y, v_texcoords.z, v_texcoords.w
+		v_texcoords.x, v_texcoords.y,
+		v_texcoords.x + v_texcoords.z, 
+		v_texcoords.y + v_texcoords.w
 	);
 
 	f_texcoords = vec2(
@@ -59,7 +60,7 @@ void main()
 	mat4 ortho = mat4(
 		2 / (screen.z - screen.x), 0, 0, -1 * (screen.x + screen.z) / (screen.z - screen.x),
 		0, 2 / (screen.y - screen.w), 0, -1 * (screen.y + screen.w) / (screen.y - screen.w),
-		0, 0, -2 / (-1000 - 1),          -1 *(-1000 + 1) / (-1000 - 1),
+		0, 0,          -2 / (-1 - 1), -1 * (-1 + 1) / (-1 - 1),
 		0, 0, 0, 1
 	);
 	gl_Position = vec4(coords, 0, 1) * ortho; 
