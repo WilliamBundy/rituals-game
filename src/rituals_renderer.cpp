@@ -12,7 +12,7 @@ struct Sprite
 	Vec2 size;
 	Rect2 texture;
 	Vec4 color;
-	uint32 id;
+	real extra;
 };
 
 struct Renderer
@@ -25,7 +25,7 @@ struct Renderer
 	isize screen_loc, texture_size_loc;
 	Vec4 ortho;
 
-	real* sprite_data;
+	Sprite* sprite_data;
 	isize data_index, sprite_count;
 
 
@@ -42,7 +42,6 @@ void init_sprite(Sprite* s)
 	s->size = v2(100, 100);
 	s->texture = rect2(0, 0, 1, 1);
 	s->color = v4(1, 1, 1, 1);
-	s->id = 0;
 }
 
 
@@ -53,13 +52,13 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->offset = v2(0, 0);
 	renderer->last_sprite_id = 0;
-	renderer->sprite_data = Arena_Push_Array(arena, real, Megabytes(8) / sizeof(real)); 
+	renderer->sprite_data = Arena_Push_Array(arena, Sprite, Megabytes(8) / sizeof(Sprite)); 
 	glGenVertexArrays(1, &renderer->vao);
 	glBindVertexArray(renderer->vao);
 	glGenBuffers(1, &renderer->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
 
-	usize stride = sizeof(real) * 15;
+	usize stride = sizeof(real) * 16;
 	//position
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(0));
 	glEnableVertexAttribArray(0);  
@@ -222,8 +221,10 @@ void renderer_push_sprite(Sprite* s)
 	};
 	if(!aabb_intersect(&renderer->screen, &sprite)) return;
 #endif
-	renderer->sprite_count++;
+	//renderer->sprite_count++;
 
+	renderer->sprite_data[renderer->sprite_count++] = *s;
+	/*
 	_renderer_push(s->position.x);
 	_renderer_push(s->position.y);
 	_renderer_push(s->center.x);
@@ -239,13 +240,26 @@ void renderer_push_sprite(Sprite* s)
 	_renderer_push(s->color.y);
 	_renderer_push(s->color.z);
 	_renderer_push(s->color.w);
+	_renderer_push(s->extra)
+	*/
 }
+
+#define _get_sprite_y_base(s) (s.position.y + s.size.y / 2 - s.center.y)
+Generate_Quicksort_For_Type(sort_sprites_on_y_base, Sprite, _get_sprite_y_base)
+
+void renderer_sort(isize offset)
+{
+	sort_sprites_on_y_base(renderer->sprite_data + offset,
+			renderer->sprite_count - offset);
+}
+
+
 
 void renderer_draw()
 {
 	glBindVertexArray(renderer->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-	glBufferData(GL_ARRAY_BUFFER, renderer->data_index * sizeof(real),
+	glBufferData(GL_ARRAY_BUFFER, renderer->sprite_count * sizeof(Sprite),
 			renderer->sprite_data, GL_STREAM_DRAW);
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count * 4);
 	glBindVertexArray(0);

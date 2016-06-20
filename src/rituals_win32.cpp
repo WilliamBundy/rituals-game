@@ -152,6 +152,7 @@ void update()
 	renderer->offset = offset;
 
 	render_tilemap(&map, v2(16, 16), 1.0f);
+	isize sprite_count_offset = renderer->sprite_count;
 
 	for(isize i = 0; i < sim.entities_count; ++i) {
 		Entity* e = sim.entities + i;
@@ -165,6 +166,7 @@ void update()
 		renderer_push_sprite(&e->sprite);
 	}
 
+	renderer_sort(sprite_count_offset);
 	renderer_draw();
 }
 
@@ -193,8 +195,12 @@ void load_assets()
 	for(isize i = 0; i < 200; ++i) {
 		Entity* e = sim.entities + sim.entities_count++;
 		init_entity(e);
-		e->sprite.texture = Get_Texture_Coordinates(32 * 3, 64, 32, 32);
-		e->body.hw = e->body.hh = 16;
+		e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
+		e->body.hw = 16;
+		e->body.hh = 12;
+		e->use_custom_size = true;
+		e->sprite.size = v2(32, 64);
+		e->sprite.center = v2(0, 20);
 		e->body.center = v2(
 				rand_range(&game->r, 0, map.w * 32),
 				rand_range(&game->r, 0, map.h * 32));
@@ -203,10 +209,11 @@ void load_assets()
 	Entity* player = sim.entities;
 	player->body.center = v2(map.w * 16, map.h * 16);
 	player->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
-	player->body.hext = v2(5, 13);
+	player->body.hext = v2(5, 5);
+
 	player->sprite.size = v2(32, 32);
 	player->use_custom_size = true;
-	player->sprite.center = v2(0,3);
+	player->sprite.center = v2(0,11);
 	generate_statics_for_tilemap(&sim, &map);
 	sim_refresh_sorted(&sim);
 }
@@ -252,8 +259,6 @@ int main(int argc, char** argv)
 			SDL_WINDOW_RESIZABLE |
 			SDL_WINDOW_MOUSE_FOCUS |
 			SDL_WINDOW_INPUT_FOCUS);
-
-
 
 	if(window == NULL) {
 		Log_Error("Could not create window");
