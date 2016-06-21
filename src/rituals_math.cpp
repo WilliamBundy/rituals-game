@@ -36,6 +36,15 @@ union Vec2
 	real e[2];
 };
 
+union Vec2i
+{
+	struct {
+		int32 x, y;
+	};
+	int32 e[2];
+};
+
+
 struct Vec3
 {
 	real x, y, z;
@@ -78,6 +87,23 @@ static inline Vec2 v2(real x, real y)
 {
 	return Vec2{x, y};
 }
+static inline Vec2 v2(Vec2i vi)
+{
+	return v2(vi.x, vi.y);
+}
+
+static inline Vec2i v2i(int32 x, int32 y)
+{
+	return Vec2i {
+		x, y
+	};
+}
+
+static inline Vec2i v2i(Vec2 v)
+{
+	return v2i((int32)v.x, (int32)v.y);
+}
+
 static inline Vec2 operator-(Vec2 a)
 {
 	return Vec2{-a.x, -a.y};
@@ -168,6 +194,13 @@ struct Rect2i
 {
 	int32 x, y, w, h;
 };
+
+static inline Rect2i rect2i(int32 x, int32 y, int32 w, int32 h)
+{
+	return Rect2i {
+		x, y, w, h
+	};
+}
 
 union Rectangle
 {

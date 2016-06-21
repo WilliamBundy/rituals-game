@@ -194,16 +194,16 @@ void renderer_start()
 {
 	renderer->data_index = 0;
 	renderer->sprite_count = 0;
-	renderer->screen = {
-		renderer->offset,
-		game->width / 2.0f, game->height / 2.0f
-	};
+	renderer->screen.center = renderer->offset;
+	renderer->screen.hext = game->size * 0.5;
 	renderer->screen.center += v2(renderer->screen.hw, renderer->screen.hh);
 
 	glUseProgram(renderer->shader_program);
 	glUniform4f(renderer->screen_loc, 
 			renderer->offset.x, renderer->offset.y, 
-			game->width + renderer->offset.x, game->height + renderer->offset.y);
+
+			game->size.x + renderer->offset.x,
+			game->size.y + renderer->offset.y);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderer->texture);

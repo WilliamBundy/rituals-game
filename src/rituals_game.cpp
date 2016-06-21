@@ -236,8 +236,9 @@ struct Game
 {
 	SDL_Window* window;
 	Renderer* renderer;
-	int32 width;
-	int32 height;
+	real scale;
+	Vec2 size;
+	Vec2i window_size;
 
 	Memory_Arena* meta_arena;
 	Memory_Arena* asset_arena;
@@ -259,4 +260,8 @@ Game* game;
 Renderer* renderer;
 Game_Input* input;
 
-
+void game_set_scale(real scale)
+{
+	game->scale = scale;
+	game->size = v2(game->window_size) * (1.0f / game->scale);
+}

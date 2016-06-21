@@ -4,6 +4,24 @@
  *
  */ 
 
+/* TODO(will)
+ *  - Add tilemap decomposition
+ *	- Heightmap style map generation
+ *	- Rectangle packing/atlas generation
+ *	- Text rendering (spritefonts)
+ *	- Buttons
+ *	- Fix physics code... a lot.
+ *
+ *	- Game states: Menu_State, Play_State, etc
+ *	- Struct that organizes simulation into one thing -- "World" object
+ *	- Moving between areas
+ *	- SDL_Mixer, making some sounds
+ *	- Making some backgrounds
+ *
+ */
+
+
+
 //platform imports
 #include <windows.h>
 
@@ -23,7 +41,6 @@
 //3rd party imports
 #include <SDL.h>
 #include "thirdparty.h"
-
 
 //Some defines
 typedef int8_t int8;
@@ -76,21 +93,20 @@ typedef size_t usize;
 #include "rituals_tilemap.cpp"
 #include "rituals_simulation.cpp"
 
-Tilemap map;
 
+Tilemap map;
 Simulator sim;
 
-void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
+
+
+void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 {
+
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
 			Tile_Info* t = tilemap->info + tilemap->tiles[i * tilemap->w + j];
 			if(t->solid) {
-				if(sim->entities_count + 1 > sim->entities_capacity) {
-					Log_Error("Trying to add too many static entities");
-					continue;
-				}
-				Entity* e = sim->entities + sim->entities_count++;
+				Entity* e = sim_get_next_entity(sim);
 				init_entity(e);
 				e->body.center = v2(
 						j * 32 + 16,
@@ -101,19 +117,120 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 			}
 		}
 	}
-	
 }
+
+isize _tw, _th;
+uint8* _tiles;
+uint8 _get_at(isize x, isize y)
+{
+	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return false;
+	isize index = y * _tw + x;
+	if((index < 0) || (index >= _tw * _th)) return false;
+	return _tiles[index];
+
+}
+//#define _get_at(u, v) (((u<0) || (u >= tilemap->w) || (v < 0) || (v >= tilemap->h)) ? false : printf("%d\n", v * tilemap->w + u), tiles[v * tilemap->w + u])
+void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
+{
+	start_temp_arena(game->temp_arena);
+	_tw = tilemap->w;
+	_th = tilemap->h;
+	isize map_size = tilemap->w * tilemap->h;
+	uint8* tiles = Arena_Push_Array(game->temp_arena, uint8, map_size + 1);
+	for(isize i = 0; i < map_size; ++i) {
+		tiles[i] = tilemap->info[tilemap->tiles[i]].solid;
+	}
+	_tiles = tiles;
+	isize work = 0;
+
+	Rect2i* rects = Arena_Push_Array(game->temp_arena, Rect2i, map_size / 2);
+	isize rects_count = 0;
+	isize last_rects = 0;
+	do {
+		last_rects = rects_count;
+		for(isize y = 0; y < tilemap->h; ++y) {
+			for(isize x = 0; x < tilemap->w; ++x) {
+				if(_get_at(x, y)) {
+					if(!_get_at(x, y - 1)) {
+						Rect2i* r = rects + rects_count++;
+						r->x = x;
+						r->y = y;
+						r->w = 1;
+						r->h = 1;
+						do {
+							x++;
+						}
+						while(_get_at(x, y) && !_get_at(x, y - 1) && (x < tilemap->w));
+
+						if(x != r->x) {
+							r->w = x - r->x;
+						}
+					}	
+				}
+			}
+		}
+
+		for(isize i = last_rects; i < rects_count; ++i) {
+			Rect2i* r = rects + i;
+			bool solid = true;
+			isize y = r->y;
+			while(solid && (y < tilemap->h)) {
+				for(isize local_x = 0; local_x < r->w; ++local_x) {
+					solid = solid && _get_at(r->x + local_x, y + 1);
+					if(!solid) break;
+				}
+				if(solid) {
+					y++;
+					r->h++;
+				}
+			}
+		}
+
+		for(isize i = 0; i < rects_count; ++i) {
+			Rect2i* r = rects + i;
+			for(isize local_y = 0; local_y < r->h; ++local_y) {
+				for(isize local_x = 0; local_x < r->w; ++local_x) {
+					isize index = (local_y + r->y) * tilemap->w + (local_x + r->x);
+					//printf("%d ", index);
+					tiles[index] = false;
+				}
+			}
+		}
+		work = 0;
+		for(isize i = 0; i < map_size; ++i) {
+			work += tiles[i];
+		}
+	} while(work);
+	
+	for(isize i = 0; i < rects_count; ++i) {
+		Rect2i* r = rects + i;
+		Entity* e = sim_get_next_entity(sim);
+		e->body.center.x = (r->x + r->w / 2.0f) * Tile_Size;//+ Half_TS;
+		e->body.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
+		e->body.hw = r->w * Half_TS;
+		e->body.hh = r->h * Half_TS;
+		e->is_static = true;
+		//e->sprite.texture = Get_Texture_Coordinates(0, 64, 32, 32);
+
+	}
+	end_temp_arena(game->temp_arena);
+}
+
+
+
+
+
 
 
 
 usize current_time = 0, prev_time = 0;
 real accumulator = 0;
+Vec2 offset;
 
 #define Time_Step (1.0f/60.0f)
 void update()
 {
-	renderer_start();
-
+	game_set_scale(2.0);
 	real movespeed = 100;
 	Vec2 move_impulse = v2(0, 0);
 	if(input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
@@ -128,7 +245,10 @@ void update()
 	if(input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
 		move_impulse.y += movespeed;
 	}
-	Entity* player = sim.entities;
+	Entity* player = sim_find_entity(&sim, 0);
+	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
+		move_impulse *= Math_InvSqrt2;
+	}
 
 	current_time = SDL_GetTicks();
 	real dt = (current_time - prev_time) / 1000.0;
@@ -142,16 +262,22 @@ void update()
 		sim_update(&sim, Time_Step);
 	}
 
+	Vec2 target = player->body.center;
 
-	Vec2 offset = player->body.center - v2(game->width / 2, game->height / 2);
+	offset += (target - offset) * 0.1f;
+
+	offset -= game->size * 0.5f;
 	if(offset.x < 0) offset.x = 0;
-	else if((offset.x + game->width) > map.w * 32) offset.x = map.w * 32 - game->width;
+	else if((offset.x + game->size.x) > map.w * Tile_Size) offset.x = map.w * Tile_Size - game->size.x;
 	if(offset.y < 0) offset.y = 0;
-	else if((offset.y + game->height) > map.h * 32) offset.y = map.h * 32 - game->height;
-
+	else if((offset.y + game->size.y) > map.h * Tile_Size) offset.y = map.h * Tile_Size - game->size.y;
 	renderer->offset = offset;
+	offset += game->size * 0.5f;
 
-	render_tilemap(&map, v2(16, 16), 1.0f);
+	renderer_start();
+
+	Rect2 screen = rect2(offset.x - game->size.x / 2, offset.y - game->size.y / 2, game->size.x, game->size.y);
+	render_tilemap(&map, v2(0,0),  screen);
 	isize sprite_count_offset = renderer->sprite_count;
 
 	for(isize i = 0; i < sim.entities_count; ++i) {
@@ -189,12 +315,11 @@ void load_assets()
 	add_tile_info(&map, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
 	add_tile_info(&map, Get_Texture_Coordinates(32 * 3, 64, 32, 32), true); 
 	add_tile_info(&map, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
-	generate_tilemap(&map);
+	generate_tilemap(&map, 0);
 	init_simulator(&sim, 256 * 256, game->play_arena);
 
-	for(isize i = 0; i < 200; ++i) {
-		Entity* e = sim.entities + sim.entities_count++;
-		init_entity(e);
+	for(isize i = 0; i < 256; ++i) {
+		Entity* e = sim_get_next_entity(&sim);
 		e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
 		e->body.hw = 16;
 		e->body.hh = 12;
@@ -205,24 +330,30 @@ void load_assets()
 				rand_range(&game->r, 0, map.w * 32),
 				rand_range(&game->r, 0, map.h * 32));
 	}
+	generate_statics_for_tilemap(&sim, &map);
+	sim_sort_entities(&sim);
 
-	Entity* player = sim.entities;
+	Entity* player = sim_find_entity(&sim, 0);
+	if(player == NULL) {
+		printf("Something went wrong! Couldn't find player entity....?");
+	}
 	player->body.center = v2(map.w * 16, map.h * 16);
 	player->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
 	player->body.hext = v2(5, 5);
-
 	player->sprite.size = v2(32, 32);
 	player->use_custom_size = true;
 	player->sprite.center = v2(0,11);
-	generate_statics_for_tilemap(&sim, &map);
-	sim_refresh_sorted(&sim);
+	game_set_scale(2.0f);
 }
+
+
 
 
 void update_screen()
 {
-	SDL_GetWindowSize(game->window, &game->width, &game->height);
-	glViewport(0, 0, game->width, game->height);
+	SDL_GetWindowSize(game->window, &game->window_size.x, &game->window_size.y);
+	glViewport(0, 0, game->window_size.x, game->window_size.y);
+	game->size = v2(game->window_size) * game->scale;
 }
 
 int main(int argc, char** argv)
@@ -320,7 +451,7 @@ int main(int argc, char** argv)
 		init_memory_arena(game->meta_arena, isz(Memory_Arena) * 10);
 		game->game_arena = new_memory_arena(Kilobytes(64), game->meta_arena);
 		game->asset_arena = new_memory_arena(Megabytes(512), game->meta_arena);
-		game->temp_arena = new_memory_arena(Kilobytes(64), game->meta_arena);
+		game->temp_arena = new_memory_arena(Megabytes(64), game->meta_arena);
 		game->play_arena = new_memory_arena(Megabytes(512), game->meta_arena);
 
 		game->base_path = SDL_GetBasePath();
@@ -333,9 +464,8 @@ int main(int argc, char** argv)
 
 		init_random(&game->r, time(NULL));
 		//TODO(will) load window settings from file
-		game->width = 1280;
-		game->height = 720;
-		
+		game->window_size = v2i(1280, 720);
+		game->scale = 1.0f;
 
 		game->renderer = Arena_Push_Struct(game->game_arena, Renderer);
 		renderer_init(game->renderer, game->play_arena);
@@ -348,7 +478,6 @@ int main(int argc, char** argv)
 	}
 
 	load_assets();
-	update_screen();
 
 	bool running = true;
 	SDL_Event event;
