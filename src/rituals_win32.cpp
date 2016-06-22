@@ -5,15 +5,12 @@
  */ 
 
 /* TODO(will)
- *  - Add tilemap decomposition
- *	- Heightmap style map generation
- *	- Rectangle packing/atlas generation
- *	- Text rendering (spritefonts)
  *	- Buttons
  *	- Fix physics code... a lot.
  *
  *	- Game states: Menu_State, Play_State, etc
  *	- Struct that organizes simulation into one thing -- "World" object
+ *
  *	- Moving between areas
  *	- SDL_Mixer, making some sounds
  *	- Making some backgrounds
@@ -90,6 +87,7 @@ typedef size_t usize;
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
 #include "rituals_renderer.cpp"
+#include "rituals_gui.cpp"
 #include "rituals_tilemap.cpp"
 #include "rituals_simulation.cpp"
 
@@ -97,11 +95,8 @@ typedef size_t usize;
 Tilemap map;
 Simulator sim;
 
-
-
 void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 {
-
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
 			Tile_Info* t = tilemap->info + tilemap->tiles[i * tilemap->w + j];
@@ -293,15 +288,23 @@ void update()
 	}
 
 	renderer_sort(sprite_count_offset);
+
+
+	render_body_text("Player 1", player->body.center - v2(4 * body_font->glyph_width, 32));
+
+
 	renderer_draw();
 }
 
 void load_assets()
 {
 	isize w, h;
-	renderer->texture = ogl_load_texture("data/terrain.png", &w, &h);
+	renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
 	renderer->texture_width = w;
 	renderer->texture_height = h;
+
+	game->body_font = load_spritefont("data/gohufont-14.glyphs", v2i(2048 - 1142, 0));
+	body_font = game->body_font;
 	init_tilemap(&map, 64, 64,  game->play_arena);
 
 	add_tile_info(&map, Get_Texture_Coordinates(0, 0, 0, 0), true);
@@ -315,7 +318,7 @@ void load_assets()
 	add_tile_info(&map, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
 	add_tile_info(&map, Get_Texture_Coordinates(32 * 3, 64, 32, 32), true); 
 	add_tile_info(&map, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
-	generate_tilemap(&map, 0);
+	generate_tilemap(&map, next_random_uint64(&game->r));
 	init_simulator(&sim, 256 * 256, game->play_arena);
 
 	for(isize i = 0; i < 256; ++i) {
@@ -343,7 +346,7 @@ void load_assets()
 	player->sprite.size = v2(32, 32);
 	player->use_custom_size = true;
 	player->sprite.center = v2(0,11);
-	game_set_scale(2.0f);
+	offset = player->body.center;	
 }
 
 

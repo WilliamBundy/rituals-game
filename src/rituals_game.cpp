@@ -231,6 +231,7 @@ struct Game_Input
 
 // Game struct
 //typedef struct Debug_Log Debug_Log;
+typedef struct Spritefont Spritefont;
 typedef struct Renderer Renderer;
 struct Game
 {
@@ -250,6 +251,9 @@ struct Game
 	const char* base_path;
 	isize base_path_length;
 
+	Spritefont* body_font;
+	Spritefont* title_font;
+
 	Random r;
 
 	//Debug_Log* log;
@@ -259,6 +263,8 @@ struct Game
 Game* game;
 Renderer* renderer;
 Game_Input* input;
+Spritefont* body_font;
+Spritefont* title_font;
 
 void game_set_scale(real scale)
 {
