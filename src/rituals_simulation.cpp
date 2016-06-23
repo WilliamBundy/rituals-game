@@ -16,7 +16,7 @@ struct Sim_Body
 	isize id;
 	AABB shape;
 	Vec2 velocity, force;
-	real inv_mass;
+	real inv_mass, restitution;
 	uint64 flags;
 };
 
@@ -38,6 +38,7 @@ void init_body(Sim_Body* b)
 {
 	b->shape = aabb(v2(0, 0), 0, 0);
 	b->inv_mass = 1.0f;
+	b->restitution = 0.3f;
 	b->velocity = v2(0,0);
 	b->force = v2(0, 0);
 	b->flags = Body_Flag_None;
@@ -79,11 +80,14 @@ Sim_Body* sim_find_body(Simulator* sim, isize id)
 	return index == -1? NULL: sim->bodies + index;
 }
 
+#define Time_Step (1.0f/60.0f)
+#define Sim_Iter_i (8)
+#define Sim_Iter ((real)Sim_Iter_i)
 void sim_update(Simulator* sim, real dt)
 {
 	Sim_Body *a, *b;
 	real damping = powf(0.5, 8);
-	for(isize times = 0; times < 4; ++times) {
+	for(isize times = 0; times < Sim_Iter_i; ++times) {
 		if(sim->sort_axis == 0) {
 			body_sort_on_x(sim->bodies, sim->bodies_count);
 		} else if(sim->sort_axis == 1) {
@@ -122,11 +126,11 @@ void sim_update(Simulator* sim, real dt)
 				}
 			
 				if(aabb_intersect(&a->shape, &b->shape)) {
-					// TODO(will) fix velocities for real momentum collision
-					// resolution....
-					
 					Vec2 overlap;
 					aabb_overlap(&a->shape, &b->shape, &overlap);
+					Vec2 normal = v2(
+							overlap.x / fabsf(overlap.x),
+							overlap.y / fabsf(overlap.y));
 
 					if(a_is_static && !b_is_static) {
 						b->shape.center += overlap;
@@ -136,16 +140,26 @@ void sim_update(Simulator* sim, real dt)
 						overlap *= 0.5f;
 						a->shape.center -= overlap;
 						b->shape.center += overlap;
-					}
 
+#if 0
+						Vec2 relative_velocity = b->velocity - a->velocity;
+						real velocity_on_normal = v2_dot(relative_velocity, normal);
+						real e = Min(a->restitution, b->restitution);
+						real j = -(1 + e) * velocity_on_normal;
+						j /= a->inv_mass + b->inv_mass;
+						Vec2 impulse = j * normal;
+						a->velocity -= a->inv_mass * impulse;
+						b->velocity += b->inv_mass * impulse;
+#endif
+
+					}
 				}
 			}
 		}
 
 		for(isize i = 0; i < 2; ++i) {
-			//TODO(will) check if it's (sum2 - sum1 ** 2) / count or sum2 - (sum1 ** 2) / count ?
-			//seems to be correct
-			variance.e[i] = center_sum2.e[i] - center_sum1.e[i] * center_sum1.e[i] / sim->bodies_count;
+			variance.e[i] = center_sum2.e[i] - center_sum1.e[i] * center_sum1.e[i] / 
+				sim->bodies_count;
 		}
 		
 		if(variance.x > variance.y) {
@@ -157,9 +171,10 @@ void sim_update(Simulator* sim, real dt)
 		for(isize i = 0; i < sim->bodies_count; ++i) {
 			a = sim->bodies + i;
 			if(Has_Flag(a->flags, Body_Flag_Static)) continue;
-			//TODO(will) sort bodies by static, skip block of statics
-			Vec2 new_vel = a->velocity + (dt * a->force);
+			Vec2 iter_force = a->force * (1.0f / Sim_Iter);
+			Vec2 new_vel = a->velocity + (dt * iter_force);
 			Vec2 dpos = (a->velocity + new_vel) * 0.5f;
+			dpos *= 1.0f / Sim_Iter;
 			a->shape.center += dpos * dt;
 			a->velocity = new_vel;
 			a->velocity *= damping;

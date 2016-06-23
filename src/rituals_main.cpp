@@ -4,17 +4,17 @@
  *
  */ 
 
-/* TODO(will)
- *	- Buttons
- *	- Fix physics code... a lot.
+/* TODO(will) features
+ *	- Improve physics system
+ *		- Impulse collision resolution
+ *		- Any speedups that we can think of
+ *	- UI controls
+ *	- Main Menu
+ *  - Sound effects, music
+ *  - Make a new palette, do some art
  *
- *	- Game states: Menu_State, Play_State, etc
- *	- Struct that organizes area->simulation into one thing -- "World" object
- *
- *	- Moving between areas
- *	- SDL_Mixer, making some sounds
- *	- Making some backgrounds
- *
+ * TODO(will) logical fixes
+ *  - current/last time/accumulator need to belong to simulation
  */
 
 
@@ -79,6 +79,10 @@ typedef size_t usize;
 #define Path_Separator ("\\")
 #define Path_Separator_Char ('\\')
 
+#define Min(x,y) ((x<y)?x:y)
+#define Max(x,y) ((x>y)?x:y)
+
+
 #define Kilobytes(b) (b * UINT64_C(1024))
 #define Megabytes(b) (Kilobytes(b) * UINT64_C(1024))
 #define Gigabytes(b) (Megabytes(b) * UINT64_C(1024))
@@ -86,101 +90,28 @@ typedef size_t usize;
 //local imports
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
+typedef struct World World;
+struct Play_State
+{
+	usize current_time = 0, prev_time = 0;
+	real accumulator = 0;
+	World* world;
+
+	Vec2i world_xy;
+};
+Play_State* play_state;
+
 #include "rituals_renderer.cpp"
 #include "rituals_gui.cpp"
 #include "rituals_tilemap.cpp"
 #include "rituals_simulation.cpp"
 #include "rituals_world.cpp"
+#include "rituals_play_state.cpp"
 
-World_Area* area;
 
-usize current_time = 0, prev_time = 0;
-real accumulator = 0;
-Vec2 offset;
-
-#define Time_Step (1.0f/60.0f)
 void update()
 {
-	game_set_scale(2.0);
-	real movespeed = 100;
-	Vec2 move_impulse = v2(0, 0);
-	if(input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
-		move_impulse.x -= movespeed;
-	}
-	if(input->scancodes[SDL_SCANCODE_RIGHT] == State_Pressed) {
-		move_impulse.x += movespeed;
-	}
-	if(input->scancodes[SDL_SCANCODE_UP] == State_Pressed) {
-		move_impulse.y -= movespeed;
-	}
-	if(input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
-		move_impulse.y += movespeed;
-	}
-
-
-	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
-		move_impulse *= Math_InvSqrt2;
-	}
-
-	current_time = SDL_GetTicks();
-	real dt = (current_time - prev_time) / 1000.0;
-	dt = clamp(dt, 0, 1.2f);
-	accumulator += dt;
-	prev_time = current_time;
-
-	while(accumulator >= Time_Step) {
-		accumulator -= Time_Step;
-		sim_update(&area->sim, Time_Step);
-	}
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-		player->velocity += move_impulse;
-
-	Vec2 target = player->shape.center;
-
-	offset += (target - offset) * 0.1f;
-
-	offset -= game->size * 0.5f;
-	if(offset.x < 0) 
-		offset.x = 0;
-	else if((offset.x + game->size.x) > area->map.w * Tile_Size)
-		offset.x = area->map.w * Tile_Size - game->size.x;
-
-	if(offset.y < 0) 
-		offset.y = 0;
-	else if((offset.y + game->size.y) > area->map.h * Tile_Size)
-		offset.y = area->map.h * Tile_Size - game->size.y;
-
-	renderer->offset = offset;
-	offset += game->size * 0.5f;
-
-	renderer_start();
-
-	Rect2 screen = rect2(
-			offset.x - game->size.x / 2,
-			offset.y - game->size.y / 2, 
-			game->size.x, game->size.y);
-
-	render_tilemap(&area->map, v2(0,0),  screen);
-	isize sprite_count_offset = renderer->sprite_count;
-
-	for(isize i = 0; i < area->entities_count; ++i) {
-		Entity* e = area->entities + i;
-		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-
-		if (b == NULL) continue;
-		e->sprite.position = b->shape.center;
-		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
-		
-		//TODO(will) align entity sprites by their bottom center
-		renderer_push_sprite(&e->sprite);
-	}
-
-	renderer_sort(sprite_count_offset);
-
-	render_body_text("You", player->shape.center - v2(1.5f * body_font->glyph_width, 32));
-
-	renderer_draw();
+	play_state_update();
 }
 
 void load_assets()
@@ -190,54 +121,14 @@ void load_assets()
 	renderer->texture_width = w;
 	renderer->texture_height = h;
 
-	game->body_font = load_spritefont("data/gohufont-14.glyphs", v2i(2048 - 1142, 0));
+	game->body_font = load_spritefont("data/gohufont-14.glyphs", 
+			v2i(2048 - 1142, 0));
 	body_font = game->body_font;
-	//init_tilemap(&area->map, 64, 64,  game->play_arena);
-	area = Arena_Push_Struct(game->play_arena, World_Area);
-	init_world_area(area, game->play_arena);
 
-	add_tile_info(&area->map, Get_Texture_Coordinates(0, 0, 0, 0), true);
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 0, 32, 32, 32), false); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 1, 32, 32, 32), false); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 2, 32, 32, 32), false); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 3, 32, 32, 32), false); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 4, 32, 32, 32), false); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 0, 64, 32, 32), true); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 1, 64, 32, 32), true); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 3, 64, 32, 32), true); 
-	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
-	generate_tilemap(&area->map, next_random_uint64(&game->r));
 
-	for(isize i = 0; i < 256; ++i) {
-		Entity* e = world_area_get_next_entity(area);
-		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
-		b->shape.hw = 16;
-		b->shape.hh = 12;
-		e->sprite.size = v2(32, 64);
-		e->sprite.center = v2(0, 20);
-		b->shape.center = v2(
-				rand_range(&game->r, 0, area->map.w * 32),
-				rand_range(&game->r, 0, area->map.h * 32));
-	}
-	generate_statics_for_tilemap(&area->sim, &area->map);
-	//sim_sort_bodies(&area->sim);
-
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-	if(player == NULL) {
-		printf("Something went wrong! Couldn't find player entity....?");
-	}
-	player->shape.center = v2(area->map.w * 16, area->map.h * 16);
-	player_entity->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
-	player->shape.hext = v2(5, 5);
-	player_entity->sprite.size = v2(32, 32);
-	player_entity->sprite.center = v2(0,11);
-	offset = player->shape.center;	
+	play_state_init();
+	play_state_start();
 }
-
-
 
 
 void update_screen()
@@ -344,6 +235,7 @@ int main(int argc, char** argv)
 		game->asset_arena = new_memory_arena(Megabytes(512), game->meta_arena);
 		game->temp_arena = new_memory_arena(Megabytes(64), game->meta_arena);
 		game->play_arena = new_memory_arena(Megabytes(512), game->meta_arena);
+		game->renderer_arena = new_memory_arena(Megabytes(32), game->meta_arena);
 
 		game->base_path = SDL_GetBasePath();
 		game->base_path_length = strlen(game->base_path);
@@ -359,7 +251,7 @@ int main(int argc, char** argv)
 		game->scale = 1.0f;
 
 		game->renderer = Arena_Push_Struct(game->game_arena, Renderer);
-		renderer_init(game->renderer, game->play_arena);
+		renderer_init(game->renderer, game->renderer_arena);
 
 		renderer = game->renderer;
 
@@ -375,8 +267,8 @@ int main(int argc, char** argv)
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	//glClearColor(1, 1, 1, 1);
 
-	current_time = SDL_GetTicks();
-	prev_time = current_time;
+	play_state->current_time = SDL_GetTicks();
+	play_state->prev_time = play_state->current_time;
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 

@@ -52,7 +52,7 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->offset = v2(0, 0);
 	renderer->last_sprite_id = 0;
-	renderer->sprite_data = Arena_Push_Array(arena, Sprite, Megabytes(8) / sizeof(Sprite)); 
+	renderer->sprite_data = Arena_Push_Array(arena, Sprite, Megabytes(32) / sizeof(Sprite)); 
 	glGenVertexArrays(1, &renderer->vao);
 	glBindVertexArray(renderer->vao);
 	glGenBuffers(1, &renderer->vbo);
@@ -203,7 +203,6 @@ void renderer_start()
 	glUseProgram(renderer->shader_program);
 	glUniform4f(renderer->screen_loc, 
 			renderer->offset.x, renderer->offset.y, 
-
 			game->size.x + renderer->offset.x,
 			game->size.y + renderer->offset.y);
 
@@ -254,8 +253,6 @@ void renderer_sort(isize offset)
 	sort_sprites_on_y_base(renderer->sprite_data + offset,
 			renderer->sprite_count - offset);
 }
-
-
 
 void renderer_draw()
 {

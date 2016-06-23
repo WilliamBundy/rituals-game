@@ -35,6 +35,16 @@ void init_tilemap(Tilemap* tilemap, isize w, isize h, Memory_Arena* arena)
 	tilemap->info = Arena_Push_Array(arena, Tile_Info, Max_Tile_Info_Count);
 }
 
+Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, Rect2 texture_clip, bool solid)
+{
+	Tile_Info* t = list + *info_count;
+	*info_count += 1;
+	t->texture_clip = texture_clip;
+	t->solid = solid;
+
+	return t;
+}
+
 Tile_Info* add_tile_info(Tilemap* tilemap, Rect2 texture_clip, bool solid)
 {
 	Tile_Info* t = tilemap->info + tilemap->info_count++;
@@ -107,13 +117,31 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 		}
 	}
 
+	bool flag = false;
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
 			isize index = i * tilemap->w + j;
-			if(i == 0 || i == tilemap->h - 1 || j == 0 || j == tilemap->w - 1) {
+			if( i == 0 || 
+				i == tilemap->h - 1 || 
+				j == 0 ||
+				j == tilemap->w - 1) {
 				tilemap->tiles[index] = 7;
+				flag = true;
+			}
+
+			if((i >= (tilemap->h/2 - 1) &&
+				i <= (tilemap->h/2 + 1)) ||
+			   (j >= (tilemap->w/2 - 1) && 
+				j <= (tilemap->w/2 + 1))) {
+				tilemap->tiles[index] = 9;
+				flag = true;
+			}
+
+			if(flag) {
+				flag = false;
 				continue;
 			}
+
 
 			real height = fourth[index];
 			if(height < 0.25f) {
@@ -133,7 +161,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 				// trees
 				tilemap->tiles[index] = 7;
 			} else {
-				tilemap->tiles[index] = 9;
+				tilemap->tiles[index] = 10;
 
 			}
 		}

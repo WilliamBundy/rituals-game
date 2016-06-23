@@ -151,6 +151,14 @@ void end_temp_arena(Memory_Arena* arena)
 	arena->temp_head = -1;
 }
 
+void clear_arena(Memory_Arena* arena)
+{
+	memset(arena->data, 0, arena->capacity);
+	arena->head = (isize)arena->data;
+	arena->temp_head = -1;
+}
+
+
 Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)
 {
 	Memory_Arena* arena = (Memory_Arena*)arena_push(src, sizeof(Memory_Arena));
@@ -258,7 +266,10 @@ struct Game
 	Memory_Arena* asset_arena;
 	Memory_Arena* game_arena;
 	Memory_Arena* temp_arena;
+	Memory_Arena* renderer_arena;
 
+	//TODO(will) possibly come up with another type of arena for storing
+	// static game info: world areas, loaded tile types, etc
 	Memory_Arena* play_arena;
 
 	const char* base_path;
@@ -278,6 +289,8 @@ Renderer* renderer;
 Game_Input* input;
 Spritefont* body_font;
 Spritefont* title_font;
+
+
 
 void game_set_scale(real scale)
 {
