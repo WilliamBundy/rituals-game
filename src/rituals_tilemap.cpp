@@ -57,7 +57,8 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 
 	for(isize i = 0; i < minified_h; ++i) {
 		for(isize j = 0; j < minified_w; ++j) {
-			initial[i * minified_w + j] = rand_range(r, -0.5f, 1.0f);
+			real rr = rand_range(r, 0, 2);
+			initial[i * minified_w + j] = (rr * rr) / 4.0f;
 		}
 	}
 
@@ -69,11 +70,12 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 		for(isize j = 0; j < minified_w; ++j) {
 			isize sample_x = j / 2;
 			isize sample_y = i / 2;
-			real val = rand_range(r, 0, 1.0f);
+			real val = rand_range(r, 0, 2.0f);
 			real prev = initial[sample_y * minified_w / 2 + sample_x]; 
-			second[i * minified_w + j] = prev * prev + val * val;
+			second[i * minified_w + j] = prev + (val * val) / 4.0f;
 		}
 	}
+
 
 	minified_w *= 2;
 	minified_h *= 2;
@@ -84,6 +86,9 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 			isize sample_x = j / 2;
 			isize sample_y = i / 2;
 			third[i * minified_w + j] = second[sample_y * minified_w / 2 + sample_x] + rand_range(r, 0, 1.0f);
+			real val = rand_range(r, 0, 2.0f);
+			real prev = second[sample_y * minified_w / 2 + sample_x]; 
+			third[i * minified_w + j] = prev + (val * val) / 4.0f;
 		}
 	}
 
@@ -95,7 +100,9 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 		for(isize j = 0; j < minified_w; ++j) {
 			isize sample_x = j / 2;
 			isize sample_y = i / 2;
-			fourth[i * minified_w + j] = third[sample_y * minified_w / 2 + sample_x] + rand_range(r, 0, 1.0f);
+			real val = rand_range(r, 0, 2.0f);
+			real prev = third[sample_y * minified_w / 2 + sample_x]; 
+			fourth[i * minified_w + j] = prev + (val * val) / 4.0f;
 			fourth[i * minified_w + j] /= 4.0f;
 		}
 	}
@@ -107,8 +114,6 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 				tilemap->tiles[index] = 7;
 				continue;
 			}
-
-
 
 			real height = fourth[index];
 			if(height < 0.25f) {

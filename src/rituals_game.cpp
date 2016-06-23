@@ -35,6 +35,19 @@ void func_name(T* array, isize count) \
 	} \
 }
 
+#define Generate_Insertion_Sort_For_Type(func_name, T, Member_Macro) \
+void func_name(T* array, isize count) \
+{ \
+	for(isize i = 1; i < count; ++i) { \
+		T x = array[i]; \
+		isize j = i - 1; \
+		while((j >= 0) && (Member_Macro(array[j]) > Member_Macro(x))) { \
+			array[j + 1] = array[j]; \
+			j--; \
+		} \
+		array[j+1] = x; \
+	} \
+}
 
 // Returns -1 on fail to find.
 #define Generate_Binary_Search_For_Type(func_name, T, K, Member_Key_Macro) \

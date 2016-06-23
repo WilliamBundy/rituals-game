@@ -90,11 +90,9 @@ typedef size_t usize;
 #include "rituals_gui.cpp"
 #include "rituals_tilemap.cpp"
 #include "rituals_simulation.cpp"
+#include "rituals_world.cpp"
 
-
-Tilemap map;
-Simulator sim;
-
+#if 0
 void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 {
 	for(isize i = 0; i < tilemap->h; ++i) {
@@ -113,111 +111,7 @@ void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		}
 	}
 }
-
-isize _tw, _th;
-uint8* _tiles;
-uint8 _get_at(isize x, isize y)
-{
-	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return false;
-	isize index = y * _tw + x;
-	if((index < 0) || (index >= _tw * _th)) return false;
-	return _tiles[index];
-
-}
-//#define _get_at(u, v) (((u<0) || (u >= tilemap->w) || (v < 0) || (v >= tilemap->h)) ? false : printf("%d\n", v * tilemap->w + u), tiles[v * tilemap->w + u])
-void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
-{
-	start_temp_arena(game->temp_arena);
-	_tw = tilemap->w;
-	_th = tilemap->h;
-	isize map_size = tilemap->w * tilemap->h;
-	uint8* tiles = Arena_Push_Array(game->temp_arena, uint8, map_size + 1);
-	for(isize i = 0; i < map_size; ++i) {
-		tiles[i] = tilemap->info[tilemap->tiles[i]].solid;
-	}
-	_tiles = tiles;
-	isize work = 0;
-
-	Rect2i* rects = Arena_Push_Array(game->temp_arena, Rect2i, map_size / 2);
-	isize rects_count = 0;
-	isize last_rects = 0;
-	do {
-		last_rects = rects_count;
-		for(isize y = 0; y < tilemap->h; ++y) {
-			for(isize x = 0; x < tilemap->w; ++x) {
-				if(_get_at(x, y)) {
-					if(!_get_at(x, y - 1)) {
-						Rect2i* r = rects + rects_count++;
-						r->x = x;
-						r->y = y;
-						r->w = 1;
-						r->h = 1;
-						do {
-							x++;
-						}
-						while(_get_at(x, y) && !_get_at(x, y - 1) && (x < tilemap->w));
-
-						if(x != r->x) {
-							r->w = x - r->x;
-						}
-					}	
-				}
-			}
-		}
-
-		for(isize i = last_rects; i < rects_count; ++i) {
-			Rect2i* r = rects + i;
-			bool solid = true;
-			isize y = r->y;
-			while(solid && (y < tilemap->h)) {
-				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					solid = solid && _get_at(r->x + local_x, y + 1);
-					if(!solid) break;
-				}
-				if(solid) {
-					y++;
-					r->h++;
-				}
-			}
-		}
-
-		for(isize i = 0; i < rects_count; ++i) {
-			Rect2i* r = rects + i;
-			for(isize local_y = 0; local_y < r->h; ++local_y) {
-				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					isize index = (local_y + r->y) * tilemap->w + (local_x + r->x);
-					//printf("%d ", index);
-					tiles[index] = false;
-				}
-			}
-		}
-		work = 0;
-		for(isize i = 0; i < map_size; ++i) {
-			work += tiles[i];
-		}
-	} while(work);
-	
-	for(isize i = 0; i < rects_count; ++i) {
-		Rect2i* r = rects + i;
-		Entity* e = sim_get_next_entity(sim);
-		e->body.center.x = (r->x + r->w / 2.0f) * Tile_Size;//+ Half_TS;
-		e->body.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
-		e->body.hw = r->w * Half_TS;
-		e->body.hh = r->h * Half_TS;
-		e->is_static = true;
-		//e->sprite.texture = Get_Texture_Coordinates(0, 64, 32, 32);
-
-	}
-	end_temp_arena(game->temp_arena);
-}
-
-
-
-
-
-
-
-
+#endif 
 usize current_time = 0, prev_time = 0;
 real accumulator = 0;
 Vec2 offset;
@@ -240,6 +134,7 @@ void update()
 	if(input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
 		move_impulse.y += movespeed;
 	}
+
 	Entity* player = sim_find_entity(&sim, 0);
 	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
 		move_impulse *= Math_InvSqrt2;
@@ -290,7 +185,7 @@ void update()
 	renderer_sort(sprite_count_offset);
 
 
-	render_body_text("Player 1", player->body.center - v2(4 * body_font->glyph_width, 32));
+	render_body_text("You", player->body.center - v2(1.5f * body_font->glyph_width, 32));
 
 
 	renderer_draw();

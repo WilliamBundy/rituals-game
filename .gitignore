@@ -35,6 +35,8 @@
 *.sdf
 *.pdb
 *.ilk
+*.suo
+
 
 # Compiled python
 *.pyc

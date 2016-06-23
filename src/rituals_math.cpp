@@ -185,6 +185,12 @@ struct AABB
 	};
 };
 
+#define AABB_x1(b) (b.center.x - b.hw)
+#define AABB_x2(b) (b.center.x + b.hw)
+#define AABB_y1(b) (b.center.y - b.hh)
+#define AABB_y2(b) (b.center.y + b.hh)
+
+
 struct Rect2
 {
 	real x, y, w, h;

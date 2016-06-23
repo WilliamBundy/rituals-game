@@ -2,7 +2,7 @@
 SET msvcdir=C:\Program Files^ (x86)\Microsoft^ Visual^ Studio^ 14.0\VC\
 if not defined DevEnvDir call "%msvcdir%vcvarsall.bat" amd64
 
-SET MAINFILE=src\rituals_win32.cpp
+SET MAINFILE=src\rituals_main.cpp
 SET OUTPUT=bin\Rituals.exe
 SET PDBOUT=bin\Rituals.pdb
 SET LIBRARIES="c:\mslibs\lib"
@@ -21,7 +21,7 @@ SET LIBS=SDL2.lib ^
 	SDL2_mixer.lib ^
 	opengl32.lib
 
-
+ctime -begin rituals.ctm
 if "%~1"=="" goto DEBUG_BUILD
 if "%~1"=="release" goto RELEASE_BUILD
 if "%~1"=="debug" goto DEBUG_BUILD
@@ -77,6 +77,7 @@ GOTO END
 :END
 popd
 del *.obj
+ctime -end rituals.ctm
 echo Build Complete
 if "%~1"=="run" goto RUN_APP
 if "%~2"=="run" goto RUN_APP
