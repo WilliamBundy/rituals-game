@@ -1041,7 +1041,7 @@ _body_get_id	src/rituals_simulation.cpp	33;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	23;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	24;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	30;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	299;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	302;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _entity_get_id	src/rituals_world.cpp	111;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	75;"	d	file:

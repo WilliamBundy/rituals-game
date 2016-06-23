@@ -117,8 +117,6 @@ void update()
 		move_impulse.y += movespeed;
 	}
 
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
 
 	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
 		move_impulse *= Math_InvSqrt2;
@@ -132,9 +130,11 @@ void update()
 
 	while(accumulator >= Time_Step) {
 		accumulator -= Time_Step;
-		player->velocity += move_impulse;
 		sim_update(&area->sim, Time_Step);
 	}
+	Entity* player_entity = world_area_find_entity(area, 0);
+	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
+		player->velocity += move_impulse;
 
 	Vec2 target = player->shape.center;
 
@@ -167,8 +167,10 @@ void update()
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+
+		if (b == NULL) continue;
 		e->sprite.position = b->shape.center;
-		e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
+		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
 		
 		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
@@ -191,6 +193,7 @@ void load_assets()
 	game->body_font = load_spritefont("data/gohufont-14.glyphs", v2i(2048 - 1142, 0));
 	body_font = game->body_font;
 	//init_tilemap(&area->map, 64, 64,  game->play_arena);
+	area = Arena_Push_Struct(game->play_arena, World_Area);
 	init_world_area(area, game->play_arena);
 
 	add_tile_info(&area->map, Get_Texture_Coordinates(0, 0, 0, 0), true);

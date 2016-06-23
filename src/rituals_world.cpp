@@ -114,8 +114,8 @@ Generate_Binary_Search_For_Type(entity_search_for_id, Entity, isize, _entity_get
 
 
 #define World_Area_Entity_Capacity (8192)
-#define World_Arena_Tilemap_Width (48)
-#define World_Arena_Tilemap_Height (32)
+#define World_Arena_Tilemap_Width (64)
+#define World_Arena_Tilemap_Height (64)
 struct World_Area
 {
 	Simulator sim;

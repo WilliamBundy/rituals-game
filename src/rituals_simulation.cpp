@@ -166,5 +166,5 @@ void sim_update(Simulator* sim, real dt)
 		}
 
 	}
-	
+	body_sort_on_id(sim->bodies, sim->bodies_count);
 }
