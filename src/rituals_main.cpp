@@ -9,7 +9,7 @@
  *	- Fix physics code... a lot.
  *
  *	- Game states: Menu_State, Play_State, etc
- *	- Struct that organizes simulation into one thing -- "World" object
+ *	- Struct that organizes area->simulation into one thing -- "World" object
  *
  *	- Moving between areas
  *	- SDL_Mixer, making some sounds
@@ -92,26 +92,8 @@ typedef size_t usize;
 #include "rituals_simulation.cpp"
 #include "rituals_world.cpp"
 
-#if 0
-void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
-{
-	for(isize i = 0; i < tilemap->h; ++i) {
-		for(isize j = 0; j < tilemap->w; ++j) {
-			Tile_Info* t = tilemap->info + tilemap->tiles[i * tilemap->w + j];
-			if(t->solid) {
-				Entity* e = sim_get_next_entity(sim);
-				init_entity(e);
-				e->body.center = v2(
-						j * 32 + 16,
-						i * 32 + 16);
-				e->body.hw = 16; 
-				e->body.hh = 16;
-				e->is_static = true;
-			}
-		}
-	}
-}
-#endif 
+World_Area* area;
+
 usize current_time = 0, prev_time = 0;
 real accumulator = 0;
 Vec2 offset;
@@ -135,7 +117,9 @@ void update()
 		move_impulse.y += movespeed;
 	}
 
-	Entity* player = sim_find_entity(&sim, 0);
+	Entity* player_entity = world_area_find_entity(area, 0);
+	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
+
 	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
 		move_impulse *= Math_InvSqrt2;
 	}
@@ -149,34 +133,42 @@ void update()
 	while(accumulator >= Time_Step) {
 		accumulator -= Time_Step;
 		player->velocity += move_impulse;
-		sim_update(&sim, Time_Step);
+		sim_update(&area->sim, Time_Step);
 	}
 
-	Vec2 target = player->body.center;
+	Vec2 target = player->shape.center;
 
 	offset += (target - offset) * 0.1f;
 
 	offset -= game->size * 0.5f;
-	if(offset.x < 0) offset.x = 0;
-	else if((offset.x + game->size.x) > map.w * Tile_Size) offset.x = map.w * Tile_Size - game->size.x;
-	if(offset.y < 0) offset.y = 0;
-	else if((offset.y + game->size.y) > map.h * Tile_Size) offset.y = map.h * Tile_Size - game->size.y;
+	if(offset.x < 0) 
+		offset.x = 0;
+	else if((offset.x + game->size.x) > area->map.w * Tile_Size)
+		offset.x = area->map.w * Tile_Size - game->size.x;
+
+	if(offset.y < 0) 
+		offset.y = 0;
+	else if((offset.y + game->size.y) > area->map.h * Tile_Size)
+		offset.y = area->map.h * Tile_Size - game->size.y;
+
 	renderer->offset = offset;
 	offset += game->size * 0.5f;
 
 	renderer_start();
 
-	Rect2 screen = rect2(offset.x - game->size.x / 2, offset.y - game->size.y / 2, game->size.x, game->size.y);
-	render_tilemap(&map, v2(0,0),  screen);
+	Rect2 screen = rect2(
+			offset.x - game->size.x / 2,
+			offset.y - game->size.y / 2, 
+			game->size.x, game->size.y);
+
+	render_tilemap(&area->map, v2(0,0),  screen);
 	isize sprite_count_offset = renderer->sprite_count;
 
-	for(isize i = 0; i < sim.entities_count; ++i) {
-		Entity* e = sim.entities + i;
-		if(e->is_static) continue;
-		e->sprite.position = e->body.center;
-		if(!e->use_custom_size) {
-			e->sprite.size = v2(e->body.hw * 2, e->body.hh * 2);
-		}
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+		e->sprite.position = b->shape.center;
+		e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
 		
 		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
@@ -184,9 +176,7 @@ void update()
 
 	renderer_sort(sprite_count_offset);
 
-
-	render_body_text("You", player->body.center - v2(1.5f * body_font->glyph_width, 32));
-
+	render_body_text("You", player->shape.center - v2(1.5f * body_font->glyph_width, 32));
 
 	renderer_draw();
 }
@@ -200,48 +190,48 @@ void load_assets()
 
 	game->body_font = load_spritefont("data/gohufont-14.glyphs", v2i(2048 - 1142, 0));
 	body_font = game->body_font;
-	init_tilemap(&map, 64, 64,  game->play_arena);
+	//init_tilemap(&area->map, 64, 64,  game->play_arena);
+	init_world_area(area, game->play_arena);
 
-	add_tile_info(&map, Get_Texture_Coordinates(0, 0, 0, 0), true);
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 0, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 1, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 2, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 3, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 4, 32, 32, 32), false); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 0, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 1, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 3, 64, 32, 32), true); 
-	add_tile_info(&map, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
-	generate_tilemap(&map, next_random_uint64(&game->r));
-	init_simulator(&sim, 256 * 256, game->play_arena);
+	add_tile_info(&area->map, Get_Texture_Coordinates(0, 0, 0, 0), true);
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 0, 32, 32, 32), false); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 1, 32, 32, 32), false); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 2, 32, 32, 32), false); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 3, 32, 32, 32), false); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 4, 32, 32, 32), false); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 0, 64, 32, 32), true); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 1, 64, 32, 32), true); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 3, 64, 32, 32), true); 
+	add_tile_info(&area->map, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
+	generate_tilemap(&area->map, next_random_uint64(&game->r));
 
 	for(isize i = 0; i < 256; ++i) {
-		Entity* e = sim_get_next_entity(&sim);
+		Entity* e = world_area_get_next_entity(area);
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
-		e->body.hw = 16;
-		e->body.hh = 12;
-		e->use_custom_size = true;
+		b->shape.hw = 16;
+		b->shape.hh = 12;
 		e->sprite.size = v2(32, 64);
 		e->sprite.center = v2(0, 20);
-		e->body.center = v2(
-				rand_range(&game->r, 0, map.w * 32),
-				rand_range(&game->r, 0, map.h * 32));
+		b->shape.center = v2(
+				rand_range(&game->r, 0, area->map.w * 32),
+				rand_range(&game->r, 0, area->map.h * 32));
 	}
-	generate_statics_for_tilemap(&sim, &map);
-	sim_sort_entities(&sim);
+	generate_statics_for_tilemap(&area->sim, &area->map);
+	//sim_sort_bodies(&area->sim);
 
-	Entity* player = sim_find_entity(&sim, 0);
+	Entity* player_entity = world_area_find_entity(area, 0);
+	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
 	if(player == NULL) {
 		printf("Something went wrong! Couldn't find player entity....?");
 	}
-	player->body.center = v2(map.w * 16, map.h * 16);
-	player->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
-	player->body.hext = v2(5, 5);
-	player->sprite.size = v2(32, 32);
-	player->use_custom_size = true;
-	player->sprite.center = v2(0,11);
-	offset = player->body.center;	
+	player->shape.center = v2(area->map.w * 16, area->map.h * 16);
+	player_entity->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
+	player->shape.hext = v2(5, 5);
+	player_entity->sprite.size = v2(32, 32);
+	player_entity->sprite.center = v2(0,11);
+	offset = player->shape.center;	
 }
 
 

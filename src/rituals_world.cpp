@@ -164,6 +164,7 @@ Entity* world_area_get_next_entity(World_Area* area)
 	e->area = area;
 	e->body_id = sim_get_next_body(&area->sim)->id;
 	e->id = area->next_entity_id++;
+	return e;
 
 }
 

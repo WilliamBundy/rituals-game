@@ -1012,7 +1012,7 @@ Tile	src/rituals_tilemap.cpp	/^typedef int32 Tile;$/;"	t	file:
 Tile_Info	src/rituals_tilemap.cpp	/^struct Tile_Info$/;"	s	file:
 Tile_Size	src/rituals_tilemap.cpp	17;"	d	file:
 Tilemap	src/rituals_tilemap.cpp	/^struct Tilemap$/;"	s	file:
-Time_Step	src/rituals_main.cpp	119;"	d	file:
+Time_Step	src/rituals_main.cpp	101;"	d	file:
 Time_Step	src/rituals_win32.cpp	225;"	d	file:
 Transform	src/rituals_math.cpp	/^struct Transform$/;"	s	file:
 Vec2	src/rituals_math.cpp	/^union Vec2 $/;"	u	file:
@@ -1041,7 +1041,7 @@ _body_get_id	src/rituals_simulation.cpp	33;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	23;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	24;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	30;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	309;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	299;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _entity_get_id	src/rituals_world.cpp	111;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	75;"	d	file:
@@ -1082,6 +1082,7 @@ all_a	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	str
 angle	src/rituals_math.cpp	/^	real angle;$/;"	m	struct:Transform	file:
 angle	src/rituals_renderer.cpp	/^	real angle;$/;"	m	struct:Sprite	file:
 apply_transform_vec2	src/rituals_math.cpp	/^Vec2 apply_transform_vec2(Transform* tr, Vec2* v)$/;"	f
+area	src/rituals_main.cpp	/^World_Area* area;$/;"	v
 area	src/rituals_world.cpp	/^	World_Area* area;$/;"	m	struct:Entity	file:
 arena_push	src/rituals_game.cpp	/^uint8* arena_push(Memory_Arena* arena, isize size)$/;"	f
 asset_arena	src/rituals_game.cpp	/^	Memory_Arena* asset_arena;$/;"	m	struct:Game	file:
