@@ -92,6 +92,8 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		e->shape.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
 		e->shape.hw = r->w * Half_TS;
 		e->shape.hh = r->h * Half_TS;
+		e->restitution = 0.3f;
+		e->inv_mass = 0.0f;
 		e->flags = Body_Flag_Static;
 	}
 	end_temp_arena(game->temp_arena);
@@ -105,6 +107,9 @@ struct Entity
 	isize body_id;
 	Sim_Body* body;
 	Sprite sprite;
+
+	int32 counter;
+	int32 direction;
 
 	World_Area* area;
 };
@@ -164,6 +169,7 @@ void init_entity(Entity* entity)
 	entity->id = 0;
 	entity->body_id = 0;
 	init_sprite(&entity->sprite);
+	entity->counter = 0;
 	entity->area = NULL;
 }
 
@@ -177,8 +183,11 @@ Entity* world_area_get_next_entity(World_Area* area)
 	Entity* e = area->entities + area->entities_count++;
 	init_entity(e);
 	e->area = area;
-	e->body_id = sim_get_next_body(&area->sim)->id;
+	e->body = sim_get_next_body(&area->sim);
+	e->body_id = e->body->id;
 	e->id = area->next_entity_id++;
+	e->body->entity = e;
+	e->body->entity_id = e->id;
 	return e;
 }
 
@@ -204,6 +213,8 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos)
 	player->shape.hext = v2(5, 5);
 	player_entity->sprite.size = v2(32, 32);
 	player_entity->sprite.center = v2(0,11);
+	player->damping = 0.5f;
+	player->restitution = 0;
 	area->offset = player->shape.center;	
 }
 
@@ -262,6 +273,7 @@ void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, 
 				e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
 				b->shape.hw = 16;
 				b->shape.hh = 12;
+				b->inv_mass = 1.0f;
 				e->sprite.size = v2(32, 64);
 				e->sprite.center = v2(0, 20);
 				b->shape.center = v2(
@@ -270,49 +282,81 @@ void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, 
 			}
 			generate_statics_for_tilemap(&area->sim, &area->map);
 
+			isize north_link = modulus(i - 1, world->areas_height) * world->areas_width + j;
+			isize south_link = modulus(i + 1, world->areas_height) * world->areas_width + j;
+			isize west_link = i * world->areas_width + modulus(j - 1, world->areas_width);
+			isize east_link = i * world->areas_width + modulus(j + 1, world->areas_width);
 			area->north = Area_Link {
 				v2i(World_Area_Tilemap_Width / 2,  World_Area_Tilemap_Height - 1), 
-				world->areas + (((i - 1) % world->areas_height) * world->areas_width + (j)),
+				world->areas + north_link
 			};
 			area->south = Area_Link {
 				v2i(World_Area_Tilemap_Width / 2, 1),
-				world->areas + ((i + 1) % world->areas_height) * world->areas_width + (j)
+				world->areas + south_link
 			};
 			area->west = Area_Link {
 				v2i(World_Area_Tilemap_Width - 1, World_Area_Tilemap_Height / 2),
-				world->areas + ((i) * world->areas_width + ((j - 1) % world->areas_width))
+				world->areas + west_link
 			};
 			area->east = Area_Link {
 				v2i(1, World_Area_Tilemap_Height / 2),
-				world->areas + ((i) * world->areas_width + ((j + 1) % world->areas_width))
+				world->areas + east_link
 			};
 		}
 	}
 
 }
 
+void world_area_sort_entities_on_id(World_Area* area)
+{
+	entity_sort_on_id(area->entities, area->entities_count);
+}
+
+void world_area_synchronize_entities_and_bodies(World_Area* area)
+{
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		if(e->body_id == -1) continue;
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+		b->entity = e;
+		b->entity_id = e->id;
+		e->body = b;
+	}
+}
+
+void world_area_remove_entity(World_Area* area, Entity* entity)
+{
+	sim_remove_body(&area->sim, entity->body_id);
+	isize index = entity_search_for_id(entity->id, area->entities, area->entities_count);
+	area->entities[index] = area->entities[--area->entities_count];
+	world_area_sort_entities_on_id(area);
+	world_area_synchronize_entities_and_bodies(area);
+}
+
+#define _check(s1, s2, state) ((input->scancodes[SDL_SCANCODE_##s1] == state) || (input->scancodes[SDL_SCANCODE_##s2] == state))
 void update_world_area(World_Area* area)
 {
 	game_set_scale(2.0);
 	real movespeed = 800;
 	Vec2 move_impulse = v2(0, 0);
-	if(input->scancodes[SDL_SCANCODE_LEFT] == State_Pressed) {
+
+	if(_check(LEFT, A, State_Pressed)) {
 		move_impulse.x -= movespeed;
 	}
-	if(input->scancodes[SDL_SCANCODE_RIGHT] == State_Pressed) {
+	if(_check(RIGHT, D, State_Pressed)) {
 		move_impulse.x += movespeed;
 	}
-	if(input->scancodes[SDL_SCANCODE_UP] == State_Pressed) {
+	if(_check(UP, W, State_Pressed)) {
 		move_impulse.y -= movespeed;
 	}
-	if(input->scancodes[SDL_SCANCODE_DOWN] == State_Pressed) {
+	if(_check(DOWN, S, State_Pressed)) {
 		move_impulse.y += movespeed;
 	}
-
 
 	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
 		move_impulse *= Math_InvSqrt2;
 	}
+
 
 	play_state->current_time = SDL_GetTicks();
 	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
@@ -320,13 +364,44 @@ void update_world_area(World_Area* area)
 	play_state->accumulator += dt;
 	play_state->prev_time = play_state->current_time;
 
+	sim_sort_bodies_on_id(&area->sim);
+	Entity* player_entity = world_area_find_entity(area, 0);
+	Sim_Body* player = player_entity->body;
 	while(play_state->accumulator >= Time_Step) {
 		play_state->accumulator -= Time_Step;
+		player->velocity += move_impulse;
 		sim_update(&area->sim, Time_Step);
 	}
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-		player->velocity += move_impulse;
+
+	if(move_impulse.x < 0) {
+		player_entity->direction = -1;
+	} else if(move_impulse.x > 0) {
+		player_entity->direction = 1;
+	}
+
+	Sprite* plr_spr = &player_entity->sprite;
+	int32 player_frame = 0;
+	if(v2_dot(move_impulse, move_impulse) > 0){
+		player_entity->counter++;
+		player_frame = 1;
+		if(player_entity->counter > 15) {
+			player_frame = 0;
+			if(player_entity->counter > 30) {
+				player_entity->counter = 0;
+			}
+		}
+	} else {
+		player_entity->counter = 0;
+		player_frame = 0;
+	}
+
+	if(player_entity->direction == -1) {
+		plr_spr->texture = Get_Texture_Coordinates(32 + player_frame * 32, 0, -32, 32);
+	} else if(player_entity->direction == 1) {
+		plr_spr->texture = Get_Texture_Coordinates(0  + player_frame * 32, 0, 32, 32);
+	}
+
+
 
 	Vec2 target = player->shape.center;
 
@@ -355,8 +430,66 @@ void update_world_area(World_Area* area)
 		area->offset.y = 0;
 	else if((area->offset.y + game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - game->size.y;
+
+	//TODO(will) clean up/remove debug ball throwing code
+#if 1
+	if(input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+		Entity* ball_entity = world_area_get_next_entity(area);
+		Sim_Body* ball = ball_entity->body;
+		Vec2 dmouse = v2(input->mouse_x / game->scale, 
+						input->mouse_y / game->scale) + area->offset;
+
+		dmouse -= player->shape.center;
+		real angle = atan2f(dmouse.y, dmouse.x);
+		Vec2 normal = v2(cosf(angle), sinf(angle));
+
+		ball->damping = 0.99f;
+		ball->shape.hext = v2(8, 16);
+		ball->shape.center = normal * ball->shape.hw * 4 + player->shape.center; 
+		ball->velocity += normal * 1000;
+		ball->shape.hext = v2(8, 6);
+		ball_entity->sprite.size = v2(16, 32);
+		ball_entity->sprite.center = v2(0, 10);
+		ball_entity->sprite.texture  = Get_Texture_Coordinates(0, 96, 32, 64);
+	}
+
+
+	if(input->mouse[SDL_BUTTON_RIGHT] == State_Just_Pressed) {
+		Vec2 dmouse = v2(
+			input->mouse_x / game->scale, 
+			input->mouse_y / game->scale) + area->offset;
+		AABB mbb = aabb(dmouse, 0, 0);
+		world_area_synchronize_entities_and_bodies(area);
+		for(isize i = 0; i < area->entities_count; ++i) {
+			Entity* e = area->entities + i;
+			if(aabb_intersect(e->body->shape, mbb)) {
+				if(e->id != 0) {
+					world_area_remove_entity(area, e);
+					break;
+				}
+			}
+		}
+	}
+#endif 
+#if 0
+	if(input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+		Vec2 dmouse = v2(
+			input->mouse_x / game->scale, 
+			input->mouse_y / game->scale) + area->offset;
+		AABB mbb = aabb(dmouse, 0, 0);
+		for(isize i = 0; i < area->sim.bodies_count; ++i) {
+			Sim_Body* body = area->sim.bodies + i;
+			if(aabb_intersect(&body->shape, &mbb)) {
+				printf("%d \n", body->id);
+
+			}
+		}
+	}
+	
+#endif 
 	renderer->offset = area->offset;
 	area->offset += game->size * 0.5f;
+	// throw a ball
 
 	renderer_start();
 
@@ -389,15 +522,15 @@ void update_world_area(World_Area* area)
 	renderer_start();
 
 	Sprite s; 
-	s.size = v2(100, 16);
-	s.position = v2(50, 18);
+	init_sprite(&s);
+	s.size = v2(150, 20);
+	s.position = v2(8 + s.size.x / 2, 8 + s.size.y / 2);
 	s.color = v4(1, 1, 1, 0.5f);
-	s.texture = Get_Texture_Coordinates(16, 16, 1, 1); 
+	s.texture = Get_Texture_Coordinates(16, 16, 1, 1);
 	renderer_push_sprite(&s);
 
-	render_body_text("You", player->shape.center - v2(1.5f * body_font->glyph_width, 32));
 	char str[256];
-	isize len = snprintf(str, 256, "X: %d, Y: %d", play_state->world_xy.x, play_state->world_xy.y);
+	isize len = snprintf(str, 256, "X:%d Y:%d", play_state->world_xy.x, play_state->world_xy.y);
 
 	render_body_text(str, v2(16, 16));
 

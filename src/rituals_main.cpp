@@ -6,7 +6,6 @@
 
 /* TODO(will) features
  *	- Improve physics system
- *		- Impulse collision resolution
  *		- Any speedups that we can think of
  *	- UI controls
  *	- Main Menu
@@ -108,10 +107,41 @@ Play_State* play_state;
 #include "rituals_world.cpp"
 #include "rituals_play_state.cpp"
 
+void main_menu_update()
+{
+	game_set_scale(2.0f);
+	renderer_start();
+
+	Sprite s;
+	init_sprite(&s);
+	s.size = v2(15 * 16, 4 * 16);
+	s.position = v2(16 + s.size.x / 2, game->size.y / 2 - s.size.y / 2);
+	s.texture = Get_Texture_Coordinates(
+			renderer->texture_width - s.size.x,
+			2 * 16, 
+			s.size.x, s.size.y);
+	renderer_push_sprite(&s);
+
+	if(gui_add_button(v2(40 + 16, s.position.y + s.size.y / 2 + 16), "Start")) {
+		game->state = Game_State_Play;
+	}
+	renderer_draw();
+}
 
 void update()
 {
-	play_state_update();
+	switch(game->state) {
+		case Game_State_None:
+			break;
+		case Game_State_Menu:
+			main_menu_update();
+			break;
+		case Game_State_Play:
+			play_state_update();
+			break;
+		default:
+			break;
+	}
 }
 
 void load_assets()
@@ -126,6 +156,7 @@ void load_assets()
 	body_font = game->body_font;
 
 
+	game->state = Game_State_Play;
 	play_state_init();
 	play_state_start();
 }
@@ -229,6 +260,7 @@ int main(int argc, char** argv)
 	game = Allocate(Game, 1);
 	{
 		game->window = window;
+		game->state = Game_State_None;
 		game->meta_arena = Allocate(Memory_Arena, 1);
 		init_memory_arena(game->meta_arena, isz(Memory_Arena) * 10);
 		game->game_arena = new_memory_arena(Kilobytes(64), game->meta_arena);
@@ -254,17 +286,14 @@ int main(int argc, char** argv)
 		renderer_init(game->renderer, game->renderer_arena);
 
 		renderer = game->renderer;
-
-
 		input = game->input;
-
 	}
 
 	load_assets();
 
 	bool running = true;
 	SDL_Event event;
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	//glClearColor(1, 1, 1, 1);
 
 	play_state->current_time = SDL_GetTicks();

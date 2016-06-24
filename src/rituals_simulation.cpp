@@ -11,21 +11,26 @@ enum Sim_Body_Flags
 	Body_Flag_Static = Flag(1),
 	Body_Flag_Custom_Size = Flag(2)
 };
+
+
+typedef struct Entity Entity;
 struct Sim_Body
 {
 	isize id;
 	AABB shape;
 	Vec2 velocity, force;
-	real inv_mass, restitution;
+	real inv_mass, restitution, damping;
 	uint64 flags;
+	isize entity_id;
+	Entity* entity;
 };
 
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
-Generate_Insertion_Sort_For_Type(body_sort_on_x, Sim_Body, _body_get_min_x)
-Generate_Insertion_Sort_For_Type(body_sort_on_y, Sim_Body, _body_get_min_y)
-//Generate_Quicksort_For_Type(body_sort_on_x, Sim_Body*, _body_get_min_x)
-//Generate_Quicksort_For_Type(body_sort_on_y, Sim_Body*, _body_get_min_y)
+//Generate_Insertion_Sort_For_Type(body_sort_on_x, Sim_Body, _body_get_min_x)
+//Generate_Insertion_Sort_For_Type(body_sort_on_y, Sim_Body, _body_get_min_y)
+Generate_Quicksort_For_Type(body_sort_on_x, Sim_Body, _body_get_min_x)
+Generate_Quicksort_For_Type(body_sort_on_y, Sim_Body, _body_get_min_y)
 
 #define _body_get_not_static(e) (!Has_Flag(e.flags, Body_Flag_Static))
 Generate_Quicksort_For_Type(body_sort_static_first, Sim_Body, _body_get_not_static)
@@ -40,6 +45,7 @@ void init_body(Sim_Body* b)
 	b->inv_mass = 1.0f;
 	b->restitution = 0.3f;
 	b->velocity = v2(0,0);
+	b->damping = 0.5f;
 	b->force = v2(0, 0);
 	b->flags = Body_Flag_None;
 }
@@ -80,20 +86,39 @@ Sim_Body* sim_find_body(Simulator* sim, isize id)
 	return index == -1? NULL: sim->bodies + index;
 }
 
+void sim_sort_bodies_on_id(Simulator* sim)
+{
+	body_sort_on_id(sim->bodies, sim->bodies_count);
+}
+
+void sim_remove_body(Simulator* sim, isize body)
+{
+	isize index = body_search_for_id(body, sim->bodies, sim->bodies_count);
+	sim->bodies[index] = sim->bodies[--sim->bodies_count];
+	sim_sort_bodies_on_id(sim);
+}
+
+void sim_remove_body(Simulator* sim, Sim_Body* body)
+{
+	sim_remove_body(sim, body->id);
+}
+
+
 #define Time_Step (1.0f/60.0f)
 #define Sim_Iter_i (8)
 #define Sim_Iter ((real)Sim_Iter_i)
 void sim_update(Simulator* sim, real dt)
 {
 	Sim_Body *a, *b;
-	real damping = powf(0.5, 8);
 	for(isize times = 0; times < Sim_Iter_i; ++times) {
+//#if 0
 		if(sim->sort_axis == 0) {
 			body_sort_on_x(sim->bodies, sim->bodies_count);
 		} else if(sim->sort_axis == 1) {
 			body_sort_on_y(sim->bodies, sim->bodies_count);
 		}
 
+//#endif 
 		Vec2 center_sum1 = v2(0, 0);
 		Vec2 center_sum2 = v2(0, 0);
 		Vec2 variance = v2(0, 0);
@@ -115,6 +140,7 @@ void sim_update(Simulator* sim, real dt)
 				uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
 				if(a_is_static && b_is_static) continue;
 
+//#if 0
 				if(sim->sort_axis == 0) {
 					if(AABB_x1(b->shape) > AABB_x2(a->shape)) {
 						break;
@@ -124,34 +150,60 @@ void sim_update(Simulator* sim, real dt)
 						break;
 					}
 				}
+//#endif 
 			
 				if(aabb_intersect(&a->shape, &b->shape)) {
 					Vec2 overlap;
 					aabb_overlap(&a->shape, &b->shape, &overlap);
-					Vec2 normal = v2(
-							overlap.x / fabsf(overlap.x),
-							overlap.y / fabsf(overlap.y));
+					real ovl_mag = sqrtf(v2_dot(overlap, overlap));
+					if (ovl_mag < 0.0001f) continue;
+					Vec2 normal = overlap * (1.0f / ovl_mag);
 
+					if(a->id == 0 || b->id  == 0) {
+						aabb_intersect(&a->shape, &b->shape);
+					}
+					
+
+					#define _collision_slop (0.8f)
 					if(a_is_static && !b_is_static) {
 						b->shape.center += overlap;
+						Vec2 relative_velocity = b->velocity;
+						real velocity_on_normal = v2_dot(relative_velocity, normal);
+						if(velocity_on_normal > 0) continue;
+
+						real e = Min(a->restitution, b->restitution);
+						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+						mag /= b->inv_mass;
+						Vec2 impulse = mag * normal;
+						b->velocity += b->inv_mass * impulse;
 					} else if(!a_is_static && b_is_static) {
 						a->shape.center -= overlap;
-					} else {
-						overlap *= 0.5f;
-						a->shape.center -= overlap;
-						b->shape.center += overlap;
 
-#if 0
+						Vec2 relative_velocity = -a->velocity;
+						real velocity_on_normal = v2_dot(relative_velocity, normal);
+						if(velocity_on_normal > 0) continue;
+
+						real e = Min(a->restitution, b->restitution);
+						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+						mag /= a->inv_mass + 0;
+						Vec2 impulse = mag * normal;
+						a->velocity -= a->inv_mass * impulse;
+					} else {
+						Vec2 separation = Max(ovl_mag - _collision_slop, 0) 
+							* (1.0f / (a->inv_mass + b->inv_mass)) * 0.5f * normal;
+						a->shape.center -= a->inv_mass * separation;
+						b->shape.center += b->inv_mass * separation;
+
 						Vec2 relative_velocity = b->velocity - a->velocity;
 						real velocity_on_normal = v2_dot(relative_velocity, normal);
+						if(velocity_on_normal > 0) continue;
+
 						real e = Min(a->restitution, b->restitution);
-						real j = -(1 + e) * velocity_on_normal;
-						j /= a->inv_mass + b->inv_mass;
-						Vec2 impulse = j * normal;
+						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+						mag /= a->inv_mass + b->inv_mass;
+						Vec2 impulse = mag * normal;
 						a->velocity -= a->inv_mass * impulse;
 						b->velocity += b->inv_mass * impulse;
-#endif
-
 					}
 				}
 			}
@@ -171,15 +223,16 @@ void sim_update(Simulator* sim, real dt)
 		for(isize i = 0; i < sim->bodies_count; ++i) {
 			a = sim->bodies + i;
 			if(Has_Flag(a->flags, Body_Flag_Static)) continue;
-			Vec2 iter_force = a->force * (1.0f / Sim_Iter);
-			Vec2 new_vel = a->velocity + (dt * iter_force);
+			Vec2 iter_acl = (a->force * a->inv_mass) / Sim_Iter;
+			Vec2 new_vel = a->velocity + (dt * iter_acl);
 			Vec2 dpos = (a->velocity + new_vel) * 0.5f;
 			dpos *= 1.0f / Sim_Iter;
 			a->shape.center += dpos * dt;
 			a->velocity = new_vel;
-			a->velocity *= damping;
+			a->velocity *= powf(a->damping, Sim_Iter);
 		}
 
 	}
 	body_sort_on_id(sim->bodies, sim->bodies_count);
 }
+

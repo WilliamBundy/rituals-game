@@ -124,6 +124,15 @@ static inline Vec2 operator*(Vec2 a, real s)
 	return Vec2{a.x * s, a.y * s};
 }
 
+static inline Vec2 operator/(real s, Vec2 a)
+{
+	return a * (1.0f / s);
+}
+static inline Vec2 operator/(Vec2 a, real s)
+{
+	return a * (1.0f / s);
+}
+
 static inline Vec2 operator*(real s, Vec2 a)
 {
 	return Vec2{a.x * s, a.y * s};
@@ -173,7 +182,7 @@ inline Vec2 v2_from_angle(real normal)
 
 struct AABB
 {
-	
+
 	Vec2 center;
 	union {
 		struct {
@@ -219,6 +228,13 @@ static inline bool aabb_intersect(AABB* a, AABB* b)
 {
 	if(fabsf(b->center.x - a->center.x) > (b->hw + a->hw)) return false;
 	if(fabsf(b->center.y - a->center.y) > (b->hh + a->hh)) return false;
+	return true;
+}
+
+static inline bool aabb_intersect(AABB a, AABB b)
+{
+	if(fabsf(b.center.x - a.center.x) > (b.hw + a.hw)) return false;
+	if(fabsf(b.center.y - a.center.y) > (b.hh + a.hh)) return false;
 	return true;
 }
 
@@ -376,4 +392,12 @@ Mat3 transform_to_mat3(Transform* tr)
 	m.b2 = m.a1;
 	m.b3 = tr->position.y;
 	return m;
+}
+
+static inline isize modulus(isize a, isize b)
+{
+	if(b == 0) return -1;
+	if(a == -b) return 0;
+	else if(a < 0) a = b + (a % b);
+	return a % b;
 }

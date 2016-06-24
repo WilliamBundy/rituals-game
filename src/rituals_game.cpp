@@ -250,6 +250,15 @@ struct Game_Input
 	int32 mouse_y;
 };
 
+enum Game_State
+{
+	Game_State_None,
+	Game_State_Menu,
+	Game_State_Play
+};
+
+
+
 // Game struct
 //typedef struct Debug_Log Debug_Log;
 typedef struct Spritefont Spritefont;
@@ -258,6 +267,7 @@ struct Game
 {
 	SDL_Window* window;
 	Renderer* renderer;
+	Game_State state;
 	real scale;
 	Vec2 size;
 	Vec2i window_size;

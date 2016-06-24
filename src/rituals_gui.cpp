@@ -157,6 +157,7 @@ void spritefont_render_text(Spritefont* font,
 		s.position = position;
 		s.texture = font->glyphs[c - Ascii_Printable_Start];
 		s.size = size;
+		s.color = font->color;
 		
 		if((max_width > 0) && (s.position.x + s.size.x > (max_width + initial_pos.x))) {
 			position.y += font->glyph_height + font->line_padding;
@@ -194,3 +195,29 @@ void render_title_text(char* text, Vec2 position)
 	spritefont_render_text(title_font, text, position);
 }
 
+bool gui_add_button(Vec2 position, char* text)
+{
+	Vec2 dmouse = v2(
+			input->mouse_x / game->scale, 
+			input->mouse_y / game->scale) + renderer->offset;
+	int32 state = 0;
+	if(aabb_intersect(aabb(position, 5 * 16, 24), aabb(dmouse, 0, 0))) {
+		state = 1;
+		if(input->mouse[SDL_BUTTON_LEFT] >= State_Pressed) {
+			state = 2;
+		}
+	}
+
+	Sprite s;
+	init_sprite(&s);
+	s.position = position;
+	s.size = v2(5 * 16, 24);
+	s.texture = Get_Texture_Coordinates(renderer->texture_width - 5 * 16, 6 * 16 + s.size.y * state, 5 * 16, 24);
+	renderer_push_sprite(&s);
+	body_font->color = v4(0, 0, 0, 1);
+	render_body_text(text, v2(
+				position.x - s.size.x/2 + 8 + body_font->glyph_width / 2,
+				position.y));
+
+	return state > 0 && input->mouse[SDL_BUTTON_LEFT] == State_Just_Released;
+}
