@@ -94,12 +94,12 @@ typedef size_t usize;
 #define isizeof(t) ((isize)sizeof(t))
 #define isz(t) (isizeof(t))
 
-#define Mixer_Number_Of_Channels (64)
+#define MixerNumberOfChannels (64)
 
-#define File_Path_Max_Length (4096)
+#define FilePathMaxLength (4096)
 
-#define Path_Separator ("\\")
-#define Path_Separator_Char ('\\')
+#define PathSeparator ("\\")
+#define PathSeparatorChar ('\\')
 
 #define Min(x,y) ((x<y)?x:y)
 #define Max(x,y) ((x>y)?x:y)

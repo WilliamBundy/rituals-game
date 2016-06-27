@@ -53,7 +53,7 @@ Entity_On_Activate_Macro	src/rituals_world.cpp	/^Entity_On_Activate_Macro(test_o
 Entity_On_Activate_Macro	src/rituals_world.cpp	/^typedef Entity_On_Activate_Macro((*Entity_On_Activate));$/;"	t	file:
 Entity_On_Activate_Macro	src/rituals_world.cpp	124;"	d	file:
 FAST_BITS	src/thirdparty/stb_image.h	1456;"	d
-File_Path_Max_Length	src/rituals_main.cpp	99;"	d	file:
+FilePathMaxLength	src/rituals_main.cpp	99;"	d	file:
 File_Path_Max_Length	src/rituals_win32.cpp	77;"	d	file:
 Flag	src/rituals_simulation.cpp	5;"	d	file:
 GLAPI	src/thirdparty/gl_core_3_3.h	61;"	d
@@ -964,14 +964,14 @@ Megabytes	src/rituals_main.cpp	109;"	d	file:
 Megabytes	src/rituals_win32.cpp	83;"	d	file:
 Memory_Arena	src/rituals_game.cpp	/^struct Memory_Arena$/;"	s	file:
 Min	src/rituals_main.cpp	104;"	d	file:
-Mixer_Number_Of_Channels	src/rituals_main.cpp	97;"	d	file:
+MixerNumberOfChannels	src/rituals_main.cpp	97;"	d	file:
 Mixer_Number_Of_Channels	src/rituals_win32.cpp	75;"	d	file:
 NOMINMAX	src/thirdparty/gl_core_3_3.h	35;"	d
 NOMINMAX	src/thirdparty/gl_core_3_3.h	43;"	d
 POINTER_C_GENERATED_HEADER_OPENGL_H	src/thirdparty/gl_core_3_3.h	2;"	d
-Path_Separator	src/rituals_main.cpp	101;"	d	file:
+PathSeparator	src/rituals_main.cpp	101;"	d	file:
+PathSeparatorChar	src/rituals_main.cpp	102;"	d	file:
 Path_Separator	src/rituals_win32.cpp	79;"	d	file:
-Path_Separator_Char	src/rituals_main.cpp	102;"	d	file:
 Path_Separator_Char	src/rituals_win32.cpp	80;"	d	file:
 Play_State	src/rituals_main.cpp	/^struct Play_State$/;"	s	file:
 Random	src/rituals_game.cpp	/^struct Random$/;"	s	file:
