@@ -1146,6 +1146,7 @@ _new_tile	src/rituals_game_registry.cpp	81;"	d	file:
 _passthru_macro	src/rituals_game.cpp	84;"	d	file:
 _player_animate	src/rituals_world.cpp	/^void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, Vec2 move_impulse)$/;"	f
 _player_controls	src/rituals_world.cpp	/^Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)$/;"	f
+_player_handle_interactions	src/rituals_world.cpp	/^void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Body* player)$/;"	f
 _rotate_left	src/rituals_game.cpp	/^static inline uint64 _rotate_left(const uint64 t, int64 k)$/;"	f	file:
 _splitmix64	src/rituals_game.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 _th	src/rituals_win32.cpp	/^isize _tw, _th;$/;"	v

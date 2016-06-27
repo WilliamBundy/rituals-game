@@ -268,60 +268,8 @@ void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, 
 	}
 }
 
-void world_area_update(World_Area* area)
+void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Body* player)
 {
-	game_set_scale(2.0);
-
-	play_state->current_time = SDL_GetTicks();
-	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
-	dt = clamp(dt, 0, 1.2f);
-	play_state->accumulator += dt;
-	play_state->prev_time = play_state->current_time;
-
-	sim_sort_bodies_on_id(&area->sim);
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = player_entity->body;
-	Vec2 move_impulse = _player_controls(area, player_entity, player);
-	while(play_state->accumulator >= TimeStep) {
-		play_state->accumulator -= TimeStep;
-		player->velocity += move_impulse;
-		sim_update(&area->sim, &area->map, TimeStep);
-	}
-	
-	_player_animate(area, player_entity, player, move_impulse);
-	Vec2 target = player->shape.center;
-
-	if(target.x < 0) {
-		world_switch_current_area(play_state->world, area->west);
-		play_state->world_xy.x--;
-	} else if(target.x > area->map.w * Tile_Size) {
-		world_switch_current_area(play_state->world, area->east);
-		play_state->world_xy.x++;
-	} else if(target.y < 0) {
-		world_switch_current_area(play_state->world, area->north);
-		play_state->world_xy.y--;
-	} else if(target.y > area->map.h * Tile_Size) {
-		world_switch_current_area(play_state->world, area->south);
-		play_state->world_xy.y++;
-	}
-
-	area->offset += (target - area->offset) * 0.1f;
-	area->offset -= Game->size * 0.5f;
-	if(area->offset.x < 0) 
-		area->offset.x = 0;
-	else if((area->offset.x + Game->size.x) > area->map.w * Tile_Size)
-		area->offset.x = area->map.w * Tile_Size - Game->size.x;
-
-	if(area->offset.y < 0) 
-		area->offset.y = 0;
-	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
-		area->offset.y = area->map.h * Tile_Size - Game->size.y;
-
-	//TODO(will) refactor into own function?
-	/*
-	 * Player input code
-	 *
-	 */ 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
 		Entity* ball_entity = world_area_get_next_entity(area);
 		Sim_Body* ball = ball_entity->body;
@@ -447,6 +395,60 @@ void world_area_update(World_Area* area)
 		}
 
 	}
+}
+
+
+
+void world_area_update(World_Area* area)
+{
+	game_set_scale(2.0);
+
+	play_state->current_time = SDL_GetTicks();
+	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
+	dt = clamp(dt, 0, 1.2f);
+	play_state->accumulator += dt;
+	play_state->prev_time = play_state->current_time;
+
+	sim_sort_bodies_on_id(&area->sim);
+	Entity* player_entity = world_area_find_entity(area, 0);
+	Sim_Body* player = player_entity->body;
+	Vec2 move_impulse = _player_controls(area, player_entity, player);
+	while(play_state->accumulator >= TimeStep) {
+		play_state->accumulator -= TimeStep;
+		player->velocity += move_impulse;
+		sim_update(&area->sim, &area->map, TimeStep);
+	}
+	
+	_player_animate(area, player_entity, player, move_impulse);
+	Vec2 target = player->shape.center;
+
+	if(target.x < 0) {
+		world_switch_current_area(play_state->world, area->west);
+		play_state->world_xy.x--;
+	} else if(target.x > area->map.w * Tile_Size) {
+		world_switch_current_area(play_state->world, area->east);
+		play_state->world_xy.x++;
+	} else if(target.y < 0) {
+		world_switch_current_area(play_state->world, area->north);
+		play_state->world_xy.y--;
+	} else if(target.y > area->map.h * Tile_Size) {
+		world_switch_current_area(play_state->world, area->south);
+		play_state->world_xy.y++;
+	}
+
+	area->offset += (target - area->offset) * 0.1f;
+	area->offset -= Game->size * 0.5f;
+	if(area->offset.x < 0) 
+		area->offset.x = 0;
+	else if((area->offset.x + Game->size.x) > area->map.w * Tile_Size)
+		area->offset.x = area->map.w * Tile_Size - Game->size.x;
+
+	if(area->offset.y < 0) 
+		area->offset.y = 0;
+	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
+		area->offset.y = area->map.h * Tile_Size - Game->size.y;
+
+	_player_handle_interactions(area, player_entity, player);
 
 	Renderer->offset = area->offset;
 	area->offset += Game->size * 0.5f;
