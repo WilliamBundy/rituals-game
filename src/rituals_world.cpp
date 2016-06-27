@@ -702,23 +702,13 @@ void update_world_area(World_Area* area)
 	renderer_start();
 
 	char str[256];
-	isize len = snprintf(str, 256, "X:%d Y:%d Tile: %s", play_state->world_xy.x, play_state->world_xy.y, player_tile->name);
-	
-
-
-	Sprite testspr;
-	init_sprite(&testspr);
-	testspr.position = v2(input->mouse_x, input->mouse_y);
-	testspr.texture = _tile_texture(0, 2);
-	testspr.size = v2(64, 64);
-	testspr.anchor = Anchor_Top_Left;
-	renderer_push_sprite(&testspr);
+	isize len = snprintf(str, 256, "X:%d Y:%d Tile: %s",
+			play_state->world_xy.x, 
+			play_state->world_xy.y, 
+			player_tile->name);
 
 	render_body_text(str, v2(16, game->size.y - (body_font->glyph_height) - 8), true);
 	render_body_text(debug_str, v2(16, 16), true);
-
-
-
 
 	renderer_draw();
 }
