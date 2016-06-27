@@ -75,7 +75,7 @@ def main(tracking_file):
     try:
         ff = open("autogit.sh", "w")
         ff.write("git add --all\n")
-        ff.write("git commit -m \"rituals rev {0}\" \n".format(rev))
+        ff.write("git commit -m \"rituals build {0}\" \n".format(rev))
         ff.write("git push \n")
         ff.close()
     except IOError as err:

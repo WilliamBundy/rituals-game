@@ -16,11 +16,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /* TODO(will) features
  *	- Improve physics system
- *		- Any speedups that we can think of
+ *		- Fixing the broadphase?
+ *		- Real friction?
  *	- UI controls
+ *		- Mostly artwork.
  *	- Main Menu
+ *		- done, but not needed yet, really
  *  - Sound effects, music
  *  - Make a new palette, do some art
+ *  - Game_Registry for all the <thing>_info types
+ *  	- also to catalogue event handlers
+ *  - Inventory management
+ *  - Item entities
+ *  - Different types of world
+ *  - Game loop (die, respawn)
+ *  - Rituals! They need to be in the game at some point.
+ *
+ *
+ * - Thank you for watching the stream
  *
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
