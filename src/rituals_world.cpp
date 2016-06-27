@@ -281,7 +281,7 @@ void world_area_update(World_Area* area)
 	sim_sort_bodies_on_id(&area->sim);
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = player_entity->body;
-	Vec2 move_impluse = _player_controls(area, player_entity, player);
+	Vec2 move_impulse = _player_controls(area, player_entity, player);
 	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;
 		player->velocity += move_impulse;
