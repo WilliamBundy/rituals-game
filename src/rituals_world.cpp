@@ -475,7 +475,6 @@ void world_area_update(World_Area* area)
 		renderer_push_sprite(&e->sprite);
 	}
 
-	renderer_push_sprite(&s);
 	renderer_sort(sprite_count_offset);
 
 	renderer_draw();
