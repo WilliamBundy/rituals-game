@@ -1,3 +1,3 @@
 git add --all
-git commit -m "this file is going to be written from python, but I need a working ssh-agent" 
+git commit -m "one more time! hopefully bash -login autogit.sh works..." 
 git push 
