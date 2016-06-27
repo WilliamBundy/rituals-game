@@ -202,7 +202,7 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 {
 	int w, h, n;
-	char file[File_Path_Max_Length];
+	char file[FilePathMaxLength];
 	const char* base_path = SDL_GetBasePath();
 	isize len = snprintf(file, File_Path_Max_Length, "%s%s", base_path, filename);
 	uint8* data = (uint8*)stbi_load(file, &w, &h, &n, STBI_rgb_alpha);

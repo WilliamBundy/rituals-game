@@ -921,7 +921,7 @@ Game_State_Play	src/rituals_game.cpp	/^	Game_State_Play$/;"	e	enum:Game_State	fi
 Generate_Binary_Search_For_Type	src/rituals_game.cpp	53;"	d	file:
 Generate_Insertion_Sort_For_Type	src/rituals_game.cpp	38;"	d	file:
 Generate_Quicksort_For_Type	src/rituals_game.cpp	15;"	d	file:
-Get_Texture_Coordinates	src/rituals_renderer.cpp	211;"	d	file:
+Get_Texture_Coordinates	src/rituals_renderer.cpp	221;"	d	file:
 Gigabytes	src/rituals_main.cpp	110;"	d	file:
 Gigabytes	src/rituals_win32.cpp	84;"	d	file:
 Half_TS	src/rituals_game_info.cpp	62;"	d	file:
@@ -1112,9 +1112,9 @@ _entity_get_id	src/rituals_world.cpp	168;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	75;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
-_get_sprite_y_base	src/rituals_renderer.cpp	236;"	d	file:
-_gl_offset	src/rituals_renderer.cpp	61;"	d	file:
-_glerror	src/rituals_renderer.cpp	63;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	246;"	d	file:
+_gl_offset	src/rituals_renderer.cpp	71;"	d	file:
+_glerror	src/rituals_renderer.cpp	73;"	d	file:
 _isnt_spritefont_separator	rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _isnt_spritefont_separator	src/rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _naive_generate_statics_for_tilemap	src/rituals_win32.cpp	/^void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
