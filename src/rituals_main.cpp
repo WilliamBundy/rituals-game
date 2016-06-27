@@ -204,8 +204,8 @@ void load_assets()
 	play_state_init();
 	play_state_start();
 #if DEBUG
-	load_test_assets();
-	game->state = Game_State_None;
+	//load_test_assets();
+	//game->state = Game_State_None;
 #endif
 }
 

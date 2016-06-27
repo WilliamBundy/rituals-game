@@ -21,6 +21,8 @@ SET LIBS=SDL2.lib ^
 	SDL2_mixer.lib ^
 	opengl32.lib
 
+python autogit.py
+
 ctime -begin rituals.ctm
 if "%~1"=="" goto DEBUG_BUILD
 if "%~1"=="release" goto RELEASE_BUILD

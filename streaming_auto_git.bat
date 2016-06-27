@@ -1,1 +1,0 @@
-"C:\Program Files\Git\usr\bin\bash.exe" -login autogit.sh
