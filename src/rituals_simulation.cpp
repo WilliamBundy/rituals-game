@@ -37,17 +37,17 @@ struct Sim_Body
 
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
-//Generate_Insertion_Sort_For_Type(body_sort_on_x, Sim_Body, _body_get_min_x)
-//Generate_Insertion_Sort_For_Type(body_sort_on_y, Sim_Body, _body_get_min_y)
-Generate_Quicksort_For_Type(body_sort_on_x, Sim_Body, _body_get_min_x)
-Generate_Quicksort_For_Type(body_sort_on_y, Sim_Body, _body_get_min_y)
+//GenerateInsertionSortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
+//GenerateInsertionSortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
+GenerateQuicksortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
+GenerateQuicksortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
 
 #define _body_get_not_static(e) (!Has_Flag(e.flags, Body_Flag_Static))
-Generate_Quicksort_For_Type(body_sort_static_first, Sim_Body, _body_get_not_static)
+GenerateQuicksortForType(body_sort_static_first, Sim_Body, _body_get_not_static)
 
 #define _body_get_id(e) (e.id)
-Generate_Quicksort_For_Type(body_sort_on_id, Sim_Body, _body_get_id)
-Generate_Binary_Search_For_Type(body_search_for_id, Sim_Body, isize, _body_get_id)
+GenerateQuicksortForType(body_sort_on_id, Sim_Body, _body_get_id)
+GenerateBinarySearchForType(body_search_for_id, Sim_Body, isize, _body_get_id)
 
 void init_body(Sim_Body* b)
 {
@@ -87,7 +87,7 @@ void init_simulator(Simulator* sim, isize cap, Memory_Arena* arena)
 	sim->bodies_capacity = cap;
 	sim->sort_axis = 0;
 	sim->next_body_id = 0;
-	sim->bodies = Arena_Push_Array(arena, Sim_Body, cap);
+	sim->bodies = arena_push_array(arena, Sim_Body, cap);
 }
 
 Sim_Body* sim_find_body(Simulator* sim, isize id)
@@ -124,13 +124,13 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 	return NULL;
 }
 
-#define Time_Step (1.0f/60.0f)
-#define Sim_Iter_i (8)
-#define Sim_Iter ((real)Sim_Iter_i)
+#define TimeStep (1.0f/60.0f)
+#define SimIter_i (8)
+#define SimIter ((real)SimIter_i)
 void sim_update(Simulator* sim, Tilemap* map, real dt)
 {
 	Sim_Body *a, *b;
-	for(isize times = 0; times < Sim_Iter_i; ++times) {
+	for(isize times = 0; times < SimIter_i; ++times) {
 //#if 0
 		if(sim->sort_axis == 0) {
 			body_sort_on_x(sim->bodies, sim->bodies_count);
@@ -243,12 +243,12 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 		for(isize i = 0; i < sim->bodies_count; ++i) {
 			a = sim->bodies + i;
 			if(Has_Flag(a->flags, Body_Flag_Static)) continue;
-			Vec2 iter_acl = (a->force * a->inv_mass) / Sim_Iter;
+			Vec2 iter_acl = (a->force * a->inv_mass) / SimIter;
 			Vec2 new_vel = a->velocity + (dt * iter_acl);
 			Vec2 dpos = (a->velocity + new_vel) * 0.5f;
-			dpos *= 1.0f / Sim_Iter;
+			dpos *= 1.0f / SimIter;
 			a->shape.center += dpos * dt;
-			a->shape.center += a->collision_vel / Sim_Iter * dt;
+			a->shape.center += a->collision_vel / SimIter * dt;
 			a->velocity = new_vel;
 			Tile_Info* tile = map->info + tilemap_get_at(map, a->shape.center);
 			real damping = 1.0f;
@@ -258,7 +258,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 				damping = sqrtf(a->damping * a->damping + 
 					tile->friction * tile->friction) * Math_InvSqrt2;
 			}
-			a->velocity *= powf(damping, Sim_Iter);
+			a->velocity *= powf(damping, SimIter);
 			a->velocity += a->collision_vel;
 			a->collision_vel = v2(0, 0);
 		}

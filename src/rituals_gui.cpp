@@ -13,9 +13,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */
 
-#define Ascii_Printable_Start (32)
-#define Ascii_Printable_End   (128)
-#define Ascii_Printable_Count (128-32)
+#define AsciiPrintableStart (32)
+#define AsciiPrintableEnd   (128)
+#define AsciiPrintableCount (128-32)
 
 struct Spritefont
 {
@@ -53,14 +53,14 @@ static inline bool _isnt_spritefont_separator(char c)
 
 Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)
 {
-	Rect2* glyphs = Arena_Push_Array(arena, Rect2, Ascii_Printable_Count);
+	Rect2* glyphs = arena_push_array(arena, Rect2, AsciiPrintableCount);
 	isize file_len = strlen(glyphs_file);
 	isize start = 0, len = 0;
 	for(isize i = 0; i < file_len; ++i) {
 		char c = glyphs_file[i++];
 		Rect2* r;
-		if(c > Ascii_Printable_Start && c <= Ascii_Printable_End) {
-			r = &glyphs[c - Ascii_Printable_Start];
+		if(c > AsciiPrintableStart && c <= AsciiPrintableEnd) {
+			r = &glyphs[c - AsciiPrintableStart];
 		} else {
 			while(glyphs_file[i] != '\n') i++;
 			continue;
@@ -71,14 +71,14 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
 		len = i - start;
 		r->x = dec_str_to_int(glyphs_file + start, len) + offsetx;
-		r->x /= renderer->texture_width;
+		r->x /= Renderer->texture_width;
 		i++;
 
 		start = i;
 		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
 		len = i - start;
 		r->y = dec_str_to_int(glyphs_file + start, len) + offsety - 1;
-		r->y /= renderer->texture_height;
+		r->y /= Renderer->texture_height;
 		i++;
 
 		start = i;
@@ -86,7 +86,7 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		len = i - start;
 		r->w = dec_str_to_int(glyphs_file + start, len);
 		*w = r->w;
-		r->w /= renderer->texture_width;
+		r->w /= Renderer->texture_width;
 		i++;
 		start = i;
 
@@ -94,7 +94,7 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		len = i - start;
 		r->h = dec_str_to_int(glyphs_file + start, len) + 2;
 		*h = r->h;
-		r->h /= renderer->texture_height;
+		r->h /= Renderer->texture_height;
 		i++;
 	}
 	return glyphs;
@@ -104,23 +104,23 @@ void load_spritefont(Spritefont* font, char* file_path_in, Vec2i offset)
 {
 	init_spritefont(font);
 
-	char file_path[File_Path_Max_Length];
-	isize len = snprintf(file_path, File_Path_Max_Length, "%s%s", game->base_path, file_path_in);
+	char file_path[FilePathMaxLength];
+	isize len = snprintf(file_path, FilePathMaxLength, "%s%s", Game->base_path, file_path_in);
 	
 	char* str = NULL;
 	FILE* fp = fopen(file_path, "r");
 	if(fp != NULL) {
-		start_temp_arena(game->temp_arena);
+		start_temp_arena(Game->temp_arena);
 		fseek(fp, 0L, SEEK_END);
 		isize size = ftell(fp);
 		rewind(fp);
-		str = Arena_Push_Array(game->temp_arena, char, size + 1);
+		str = arena_push_array(Game->temp_arena, char, size + 1);
 		fread(str, sizeof(char), size, fp);
 		str[size] = '\0';
 		fclose(fp);
-		font->glyphs = parse_spritefont_rectangles(str, game->asset_arena, 
+		font->glyphs = parse_spritefont_rectangles(str, Game->asset_arena, 
 			offset.x, offset.y, &font->glyph_width, &font->glyph_height);
-		end_temp_arena(game->temp_arena);
+		end_temp_arena(Game->temp_arena);
 	} else {
 		Log_Error("Could not find font glyphs file");
 		Log_Error(file_path);
@@ -129,7 +129,7 @@ void load_spritefont(Spritefont* font, char* file_path_in, Vec2i offset)
 
 Spritefont* load_spritefont(char* filepath, Vec2i offset)
 {
-	Spritefont* font = Arena_Push_Struct(game->asset_arena, Spritefont);
+	Spritefont* font = arena_push_struct(Game->asset_arena, Spritefont);
 	load_spritefont(font, filepath, offset);
 	return font;
 }
@@ -157,7 +157,7 @@ Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)
 			default: 
 				break;
 		}
-		if(c < Ascii_Printable_Start || c > Ascii_Printable_End) continue;
+		if(c < AsciiPrintableStart || c > AsciiPrintableEnd) continue;
 		position.x += size.x + font->character_padding;
 	}
 
@@ -198,10 +198,10 @@ void spritefont_render_text(Spritefont* font,
 			default: 
 				break;
 		}
-		if(c < Ascii_Printable_Start || c > Ascii_Printable_End) continue;
+		if(c < AsciiPrintableStart || c > AsciiPrintableEnd) continue;
 
 		s.position = position;
-		s.texture = font->glyphs[c - Ascii_Printable_Start];
+		s.texture = font->glyphs[c - AsciiPrintableStart];
 		s.size = size;
 		s.color = font->color;
 		s.angle = 0;
@@ -236,10 +236,10 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	Vec2 text_size = spritefont_size_text(font, text);
 	Sprite s; 
 	init_sprite(&s);
-	s.size = v2(text_size.x + 16,  body_font->glyph_height + 8);
+	s.size = v2(text_size.x + 16,  Body_Font->glyph_height + 8);
 	s.position = position - v2(8, 4);
 	s.color = background;
-	s.texture = Get_Texture_Coordinates(0, renderer->texture_height - 16, 16, 16);
+	s.texture = Get_Texture_Coordinates(0, Renderer->texture_height - 16, 16, 16);
 	s.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&s);
 
@@ -249,25 +249,25 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 void render_body_text(char* text, Vec2 position, bool background=false)
 {
 	if(background) {
-		spritefont_render_text_background(body_font, text, position, v4(0, 0, 0, 0.8f));
+		spritefont_render_text_background(Body_Font, text, position, v4(0, 0, 0, 0.8f));
 	}
-	spritefont_render_text(body_font, text, position, Anchor_Top_Left);
+	spritefont_render_text(Body_Font, text, position, Anchor_Top_Left);
 }
 
 void render_title_text(char* text, Vec2 position)
 {
-	spritefont_render_text(title_font, text, position);
+	spritefont_render_text(Title_Font, text, position);
 }
 
 bool gui_add_button(Vec2 position, char* text)
 {
 	Vec2 dmouse = v2(
-			input->mouse_x / game->scale, 
-			input->mouse_y / game->scale) + renderer->offset;
+			Input->mouse_x / Game->scale, 
+			Input->mouse_y / Game->scale) + Renderer->offset;
 	int32 state = 0;
 	if(aabb_intersect(aabb(position, 5 * 16, 24), aabb(dmouse, 0, 0))) {
 		state = 1;
-		if(input->mouse[SDL_BUTTON_LEFT] >= State_Pressed) {
+		if(Input->mouse[SDL_BUTTON_LEFT] >= State_Pressed) {
 			state = 2;
 		}
 	}
@@ -276,12 +276,12 @@ bool gui_add_button(Vec2 position, char* text)
 	init_sprite(&s);
 	s.position = position;
 	s.size = v2(5 * 16, 24);
-	s.texture = Get_Texture_Coordinates(renderer->texture_width - 5 * 16, 6 * 16 + s.size.y * state, 5 * 16, 24);
+	s.texture = Get_Texture_Coordinates(Renderer->texture_width - 5 * 16, 6 * 16 + s.size.y * state, 5 * 16, 24);
 	renderer_push_sprite(&s);
-	body_font->color = v4(0, 0, 0, 1);
+	Body_Font->color = v4(0, 0, 0, 1);
 	render_body_text(text, v2(
-				position.x - s.size.x/2 + 8 + body_font->glyph_width / 2,
+				position.x - s.size.x/2 + 8 + Body_Font->glyph_width / 2,
 				position.y));
 
-	return state > 0 && input->mouse[SDL_BUTTON_LEFT] == State_Just_Released;
+	return state > 0 && Input->mouse[SDL_BUTTON_LEFT] == State_Just_Released;
 }

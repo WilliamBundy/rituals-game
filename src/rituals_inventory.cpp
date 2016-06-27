@@ -68,7 +68,7 @@ void init_item_stack(Item_Stack* stack, Item_Info* info)
 // or, maybe implement free-list allocator?
 Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)
 {
-	Item_Stack* stack = Arena_Push_Struct(arena, Item_Stack);
+	Item_Stack* stack = arena_push_struct(arena, Item_Stack);
 	init_item_stack(stack, info);
 	return stack;
 }
@@ -85,7 +85,7 @@ void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)
 	inventory->w = w;
 	inventory->h = h;
 	inventory->size = size;
-	inventory->contents = Arena_Push_Array(arena, Item_Stack*, size);
+	inventory->contents = arena_push_array(arena, Item_Stack*, size);
 }
 
 bool inventory_add_item(Inventory* inventory, Item_Stack** origin_slot)
@@ -120,7 +120,7 @@ void render_inventory(Inventory* inventory, Vec2 position)
 			s.size = v2(32, 32);
 
 			s.texture = Get_Texture_Coordinates(
-					renderer->texture_width - 7 * 16, 
+					Renderer->texture_width - 7 * 16, 
 					6 * 16, 
 					32, 32);
 					

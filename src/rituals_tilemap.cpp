@@ -29,16 +29,16 @@ void init_tilemap(Tilemap* tilemap, isize w, isize h, Memory_Arena* arena)
 {
 	tilemap->w = w;
 	tilemap->h = h;
-	tilemap->tiles = Arena_Push_Array(arena, Tile, w * h);
-	tilemap->states = Arena_Push_Array(arena, Tile_State,  w * h);
+	tilemap->tiles = arena_push_array(arena, Tile, w * h);
+	tilemap->states = arena_push_array(arena, Tile_State,  w * h);
 }
 
 void generate_tilemap(Tilemap* tilemap, uint64 seed)
 {
-	start_temp_arena(game->temp_arena);
+	start_temp_arena(Game->temp_arena);
 	isize minified_w = tilemap->w / 8;
 	isize minified_h = tilemap->h / 8;
-	real* initial = Arena_Push_Array(game->temp_arena, real, minified_w * minified_h);
+	real* initial = arena_push_array(Game->temp_arena, real, minified_w * minified_h);
 
 	Random rs;
 	Random* r = &rs;
@@ -53,7 +53,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 
 	minified_w *= 2;
 	minified_h *= 2;
-	real* second = Arena_Push_Array(game->temp_arena, real, minified_w * minified_h);
+	real* second = arena_push_array(Game->temp_arena, real, minified_w * minified_h);
 		
 	for(isize i = 0; i < minified_h; ++i) {
 		for(isize j = 0; j < minified_w; ++j) {
@@ -68,7 +68,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 
 	minified_w *= 2;
 	minified_h *= 2;
-	real* third = Arena_Push_Array(game->temp_arena, real, minified_w * minified_h);
+	real* third = arena_push_array(Game->temp_arena, real, minified_w * minified_h);
 		
 	for(isize i = 0; i < minified_h; ++i) {
 		for(isize j = 0; j < minified_w; ++j) {
@@ -83,7 +83,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 
 	minified_w *= 2;
 	minified_h *= 2;
-	real* fourth = Arena_Push_Array(game->temp_arena, real, minified_w * minified_h);
+	real* fourth = arena_push_array(Game->temp_arena, real, minified_w * minified_h);
 		
 	for(isize i = 0; i < minified_h; ++i) {
 		for(isize j = 0; j < minified_w; ++j) {
@@ -152,7 +152,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 		}
 	}
 
-	end_temp_arena(game->temp_arena);
+	end_temp_arena(Game->temp_arena);
 
 }
 
@@ -278,7 +278,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 			}
 		}
 	}
-	isize unsorted_index = renderer->sprite_count;
+	isize unsorted_index = Renderer->sprite_count;
 	for(isize i = starty; i < endy; ++i) {
 		for(isize j = startx; j < endx; ++j) {
 				Tile tile = tilemap->tiles[i * tilemap->w + j];

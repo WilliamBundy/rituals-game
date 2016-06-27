@@ -125,11 +125,19 @@ Play_State* play_state;
 
 #include "rituals_renderer.cpp"
 #include "rituals_gui.cpp"
+
 #include "rituals_game_info.cpp"
+#include "rituals_game_registry.cpp"
+
 #include "rituals_inventory.cpp"
+
 #include "rituals_tilemap.cpp"
+
 #include "rituals_simulation.cpp"
+
+#include "rituals_world_area.cpp"
 #include "rituals_world.cpp"
+
 #include "rituals_play_state.cpp"
 
 void main_menu_update()
@@ -140,15 +148,15 @@ void main_menu_update()
 	Sprite s;
 	init_sprite(&s);
 	s.size = v2(15 * 16, 4 * 16);
-	s.position = v2(16 + s.size.x / 2, game->size.y / 2 - s.size.y / 2);
+	s.position = v2(16 + s.size.x / 2, Game->size.y / 2 - s.size.y / 2);
 	s.texture = Get_Texture_Coordinates(
-			renderer->texture_width - s.size.x,
+			Renderer->texture_width - s.size.x,
 			2 * 16, 
 			s.size.x, s.size.y);
 	renderer_push_sprite(&s);
 
 	if(gui_add_button(v2(40 + 16, s.position.y + s.size.y / 2 + 16), "Start")) {
-		game->state = Game_State_Play;
+		Game->state = Game_State_Play;
 	}
 	renderer_draw();
 }
@@ -160,15 +168,15 @@ Inventory inventory;
 #define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(item_types, &item_types_count, #name, (s), _tile_texture(x, y)) 
 void load_test_assets()
 {
-	item_types = Arena_Push_Array(game->play_arena, Item_Info, Max_Item_Info_Count);
+	item_types = arena_push_array(Game->play_arena, Item_Info, Max_Item_Info_Count);
 	_add_item(none, 0, 0, 0);
 	_add_item(hooknife, 1, 0, 5);
 	_add_item(rope, 8, 1, 5);
 	_add_item(book, 64, 2, 5);
 	_add_item(rock, 64, 3, 0);
 	
-	init_inventory(&inventory, 9, 6, game->play_arena);
-	Item_Stack* stack = new_item_stack(item_types + 1, game->play_arena);
+	init_inventory(&inventory, 9, 6, Game->play_arena);
+	Item_Stack* stack = new_item_stack(item_types + 1, Game->play_arena);
 	printf("%0x \n", (usize)stack);
 	inventory_add_item(&inventory, &stack);
 	printf("%0x \n", (usize)stack);
@@ -184,7 +192,7 @@ void test_update()
 
 void update()
 {
-	switch(game->state) {
+	switch(Game->state) {
 		case Game_State_None:
 #if DEBUG
 			test_update();
@@ -204,29 +212,29 @@ void update()
 void load_assets()
 {
 	isize w, h;
-	renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
-	renderer->texture_width = w;
-	renderer->texture_height = h;
+	Renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
+	Renderer->texture_width = w;
+	Renderer->texture_height = h;
 
-	game->body_font = load_spritefont("data/gohufont-14.glyphs", 
+	Game->body_font = load_spritefont("data/gohufont-14.glyphs", 
 			v2i(2048 - 1142, 0));
-	body_font = game->body_font;
+	Body_Font = Game->body_font;
 
-	game->state = Game_State_Play;
+	Game->state = Game_State_Play;
 	play_state_init();
 	play_state_start();
 #if DEBUG
 	//load_test_assets();
-	//game->state = Game_State_None;
+	//Game->state = Game_State_None;
 #endif
 }
 
 
 void update_screen()
 {
-	SDL_GetWindowSize(game->window, &game->window_size.x, &game->window_size.y);
-	glViewport(0, 0, game->window_size.x, game->window_size.y);
-	game->size = v2(game->window_size) * game->scale;
+	SDL_GetWindowSize(Game->window, &Game->window_size.x, &Game->window_size.y);
+	glViewport(0, 0, Game->window_size.x, Game->window_size.y);
+	Game->size = v2(Game->window_size) * Game->scale;
 }
 
 int main(int argc, char** argv)
@@ -317,36 +325,36 @@ int main(int argc, char** argv)
 	}	
 
 	// Game initializiation
-	game = Allocate(Game, 1);
+	Game = Allocate(Game_Main, 1);
 	{
-		game->window = window;
-		game->state = Game_State_None;
-		game->meta_arena = Allocate(Memory_Arena, 1);
-		init_memory_arena(game->meta_arena, isz(Memory_Arena) * 10);
-		game->game_arena = new_memory_arena(Kilobytes(64), game->meta_arena);
-		game->asset_arena = new_memory_arena(Megabytes(512), game->meta_arena);
-		game->temp_arena = new_memory_arena(Megabytes(64), game->meta_arena);
-		game->play_arena = new_memory_arena(Megabytes(512), game->meta_arena);
-		game->renderer_arena = new_memory_arena(Megabytes(32), game->meta_arena);
+		Game->window = window;
+		Game->state = Game_State_None;
+		Game->meta_arena = Allocate(Memory_Arena, 1);
+		init_memory_arena(Game->meta_arena, isz(Memory_Arena) * 10);
+		Game->game_arena = new_memory_arena(Kilobytes(64), Game->meta_arena);
+		Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
+		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
+		Game->play_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
+		Game->renderer_arena = new_memory_arena(Megabytes(32), Game->meta_arena);
 
-		game->base_path = SDL_GetBasePath();
-		game->base_path_length = strlen(game->base_path);
+		Game->base_path = SDL_GetBasePath();
+		Game->base_path_length = strlen(Game->base_path);
 
-		game->input = Arena_Push_Struct(game->game_arena, Game_Input);
-		game->input->scancodes = Arena_Push_Array(game->game_arena, int8, SDL_NUM_SCANCODES);
-		game->input->keycodes = Arena_Push_Array(game->game_arena, int8, SDL_NUM_SCANCODES);
-		game->input->mouse = Arena_Push_Array(game->game_arena, int8, 16);
+		Game->input = arena_push_struct(Game->game_arena, Game_Input);
+		Game->input->scancodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
+		Game->input->keycodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
+		Game->input->mouse = arena_push_array(Game->game_arena, int8, 16);
 
-		init_random(&game->r, time(NULL));
+		init_random(&Game->r, time(NULL));
 		//TODO(will) load window settings from file
-		game->window_size = v2i(1280, 720);
-		game->scale = 1.0f;
+		Game->window_size = v2i(1280, 720);
+		Game->scale = 1.0f;
 
-		game->renderer = Arena_Push_Struct(game->game_arena, Renderer);
-		renderer_init(game->renderer, game->renderer_arena);
+		Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
+		renderer_init(Game->renderer, Game->renderer_arena);
 
-		renderer = game->renderer;
-		input = game->input;
+		Renderer = Game->renderer;
+		Input = Game->input;
 	}
 
 	load_assets();
@@ -361,27 +369,27 @@ int main(int argc, char** argv)
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 
-		if(game->input->num_keys_down < 0) game->input->num_keys_down = 0;
-		if(game->input->num_mouse_down < 0) game->input->num_mouse_down = 0;
+		if(Game->input->num_keys_down < 0) Game->input->num_keys_down = 0;
+		if(Game->input->num_mouse_down < 0) Game->input->num_mouse_down = 0;
 
-		if(game->input->num_keys_down > 0)
+		if(Game->input->num_keys_down > 0)
 		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
-			int8* t = game->input->scancodes + i;
+			int8* t = Game->input->scancodes + i;
 			if(*t == State_Just_Released) {
 				*t = State_Released;
 			} else if(*t == State_Just_Pressed) {
 				*t = State_Pressed;
 			}
-			t = game->input->keycodes + i;
+			t = Game->input->keycodes + i;
 			if(*t == State_Just_Released) {
 				*t = State_Released;
 			} else if(*t == State_Just_Pressed) {
 				*t = State_Pressed;
 			}
 		}
-		if(game->input->num_mouse_down > 0)
+		if(Game->input->num_mouse_down > 0)
 		for(int64 i = 0; i < 16; ++i) {
-			int8* t = game->input->mouse + i;
+			int8* t = Game->input->mouse + i;
 			if(*t == State_Just_Released) {
 				*t = State_Released;
 			} else if(*t == State_Just_Pressed) {
@@ -400,38 +408,38 @@ int main(int argc, char** argv)
 					update_screen();
 					break;
 				case SDL_KEYDOWN:
-					game->input->num_keys_down++;
+					Game->input->num_keys_down++;
 					if(!event.key.repeat) {
-						game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
+						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
-							game->input->keycodes[event.key.keysym.sym] = State_Just_Pressed;
+							Game->input->keycodes[event.key.keysym.sym] = State_Just_Pressed;
 						}
 					}
 					break;
 				case SDL_KEYUP:
-					game->input->num_keys_down--;
+					Game->input->num_keys_down--;
 					if(!event.key.repeat) {
-						game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
+						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
-							game->input->keycodes[event.key.keysym.sym] = State_Just_Released;
+							Game->input->keycodes[event.key.keysym.sym] = State_Just_Released;
 						}
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					game->input->num_mouse_down++;
-					game->input->mouse[event.button.button] = State_Just_Pressed;
+					Game->input->num_mouse_down++;
+					Game->input->mouse[event.button.button] = State_Just_Pressed;
 					break;
 				case SDL_MOUSEBUTTONUP:
-					game->input->num_mouse_down--;
-					game->input->mouse[event.button.button] = State_Just_Released;
+					Game->input->num_mouse_down--;
+					Game->input->mouse[event.button.button] = State_Just_Released;
 					break;
 			}
 		}
 	
 		int mx, my;
 		SDL_GetMouseState(&mx, &my);
-		input->mouse_x = mx;
-		input->mouse_y = my;
+		Input->mouse_x = mx;
+		Input->mouse_y = my;
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

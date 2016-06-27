@@ -39,7 +39,7 @@ struct Sprite
 	uint32 anchor;
 };
 
-struct Renderer
+struct OpenGL_Renderer
 {
 	GLuint shader_program, vbo, vao, texture;
 	AABB screen;
@@ -71,11 +71,11 @@ void init_sprite(Sprite* s)
 #define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
 int32 t = 0;
 #define _glerror printf("OpenGL Error at #%d: %0x\n", t++, glGetError());
-void renderer_init(Renderer* renderer, Memory_Arena* arena)
+void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->offset = v2(0, 0);
 	renderer->last_sprite_id = 0;
-	renderer->sprite_data = Arena_Push_Array(arena, Sprite, Megabytes(32) / sizeof(Sprite)); 
+	renderer->sprite_data = arena_push_array(arena, Sprite, Megabytes(32) / sizeof(Sprite)); 
 	glGenVertexArrays(1, &renderer->vao);
 	glBindVertexArray(renderer->vao);
 	glGenBuffers(1, &renderer->vbo);
@@ -204,7 +204,7 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 	int w, h, n;
 	char file[FilePathMaxLength];
 	const char* base_path = SDL_GetBasePath();
-	isize len = snprintf(file, File_Path_Max_Length, "%s%s", base_path, filename);
+	isize len = snprintf(file, FilePathMaxLength, "%s%s", base_path, filename);
 	uint8* data = (uint8*)stbi_load(file, &w, &h, &n, STBI_rgb_alpha);
 	//TODO(will) do error checking
 	GLuint texture = ogl_add_texture(data, w, h);
@@ -218,47 +218,47 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 	return texture;
 }
 
-#define Get_Texture_Coordinates(x, y, w, h) rect2((x) / renderer->texture_width, (y) / renderer->texture_height, (w) / renderer->texture_width, (h) / renderer->texture_height)
+#define Get_Texture_Coordinates(x, y, w, h) rect2((x) / Renderer->texture_width, (y) / Renderer->texture_height, (w) / Renderer->texture_width, (h) / Renderer->texture_height)
 
 void renderer_start()
 {
-	renderer->data_index = 0;
-	renderer->sprite_count = 0;
-	renderer->screen.center = renderer->offset;
-	renderer->screen.hext = game->size * 0.5;
-	renderer->screen.center += v2(renderer->screen.hw, renderer->screen.hh);
+	Renderer->data_index = 0;
+	Renderer->sprite_count = 0;
+	Renderer->screen.center = Renderer->offset;
+	Renderer->screen.hext = Game->size * 0.5;
+	Renderer->screen.center += v2(Renderer->screen.hw, Renderer->screen.hh);
 
-	glUseProgram(renderer->shader_program);
-	glUniform4f(renderer->screen_loc, 
-			renderer->offset.x, renderer->offset.y, 
-			game->size.x + renderer->offset.x,
-			game->size.y + renderer->offset.y);
+	glUseProgram(Renderer->shader_program);
+	glUniform4f(Renderer->screen_loc, 
+			Renderer->offset.x, Renderer->offset.y, 
+			Game->size.x + Renderer->offset.x,
+			Game->size.y + Renderer->offset.y);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, renderer->texture);
+	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
 }
 
 void renderer_push_sprite(Sprite* s)
 {
-	renderer->sprite_data[renderer->sprite_count++] = *s;
+	Renderer->sprite_data[Renderer->sprite_count++] = *s;
 }
 
 #define _get_sprite_y_base(s) (s.position.y + s.size.y / 2 - s.center.y)
-Generate_Quicksort_For_Type(sort_sprites_on_y_base, Sprite, _get_sprite_y_base)
+GenerateQuicksortForType(sort_sprites_on_y_base, Sprite, _get_sprite_y_base)
 
 void renderer_sort(isize offset)
 {
-	sort_sprites_on_y_base(renderer->sprite_data + offset,
-			renderer->sprite_count - offset);
+	sort_sprites_on_y_base(Renderer->sprite_data + offset,
+			Renderer->sprite_count - offset);
 }
 
 void renderer_draw()
 {
-	glBindVertexArray(renderer->vao);
-	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-	glBufferData(GL_ARRAY_BUFFER, renderer->sprite_count * sizeof(Sprite),
-			renderer->sprite_data, GL_STREAM_DRAW);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count);
+	glBindVertexArray(Renderer->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, Renderer->vbo);
+	glBufferData(GL_ARRAY_BUFFER, Renderer->sprite_count * sizeof(Sprite),
+			Renderer->sprite_data, GL_STREAM_DRAW);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, Renderer->sprite_count);
 	glBindVertexArray(0);
 }
 

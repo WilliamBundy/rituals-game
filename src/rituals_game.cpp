@@ -22,7 +22,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 // Sort/Search macros
-#define Generate_Quicksort_For_Type(func_name, T, Member_Macro) \
+#define GenerateQuicksortForType(func_name, T, Member_Macro) \
 void func_name(T* array, isize count) \
 { \
 	if(count > 1) { \
@@ -45,7 +45,7 @@ void func_name(T* array, isize count) \
 	} \
 }
 
-#define Generate_Insertion_Sort_For_Type(func_name, T, Member_Macro) \
+#define GenerateInsertionSortForType(func_name, T, Member_Macro) \
 void func_name(T* array, isize count) \
 { \
 	for(isize i = 1; i < count; ++i) { \
@@ -60,7 +60,7 @@ void func_name(T* array, isize count) \
 }
 
 // Returns -1 on fail to find.
-#define Generate_Binary_Search_For_Type(func_name, T, K, Member_Key_Macro) \
+#define GenerateBinarySearchForType(func_name, T, K, Member_Key_Macro) \
 isize func_name(K key, T* array, isize count) \
 { \
 	if(count == 0) return -1; \
@@ -83,8 +83,8 @@ isize func_name(K key, T* array, isize count) \
 
 #define _passthru_macro(x) (x) 
 #define _generate_sort_and_search_for_numeric_type(t) \
-	Generate_Quicksort_For_Type(t##_sort, t, _passthru_macro) \
-	Generate_Binary_Search_For_Type(t##_search, t, t, _passthru_macro) 
+	GenerateQuicksortForType(t##_sort, t, _passthru_macro) \
+	GenerateBinarySearchForType(t##_search, t, t, _passthru_macro) 
 _generate_sort_and_search_for_numeric_type(real);
 _generate_sort_and_search_for_numeric_type(real32);
 _generate_sort_and_search_for_numeric_type(real64);
@@ -108,8 +108,8 @@ _generate_sort_and_search_for_numeric_type(isize);
 // Linear allocator
 // TODO(will) implement a pool allocator
 
-#define Arena_Push_Struct(arena, type) ((type*)arena_push(arena, sizeof(type)))
-#define Arena_Push_Array(arena, type, count) ((type*)arena_push(arena, sizeof(type) * count))
+#define arena_push_struct(arena, type) ((type*)arena_push(arena, sizeof(type)))
+#define arena_push_array(arena, type, count) ((type*)arena_push(arena, sizeof(type) * count))
 
 struct Memory_Arena
 {
@@ -196,7 +196,6 @@ struct Random
 	uint64 x, y;
 };
 
-#define Random_Max (UINT64_MAX)
 uint64 next_random_uint64(Random* r)
 {
 	uint64 a = r->x;
@@ -272,11 +271,11 @@ enum Game_State
 // Game struct
 //typedef struct Debug_Log Debug_Log;
 typedef struct Spritefont Spritefont;
-typedef struct Renderer Renderer;
-struct Game
+typedef struct OpenGL_Renderer OpenGL_Renderer;
+struct Game_Main
 {
 	SDL_Window* window;
-	Renderer* renderer;
+	OpenGL_Renderer* renderer;
 	Game_State state;
 	real scale;
 	Vec2 size;
@@ -304,16 +303,14 @@ struct Game
 	Game_Input* input;
 };
 
-Game* game;
-Renderer* renderer;
-Game_Input* input;
-Spritefont* body_font;
-Spritefont* title_font;
-
-
+Game_Main* Game;
+OpenGL_Renderer* Renderer;
+Game_Input* Input;
+Spritefont* Body_Font;
+Spritefont* Title_Font;
 
 void game_set_scale(real scale)
 {
-	game->scale = scale;
-	game->size = v2(game->window_size) * (1.0f / game->scale);
+	Game->scale = scale;
+	Game->size = v2(Game->window_size) * (1.0f / Game->scale);
 }
