@@ -1,3 +1,1 @@
-git add --all
-git commit -m "testing stuff..." 
-git push 
+"c:\program files\git\git-bash.exe" autogit.sh
