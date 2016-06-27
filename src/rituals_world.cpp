@@ -109,197 +109,6 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	end_temp_arena(Game->temp_arena);
 }
 
-typedef struct World_Area World_Area;
-
-enum Direction 
-{
-	Direction_North,
-	Direction_South,
-	Direction_East,
-	Direction_West
-};
-
-
-#define EntityMaxCallbacksPerFrame (16)
-#define EntityOnActivateDecl(name) void name(Entity* entity, World_Area* area)
-typedef EntityOnActivateDecl((*Entity_On_Activate));
-
-/*
-enum Entity_Event_Type
-{
-	Entity_Event_On_Activate
-}
-struct Entity_Event 
-{
-	union {
-		Entity_On_Activate on_activate;
-
-	} event;
-	isize hash;
-	const char* name;
-	real priority;
-};
-*/
-
-struct Entity
-{
-	isize id;
-	isize body_id;
-	Sim_Body* body;
-	Sprite sprite;
-
-	int32 counter;
-
-	int32 facing;
-	Direction direction;
-	
-	World_Area* area;
-	
-	//TODO(will) Implement entity callback hashtable
-	// Right now save and load with function pointers will break
-	// Can't verify whether pointers will be the same between dll loads
-	Entity_On_Activate* event_on_activate;
-	isize event_on_activate_count;
-
-	//userdata
-	isize held_entity_id;
-};
-
-#define _entity_get_id(e) (e.id)
-GenerateQuicksortForType(entity_sort_on_id, Entity, _entity_get_id)
-GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
-
-
-typedef struct World_Area World_Area;
-struct Area_Link
-{
-	Vec2i position;
-	World_Area* link;
-};
-
-#define WorldAreaEntityCapacity (8192)
-#define WorldAreaTilemapWidth (64)
-#define WorldAreaTilemapHeight (64)
-struct World_Area
-{
-	Simulator sim;
-	Tilemap map;
-	Vec2 offset;
-
-	Entity* player;
-	Sim_Body* player_body;
-	Entity* entities;
-	bool entities_dirty;
-	isize entities_count, entities_capacity, next_entity_id;
-
-	Area_Link north;
-	Area_Link south;
-	Area_Link west;
-	Area_Link east;
-};
-
-
-void init_world_area(World_Area* area, Memory_Arena* arena)
-{
-	init_simulator(&area->sim, WorldAreaEntityCapacity, arena);
-	init_tilemap(&area->map, 
-			WorldAreaTilemapWidth,
-			WorldAreaTilemapHeight,
-			arena);
-
-	area->entities = arena_push_array(arena, Entity, WorldAreaEntityCapacity);
-	area->entities_count = 0;
-	area->entities_capacity = WorldAreaEntityCapacity;
-	area->next_entity_id = 0;
-	area->entities_dirty = false;
-}
-
-void init_entity(Entity* entity)
-{
-	entity->id = 0;
-	entity->body_id = 0;
-	init_sprite(&entity->sprite);
-	entity->counter = 0;
-	entity->area = NULL;
-	entity->event_on_activate = NULL;
-	entity->event_on_activate_count = 0;
-}
-
-isize entity_add_event_on_activate(Entity* e, Entity_On_Activate event)
-{
-	if(e != NULL) {
-		if(e->event_on_activate == NULL) {
-			e->event_on_activate = arena_push_array(
-					Game->play_arena, 
-					Entity_On_Activate,
-					EntityMaxCallbacksPerFrame);
-		}
-		if(e->event_on_activate_count < EntityMaxCallbacksPerFrame) {
-			e->event_on_activate[e->event_on_activate_count++] = event;
-		} else {
-			Log_Error("Entity exceeded on_activate_count callbacks");
-		}
-
-	}
-	return e->event_on_activate_count - 1;
-}
-
-
-
-Entity* world_area_get_next_entity(World_Area* area)
-{
-	if(area->entities_count + 1 >= area->entities_capacity) {
-		Log_Error("Ran out of entities");
-		return NULL;
-	}
-
-	Entity* e = area->entities + area->entities_count++;
-	init_entity(e);
-	e->area = area;
-	e->body = sim_get_next_body(&area->sim);
-	e->body_id = e->body->id;
-	e->id = area->next_entity_id++;
-	e->body->entity = e;
-	e->body->entity_id = e->id;
-	return e;
-}
-
-Entity* world_area_find_entity(World_Area* area, isize id)
-{
-	if(area->entities_dirty) {
-		entity_sort_on_id(area->entities, area->entities_count);
-	}
-	isize index = entity_search_for_id(id, area->entities, area->entities_count);
-	return index == -1 ? NULL : area->entities + index;
-}
-
-//Make a player struct?
-void world_area_init_player(World_Area* area, Vec2i tile_pos)
-{
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-	if(player == NULL) {
-		printf("Something went wrong! Couldn't find player entity....?");
-	}
-	///player->shape.center = v2(area->map.w * 16, area->map.h * 16);
-	player->shape.center = v2(tile_pos.x * Tile_Size, tile_pos.y * Tile_Size);
-	player_entity->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
-	player->shape.hext = v2(5, 5);
-	player_entity->sprite.size = v2(32, 32);
-	player_entity->sprite.center = v2(0,11);
-	player->damping = 0.5f;
-	player->restitution = 0;
-	player->flags = Body_Flag_No_Friction;
-	area->offset = player->shape.center;	
-}
-
-void world_area_deinit_player(World_Area* area)
-{
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-	player->shape.center = v2(-1000, -1000);
-}
-
 struct World
 {
 	World_Area* areas;
@@ -308,15 +117,6 @@ struct World
 
 	World_Area* current_area;
 };
-
-void world_switch_current_area(World* world, Area_Link link)
-{
-	if(link.link == NULL) return;
-	World_Area* new_area = link.link;
-	world_area_init_player(new_area, link.position);
-	world_area_deinit_player(world->current_area);
-	world->current_area = new_area;
-}
 
 void init_world(World* world, isize width, isize height, Memory_Arena* arena)
 {
@@ -328,10 +128,15 @@ void init_world(World* world, isize width, isize height, Memory_Arena* arena)
 }
 
 
-EntityOnActivateDecl(test_on_activate)
+void world_switch_current_area(World* world, Area_Link link)
 {
-	printf("%d was clicked \n", entity->id);
+	if(link.link == NULL) return;
+	World_Area* new_area = link.link;
+	world_area_init_player(new_area, link.position);
+	world_area_deinit_player(world->current_area);
+	world->current_area = new_area;
 }
+
 void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, Memory_Arena* arena)
 {
 	Random r_s;
@@ -356,7 +161,7 @@ void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, 
 				b->inv_mass = 1.0f;
 				e->sprite.size = v2(32, 64);
 				e->sprite.center = v2(0, 20);
-				entity_add_event_on_activate(e, test_on_activate);
+				//entity_add_event_on_activate(e, test_on_activate);
 				do {
 					b->shape.center = v2(
 						rand_range(r, 0, area->map.w * 32),
@@ -389,40 +194,7 @@ void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, 
 			};
 		}
 	}
-
 }
-
-void world_area_sort_entities_on_id(World_Area* area)
-{
-	entity_sort_on_id(area->entities, area->entities_count);
-}
-
-void world_area_synchronize_entities_and_bodies(World_Area* area)
-{
-	for(isize i = 0; i < area->entities_count; ++i) {
-		Entity* e = area->entities + i;
-		if(e->body_id == -1) continue;
-		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		b->entity = e;
-		b->entity_id = e->id;
-		e->body = b;
-	}
-}
-
-void world_area_remove_entity(World_Area* area, Entity* entity)
-{
-	sim_remove_body(&area->sim, entity->body_id);
-	isize index = entity_search_for_id(entity->id, area->entities, area->entities_count);
-	area->entities[index] = area->entities[--area->entities_count];
-	world_area_sort_entities_on_id(area);
-	world_area_synchronize_entities_and_bodies(area);
-}
-
-EntityOnActivateDecl(delete_on_activate)
-{
-	world_area_remove_entity(area, entity);
-}
-
 
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 void world_area_update(World_Area* area)
@@ -461,7 +233,6 @@ void world_area_update(World_Area* area)
 	Tile_Info* player_tile = area->map.info + tilemap_get_at(&area->map, player->shape.center);
 
 	move_impulse *= player_tile->movement_modifier;
-
 
 	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;

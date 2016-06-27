@@ -13,6 +13,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
+EntityOnActivateDecl(test_on_activate)
+{
+	printf("%d was clicked \n", entity->id);
+}
+EntityOnActivateDecl(delete_on_activate)
+{
+	world_area_remove_entity(area, entity);
+}
+
 typedef int32 Tile;
 
 struct Tile_Info
