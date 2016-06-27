@@ -477,21 +477,6 @@ void world_area_update(World_Area* area)
 	renderer_sort(sprite_count_offset);
 
 	renderer_draw();
-
-	Renderer->offset = v2(0, 0);
-	game_set_scale(1.0);
-	renderer_start();
-
-	char str[256];
-	isize len = snprintf(str, 256, "X:%d Y:%d Tile: %s",
-			play_state->world_xy.x, 
-			play_state->world_xy.y, 
-			player_tile->name);
-
-	render_body_text(str, v2(16, Game->size.y - (Body_Font->glyph_height) - 8), true);
-	render_body_text(debug_str, v2(16, 16), true);
-
-	renderer_draw();
 }
 
 
