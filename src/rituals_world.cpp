@@ -536,8 +536,11 @@ void update_world_area(World_Area* area)
 	else if((area->offset.y + game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - game->size.y;
 
-	//TODO(will) clean up/remove debug ball throwing code
-#if 1
+	//TODO(will) refactor into own function?
+	/*
+	 * Player input code
+	 *
+	 */ 
 	if(input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
 		Entity* ball_entity = world_area_get_next_entity(area);
 		Sim_Body* ball = ball_entity->body;
@@ -664,25 +667,6 @@ void update_world_area(World_Area* area)
 
 	}
 
-
-
-#endif 
-#if 0
-	if(input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-		Vec2 dmouse = v2(
-			input->mouse_x / game->scale, 
-			input->mouse_y / game->scale) + area->offset;
-		AABB mbb = aabb(dmouse, 0, 0);
-		for(isize i = 0; i < area->sim.bodies_count; ++i) {
-			Sim_Body* body = area->sim.bodies + i;
-			if(aabb_intersect(&body->shape, &mbb)) {
-				printf("%d \n", body->id);
-
-			}
-		}
-	}
-	
-#endif 
 	renderer->offset = area->offset;
 	area->offset += game->size * 0.5f;
 	// throw a ball
