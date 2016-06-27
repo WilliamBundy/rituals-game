@@ -225,7 +225,8 @@ Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)
 	return move_impulse;
 }
 
-Vec2 _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player)
+//TODO(will) store move impulse on entities to reference later
+void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, Vec2 move_impulse)
 {
 	Direction old_direction = player_entity->direction;
 	if(move_impulse.y < 0) {
@@ -286,6 +287,8 @@ void world_area_update(World_Area* area)
 		player->velocity += move_impulse;
 		sim_update(&area->sim, &area->map, TimeStep);
 	}
+	
+	_player_animate(area, player_entity, player, move_impulse);
 	Vec2 target = player->shape.center;
 
 	if(target.x < 0) {
