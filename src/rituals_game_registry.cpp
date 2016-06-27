@@ -18,14 +18,6 @@ typedef struct World_Area World_Area;
 typedef struct World World;
 #define EntityOnActivateDecl(name) void name(Entity* entity, World_Area* area)
 typedef EntityOnActivateDecl((*Entity_On_Activate));
-EntityOnActivateDecl(test_on_activate)
-{
-	printf("%d was clicked \n", entity->id);
-}
-EntityOnActivateDecl(delete_on_activate)
-{
-	world_area_remove_entity(area, entity);
-}
 
 typedef int32 Tile;
 

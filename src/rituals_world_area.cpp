@@ -70,6 +70,7 @@ struct Entity
 	isize held_entity_id;
 };
 
+
 typedef struct World_Area World_Area;
 struct Area_Link
 {
@@ -225,5 +226,11 @@ void world_area_remove_entity(World_Area* area, Entity* entity)
 	world_area_synchronize_entities_and_bodies(area);
 }
 
-
-
+EntityOnActivateDecl(test_on_activate)
+{
+	printf("%d was clicked \n", entity->id);
+}
+EntityOnActivateDecl(delete_on_activate)
+{
+	world_area_remove_entity(area, entity);
+}
