@@ -1105,9 +1105,9 @@ WIN32_LEAN_AND_MEAN	src/thirdparty/gl_core_3_3.h	40;"	d
 World	src/rituals_game_registry.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
-WorldAreaEntityCapacity	src/rituals_world_area.cpp	81;"	d	file:
-WorldAreaTilemapHeight	src/rituals_world_area.cpp	83;"	d	file:
-WorldAreaTilemapWidth	src/rituals_world_area.cpp	82;"	d	file:
+WorldAreaEntityCapacity	src/rituals_world_area.cpp	84;"	d	file:
+WorldAreaTilemapHeight	src/rituals_world_area.cpp	86;"	d	file:
+WorldAreaTilemapWidth	src/rituals_world_area.cpp	85;"	d	file:
 World_Area	src/rituals_game_registry.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
 World_Area	src/rituals_world_area.cpp	/^struct World_Area$/;"	s	file:
 World_Area	src/rituals_world_area.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
@@ -1131,6 +1131,7 @@ _check	src/rituals_world.cpp	199;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	292;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	187;"	d	file:
+_entity_get_id	src/rituals_world_area.cpp	73;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	85;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f

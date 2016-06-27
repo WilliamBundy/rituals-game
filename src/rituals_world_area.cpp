@@ -70,6 +70,9 @@ struct Entity
 	isize held_entity_id;
 };
 
+#define _entity_get_id(e) (e.id)
+GenerateQuicksortForType(entity_sort_on_id, Entity, _entity_get_id)
+GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
 
 typedef struct World_Area World_Area;
 struct Area_Link
