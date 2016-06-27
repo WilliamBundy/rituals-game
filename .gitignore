@@ -40,3 +40,6 @@
 
 # Compiled python
 *.pyc
+*.zip
+*.ctm
+tags
