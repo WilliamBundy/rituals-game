@@ -1,4 +1,9 @@
-c:\sshagent.cmd
+REM @echo off
+
+REM c:\sshagent.cmd
+
+echo %SSH_AGENT_PID%
+
 git add --all
-git commit -m "rituals rev 1" 
+git commit -m "testing stuff..." 
 git push 

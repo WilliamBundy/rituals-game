@@ -74,6 +74,7 @@ def main(tracking_file):
     
     try:
         ff = open("streaming_auto_git.bat", "w")
+        ff.write("@echo off \n") 
         ff.write("c:\\sshagent.cmd\n")
         ff.write("git add --all\n")
         ff.write("git commit -m \"rituals rev {0}\" \n".format(rev))
