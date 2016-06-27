@@ -72,9 +72,16 @@ def main(tracking_file):
     print("Commit message: \"rituals rev {0}\"".format(rev))
     rev += 1
     
-    os.system("git add --all")
-    os.system("git commit -m \"rituals rev {0}\"".format(rev))
-    os.system("git push")
+    try:
+        ff = open("streaming_auto_git.bat", "w")
+        ff.write("c:\\sshagent.cmd\n")
+        ff.write("git add --all\n")
+        ff.write("git commit -m \"rituals rev {0}\" \n".format(rev))
+        ff.write("git push \n")
+        ff.close()
+    except IOError as err:
+        print("Could not write to batch file streaming_auto_git.bat")
+        print(err)
     
     tt = time.time()
     try:
