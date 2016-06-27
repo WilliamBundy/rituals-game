@@ -67,7 +67,7 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		start = i;
 		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
 		len = i - start;
-		r->y = dec_str_to_int(glyphs_file + start, len) + offsety;
+		r->y = dec_str_to_int(glyphs_file + start, len) + offsety - 1;
 		r->y /= renderer->texture_height;
 		i++;
 
@@ -82,7 +82,7 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 
 		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
 		len = i - start;
-		r->h = dec_str_to_int(glyphs_file + start, len);
+		r->h = dec_str_to_int(glyphs_file + start, len) + 2;
 		*h = r->h;
 		r->h /= renderer->texture_height;
 		i++;
@@ -124,11 +124,47 @@ Spritefont* load_spritefont(char* filepath, Vec2i offset)
 	return font;
 }
 
+
+Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)
+{
+	Vec2 position = v2(0, 0);
+	Vec2 size = v2(font->glyph_width, font->glyph_height);
+	int32 wrapped = 0;
+	for(isize i = 0; i < len; ++i) {
+		char c = text[i];
+		
+		switch(c) {
+			case '\n':
+				position.y += font->glyph_height + font->line_padding;
+				position.x = 0;
+				wrapped ++;
+				break;
+			case '\t':
+				position.x += font->glyph_width * font->tab_size;
+				break;
+			case '\r':
+				continue;
+			default: 
+				break;
+		}
+		if(c < Ascii_Printable_Start || c > Ascii_Printable_End) continue;
+		position.x += size.x + font->character_padding;
+	}
+
+	return position;
+}
+
+Vec2 spritefont_size_text(Spritefont* font, char* text) 
+{
+	return spritefont_size_text(font, text, strlen(text));
+}
+
 void spritefont_render_text(Spritefont* font,
 		char* text, isize len, 
 		Vec2 position, 
-		int32 max_width, 
-		Vec2* region)
+		int32 max_width = -1, 
+		Sprite_Anchor anchor = Anchor_Top_Left,
+		Vec2* region = NULL)
 {
 	Vec2 initial_pos = position;
 	Vec2 size = v2(font->glyph_width, font->glyph_height);
@@ -158,6 +194,8 @@ void spritefont_render_text(Spritefont* font,
 		s.texture = font->glyphs[c - Ascii_Printable_Start];
 		s.size = size;
 		s.color = font->color;
+		s.angle = 0;
+		s.anchor = anchor;
 		
 		if((max_width > 0) && (s.position.x + s.size.x > (max_width + initial_pos.x))) {
 			position.y += font->glyph_height + font->line_padding;
@@ -176,18 +214,34 @@ void spritefont_render_text(Spritefont* font,
 	}
 }
 
-void spritefont_render_text(Spritefont* font, char* text, Vec2 position)
+void spritefont_render_text(Spritefont* font, char* text, Vec2 position, Sprite_Anchor anchor = Anchor_Top_Left)
 {
 	spritefont_render_text(font,
 		text, strlen(text), 
-		position, 
-		-1, 
-		NULL);
+		position,-1,  anchor);
 }
 
-void render_body_text(char* text, Vec2 position)
+void spritefont_render_text_background(Spritefont* font, char* text, Vec2 position, Vec4 background) 
 {
-	spritefont_render_text(body_font, text, position);
+	Vec2 text_size = spritefont_size_text(font, text);
+	Sprite s; 
+	init_sprite(&s);
+	s.size = v2(text_size.x + 16,  body_font->glyph_height + 8);
+	s.position = position - v2(8, 4);
+	s.color = background;
+	s.texture = Get_Texture_Coordinates(0, renderer->texture_height - 16, 16, 16);
+	s.anchor = Anchor_Top_Left;
+	renderer_push_sprite(&s);
+
+}
+
+
+void render_body_text(char* text, Vec2 position, bool background=false)
+{
+	if(background) {
+		spritefont_render_text_background(body_font, text, position, v4(0, 0, 0, 0.8f));
+	}
+	spritefont_render_text(body_font, text, position, Anchor_Top_Left);
 }
 
 void render_title_text(char* text, Vec2 position)

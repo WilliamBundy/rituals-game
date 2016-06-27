@@ -3,23 +3,11 @@
  * 
  */
 
-typedef int32 Tile;
-
-struct Tile_Info
-{
-	isize id;
-	Rect2 texture_clip;
-
-	//maybe change to flags
-	bool solid;
-};
-
-#define Tile_Size (32)
-#define Half_TS (16)
 struct Tilemap
 {
 	isize w, h;
 	Tile* tiles;
+	Tile_State* states;
 
 	Tile_Info* info;
 	isize info_count;
@@ -32,26 +20,7 @@ void init_tilemap(Tilemap* tilemap, isize w, isize h, Memory_Arena* arena)
 	tilemap->w = w;
 	tilemap->h = h;
 	tilemap->tiles = Arena_Push_Array(arena, Tile, w * h);
-	tilemap->info = Arena_Push_Array(arena, Tile_Info, Max_Tile_Info_Count);
-}
-
-Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, Rect2 texture_clip, bool solid)
-{
-	Tile_Info* t = list + *info_count;
-	*info_count += 1;
-	t->texture_clip = texture_clip;
-	t->solid = solid;
-
-	return t;
-}
-
-Tile_Info* add_tile_info(Tilemap* tilemap, Rect2 texture_clip, bool solid)
-{
-	Tile_Info* t = tilemap->info + tilemap->info_count++;
-	t->texture_clip = texture_clip;
-	t->solid = solid;
-
-	return t;
+	tilemap->states = Arena_Push_Array(arena, Tile_State,  w * h);
 }
 
 void generate_tilemap(Tilemap* tilemap, uint64 seed)
@@ -125,7 +94,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 				i == tilemap->h - 1 || 
 				j == 0 ||
 				j == tilemap->w - 1) {
-				tilemap->tiles[index] = 7;
+				tilemap->tiles[index] = Tile_Tree_Wall;
 				flag = true;
 			}
 
@@ -133,7 +102,7 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 				i <= (tilemap->h/2 + 1)) ||
 			   (j >= (tilemap->w/2 - 1) && 
 				j <= (tilemap->w/2 + 1))) {
-				tilemap->tiles[index] = 9;
+				tilemap->tiles[index] = Tile_Stone_Road;
 				flag = true;
 			}
 
@@ -146,38 +115,35 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 			real height = fourth[index];
 			if(height < 0.25f) {
 				//water
-				tilemap->tiles[index] = 8;
+				tilemap->tiles[index] = Tile_Water;
 			} else if(height < 0.35f) {
 				//sand
-				tilemap->tiles[index] = 1;
+				tilemap->tiles[index] = Tile_Sand;
 
 			} else if(height < 0.5f) {
 				//sparse grass
-				tilemap->tiles[index] = 3;
+				tilemap->tiles[index] = Tile_Grass;
 			} else if(height < 0.65f) {
 				//dense grass
-				tilemap->tiles[index] = 4;
+				tilemap->tiles[index] = Tile_Dense_Grass;
 			} else if(height < 0.8f) {
 				// trees
-				tilemap->tiles[index] = 7;
+				tilemap->tiles[index] = Tile_Tree_Wall;
 			} else {
-				tilemap->tiles[index] = 10;
+				tilemap->tiles[index] = Tile_Earthen_Wall;
 
 			}
 		}
 	}
-
+	for(isize i = 0; i < tilemap->h; ++i) {
+		for(isize j = 0; j < tilemap->w; ++j) {
+			isize index = i * tilemap->w + j;
+			init_tile_state(tilemap->states + index, tilemap->tiles[index]);
+		}
+	}
 
 	end_temp_arena(game->temp_arena);
 
-}
-
-bool tilemap_get_at(Tilemap* tilemap, isize x, isize y, Tile* out)
-{
-	isize i = y * tilemap->w + x;
-	if(i < 0 || i >= (tilemap->w * tilemap->h)) return true;
-	*out = tilemap->tiles[i];
-	return false;
 }
 
 Tile tilemap_get_at(Tilemap* tilemap, isize x, isize y)
@@ -187,6 +153,27 @@ Tile tilemap_get_at(Tilemap* tilemap, isize x, isize y)
 	return tilemap->tiles[i];
 }
 
+Tile tilemap_get_at(Tilemap* tilemap, Vec2 pos)
+{
+	isize x = (isize)(pos.x / Tile_Size);
+	isize y = (isize)(pos.y / Tile_Size);
+	return tilemap_get_at(tilemap, x, y);
+}
+
+Tile_State* tilemap_get_state_at(Tilemap* tilemap, isize x, isize y)
+{
+	isize i = y * tilemap->w + x;
+	if(i < 0 || i >= (tilemap->w * tilemap->h)) return NULL;
+	return tilemap->states + i;
+}
+
+Tile_State* tilemap_get_state_at(Tilemap* tilemap, Vec2 pos)
+{
+	isize x = (isize)(pos.x / Tile_Size);
+	isize y = (isize)(pos.y / Tile_Size);
+	return tilemap_get_state_at(tilemap, x, y);
+}
+
 bool tilemap_set_at(Tilemap* tilemap, isize x, isize y, Tile value)
 {
 	isize i = y * tilemap->w + x;
@@ -194,6 +181,39 @@ bool tilemap_set_at(Tilemap* tilemap, isize x, isize y, Tile value)
 	tilemap->tiles[i] = value;
 	return false;
 }
+
+bool tilemap_set_at(Tilemap* tilemap, Vec2 pos, Tile value)
+{
+	isize x = (isize)(pos.x / Tile_Size);
+	isize y = (isize)(pos.y / Tile_Size);
+	return tilemap_set_at(tilemap, x, y, value);
+}
+
+void update_tile_state_at(Tilemap* map, isize x, isize y)
+{
+	Tile_State* state = tilemap_get_state_at(map, x, y);
+	if(state != NULL) {
+		Tile_Info* info = map->info + tilemap_get_at(map, x, y);
+		if(info->immune_to_damage) {
+			state->damage = 0;
+		} else {
+			if(state->damage >= info->max_damage) {
+				init_tile_state(state, info->break_to_id);
+				tilemap_set_at(map, x, y, info->break_to_id);
+			}
+		}
+
+	}
+}
+
+void update_tile_state_at(Tilemap* map, Vec2 pos)
+{
+	isize x = (isize)(pos.x / Tile_Size);
+	isize y = (isize)(pos.y / Tile_Size);
+	return update_tile_state_at(map, x, y);
+}
+
+
 
 bool b = 0;
 void render_tilemap(Tilemap* tilemap, Vec2 pos)
@@ -205,13 +225,13 @@ void render_tilemap(Tilemap* tilemap, Vec2 pos)
 			init_sprite(&s);
 			s.position = v2(j*32, i*32) + pos;
 			s.size = v2(32, 32);
-			s.texture = t->texture_clip;
+			s.texture = t->texture;
 			renderer_push_sprite(&s);
 		}
 	}
 }
 
-void render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
+isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 {
 	isize startx = area.x / Tile_Size - 1;
 	isize starty = area.y / Tile_Size - 1;
@@ -224,15 +244,49 @@ void render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 	Sprite s;
 	for(isize i = starty; i < endy; ++i) {
 		for(isize j = startx; j < endx; ++j) {
-			Tile_Info* t = tilemap->info + tilemap->tiles[i * tilemap->w + j];
+			Tile tile = tilemap->tiles[i * tilemap->w + j];
+			Tile_Info* t = tilemap->info + tile;
 			init_sprite(&s);
 			s.position = v2(j*Tile_Size + Half_TS, i*Tile_Size + Half_TS) + pos;
 			s.size = v2(Tile_Size, Tile_Size);
-			s.texture = t->texture_clip;
+
+			if(t->has_bottom_texture && tilemap_get_at(tilemap, j, i + 1) != tile) {
+				s.texture = t->bottom_texture;
+			} else {
+				s.texture = t->texture;
+				renderer_push_sprite(&s);
+			}
 			renderer_push_sprite(&s);
+
+			Tile_State* state = tilemap->states + (i * tilemap->w + j);
+			if(state->damage > 0) {
+				real dmgp = (real)(state->damage) / (real)(t->max_damage);
+				dmgp *= 3;
+				int32 frame = (int32)dmgp;
+				s.texture = _tile_texture((5 + frame), 0);
+				renderer_push_sprite(&s);
+			}
 		}
 	}
+	isize unsorted_index = renderer->sprite_count;
+	for(isize i = starty; i < endy; ++i) {
+		for(isize j = startx; j < endx; ++j) {
+				Tile tile = tilemap->tiles[i * tilemap->w + j];
+				Tile bottom_tile = tilemap_get_at(tilemap, j, i + 1);
+				if(tile != bottom_tile) {
+					Tile_Info* bottom = tilemap->info + tilemap_get_at(tilemap, j, i + 1);
+					if(bottom->has_top_texture) {
+						init_sprite(&s);
+						s.position = v2(j*Tile_Size + Half_TS, i*Tile_Size) + pos;
+						s.center.y = -Half_TS - 1; 
+						s.size = v2(Tile_Size, Tile_Size);
+						s.texture = bottom->top_texture;
+						renderer_push_sprite(&s);
+					}
+				}
 
-	
-	
+		}
+	}
+	return unsorted_index;
 }
+

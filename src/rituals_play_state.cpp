@@ -13,20 +13,12 @@ void play_state_start()
 {
 	World* world = play_state->world;
 	init_world(world, 4, 4, game->play_arena);
-
-	Tile_Info* tile_info = Arena_Push_Array(game->play_arena, Tile_Info, Max_Tile_Info_Count);
+	Tile_Info* tile_info = Arena_Push_Array(
+			game->play_arena, 
+			Tile_Info, 
+			Max_Tile_Info_Count);
 	isize tile_count = 0;
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(0, 0, 0, 0), true);
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 0, 32, 32, 32), false); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 1, 32, 32, 32), false); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 2, 32, 32, 32), false); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 3, 32, 32, 32), false); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 4, 32, 32, 32), false); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 0, 64, 32, 32), true); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 1, 64, 32, 32), true); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 2, 64, 32, 32), true); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 3, 64, 32, 32), false); 
-	add_tile_info(tile_info, &tile_count, Get_Texture_Coordinates(32 * 4, 64, 32, 32), true); 
+	register_all_rituals_tile_info(tile_info, &tile_count);
 
 	generate_world(world, tile_info, tile_count, 1, game->play_arena);
 

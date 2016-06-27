@@ -1,8 +1,22 @@
 /*
+ * rituals_renderer.cpp
  *
- *
+ * This file is dedicated to D7Samurai, for without his help,
+ * none of this would work.
  */
 
+enum Sprite_Anchor
+{
+	Anchor_Center = 0,
+	Anchor_Top_Left = 1,
+	Anchor_Top = 2,
+	Anchor_Top_Right = 3,
+	Anchor_Right = 4,
+	Anchor_Bottom_Right = 5,
+	Anchor_Bottom = 6 ,
+	Anchor_Bottom_Left = 7,
+	Anchor_Left = 8
+};
 
 struct Sprite
 {
@@ -12,7 +26,7 @@ struct Sprite
 	Vec2 size;
 	Rect2 texture;
 	Vec4 color;
-	real extra;
+	uint32 anchor;
 };
 
 struct Renderer
@@ -28,9 +42,7 @@ struct Renderer
 	Sprite* sprite_data;
 	isize data_index, sprite_count;
 
-
 	isize last_sprite_id; 
-	
 };
 
 
@@ -42,6 +54,7 @@ void init_sprite(Sprite* s)
 	s->size = v2(100, 100);
 	s->texture = rect2(0, 0, 1, 1);
 	s->color = v4(1, 1, 1, 1);
+	s->anchor = Anchor_Center;
 }
 
 
@@ -58,35 +71,40 @@ void renderer_init(Renderer* renderer, Memory_Arena* arena)
 	glGenBuffers(1, &renderer->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
 
-	usize stride = sizeof(real) * 16;
+	usize stride = sizeof(Sprite);
 	//position
+	usize vertex_count = 1;
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(0));
 	glEnableVertexAttribArray(0);  
-	glVertexAttribDivisor(0, 4);
+	glVertexAttribDivisor(0, vertex_count);
 
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(2));
 	glEnableVertexAttribArray(1);
-	glVertexAttribDivisor(1, 4);
+	glVertexAttribDivisor(1, vertex_count);
 
 	//angle
 	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, stride, _gl_offset(4));
 	glEnableVertexAttribArray(2);
-	glVertexAttribDivisor(2, 4);
+	glVertexAttribDivisor(2, vertex_count);
 
 	//size
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(5));
 	glEnableVertexAttribArray(3);
-	glVertexAttribDivisor(3, 4);
+	glVertexAttribDivisor(3, vertex_count);
 
 	//texcoords
 	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(7));
 	glEnableVertexAttribArray(4);
-	glVertexAttribDivisor(4, 4);
+	glVertexAttribDivisor(4, vertex_count);
 
 	//color
 	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(11));
 	glEnableVertexAttribArray(5);
-	glVertexAttribDivisor(5, 4);
+	glVertexAttribDivisor(5, vertex_count);
+
+	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(15));
+	glEnableVertexAttribArray(6);
+	glVertexAttribDivisor(6, vertex_count);
 
 	glBindVertexArray(0);
 
@@ -210,39 +228,9 @@ void renderer_start()
 	glBindTexture(GL_TEXTURE_2D, renderer->texture);
 }
 
-#define _renderer_push(f) renderer->sprite_data[renderer->data_index++] = f
-
 void renderer_push_sprite(Sprite* s)
 {
-#if 0
-	//do quick rectangle inclusion test
-	AABB sprite = {
-		s->position,
-		s->size.x , s->size.y 
-	};
-	if(!aabb_intersect(&renderer->screen, &sprite)) return;
-#endif
-	//renderer->sprite_count++;
-
 	renderer->sprite_data[renderer->sprite_count++] = *s;
-	/*
-	_renderer_push(s->position.x);
-	_renderer_push(s->position.y);
-	_renderer_push(s->center.x);
-	_renderer_push(s->center.y);
-	_renderer_push(s->angle);
-	_renderer_push(s->size.x);
-	_renderer_push(s->size.y);
-	_renderer_push(s->texture.x);
-	_renderer_push(s->texture.y);
-	_renderer_push(s->texture.w);
-	_renderer_push(s->texture.h);
-	_renderer_push(s->color.x);
-	_renderer_push(s->color.y);
-	_renderer_push(s->color.z);
-	_renderer_push(s->color.w);
-	_renderer_push(s->extra)
-	*/
 }
 
 #define _get_sprite_y_base(s) (s.position.y + s.size.y / 2 - s.center.y)
@@ -260,7 +248,7 @@ void renderer_draw()
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
 	glBufferData(GL_ARRAY_BUFFER, renderer->sprite_count * sizeof(Sprite),
 			renderer->sprite_data, GL_STREAM_DRAW);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count * 4);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->sprite_count);
 	glBindVertexArray(0);
 }
 

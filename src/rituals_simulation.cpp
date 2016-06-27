@@ -9,7 +9,7 @@ enum Sim_Body_Flags
 {
 	Body_Flag_None,
 	Body_Flag_Static = Flag(1),
-	Body_Flag_Custom_Size = Flag(2)
+	Body_Flag_No_Friction = Flag(2)
 };
 
 
@@ -18,7 +18,7 @@ struct Sim_Body
 {
 	isize id;
 	AABB shape;
-	Vec2 velocity, force;
+	Vec2 velocity, force, collision_vel;
 	real inv_mass, restitution, damping;
 	uint64 flags;
 	isize entity_id;
@@ -103,11 +103,21 @@ void sim_remove_body(Simulator* sim, Sim_Body* body)
 	sim_remove_body(sim, body->id);
 }
 
+Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
+{
+	for(isize i = 0; i < sim->bodies_count; ++i) {
+		Sim_Body* a = sim->bodies + i;
+		if(aabb_intersect(&a->shape, &query)) {
+			return a;
+		}
+	}
+	return NULL;
+}
 
 #define Time_Step (1.0f/60.0f)
 #define Sim_Iter_i (8)
 #define Sim_Iter ((real)Sim_Iter_i)
-void sim_update(Simulator* sim, real dt)
+void sim_update(Simulator* sim, Tilemap* map, real dt)
 {
 	Sim_Body *a, *b;
 	for(isize times = 0; times < Sim_Iter_i; ++times) {
@@ -175,7 +185,7 @@ void sim_update(Simulator* sim, real dt)
 						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
 						mag /= b->inv_mass;
 						Vec2 impulse = mag * normal;
-						b->velocity += b->inv_mass * impulse;
+						b->collision_vel += b->inv_mass * impulse;
 					} else if(!a_is_static && b_is_static) {
 						a->shape.center -= overlap;
 
@@ -187,7 +197,7 @@ void sim_update(Simulator* sim, real dt)
 						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
 						mag /= a->inv_mass + 0;
 						Vec2 impulse = mag * normal;
-						a->velocity -= a->inv_mass * impulse;
+						a->collision_vel -= a->inv_mass * impulse;
 					} else {
 						Vec2 separation = Max(ovl_mag - _collision_slop, 0) 
 							* (1.0f / (a->inv_mass + b->inv_mass)) * 0.5f * normal;
@@ -202,8 +212,8 @@ void sim_update(Simulator* sim, real dt)
 						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
 						mag /= a->inv_mass + b->inv_mass;
 						Vec2 impulse = mag * normal;
-						a->velocity -= a->inv_mass * impulse;
-						b->velocity += b->inv_mass * impulse;
+						a->collision_vel -= a->inv_mass * impulse;
+						b->collision_vel += b->inv_mass * impulse;
 					}
 				}
 			}
@@ -228,8 +238,19 @@ void sim_update(Simulator* sim, real dt)
 			Vec2 dpos = (a->velocity + new_vel) * 0.5f;
 			dpos *= 1.0f / Sim_Iter;
 			a->shape.center += dpos * dt;
+			a->shape.center += a->collision_vel / Sim_Iter * dt;
 			a->velocity = new_vel;
-			a->velocity *= powf(a->damping, Sim_Iter);
+			Tile_Info* tile = map->info + tilemap_get_at(map, a->shape.center);
+			real damping = 1.0f;
+			if(Has_Flag(a->flags, Body_Flag_No_Friction)) {
+				damping = a->damping;
+			} else {
+				damping = sqrtf(a->damping * a->damping + 
+					tile->friction * tile->friction) * Math_InvSqrt2;
+			}
+			a->velocity *= powf(damping, Sim_Iter);
+			a->velocity += a->collision_vel;
+			a->collision_vel = v2(0, 0);
 		}
 
 	}

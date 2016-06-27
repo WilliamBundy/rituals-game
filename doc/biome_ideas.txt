@@ -1,0 +1,33 @@
+
+Biome Ideas:
+
+Tundra: coldest biome, no trees
+	- Alpine tundras occur at high elevations, are well drained
+		- Thin grasses, rocky
+		- Some big mammals
+		- No permafrost
+	- Arctic tundra
+		- Permafrost: gravel + fine particles, very cold
+		- Lichens
+		- Ponds and bogs form from melting snow
+		- More smaller mammals, but things like polar bears, wolves, arctic foxes
+
+Taiga: boreal forest
+	- Better soil, more water than tundra
+	- Might be slightly warmer
+	- Mostly cold-tolerant evergreens
+
+Deciduous Forest
+	- Fertile soil, varied temparature, even precipitation
+	- Lots of light gets through, so significant underbrush
+
+Swamp
+	- Cooler than jungle
+	- High high rainfall
+	- Large pools of water
+
+Tropical forest: jungle
+	- little temperature variance
+	- little precipitation variance (high)
+	- soil is nutrient-poor and acidic?
+	- 

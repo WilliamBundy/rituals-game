@@ -102,6 +102,8 @@ Play_State* play_state;
 
 #include "rituals_renderer.cpp"
 #include "rituals_gui.cpp"
+#include "rituals_game_info.cpp"
+#include "rituals_inventory.cpp"
 #include "rituals_tilemap.cpp"
 #include "rituals_simulation.cpp"
 #include "rituals_world.cpp"
@@ -128,10 +130,42 @@ void main_menu_update()
 	renderer_draw();
 }
 
+Item_Info* item_types;
+isize item_types_count;
+Inventory inventory;
+
+#define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(item_types, &item_types_count, #name, (s), _tile_texture(x, y)) 
+void load_test_assets()
+{
+	item_types = Arena_Push_Array(game->play_arena, Item_Info, Max_Item_Info_Count);
+	_add_item(none, 0, 0, 0);
+	_add_item(hooknife, 1, 0, 5);
+	_add_item(rope, 8, 1, 5);
+	_add_item(book, 64, 2, 5);
+	_add_item(rock, 64, 3, 0);
+	
+	init_inventory(&inventory, 9, 6, game->play_arena);
+	Item_Stack* stack = new_item_stack(item_types + 1, game->play_arena);
+	printf("%0x \n", (usize)stack);
+	inventory_add_item(&inventory, &stack);
+	printf("%0x \n", (usize)stack);
+}
+
+void test_update()
+{
+	game_set_scale(2.0f);
+	renderer_start();
+	render_inventory(&inventory, v2(16, 16));
+	renderer_draw();
+}
+
 void update()
 {
 	switch(game->state) {
 		case Game_State_None:
+#if DEBUG
+			test_update();
+#endif
 			break;
 		case Game_State_Menu:
 			main_menu_update();
@@ -159,6 +193,10 @@ void load_assets()
 	game->state = Game_State_Play;
 	play_state_init();
 	play_state_start();
+#if DEBUG
+	load_test_assets();
+	game->state = Game_State_None;
+#endif
 }
 
 
@@ -218,8 +256,8 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	int ret = SDL_GL_SetSwapInterval(1);
-	
+	int ret = SDL_GL_SetSwapInterval(-1);
+
 	{
 #define _check_gl_attribute(attr, val) int _##attr##_val; \
 	int _##attr##_success = SDL_GL_GetAttribute(attr, &_##attr##_val); \

@@ -18,6 +18,9 @@ layout (location = 4) in vec4 v_texcoords;
 //rgba color, sent to frag shader
 layout (location = 5) in vec4 v_color;
 
+//anchor (0 - 8)
+layout (location = 6) in uint v_anchor;
+
 out vec2 f_texcoords;
 out vec4 f_color;
 
@@ -25,13 +28,45 @@ uniform vec4 screen;
 
 void main()
 {
-	float[4] coords_arr = float[](
+	float[36] coords_arr = float[](
+//	float[4] coords_center = float[](
 		-0.5, -0.5,
-		0.5, 0.5
+		0.5, 0.5,
+//	float[4] coords_top_left = float[](
+		0.0, 0.0,
+		1.0, 1.0,
+//	float[4] coords_top = float[](
+		-0.5, 0.0, 
+		0.5, 1.0,
+//	float[4] coords_top_right = float[](
+		-1.0, 0.0,
+		0.0, 1.0,
+//	float[4] coords_right = float[](
+		-1.0, -0.5,
+		0.0, 0.5,
+//	float[4] coords_bottom_right = float[](
+		-1.0, -1.0,
+		0.0, 0.0,
+//	float[4] coords_bottom = float[](
+		-0.5, -1.0,
+		0.5, 0.0,
+//	float[4] coords_bottom_left = float[](
+		0.0, -1.0,
+		1.0, 0.0,
+//	float[4] coords_left = float[](
+		0.0, -0.5,
+		1.0, 0.5
 	);
+
+	uint vertex_x = gl_VertexID & 2;
+	uint vertex_y = ((gl_VertexID & 1) << 1) ^ 3;
+	vertex_x += 4 * v_anchor;
+	vertex_y += 4 * v_anchor;
+
+
 	vec2 coords = vec2(
-		coords_arr[gl_VertexID & 2],
-		coords_arr[((gl_VertexID & 1) << 1) ^ 3]
+		coords_arr[vertex_x],
+		coords_arr[vertex_y]
 	);
 
 	float[4] texcoords_arr = float[](
