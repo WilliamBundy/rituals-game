@@ -199,7 +199,6 @@ void load_assets()
 			v2i(2048 - 1142, 0));
 	body_font = game->body_font;
 
-
 	game->state = Game_State_Play;
 	play_state_init();
 	play_state_start();

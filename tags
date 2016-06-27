@@ -47,11 +47,11 @@ Direction_South	src/rituals_world.cpp	/^	Direction_South,$/;"	e	enum:Direction	f
 Direction_West	src/rituals_world.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
 Entity	src/rituals_simulation.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
 Entity	src/rituals_world.cpp	/^struct Entity$/;"	s	file:
-Entity_Max_Callbacks_Per_Event	src/rituals_world.cpp	113;"	d	file:
+Entity_Max_Callbacks_Per_Event	src/rituals_world.cpp	123;"	d	file:
 Entity_On_Activate_Macro	src/rituals_world.cpp	/^Entity_On_Activate_Macro(delete_on_activate)$/;"	f
 Entity_On_Activate_Macro	src/rituals_world.cpp	/^Entity_On_Activate_Macro(test_on_activate)$/;"	f
 Entity_On_Activate_Macro	src/rituals_world.cpp	/^typedef Entity_On_Activate_Macro((*Entity_On_Activate));$/;"	t	file:
-Entity_On_Activate_Macro	src/rituals_world.cpp	114;"	d	file:
+Entity_On_Activate_Macro	src/rituals_world.cpp	124;"	d	file:
 FAST_BITS	src/thirdparty/stb_image.h	1456;"	d
 File_Path_Max_Length	src/rituals_main.cpp	86;"	d	file:
 File_Path_Max_Length	src/rituals_win32.cpp	77;"	d	file:
@@ -1085,9 +1085,9 @@ World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:Wo
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
 World_Area	src/rituals_world.cpp	/^struct World_Area$/;"	s	file:
 World_Area	src/rituals_world.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
-World_Area_Entity_Capacity	src/rituals_world.cpp	170;"	d	file:
-World_Area_Tilemap_Height	src/rituals_world.cpp	172;"	d	file:
-World_Area_Tilemap_Width	src/rituals_world.cpp	171;"	d	file:
+World_Area_Entity_Capacity	src/rituals_world.cpp	180;"	d	file:
+World_Area_Tilemap_Height	src/rituals_world.cpp	182;"	d	file:
+World_Area_Tilemap_Width	src/rituals_world.cpp	181;"	d	file:
 YCbCr_to_RGB_kernel	src/thirdparty/stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);$/;"	m	struct:__anon6
 _CRT_SECURE_NO_WARNINGS	src/rituals_main.cpp	35;"	d	file:
 _CRT_SECURE_NO_WARNINGS	src/rituals_win32.cpp	26;"	d	file:
@@ -1104,11 +1104,11 @@ _body_get_id	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	28;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	29;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	35;"	d	file:
-_check	src/rituals_world.cpp	417;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	272;"	d	file:
+_check	src/rituals_world.cpp	427;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	271;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	177;"	d	file:
-_entity_get_id	src/rituals_world.cpp	158;"	d	file:
+_entity_get_id	src/rituals_world.cpp	168;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	75;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f

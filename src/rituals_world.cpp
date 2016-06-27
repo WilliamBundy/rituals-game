@@ -730,7 +730,7 @@ void update_world_area(World_Area* area)
 	testspr.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&testspr);
 
-	render_body_text(str, v2(16, game->size.y - (body_font->glyph_height)), true);
+	render_body_text(str, v2(16, game->size.y - (body_font->glyph_height) - 8), true);
 	render_body_text(debug_str, v2(16, 16), true);
 
 
