@@ -13,6 +13,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
+typedef struct Entity Entity;
+typedef struct World_Area World_Area;
+typedef struct World World;
+#define EntityOnActivateDecl(name) void name(Entity* entity, World_Area* area)
+typedef EntityOnActivateDecl((*Entity_On_Activate));
 EntityOnActivateDecl(test_on_activate)
 {
 	printf("%d was clicked \n", entity->id);

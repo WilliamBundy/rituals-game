@@ -42,9 +42,8 @@ enum Direction
 };
 
 
+
 #define EntityMaxCallbacksPerFrame (16)
-#define EntityOnActivateDecl(name) void name(Entity* entity, World_Area* area)
-typedef EntityOnActivateDecl((*Entity_On_Activate));
 
 
 struct Entity
