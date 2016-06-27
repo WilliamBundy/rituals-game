@@ -197,9 +197,8 @@ void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, 
 }
 
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
-void world_area_update(World_Area* area)
+Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)
 {
-	game_set_scale(2.0);
 	real movespeed = 800;
 	Vec2 move_impulse = v2(0, 0);
 
@@ -220,26 +219,14 @@ void world_area_update(World_Area* area)
 		move_impulse *= Math_InvSqrt2;
 	}
 
-	play_state->current_time = SDL_GetTicks();
-	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
-	dt = clamp(dt, 0, 1.2f);
-	play_state->accumulator += dt;
-	play_state->prev_time = play_state->current_time;
-
-	sim_sort_bodies_on_id(&area->sim);
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = player_entity->body;
-
 	Tile_Info* player_tile = area->map.info + tilemap_get_at(&area->map, player->shape.center);
 
 	move_impulse *= player_tile->movement_modifier;
+	return move_impulse;
+}
 
-	while(play_state->accumulator >= TimeStep) {
-		play_state->accumulator -= TimeStep;
-		player->velocity += move_impulse;
-		sim_update(&area->sim, &area->map, TimeStep);
-	}
-
+Vec2 _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player)
+{
 	Direction old_direction = player_entity->direction;
 	if(move_impulse.y < 0) {
 		player_entity->direction = Direction_North;
@@ -278,7 +265,27 @@ void world_area_update(World_Area* area)
 	} else if(player_entity->facing == 1) {
 		plr_spr->texture = Get_Texture_Coordinates(0  + player_frame * 32, 0, 32, 32);
 	}
+}
 
+void world_area_update(World_Area* area)
+{
+	game_set_scale(2.0);
+
+	play_state->current_time = SDL_GetTicks();
+	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
+	dt = clamp(dt, 0, 1.2f);
+	play_state->accumulator += dt;
+	play_state->prev_time = play_state->current_time;
+
+	sim_sort_bodies_on_id(&area->sim);
+	Entity* player_entity = world_area_find_entity(area, 0);
+	Sim_Body* player = player_entity->body;
+	Vec2 move_impluse = _player_controls(area, player_entity, player);
+	while(play_state->accumulator >= TimeStep) {
+		play_state->accumulator -= TimeStep;
+		player->velocity += move_impulse;
+		sim_update(&area->sim, &area->map, TimeStep);
+	}
 	Vec2 target = player->shape.center;
 
 	if(target.x < 0) {
