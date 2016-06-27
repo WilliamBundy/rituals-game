@@ -73,9 +73,7 @@ def main(tracking_file):
     rev += 1
     
     try:
-        ff = open("streaming_auto_git.bat", "w")
-        ff.write("@echo off \n") 
-        ff.write("c:\\sshagent.cmd\n")
+        ff = open("autogit.sh", "w")
         ff.write("git add --all\n")
         ff.write("git commit -m \"rituals rev {0}\" \n".format(rev))
         ff.write("git push \n")
@@ -83,7 +81,7 @@ def main(tracking_file):
     except IOError as err:
         print("Could not write to batch file streaming_auto_git.bat")
         print(err)
-    
+    os.system('"c:\\program files\\git\\usr\\bin\\bash.exe" -login autogit.sh')
     tt = time.time()
     try:
         ff = open(tracking_file, "w")
