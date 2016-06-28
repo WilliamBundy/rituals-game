@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
-bool check_dir(char* dir)
+void check_dir(char* dir)
 {
 	struct stat st = {0};
 	if(stat(dir, &st) == -1) {
@@ -23,7 +23,11 @@ bool check_dir(char* dir)
 
 void serialize_world(World* world)
 {
-
+	char save_dir[FilePathMaxLength];
+	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
+	check_dir(dir);
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, world->name);
+	check_dir(dir);
 }
 
 

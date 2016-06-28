@@ -139,11 +139,12 @@ void world_switch_current_area(World* world, Area_Link link)
 	world->current_area = new_area;
 }
 
-void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, Memory_Arena* arena)
+void generate_world(const char* name, World* world, Tile_Info* info, isize ti_count, uint64 seed, Memory_Arena* arena)
 {
 	Random r_s;
 	Random* r = &r_s;
 	init_random(r, seed);
+	world->name = name;
 
 
 	for(isize i = 0; i < world->areas_height; ++i) {
@@ -151,6 +152,7 @@ void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, 
 			isize index = i * world->areas_width + j;
 			World_Area* area = world->areas + index;
 			init_world_area(area, arena);
+			area->world = world;
 			area->map.info = info;
 			area->map.info_count = ti_count;
 			generate_tilemap(&area->map, next_random_uint64(r));
@@ -323,7 +325,12 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 		}
 	}
 
+	if(Input->scancodes[SDL_SCANCODE_ESC] >= State_Just_Pressed) {
+		serialize_world(area->world);
+	}
+
 	Sprite s;
+
 
 	if(Input->scancodes[SDL_SCANCODE_SPACE] >= State_Pressed) {
 		init_sprite(&s);

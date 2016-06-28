@@ -86,6 +86,7 @@ struct Area_Link
 #define WorldAreaTilemapHeight (64)
 struct World_Area
 {
+	World* world;
 	Simulator sim;
 	Tilemap map;
 	Vec2 offset;

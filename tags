@@ -1110,7 +1110,7 @@ _body_get_id	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	45;"	d	file:
-_check	src/rituals_world.cpp	201;"	d	file:
+_check	src/rituals_world.cpp	203;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	291;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	187;"	d	file:
@@ -1204,7 +1204,7 @@ center	src/rituals_renderer.cpp	/^	Vec2 center;$/;"	m	struct:Sprite	file:
 channel	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
 character_padding	rituals_gui.cpp	/^	int32 character_padding;$/;"	m	struct:Spritefont	file:
 character_padding	src/rituals_gui.cpp	/^	int32 character_padding;$/;"	m	struct:Spritefont	file:
-check_dir	src/rituals_serialization.cpp	/^bool check_dir(char* dir)$/;"	f
+check_dir	src/rituals_serialization.cpp	/^void check_dir(char* dir)$/;"	f
 clamp	src/rituals_math.cpp	/^inline real clamp(real x, real min, real max)$/;"	f
 clamp_01	src/rituals_math.cpp	/^real clamp_01(real x)$/;"	f
 clear_arena	src/rituals_game.cpp	/^void clear_arena(Memory_Arena* arena)$/;"	f
@@ -1329,7 +1329,7 @@ game_set_scale	src/rituals_game.cpp	/^void game_set_scale(real scale)$/;"	f
 generate_statics_for_tilemap	src/rituals_win32.cpp	/^void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
 generate_statics_for_tilemap	src/rituals_world.cpp	/^void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
 generate_tilemap	src/rituals_tilemap.cpp	/^void generate_tilemap(Tilemap* tilemap, uint64 seed)$/;"	f
-generate_world	src/rituals_world.cpp	/^void generate_world(World* world, Tile_Info* info, isize ti_count, uint64 seed, Memory_Arena* arena)$/;"	f
+generate_world	src/rituals_world.cpp	/^void generate_world(const char* name, World* world, Tile_Info* info, isize ti_count, uint64 seed, Memory_Arena* arena)$/;"	f
 glActiveTexture	src/thirdparty/gl_core_3_3.h	1118;"	d
 glAttachShader	src/thirdparty/gl_core_3_3.h	1195;"	d
 glBeginConditionalRender	src/thirdparty/gl_core_3_3.h	1395;"	d
@@ -2332,6 +2332,7 @@ west	src/rituals_world_area.cpp	/^	Area_Link west;$/;"	m	struct:World_Area	file:
 window	src/rituals_game.cpp	/^	SDL_Window* window;$/;"	m	struct:Game_Main	file:
 window_size	src/rituals_game.cpp	/^	Vec2i window_size;$/;"	m	struct:Game_Main	file:
 world	src/rituals_main.cpp	/^	World* world;$/;"	m	struct:Play_State	file:
+world	src/rituals_world_area.cpp	/^	World* world;$/;"	m	struct:World_Area	file:
 world_area_deinit_player	src/rituals_world_area.cpp	/^void world_area_deinit_player(World_Area* area)$/;"	f
 world_area_find_entity	src/rituals_world_area.cpp	/^Entity* world_area_find_entity(World_Area* area, isize id)$/;"	f
 world_area_get_next_entity	src/rituals_world_area.cpp	/^Entity* world_area_get_next_entity(World_Area* area)$/;"	f
