@@ -43,6 +43,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 //platform imports
 #include <windows.h>
+#include <Shlwapi.h>
 
 //CRT imports
 #define _CRT_SECURE_NO_WARNINGS 1
@@ -56,8 +57,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
 //3rd party imports
 #include <SDL.h>
