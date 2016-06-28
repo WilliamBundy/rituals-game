@@ -9,69 +9,34 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 /* 
- * game_info.cpp
+ * game_registry.cpp
  *
  */ 
 
-typedef struct Entity Entity;
-typedef struct World_Area World_Area;
-typedef struct World World;
-#define EntityOnActivateDecl(name) void name(Entity* entity, World_Area* area)
-typedef EntityOnActivateDecl((*Entity_On_Activate));
-
-typedef int32 Tile;
-
-struct Tile_Info
+usize hash_str(const char* str)
 {
-	isize id;
-	Rect2 texture;
-	//TODO(will) support sided/connected textures
-	Rect2 bottom_texture;
-	Rect2 top_texture;
-
-	real movement_modifier;
-	real friction;
-	
-	const char* name;
-
-	int32 max_damage;
-	bool immune_to_damage;
-	isize break_to_id;
-
-	//maybe change to flags
-	bool solid;
-	bool has_top_texture;
-	bool has_bottom_texture;
-};
-
-struct Tile_State
-{
-	isize id;
-	int32 damage;
-};
-
-void init_tile_state(Tile_State* state, isize id)
-{
-	state->id = id;
-	state->damage = 0;
+	isize len = strlen(str);
+	usize hash = 1;
+	for(isize i = 0; i < len; ++i) {
+		hash = hash * 65599 + str[i];	
+	}
+	return hash;
 }
 
-
-Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)
+struct Game_Registry
 {
-	Tile_Info* t = list + *info_count;
-	*info_count += 1;
-	t->texture = texture;
-	t->name = name;
-	t->solid = solid;
-	t->movement_modifier = movement_modifier;
-	t->friction = friction;
-	t->max_damage = 5;
-	t->immune_to_damage = false;
-	t->break_to_id = break_to_id;
+	Tile_Info* tiles;
+	usize* tiles_hash;
+	isize tiles_count;
 
-	return t;
-}
+	Item_Info* items;
+	usize* items_hash;
+	isize items_count;
+};
+Game_Registry* Registry;
+
+
+
 
 
 #define Tile_Size (32)
@@ -79,24 +44,6 @@ Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, const char* name, r
 
 #define _tile_texture(x, y) Get_Texture_Coordinates(Tile_Size * (x), Tile_Size * (y), Tile_Size, Tile_Size)
 #define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(tile_info, &tile_count, #name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, Tile_Dug_Earth)
-
-enum Rituals_Tiles 
-{
-	Tile_Void,
-	Tile_Sand,
-	Tile_Grassy_Sand,
-	Tile_Grass,
-	Tile_Dense_Grass,
-	Tile_Desert_Sand,
-	Tile_Dug_Earth,
-	Tile_Rock_Wall,
-	Tile_Tree_Wall,
-	Tile_Water,
-	Tile_Stone_Road,
-	Tile_Earthen_Wall
-};
-
-
 
 void register_all_rituals_tile_info(Tile_Info* tile_info, isize* tile_count_out)
 {
