@@ -1846,7 +1846,7 @@ mr	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct
 mul_mat3_vec2_affline	src/rituals_math.cpp	/^Vec2 mul_mat3_vec2_affline(Mat3* m, Vec2* v)$/;"	f
 name	src/rituals_game_info.cpp	/^	const char* name;$/;"	m	struct:Item_Info	file:
 name	src/rituals_game_info.cpp	/^	const char* name;$/;"	m	struct:Tile_Info	file:
-name	src/rituals_world.cpp	/^	char* name;$/;"	m	struct:World	file:
+name	src/rituals_world.cpp	/^	const char* name;$/;"	m	struct:World	file:
 new_item_stack	src/rituals_inventory.cpp	/^Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)$/;"	f
 new_memory_arena	src/rituals_game.cpp	/^Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)$/;"	f
 next	helping_gb.cpp	/^	isize next;$/;"	m	struct:MapEntry	file:
