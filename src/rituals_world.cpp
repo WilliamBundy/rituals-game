@@ -111,6 +111,8 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 
 struct World
 {
+	char* name;
+
 	World_Area* areas;
 	isize areas_count, areas_capacity;
 	isize areas_width, areas_height;

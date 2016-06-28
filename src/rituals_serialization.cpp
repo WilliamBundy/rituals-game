@@ -13,9 +13,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
-void serialize_world(World* world, const char* filename)
+bool check_dir(char* dir)
 {
-	
+	struct stat st = {0};
+	if(stat(dir, &st) == -1) {
+		mkdir(dir, 0700);
+	}
+}
+
+void serialize_world(World* world)
+{
+
 }
 
 
