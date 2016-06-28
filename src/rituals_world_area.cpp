@@ -86,6 +86,7 @@ struct Area_Link
 #define WorldAreaTilemapHeight (64)
 struct World_Area
 {
+	isize id;
 	World* world;
 	Simulator sim;
 	Tilemap map;
@@ -111,6 +112,7 @@ void init_world_area(World_Area* area, Memory_Arena* arena)
 			WorldAreaTilemapHeight,
 			arena);
 
+	area->id = -1;
 	area->entities = arena_push_array(arena, Entity, WorldAreaEntityCapacity);
 	area->entities_count = 0;
 	area->entities_capacity = WorldAreaEntityCapacity;

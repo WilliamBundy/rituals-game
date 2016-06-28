@@ -114,6 +114,7 @@ struct World
 	const char* name;
 
 	World_Area* areas;
+	isize next_area_id;
 	isize areas_count, areas_capacity;
 	isize areas_width, areas_height;
 
@@ -127,6 +128,7 @@ void init_world(World* world, isize width, isize height, Memory_Arena* arena)
 	world->areas_count = 0;
 	world->areas_width = width;
 	world->areas_height = height;
+	world->next_area_id = 0;
 }
 
 
@@ -152,6 +154,7 @@ void generate_world(const char* name, World* world, Tile_Info* info, isize ti_co
 			isize index = i * world->areas_width + j;
 			World_Area* area = world->areas + index;
 			init_world_area(area, arena);
+			area->id = world->next_area_id++;
 			area->world = world;
 			area->map.info = info;
 			area->map.info_count = ti_count;
