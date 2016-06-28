@@ -107,3 +107,8 @@ void register_all_rituals_item_info(Item_Info* item_info, isize* info_count_out)
 	*info_count_out = item_types_count;
 }
 
+void register_everything_in_rituals()
+{
+	register_all_rituals_item_info(Registry->items, &Registry->items_count);
+	register_all_rituals_tile_info(Registry->tiles, &Registry->tiles_count);
+}

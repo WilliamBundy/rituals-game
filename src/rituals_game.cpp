@@ -289,6 +289,7 @@ struct Game_Main
 
 	//TODO(will) possibly come up with another type of arena for storing
 	// static game info: world areas, loaded tile types, etc
+	Memory_Arena* registry_arena;
 	Memory_Arena* play_arena;
 
 	const char* base_path;

@@ -213,6 +213,9 @@ void load_assets()
 			v2i(2048 - 1142, 0));
 	Body_Font = Game->body_font;
 
+	init_game_registry(Registry, Game->registry_arena); 
+
+
 	Game->state = Game_State_Play;
 	play_state_init();
 	play_state_start();
@@ -329,6 +332,7 @@ int main(int argc, char** argv)
 		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
 		Game->play_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
 		Game->renderer_arena = new_memory_arena(Megabytes(32), Game->meta_arena);
+		Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 
 		Game->base_path = SDL_GetBasePath();
 		Game->base_path_length = strlen(Game->base_path);
