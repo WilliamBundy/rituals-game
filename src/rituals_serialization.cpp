@@ -40,12 +40,12 @@ void serialize_world(World* world)
 	FILE* world_file = fopen(save_dir, "w");
 	if(world_file != NULL) {
 		fwrite((void*)strlen(world->name), sizeof(isize), 1, world_file);
-		fwrite(world->name, sizeof(char), strlen(world->name), world_file);
-		fwrite(world->areas_count, sizeof(isize), 1, world_file);
-		fwrite(world->areas_capacity, sizeof(isize), 1, world_file);
-		fwrite(world->areas_width, sizeof(isize), 1, world_file);
-		fwrite(world->areas_height, sizeof(isize), 1, world_file);
-		fwrite(world->current_area->id, sizeof(isize), 1, world_file);
+		fwrite((void*)world->name, sizeof(char), strlen(world->name), world_file);
+		fwrite((void*)world->areas_count, sizeof(isize), 1, world_file);
+		fwrite((void*)world->areas_capacity, sizeof(isize), 1, world_file);
+		fwrite((void*)world->areas_width, sizeof(isize), 1, world_file);
+		fwrite((void*)world->areas_height, sizeof(isize), 1, world_file);
+		fwrite((void*)world->current_area->id, sizeof(isize), 1, world_file);
 		fclose();
 	}
 
