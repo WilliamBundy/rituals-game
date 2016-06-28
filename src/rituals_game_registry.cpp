@@ -36,9 +36,17 @@ struct Game_Registry
 
 Game_Registry* Registry;
 
-void init_game_registry(Game_Registry* registry)
+#define MaxRegistryInfoEntries (256)
+void init_game_registry(Game_Registry* registry, Memory_Arena* arena)
 {
-	
+#define _set_registry_arrays(type, base_name) do { \
+	registry->base_name = arena_push_array(arena, type, MaxRegistryInfoEntries); \
+	registry->base_name##_hash = arena_push_array(arena, usize, MaxRegistryInfoEntries); \
+	registry->base_name##_count = 0; \
+	} while(0)
+
+	_set_registry_arrays(Tile_Info, tiles);
+	_set_registry_arrays(Item_Info, items);
 }
 
 #define _generate_registry_lookup(func_name, return_type, array_base_name) \
