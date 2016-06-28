@@ -272,6 +272,7 @@ enum Game_State
 //typedef struct Debug_Log Debug_Log;
 typedef struct Spritefont Spritefont;
 typedef struct OpenGL_Renderer OpenGL_Renderer;
+typedef struct Game_Registry Game_Registry;
 struct Game_Main
 {
 	SDL_Window* window;
@@ -299,6 +300,8 @@ struct Game_Main
 	Spritefont* title_font;
 
 	Random r;
+
+	Game_Registry* registry;
 
 	//Debug_Log* log;
 	Game_Input* input;

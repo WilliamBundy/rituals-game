@@ -915,6 +915,7 @@ GLvoid	src/thirdparty/gl_core_3_3.h	/^	typedef void GLvoid;$/;"	t
 Game	src/rituals_game.cpp	/^Game_Main* Game;$/;"	v
 Game_Input	src/rituals_game.cpp	/^struct Game_Input$/;"	s	file:
 Game_Main	src/rituals_game.cpp	/^struct Game_Main$/;"	s	file:
+Game_Registry	src/rituals_game.cpp	/^typedef struct Game_Registry Game_Registry;$/;"	t	typeref:struct:Game_Registry	file:
 Game_Registry	src/rituals_game_registry.cpp	/^struct Game_Registry$/;"	s	file:
 Game_State	src/rituals_game.cpp	/^enum Game_State$/;"	g	file:
 Game_State_Menu	src/rituals_game.cpp	/^	Game_State_Menu,$/;"	e	enum:Game_State	file:
@@ -1924,6 +1925,7 @@ rect_to_intrect	src/rituals_math.cpp	/^static inline Rect2i rect_to_intrect(Rect
 register_all_rituals_item_info	src/rituals_game_registry.cpp	/^void register_all_rituals_item_info(Item_Info* item_info, isize* info_count_out)$/;"	f
 register_all_rituals_tile_info	src/rituals_game_registry.cpp	/^void register_all_rituals_tile_info(Tile_Info* tile_info, isize* tile_count_out)$/;"	f
 register_everything_in_rituals	src/rituals_game_registry.cpp	/^void register_everything_in_rituals()$/;"	f
+registry	src/rituals_game.cpp	/^	Game_Registry* registry;$/;"	m	struct:Game_Main	file:
 registry_arena	src/rituals_game.cpp	/^	Memory_Arena* registry_arena;$/;"	m	struct:Game_Main	file:
 render_body_text	rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position)$/;"	f
 render_body_text	src/rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position, bool background=false)$/;"	f

@@ -349,7 +349,10 @@ int main(int argc, char** argv)
 
 		Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
 		renderer_init(Game->renderer, Game->renderer_arena);
+		
+		Game->registry = arena_push_struct(Game->game_arena, Game_Registry);
 
+		Registry = Game->registry;
 		Renderer = Game->renderer;
 		Input = Game->input;
 	}
