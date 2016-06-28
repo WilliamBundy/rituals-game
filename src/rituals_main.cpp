@@ -167,7 +167,6 @@ Inventory inventory;
 
 void load_test_assets()
 {
-	item_types = arena_push_array(Game->play_arena, Item_Info, Max_Item_Info_Count);
 	
 	init_inventory(&inventory, 9, 6, Game->play_arena);
 	Item_Stack* stack = new_item_stack(item_types + 1, Game->play_arena);
