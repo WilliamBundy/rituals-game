@@ -214,7 +214,7 @@ void load_assets()
 	Body_Font = Game->body_font;
 
 	init_game_registry(Registry, Game->registry_arena); 
-
+	register_everything_in_rituals();
 
 	Game->state = Game_State_Play;
 	play_state_init();
