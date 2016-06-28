@@ -56,6 +56,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 //3rd party imports
 #include <SDL.h>
