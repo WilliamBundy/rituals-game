@@ -39,7 +39,7 @@ void serialize_world(World* world)
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/world.dat", Game->base_path, world->name);
 	FILE* world_file = fopen(save_dir, "w");
 	if(world_file != NULL) {
-		fwrite(strlen(world->name), sizeof(isize), 1, world_file);
+		fwrite((void*)strlen(world->name), sizeof(isize), 1, world_file);
 		fwrite(world->name, sizeof(char), strlen(world->name), world_file);
 		fwrite(world->areas_count, sizeof(isize), 1, world_file);
 		fwrite(world->areas_capacity, sizeof(isize), 1, world_file);
