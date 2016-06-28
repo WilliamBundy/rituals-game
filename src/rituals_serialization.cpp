@@ -46,7 +46,7 @@ void serialize_world(World* world)
 		fwrite((void*)world->areas_width, sizeof(isize), 1, world_file);
 		fwrite((void*)world->areas_height, sizeof(isize), 1, world_file);
 		fwrite((void*)world->current_area->id, sizeof(isize), 1, world_file);
-		fclose();
+		fclose(world_file);
 	}
 
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
