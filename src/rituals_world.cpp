@@ -325,7 +325,7 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 		}
 	}
 
-	if(Input->scancodes[SDL_SCANCODE_ESC] >= State_Just_Pressed) {
+	if(Input->scancodes[SDL_SCANCODE_ESCAPE] >= State_Just_Pressed) {
 		serialize_world(area->world);
 	}
 
