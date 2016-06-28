@@ -88,6 +88,25 @@ _generate_registry_lookup(lookup_item, sort_registered_items, Item_Info, items)
 #define _tile_texture(x, y) Get_Texture_Coordinates(Tile_Size * (x), Tile_Size * (y), Tile_Size, Tile_Size)
 #define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(#name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, Tile_Dug_Earth)
 
+Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)
+{
+	Tile_Info* t = Registry->tiles + Registry->tiles_count++;
+	t->id = Registry->tiles_count - 1;
+	t->hash = hash_str(name);
+	t->texture = texture;
+	t->name = name;
+	t->solid = solid;
+	t->movement_modifier = movement_modifier;
+	t->friction = friction;
+	t->max_damage = 5;
+	t->immune_to_damage = false;
+	t->break_to_id = break_to_id;
+
+	Registry->tiles_hash[Registry->tiles_count - 1] = t->hash;
+
+	return t;
+}
+
 void register_all_rituals_tile_info()
 {
 	_new_tile(void, 1.0, 0.5, 0, 0, true);
@@ -117,6 +136,19 @@ void register_all_rituals_tile_info()
 }
 
 #define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(#name, (s), _tile_texture(x, y)) 
+
+Item_Info* add_item_type(const char* name, int32 max_stack, Rect2 texture)
+{
+	Item_Info* item = Registry->items + Registry->items_count++; 
+	item->id = Registry->items_count - 1;
+	item->name = name;
+	item->max_stack = max_stack;
+	item->texture = texture;
+	item->hash = hash_str(name);
+	Registry->items_hash[Registry->items_count - 1] = item->hash;
+	return item;
+}
+
 void register_all_rituals_item_info()
 {
 	_add_item(none, 0, 0, 0);

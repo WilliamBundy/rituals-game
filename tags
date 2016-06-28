@@ -1106,7 +1106,7 @@ __gl_h_	src/thirdparty/gl_core_3_3.h	22;"	d
 __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
-_add_item	src/rituals_game_registry.cpp	119;"	d	file:
+_add_item	src/rituals_game_registry.cpp	138;"	d	file:
 _body_get_id	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
@@ -1157,8 +1157,8 @@ aabb_to_intrect	src/rituals_math.cpp	/^static inline Rect2i aabb_to_intrect(AABB
 aabb_to_rect	src/rituals_math.cpp	/^static inline Rect2 aabb_to_rect(AABB* b)$/;"	f	file:
 accumulator	src/rituals_main.cpp	/^	real accumulator = 0;$/;"	m	struct:Play_State	file:
 accumulator	src/rituals_win32.cpp	/^real accumulator = 0;$/;"	v
-add_item_type	src/rituals_game_info.cpp	/^Item_Info* add_item_type(const char* name, int32 max_stack, Rect2 texture)$/;"	f
-add_tile_info	src/rituals_game_info.cpp	/^Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)$/;"	f
+add_item_type	src/rituals_game_registry.cpp	/^Item_Info* add_item_type(const char* name, int32 max_stack, Rect2 texture)$/;"	f
+add_tile_info	src/rituals_game_registry.cpp	/^Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)$/;"	f
 all_a	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 anchor	src/rituals_renderer.cpp	/^	uint32 anchor;$/;"	m	struct:Sprite	file:
 angle	src/rituals_math.cpp	/^	real angle;$/;"	m	struct:Transform	file:
