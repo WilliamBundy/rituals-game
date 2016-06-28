@@ -78,7 +78,7 @@ void sort_func_name() \
 		auto pair = pairs + i; \
 		Registry->array_base_name[i] = pair->v; \
 		Registry->array_base_name##_hash[i] = pair->k; \
-		Registry->array_base_name[i].id = i;
+		Registry->array_base_name[i].id = i; \
 	} \
 } 
  
