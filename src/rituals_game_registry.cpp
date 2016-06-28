@@ -22,7 +22,7 @@ usize hash_str(const char* str)
 	}
 	return hash;
 }
-
+/*
 struct Game_Registry
 {
 	Tile_Info* tiles;
@@ -34,7 +34,7 @@ struct Game_Registry
 	isize items_count;
 };
 Game_Registry* Registry;
-
+*/
 
 
 

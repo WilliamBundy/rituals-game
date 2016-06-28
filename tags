@@ -915,7 +915,6 @@ GLvoid	src/thirdparty/gl_core_3_3.h	/^	typedef void GLvoid;$/;"	t
 Game	src/rituals_game.cpp	/^Game_Main* Game;$/;"	v
 Game_Input	src/rituals_game.cpp	/^struct Game_Input$/;"	s	file:
 Game_Main	src/rituals_game.cpp	/^struct Game_Main$/;"	s	file:
-Game_Registry	src/rituals_game_registry.cpp	/^struct Game_Registry$/;"	s	file:
 Game_State	src/rituals_game.cpp	/^enum Game_State$/;"	g	file:
 Game_State_Menu	src/rituals_game.cpp	/^	Game_State_Menu,$/;"	e	enum:Game_State	file:
 Game_State_None	src/rituals_game.cpp	/^	Game_State_None,$/;"	e	enum:Game_State	file:
@@ -983,7 +982,6 @@ Random	src/rituals_game.cpp	/^struct Random$/;"	s	file:
 Rect2	src/rituals_math.cpp	/^struct Rect2$/;"	s	file:
 Rect2i	src/rituals_math.cpp	/^struct Rect2i$/;"	s	file:
 Rectangle	src/rituals_math.cpp	/^union Rectangle$/;"	u	file:
-Registry	src/rituals_game_registry.cpp	/^Game_Registry* Registry;$/;"	v
 Renderer	src/rituals_game.cpp	/^OpenGL_Renderer* Renderer;$/;"	v
 Rituals_Tiles	src/rituals_game_info.cpp	/^enum Rituals_Tiles $/;"	g	file:
 STBIDEF	src/thirdparty/stb_image.h	415;"	d
@@ -1778,9 +1776,6 @@ isz	src/rituals_main.cpp	95;"	d	file:
 isz	src/rituals_win32.cpp	73;"	d	file:
 item_types	src/rituals_main.cpp	/^Item_Info* item_types;$/;"	v
 item_types_count	src/rituals_main.cpp	/^isize item_types_count;$/;"	v
-items	src/rituals_game_registry.cpp	/^	Item_Info* items;$/;"	m	struct:Game_Registry	file:
-items_count	src/rituals_game_registry.cpp	/^	isize items_count;$/;"	m	struct:Game_Registry	file:
-items_hash	src/rituals_game_registry.cpp	/^	usize* items_hash;$/;"	m	struct:Game_Registry	file:
 key	helping_gb.cpp	/^	u64 key;$/;"	m	struct:MapEntry	file:
 keycodes	src/rituals_game.cpp	/^	int8* keycodes;$/;"	m	struct:Game_Input	file:
 last_sprite_id	src/rituals_renderer.cpp	/^	isize last_sprite_id; $/;"	m	struct:OpenGL_Renderer	file:
@@ -2251,10 +2246,7 @@ tilemap_get_state_at	src/rituals_tilemap.cpp	/^Tile_State* tilemap_get_state_at(
 tilemap_get_state_at	src/rituals_tilemap.cpp	/^Tile_State* tilemap_get_state_at(Tilemap* tilemap, isize x, isize y)$/;"	f
 tilemap_set_at	src/rituals_tilemap.cpp	/^bool tilemap_set_at(Tilemap* tilemap, Vec2 pos, Tile value)$/;"	f
 tilemap_set_at	src/rituals_tilemap.cpp	/^bool tilemap_set_at(Tilemap* tilemap, isize x, isize y, Tile value)$/;"	f
-tiles	src/rituals_game_registry.cpp	/^	Tile_Info* tiles;$/;"	m	struct:Game_Registry	file:
 tiles	src/rituals_tilemap.cpp	/^	Tile* tiles;$/;"	m	struct:Tilemap	file:
-tiles_count	src/rituals_game_registry.cpp	/^	isize tiles_count;$/;"	m	struct:Game_Registry	file:
-tiles_hash	src/rituals_game_registry.cpp	/^	usize* tiles_hash;$/;"	m	struct:Game_Registry	file:
 title_font	src/rituals_game.cpp	/^	Spritefont* title_font;$/;"	m	struct:Game_Main	file:
 todo	src/thirdparty/stb_image.h	/^   int restart_interval, todo;$/;"	m	struct:__anon6
 top_texture	src/rituals_game_info.cpp	/^	Rect2 top_texture;$/;"	m	struct:Tile_Info	file:
