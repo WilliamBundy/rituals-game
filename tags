@@ -1062,7 +1062,7 @@ Tile	src/rituals_game_info.cpp	/^typedef int32 Tile;$/;"	t	file:
 Tile_Dense_Grass	src/rituals_game_registry.cpp	/^isize Tile_Dense_Grass = 0;$/;"	v
 Tile_Desert_Sand	src/rituals_game_registry.cpp	/^isize Tile_Desert_Sand = 0;$/;"	v
 Tile_Dug_Earth	src/rituals_game_registry.cpp	/^isize Tile_Dug_Earth = 0;$/;"	v
-Tile_Earthen_Wal	src/rituals_game_registry.cpp	/^isize Tile_Earthen_Wal = 0;$/;"	v
+Tile_Earthen_Wall	src/rituals_game_registry.cpp	/^isize Tile_Earthen_Wall = 0;$/;"	v
 Tile_Grass	src/rituals_game_registry.cpp	/^isize Tile_Grass = 0;$/;"	v
 Tile_Grassy_Sand	src/rituals_game_registry.cpp	/^isize Tile_Grassy_Sand = 0;$/;"	v
 Tile_Info	src/rituals_game_info.cpp	/^struct Tile_Info$/;"	s	file:

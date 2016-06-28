@@ -96,7 +96,7 @@ isize Tile_Rock_Wall = 0;
 isize Tile_Tree_Wall = 0;
 isize Tile_Water = 0;
 isize Tile_Stone_Road = 0;
-isize Tile_Earthen_Wal = 0;
+isize Tile_Earthen_Wall = 0;
 void finalize_game_registry()
 {
 	sort_registered_tiles();
