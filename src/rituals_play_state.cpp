@@ -23,11 +23,6 @@ void play_state_start()
 {
 	World* world = play_state->world;
 	init_world(world, 4, 4, Game->play_arena);
-	Tile_Info* tile_info = arena_push_array(
-			Game->play_arena, 
-			Tile_Info, 
-			Max_Tile_Info_Count);
-	isize tile_count = 0;
 	register_all_rituals_tile_info(tile_info, &tile_count);
 
 	generate_world(world, tile_info, tile_count, 1, Game->play_arena);
