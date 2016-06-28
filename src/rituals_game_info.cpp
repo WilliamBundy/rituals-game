@@ -90,3 +90,37 @@ Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, const char* name, r
 	return t;
 }
 
+enum Item_Info_Types
+{
+	Item_None,
+
+	Item_Hooknife,
+	Item_Rope,
+	Item_Book,
+	Item_Rock,
+
+	Item_Info_Types_Count
+};
+
+#define Max_Item_Info_Count (256)
+struct Item_Info
+{
+	isize id;
+	const char* name;
+	int32 max_stack;
+
+	Rect2 texture;
+};
+
+Item_Info* add_item_type(Item_Info* info, isize* count, const char* name, int32 max_stack, Rect2 texture)
+{
+
+	Item_Info* item = info + *count; 
+	item->id = *count;
+	*count += 1;
+	item->name = name;
+	item->max_stack = max_stack;
+	item->texture = texture;
+	return item;
+}
+

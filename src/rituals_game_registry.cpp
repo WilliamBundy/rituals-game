@@ -22,7 +22,7 @@ usize hash_str(const char* str)
 	}
 	return hash;
 }
-/*
+
 struct Game_Registry
 {
 	Tile_Info* tiles;
@@ -33,8 +33,24 @@ struct Game_Registry
 	usize* items_hash;
 	isize items_count;
 };
+
 Game_Registry* Registry;
-*/
+
+void init_game_registry(Game_Registry* registry)
+{
+
+}
+#define _generate_registry_lookup(func_name, return_type, array_base_name) \
+return_type func_name(const char* name) \
+{ \
+	usize hash = hash_str(name); \
+	isize index = usize_search(hash, Registry->array_base_name##_hash, Registry->array_base_name##_count); \
+	return Registry->array_base_name + index; \
+}
+
+_generate_registry_lookup(lookup_tile, Tile_Info*, tiles)
+_generate_registry_lookup(lookup_item, Item_Info*, items)
+
 
 
 
