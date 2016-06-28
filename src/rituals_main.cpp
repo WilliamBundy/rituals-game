@@ -142,6 +142,8 @@ Play_State* play_state;
 
 #include "rituals_play_state.cpp"
 
+#include "rituals_serialization.cpp"
+
 void main_menu_update()
 {
 	game_set_scale(2.0f);
