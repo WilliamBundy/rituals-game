@@ -98,7 +98,7 @@ void register_all_rituals_tile_info(Tile_Info* tile_info, isize* tile_count_out)
 #define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(item_info, &item_types_count, #name, (s), _tile_texture(x, y)) 
 void register_all_rituals_item_info(Item_Info* item_info, isize* info_count_out)
 {
-	isize items_type_count = *info_count_out;
+	isize items_types_count = *info_count_out;
 	_add_item(none, 0, 0, 0);
 	_add_item(hooknife, 1, 0, 5);
 	_add_item(rope, 8, 1, 5);
