@@ -165,15 +165,9 @@ Item_Info* item_types;
 isize item_types_count;
 Inventory inventory;
 
-#define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(item_types, &item_types_count, #name, (s), _tile_texture(x, y)) 
 void load_test_assets()
 {
 	item_types = arena_push_array(Game->play_arena, Item_Info, Max_Item_Info_Count);
-	_add_item(none, 0, 0, 0);
-	_add_item(hooknife, 1, 0, 5);
-	_add_item(rope, 8, 1, 5);
-	_add_item(book, 64, 2, 5);
-	_add_item(rock, 64, 3, 0);
 	
 	init_inventory(&inventory, 9, 6, Game->play_arena);
 	Item_Stack* stack = new_item_stack(item_types + 1, Game->play_arena);
