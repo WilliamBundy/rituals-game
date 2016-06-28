@@ -60,23 +60,6 @@ void init_tile_state(Tile_State* state, isize id)
 }
 
 
-enum Rituals_Tiles 
-{
-	Tile_Void,
-	Tile_Sand,
-	Tile_Grassy_Sand,
-	Tile_Grass,
-	Tile_Dense_Grass,
-	Tile_Desert_Sand,
-	Tile_Dug_Earth,
-	Tile_Rock_Wall,
-	Tile_Tree_Wall,
-	Tile_Water,
-	Tile_Stone_Road,
-	Tile_Earthen_Wall
-};
-
-
 enum Item_Info_Types
 {
 	Item_None,
