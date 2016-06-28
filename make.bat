@@ -19,7 +19,8 @@ SET DISABLED_WARNINGS=/wd4477 ^
 SET LIBS=SDL2.lib ^
 	SDL2main.lib ^
 	SDL2_mixer.lib ^
-	opengl32.lib
+	opengl32.lib ^
+	Shlwapi.lib
 
 start python autogit.py
 
