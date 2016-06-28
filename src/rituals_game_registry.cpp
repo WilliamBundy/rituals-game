@@ -49,26 +49,47 @@ void init_game_registry(Game_Registry* registry, Memory_Arena* arena)
 	_set_registry_arrays(Item_Info, items);
 }
 
-#define _generate_registry_lookup(func_name, return_type, array_base_name) \
-return_type func_name(const char* name) \
+#define _game_registry__key_macro(t) (t.k)
+#define _generate_registry_lookup(lookup_func_name, sort_func_name , return_type, array_base_name) \
+return_type* lookup_func_name(const char* name) \
 { \
 	usize hash = hash_str(name); \
 	isize index = usize_search(hash, Registry->array_base_name##_hash, Registry->array_base_name##_count); \
 	return Registry->array_base_name + index; \
-}
-
-_generate_registry_lookup(lookup_tile, Tile_Info*, tiles)
-_generate_registry_lookup(lookup_item, Item_Info*, items)
+} \
+struct _game_registry__##return_type##_pair { return_type v; usize k } \
+GenerateQuicksortForType(_game_registry__##return_type##_pair_sort, _game_registry__##return_type##_pair, _game_registry__key_macro) \
+void sort_func_name() \
+{ \
+	start_temp_arena(Game->temp_arena); \
+	_game_registry__##return_type##_pair* pairs = arena_push_array( \
+			Game->temp_arena,  \
+			_game_registry__##return_type##_pair, \
+			Registry->array_base_name##_count); \
+	for(isize i = 0; i < Registry->array_base_name##_count; ++i) { \
+		auto pair = pairs + i; \
+		pair->v = Registry->array_base_name[i]; \
+		pair->k = Registry->array_base_name##_hash[i]; \
+	} \
+	_game_registry__##return_type##_pair_sort(pairs, Registry->array_base_name##_count); \
+	for(isize i = 0; i < Registry->array_base_name##_count; ++i) { \
+		auto pair = pairs + i; \
+		Registry->array_base_name[i] = pair->v; \
+		Registry->array_base_name##_hash[i] = pair->k; \
+	} \
+} 
+ 
+_generate_registry_lookup(lookup_tile, sort_registered_tiles, Tile_Info, tiles) 
+_generate_registry_lookup(lookup_item, sort_registered_items, Item_Info, items)
 
 #define Tile_Size (32)
 #define Half_TS (16)
 
 #define _tile_texture(x, y) Get_Texture_Coordinates(Tile_Size * (x), Tile_Size * (y), Tile_Size, Tile_Size)
-#define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(tile_info, &tile_count, #name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, Tile_Dug_Earth)
+#define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(#name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, Tile_Dug_Earth)
 
-void register_all_rituals_tile_info(Tile_Info* tile_info, isize* tile_count_out)
+void register_all_rituals_tile_info()
 {
-	isize tile_count = *tile_count_out;
 	_new_tile(void, 1.0, 0.5, 0, 0, true);
 	tile_void->texture = rect2(0, 0, 0, 0);
 
@@ -95,20 +116,18 @@ void register_all_rituals_tile_info(Tile_Info* tile_info, isize* tile_count_out)
 	*tile_count_out = tile_count;
 }
 
-#define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(item_info, &item_types_count, #name, (s), _tile_texture(x, y)) 
-void register_all_rituals_item_info(Item_Info* item_info, isize* info_count_out)
+#define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(#name, (s), _tile_texture(x, y)) 
+void register_all_rituals_item_info()
 {
-	isize item_types_count = *info_count_out;
 	_add_item(none, 0, 0, 0);
 	_add_item(hooknife, 1, 0, 5);
 	_add_item(rope, 8, 1, 5);
 	_add_item(book, 64, 2, 5);
 	_add_item(rock, 64, 3, 0);
-	*info_count_out = item_types_count;
 }
 
 void register_everything_in_rituals()
 {
-	register_all_rituals_item_info(Registry->items, &Registry->items_count);
-	register_all_rituals_tile_info(Registry->tiles, &Registry->tiles_count);
+	register_all_rituals_item_info();
+	register_all_rituals_tile_info();
 }

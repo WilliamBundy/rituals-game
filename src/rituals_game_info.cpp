@@ -25,6 +25,8 @@ typedef int32 Tile;
 struct Tile_Info
 {
 	isize id;
+	usize hash;
+
 	Rect2 texture;
 	//TODO(will) support sided/connected textures
 	Rect2 bottom_texture;
@@ -74,10 +76,11 @@ enum Rituals_Tiles
 	Tile_Earthen_Wall
 };
 
-Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)
+Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)
 {
-	Tile_Info* t = list + *info_count;
-	*info_count += 1;
+	Tile_Info* t = Registry->tiles + Registry->tiles_count++;
+	t->id = Registry->tiles_count - 1;
+	t->hash = hash_str(name);
 	t->texture = texture;
 	t->name = name;
 	t->solid = solid;
@@ -86,6 +89,8 @@ Tile_Info* add_tile_info(Tile_Info* list, isize* info_count, const char* name, r
 	t->max_damage = 5;
 	t->immune_to_damage = false;
 	t->break_to_id = break_to_id;
+
+	Registry->tiles_hash[Registry->tiles_count - 1] = t->hash;
 
 	return t;
 }
@@ -105,21 +110,22 @@ enum Item_Info_Types
 struct Item_Info
 {
 	isize id;
+	usize hash;
 	const char* name;
 	int32 max_stack;
 
 	Rect2 texture;
 };
 
-Item_Info* add_item_type(Item_Info* info, isize* count, const char* name, int32 max_stack, Rect2 texture)
+Item_Info* add_item_type(const char* name, int32 max_stack, Rect2 texture)
 {
-
-	Item_Info* item = info + *count; 
-	item->id = *count;
-	*count += 1;
+	Item_Info* item = Registry->items + Registry->items_count++; 
+	item->id = Registry->items_count - 1;
 	item->name = name;
 	item->max_stack = max_stack;
 	item->texture = texture;
+	item->hash = hash_str(name);
+	Registry->items_hash[Registry->items_count - 1] = item->hash;
 	return item;
 }
 
