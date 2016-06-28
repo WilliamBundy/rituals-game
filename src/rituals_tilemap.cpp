@@ -23,7 +23,6 @@ struct Tilemap
 	isize info_count;
 };
 
-#define Max_Tile_Info_Count (256)
 
 void init_tilemap(Tilemap* tilemap, isize w, isize h, Memory_Arena* arena)
 {

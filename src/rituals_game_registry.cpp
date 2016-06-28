@@ -38,8 +38,9 @@ Game_Registry* Registry;
 
 void init_game_registry(Game_Registry* registry)
 {
-
+	
 }
+
 #define _generate_registry_lookup(func_name, return_type, array_base_name) \
 return_type func_name(const char* name) \
 { \
@@ -50,10 +51,6 @@ return_type func_name(const char* name) \
 
 _generate_registry_lookup(lookup_tile, Tile_Info*, tiles)
 _generate_registry_lookup(lookup_item, Item_Info*, items)
-
-
-
-
 
 #define Tile_Size (32)
 #define Half_TS (16)

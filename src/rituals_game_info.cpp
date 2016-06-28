@@ -102,7 +102,6 @@ enum Item_Info_Types
 	Item_Info_Types_Count
 };
 
-#define Max_Item_Info_Count (256)
 struct Item_Info
 {
 	isize id;
