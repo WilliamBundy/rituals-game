@@ -57,7 +57,7 @@ return_type* lookup_func_name(const char* name) \
 	isize index = usize_search(hash, Registry->array_base_name##_hash, Registry->array_base_name##_count); \
 	return Registry->array_base_name + index; \
 } \
-struct _game_registry__##return_type##_pair { return_type v; usize k }; \
+struct _game_registry__##return_type##_pair { return_type v; usize k; }; \
 GenerateQuicksortForType(_game_registry__##return_type##_pair_sort, _game_registry__##return_type##_pair, _game_registry__key_macro) \
 void sort_func_name() \
 { \
@@ -132,7 +132,6 @@ void register_all_rituals_tile_info()
 	_new_tile(stone_road, 1.2, 0.99, 3, 2, false);
 	tile_stone_road->max_damage = 20;
 	_new_tile(earthen_wall, 1, 1, 4, 2, true);
-	*tile_count_out = tile_count;
 }
 
 #define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(#name, (s), _tile_texture(x, y)) 
