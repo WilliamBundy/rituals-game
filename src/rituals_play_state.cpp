@@ -23,7 +23,7 @@ void play_state_start()
 {
 	World* world = play_state->world;
 	init_world(world, 4, 4, Game->play_arena);
-	register_all_rituals_tile_info(Registry->tiles, Registry->tiles_count);
+	register_all_rituals_tile_info(Registry->tiles, &Registry->tiles_count);
 
 	generate_world(world, Registry->tiles, Registry->tiles_count, 1, Game->play_arena);
 
