@@ -24,9 +24,9 @@ void serialize_world(World* world)
 {
 	char save_dir[FilePathMaxLength];
 	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
-	check_dir(dir);
+	check_dir(save_dir);
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, world->name);
-	check_dir(dir);
+	check_dir(save_dir);
 }
 
 
