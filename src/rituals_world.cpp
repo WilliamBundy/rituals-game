@@ -272,6 +272,7 @@ void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, 
 	}
 }
 
+void serialize_world(World* world);
 void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Body* player)
 {
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
