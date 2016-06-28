@@ -12,6 +12,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /* 
  * game_info.cpp
  *
+ * NOTE(will): all <thing>_Info types need to have an id member
+ *
  */ 
 
 typedef struct Entity Entity;

@@ -49,7 +49,7 @@ Entity	src/rituals_simulation.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:
 Entity	src/rituals_world_area.cpp	/^struct Entity$/;"	s	file:
 EntityMaxCallbacksPerFrame	src/rituals_world_area.cpp	46;"	d	file:
 EntityOnActivateDecl	src/rituals_game_info.cpp	/^typedef EntityOnActivateDecl((*Entity_On_Activate));$/;"	t	file:
-EntityOnActivateDecl	src/rituals_game_info.cpp	20;"	d	file:
+EntityOnActivateDecl	src/rituals_game_info.cpp	22;"	d	file:
 EntityOnActivateDecl	src/rituals_world_area.cpp	/^EntityOnActivateDecl(delete_on_activate)$/;"	f
 EntityOnActivateDecl	src/rituals_world_area.cpp	/^EntityOnActivateDecl(test_on_activate)$/;"	f
 FAST_BITS	src/thirdparty/stb_image.h	1456;"	d
