@@ -215,6 +215,7 @@ void load_assets()
 
 	init_game_registry(Registry, Game->registry_arena); 
 	register_everything_in_rituals();
+	finalize_game_registry();
 
 	Game->state = Game_State_Play;
 	play_state_init();
