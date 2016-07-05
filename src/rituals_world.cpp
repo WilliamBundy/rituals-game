@@ -133,7 +133,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	world->next_area_id = 0;
 }
 
-void deserialize_world_area(World_Area* area, FILE* file, Memory_Arena* arena);
+void deserialize_area(World_Area* area, FILE* file, Memory_Arena* arena);
 World_Area* world_load_area(World* world, Area_Link link)
 {
 	//TODO(will) load from file here using deserialize_world_area
