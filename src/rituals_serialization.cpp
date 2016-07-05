@@ -22,11 +22,22 @@ void check_dir(char* dir)
 }
 
 
-void serialize_tilemap(Tilemap* map, FILE* file)
+void serialize_tile_state(Tile_State* state, FILE* file)
 {
-	
+	fwrite(&state->id, sizeof(isize), 1, file);
+	fwrite(&state->damae, sizeof(int32), 1, file);
 }
 
+void serialize_tilemap(Tilemap* map, FILE* file)
+{
+	fwrite(&map->w, sizeof(isize), 1, file);
+	fwrite(&map->h, sizeof(isize), 1, file);
+	isize size = map->w * map->h;
+	fwrite(map->tiles, sizeof(Tile), size, file);
+	for(isize i = 0; i < size; ++i) {
+		serialize_tile_state(map->states + i, file);
+	}
+}
 
 void serialize_sim_body(Sim_Body* body, FILE* file)
 {
@@ -51,7 +62,6 @@ void serialize_simulator(Simulator* sim, FILE* file)
 	for(isize i = 0; i < sim->bodies_count; ++i) {
 		serialize_sim_body(sim->bodies + i, file);
 	}
-
 }
 
 void serialize_sprite(Sprite* s, FILE* file)
@@ -89,7 +99,6 @@ void serialize_area(World_Area* area, char* path)
 		}
 		fclose(area_file);
 	}
-
 }
 
 void serialize_world(World* world)

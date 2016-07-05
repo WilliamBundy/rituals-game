@@ -1977,6 +1977,7 @@ serialize_entity	src/rituals_serialization.cpp	/^void serialize_entity(Entity* e
 serialize_sim_body	src/rituals_serialization.cpp	/^void serialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 serialize_simulator	src/rituals_serialization.cpp	/^void serialize_simulator(Simulator* sim, FILE* file)$/;"	f
 serialize_sprite	src/rituals_serialization.cpp	/^void serialize_sprite(Sprite* s, FILE* file)$/;"	f
+serialize_tile_state	src/rituals_serialization.cpp	/^void serialize_tile_state(Tile_State* state, FILE* file)$/;"	f
 serialize_tilemap	src/rituals_serialization.cpp	/^void serialize_tilemap(Tilemap* map, FILE* file)$/;"	f
 serialize_world	src/rituals_serialization.cpp	/^void serialize_world(World* world)$/;"	f
 shader_program	src/rituals_renderer.cpp	/^	GLuint shader_program, vbo, vao, texture;$/;"	m	struct:OpenGL_Renderer	file:
