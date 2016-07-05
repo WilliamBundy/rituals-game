@@ -96,7 +96,7 @@ void serialize_simulator(Simulator* sim, FILE* file)
 		serialize_sim_body(sim->bodies + i, file);
 	}
 }
-void deserialize_simulator(Simulator* sim, FILE* file)
+void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 {
 	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
 	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);

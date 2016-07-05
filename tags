@@ -1294,7 +1294,7 @@ dequant	src/thirdparty/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__a
 deserialize_area	src/rituals_serialization.cpp	/^void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)$/;"	f
 deserialize_entity	src/rituals_serialization.cpp	/^void deserialize_entity(Entity* entity, FILE* file)$/;"	f
 deserialize_sim_body	src/rituals_serialization.cpp	/^void deserialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
-deserialize_simulator	src/rituals_serialization.cpp	/^void deserialize_simulator(Simulator* sim, FILE* file)$/;"	f
+deserialize_simulator	src/rituals_serialization.cpp	/^void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)$/;"	f
 deserialize_sprite	src/rituals_serialization.cpp	/^void deserialize_sprite(Sprite* s, FILE* file)$/;"	f
 deserialize_tile_state	src/rituals_serialization.cpp	/^void deserialize_tile_state(Tile_State* state, FILE* file)$/;"	f
 deserialize_tilemap	src/rituals_serialization.cpp	/^void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)$/;"	f
