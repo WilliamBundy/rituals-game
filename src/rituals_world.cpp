@@ -126,7 +126,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 {
 	world->seed = seed;
 	world->areas_capacity = width * height * 2;
-	world->area_stubs = arena_push_array(arena, World_Area, world->areas_capacity);
+	world->area_stubs = arena_push_array(arena, World_Area_Stub, world->areas_capacity);
 	world->areas_count = 0;
 	world->areas_width = width;
 	world->areas_height = height;
@@ -158,6 +158,9 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 {
 	area->stub = stub;
 	area->world = world;
+	Random rand;
+	Random* r = &rand;
+	init_random(r, stub->seed);
 	generate_tilemap(&area->map, stub->seed);
 	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
 		Entity* e = world_area_get_next_entity(area);
@@ -237,7 +240,7 @@ Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)
 		move_impulse *= Math_InvSqrt2;
 	}
 
-	Tile_Info* player_tile = area->map.info + tilemap_get_at(&area->map, player->shape.center);
+	Tile_Info* player_tile = Registry->tiles + tilemap_get_at(&area->map, player->shape.center);
 
 	move_impulse *= player_tile->movement_modifier;
 	return move_impulse;
@@ -445,7 +448,7 @@ void world_area_update(World_Area* area)
 	
 	_player_animate(area, player_entity, player, move_impulse);
 	Vec2 target = player->shape.center;
-
+#if 0
 	if(target.x < 0) {
 		world_switch_current_area(play_state->world, area->west);
 		play_state->world_xy.x--;
@@ -459,7 +462,7 @@ void world_area_update(World_Area* area)
 		world_switch_current_area(play_state->world, area->south);
 		play_state->world_xy.y++;
 	}
-
+#endif
 	area->offset += (target - area->offset) * 0.1f;
 	area->offset -= Game->size * 0.5f;
 	if(area->offset.x < 0) 

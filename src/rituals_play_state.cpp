@@ -22,10 +22,12 @@ void play_state_init()
 void play_state_start()
 {
 	World* world = play_state->world;
-	init_world(world, 4, 4, Game->play_arena);
-	generate_world("World_0", world, Registry->tiles, Registry->tiles_count, 1, Game->play_arena);
+	init_world(world, 4, 4, 1, Game->play_arena);
+	generate_world("World_0", world, 1, Game->play_arena);
 
-	world->current_area = world->areas;
+	world->current_area = arena_push_struct(Game->play_arena, World_Area);
+	init_world_area(world->current_area, Game->play_arena);
+	generate_world_area(world, world->current_area, world->area_stubs);
 
 	World_Area* area = world->current_area;
 	world_area_init_player(world->current_area, 
