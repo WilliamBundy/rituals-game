@@ -168,7 +168,7 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
 	fread(&area->id, sizeof(isize), 1, area_file);
 	deserialize_tilemap(&area->map, area_file, arena);
-	dserialize_simulator(&area->sim, area_file, arena);
+	deserialize_simulator(&area->sim, area_file, arena);
 	fread(area->offset.e, sizeof(real), 2, area_file);
 	fread(&area->entities_count, sizeof(isize), 1, area_file);
 	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
