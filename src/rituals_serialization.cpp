@@ -46,7 +46,7 @@ int32 wtf_3(int32* sanity)
 
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
-	int32 s = 3;
+	int32 s = 9;
 	wtf_3(&s);
 	printf("Serializing tilemap %d %d \n", map->w, map->h);
 	fwrite(&map->w, sizeof(isize), 1, file);
