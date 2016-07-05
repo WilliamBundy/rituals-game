@@ -40,6 +40,7 @@ int32 wtf_3(int32* sanity)
 	if(*sanity > 0) {
 		wtf_3(sanity);
 	}
+	return *sanity;
 }
 
 
