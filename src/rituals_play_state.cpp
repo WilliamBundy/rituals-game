@@ -35,6 +35,8 @@ void play_state_start()
 	world->current_area = NULL;
 	
 	world->current_area = world_load_area(world, -1);
+	printf("%d \n", world->current_area->entities_count);
+	printf("%d \n", world->current_area->sim.bodies_count);
 	world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
 
 	World_Area* area = world->current_area;

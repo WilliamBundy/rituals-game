@@ -150,11 +150,17 @@ World_Area* world_load_area(World* world, isize id)
 	if(fp != NULL) {
 		area = arena_push_struct(Game->play_arena, World_Area);
 		deserialize_area(area, fp, Game->play_arena);
+		
+
+
+
+#if 0 
 		for(isize i = 0; i < area->entities_count; ++i) {
 			Entity* e = area->entities + i;
 			e->area = area;
 		}
 		world_area_synchronize_entities_and_bodies(area);
+#endif
 
 		fclose(fp);
 	}
