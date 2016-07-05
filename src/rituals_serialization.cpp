@@ -88,7 +88,7 @@ void deserialize_sim_body(Sim_Body* body, FILE* file)
 
 void serialize_simulator(Simulator* sim, FILE* file)
 {
-	printf("serializing simulator: %d \n", sim->bodies_count);
+	printf("serializing simulator: %d \n", ftell(file));
 	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
 	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);
 	fwrite(&sim->next_body_id, sizeof(isize), 1, file);
