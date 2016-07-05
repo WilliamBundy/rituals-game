@@ -151,15 +151,15 @@ void serialize_area(World_Area* area, char* path)
 	FILE* area_file = fopen(file_name, "w");
 	if(area_file != NULL) {
 		fwrite(&area->id, sizeof(isize), 1, area_file);
-		serialize_tilemap(&area->map, area_file);
-		serialize_simulator(&area->sim, area_file);
-		fwrite(area->offset.e, sizeof(real), 2, area_file);
 		fwrite(&area->entities_count, sizeof(isize), 1, area_file);
 		fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
 		fwrite(&area->next_entity_id, sizeof(isize), 1, area_file);
+		fwrite(area->offset.e, sizeof(real), 2, area_file);
 		for(isize i = 0; i < area->entities_count; ++i) {
 			serialize_entity(area->entities + i, area_file);
 		}
+		serialize_tilemap(&area->map, area_file);
+		serialize_simulator(&area->sim, area_file);
 		fclose(area_file);
 	}
 }
@@ -167,17 +167,16 @@ void serialize_area(World_Area* area, char* path)
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
 	fread(&area->id, sizeof(isize), 1, area_file);
-	deserialize_tilemap(&area->map, area_file, arena);
-	deserialize_simulator(&area->sim, area_file, arena);
-	fread(area->offset.e, sizeof(real), 2, area_file);
 	fread(&area->entities_count, sizeof(isize), 1, area_file);
 	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
 	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
-
+	fread(area->offset.e, sizeof(real), 2, area_file);
 	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		deserialize_entity(area->entities + i, area_file);
 	}
+	deserialize_tilemap(&area->map, area_file, arena);
+	deserialize_simulator(&area->sim, area_file, arena);
 }
 
 
