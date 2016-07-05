@@ -184,7 +184,7 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	}
 	printf("area %d \n", ftell(area_file));
 	deserialize_tilemap(&area->map, area_file, arena);
-	printf("area %d \n", ftell(area_file)x);
+	printf("area %d \n", ftell(area_file));
 	deserialize_simulator(&area->sim, area_file, arena);
 }
 
