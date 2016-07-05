@@ -25,6 +25,9 @@ void serialize_area(World_Area* area, char* path)
 	char file_name[FilePathMaxLength];
 	snprintf(file_name, FilePathMaxLength, "%s/area_%d.dat", path, area->id);
 	FILE* area_file = fopen(file_name, "w");
+	if(area_file != NULL) {
+		fclose(area_file);
+	}
 
 }
 
@@ -41,20 +44,22 @@ void serialize_world(World* world)
 	if(world_file != NULL) {
 		isize namelen = strlen(world->name);
 		fwrite(&namelen, sizeof(isize), 1, world_file);
-		fwrite((void*)world->name, sizeof(char), strlen(world->name), world_file);
-		fwrite((void*)world->areas_count, sizeof(isize), 1, world_file);
-		fwrite((void*)world->areas_capacity, sizeof(isize), 1, world_file);
-		fwrite((void*)world->areas_width, sizeof(isize), 1, world_file);
-		fwrite((void*)world->areas_height, sizeof(isize), 1, world_file);
-		fwrite((void*)world->current_area->id, sizeof(isize), 1, world_file);
+		fwrite(world->name, sizeof(char), strlen(world->name), world_file);
+		fwrite(&world->areas_count, sizeof(isize), 1, world_file);
+		fwrite(&world->areas_capacity, sizeof(isize), 1, world_file);
+		fwrite(&world->areas_width, sizeof(isize), 1, world_file);
+		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
+		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
 		fclose(world_file);
 	}
 
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
 	check_dir(save_dir);
 
+	printf("%d \n", world->areas_count);
 	for(isize i = 0; i < world->areas_count; ++i) {
 		serialize_area(world->areas + i, save_dir);
+
 	}
 }
 

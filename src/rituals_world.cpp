@@ -152,7 +152,7 @@ void generate_world(const char* name, World* world, Tile_Info* info, isize ti_co
 	for(isize i = 0; i < world->areas_height; ++i) {
 		for(isize j = 0; j < world->areas_width; ++j) {
 			isize index = i * world->areas_width + j;
-			World_Area* area = world->areas + index;
+			World_Area* area = world->areas + world->areas_count++; 
 			init_world_area(area, arena);
 			area->id = world->next_area_id++;
 			area->world = world;
@@ -163,8 +163,8 @@ void generate_world(const char* name, World* world, Tile_Info* info, isize ti_co
 				Entity* e = world_area_get_next_entity(area);
 				Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 				e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
-				b->shape.hw = 16;
-				b->shape.hh = 12;
+				b->shape.hw = 15;
+				b->shape.hh = 11;
 				b->inv_mass = 1.0f;
 				e->sprite.size = v2(32, 64);
 				e->sprite.center = v2(0, 20);
