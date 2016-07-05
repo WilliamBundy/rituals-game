@@ -123,7 +123,7 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s, sizeof(real), 16, file);
 }
 
-void deserialize_entity(Entity* entity, FILE* file)
+,oid deserialize_entity(Entity* entity, FILE* file)
 {
 	fread(&entity->id, sizeof(isize), 1, file);
 	fread(&entity->body_id, sizeof(isize), 1, file);
