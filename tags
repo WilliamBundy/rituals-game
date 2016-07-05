@@ -1120,7 +1120,7 @@ _check_gl_attribute	src/rituals_main.cpp	293;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	187;"	d	file:
 _entity_get_id	src/rituals_world_area.cpp	73;"	d	file:
-_f	src/rituals_serialization.cpp	168;"	d	file:
+_f	src/rituals_serialization.cpp	50;"	d	file:
 _game_registry__key_macro	src/rituals_game_registry.cpp	54;"	d	file:
 _generate_registry_lookup	src/rituals_game_registry.cpp	55;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	85;"	d	file:
@@ -1147,6 +1147,7 @@ _tiles	src/rituals_win32.cpp	/^uint8* _tiles;$/;"	v
 _tiles	src/rituals_world.cpp	/^uint8* _tiles;$/;"	v
 _tw	src/rituals_win32.cpp	/^isize _tw, _th;$/;"	v
 _tw	src/rituals_world.cpp	/^isize _tw, _th;$/;"	v
+_v	src/rituals_serialization.cpp	51;"	d	file:
 a	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 a1	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon8	file:
 a1	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon9	file:

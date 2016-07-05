@@ -46,10 +46,16 @@ void serialize_tilemap(Tilemap* map, FILE* file)
 	}
 }
 
+
+#define _f(s) printf("%s: %d \n", s, ftell(file))
+#define _v(t) printf("%d \n", t)
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
+	_f("tilemap start");
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
+	_v(map->w);
+	_v(map->h);
 	init_tilemap(map, map->w, map->h, arena);
 	isize size = map->w * map->h;
 	fread(map->tiles, sizeof(Tile), size, file);
@@ -165,25 +171,18 @@ void serialize_area(World_Area* area, char* path)
 }
 
 
-#define _f printf("%d - %d \n", t++, ftell(area_file))
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
-	int32 t = 0;
-	_f;
 	fread(&area->id, sizeof(isize), 1, area_file);
 	fread(&area->entities_count, sizeof(isize), 1, area_file);
 	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
 	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
 	fread(area->offset.e, sizeof(real), 2, area_file);
-	_f;
 	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
-	_f;
 	for(isize i = 0; i < area->entities_count; ++i) {
 		deserialize_entity(area->entities + i, area_file);
 	}
-	_f;
 	deserialize_tilemap(&area->map, area_file, arena);
-	_f;
 	deserialize_simulator(&area->sim, area_file, arena);
 }
 
