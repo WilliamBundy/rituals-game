@@ -148,8 +148,8 @@ World_Area* world_load_area(World* world, Area_Link link)
 	FILE* file = fopen(file, "r");
 	World_Area* area = NULL;
 	if(file != NULL) {
-		area = arena_push_struct(game->play_arena, World_Area);
-		deserialize_area(area, file, game->play_arena);
+		area = arena_push_struct(Game->play_arena, World_Area);
+		deserialize_area(area, file, Game->play_arena);
 		fclose(file);
 	}
 
