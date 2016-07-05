@@ -88,6 +88,7 @@ void deserialize_sim_body(Sim_Body* body, FILE* file)
 
 void serialize_simulator(Simulator* sim, FILE* file)
 {
+	printf("serializing simulator: %d \n", sim->bodies_count);
 	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
 	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);
 	fwrite(&sim->next_body_id, sizeof(isize), 1, file);
@@ -102,7 +103,6 @@ void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 	fread(&sim->bodies_capacity, sizeof(isize), 1, file);
 	fread(&sim->next_body_id, sizeof(isize), 1, file);
 	fread(&sim->sort_axis, sizeof(isize), 1, file);
-	printf("inside deserialize_simulator %d \n", sim->bodies_count);
 	sim->bodies = arena_push_array(arena, Sim_Body, sim->bodies_capacity);
 	for(isize i = 0; i < sim->bodies_count; ++i) {
 		deserialize_sim_body(sim->bodies + i, file);
