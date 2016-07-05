@@ -99,6 +99,7 @@ void serialize_simulator(Simulator* sim, FILE* file)
 }
 void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 {
+	printf("deserializing simulator: %d \n", ftell(file));
 	fread(&sim->bodies_count, sizeof(isize), 1, file);
 	fread(&sim->bodies_capacity, sizeof(isize), 1, file);
 	fread(&sim->next_body_id, sizeof(isize), 1, file);
