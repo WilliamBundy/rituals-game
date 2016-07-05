@@ -29,6 +29,7 @@ void play_state_start()
 	init_world_area(world->current_area, Game->play_arena);
 	generate_world_area(world, world->current_area, world->area_stubs);
 	printf("%d \n", world->current_area->entities_count);
+	printf("%d \n", world->current_area->sim.bodies_count);
 	serialize_world(world);
 
 	world->current_area = NULL;
