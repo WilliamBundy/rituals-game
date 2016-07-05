@@ -174,6 +174,7 @@ void serialize_area(World_Area* area, char* path)
 		fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
 		fwrite(&area->next_entity_id, sizeof(isize), 1, area_file);
 		fwrite(area->offset.e, sizeof(real), 2, area_file);
+		wtf_2("oh god", 5);
 		for(isize i = 0; i < area->entities_count; ++i) {
 			serialize_entity(area->entities + i, area_file);
 		}
