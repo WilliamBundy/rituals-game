@@ -74,7 +74,7 @@ cl ^
 	/NOLOGO ^
 	/INCREMENTAL:NO
 pushd bin
-del *.pdb
+ReM del *.pdb
 GOTO END
 
 :END
