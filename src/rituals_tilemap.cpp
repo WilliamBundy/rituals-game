@@ -227,7 +227,7 @@ void render_tilemap(Tilemap* tilemap, Vec2 pos)
 	Sprite s;
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
-			Tile_Info* t = tilemap->info + tilemap->tiles[i * tilemap->w + j];
+			Tile_Info* t = Registry->tiles + tilemap->tiles[i * tilemap->w + j];
 			init_sprite(&s);
 			s.position = v2(j*32, i*32) + pos;
 			s.size = v2(32, 32);
