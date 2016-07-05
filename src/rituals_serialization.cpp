@@ -123,6 +123,31 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s, sizeof(real), 16, file);
 }
 
+void deserialize_entity(Entity* entity, FILE* file)
+{
+	fread(&entity->id, sizeof(isize), 1, file);
+	fread(&entity->body_id, sizeof(isize), 1, file);
+	deserialize_sprite(&entity->sprite, file);
+	fread(&entity->counter, sizeof(int32), 1, file);
+	fread(&entity->facing, sizeof(int32), 1, file);
+	fread(&entity->direction, sizeof(Direction), 1, file);
+}
+
+void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
+{
+	fread(&area->id, sizeof(isize), 1, area_file);
+	fread(&area->entities_count, sizeof(isize), 1, area_file);
+	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
+	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
+	fread(area->offset.e, sizeof(real), 2, area_file);
+	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
+	for(isize i = 0; i < area->entities_count; ++i) {
+		deserialize_entity(area->entities + i, area_file);
+	}
+	deserialize_tilemap(&area->map, area_file, arena);
+	deserialize_simulator(&area->sim, area_file, arena);
+}
+
 void serialize_entity(Entity* entity, FILE* file)
 {
 	fwrite(&entity->id, sizeof(isize), 1, file);
@@ -132,16 +157,6 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->facing, sizeof(int32), 1, file);
 	//TODO(will) standardize size of enum?
 	fwrite(&entity->direction, sizeof(Direction), 1, file);
-}
-
-void deserialize_entity(Entity* entity, FILE* file)
-{
-	fread(&entity->id, sizeof(isize), 1, file);
-	fread(&entity->body_id, sizeof(isize), 1, file);
-	deserialize_sprite(&entity->sprite, file);
-	fread(&entity->counter, sizeof(int32), 1, file);
-	fread(&entity->facing, sizeof(int32), 1, file);
-	fread(&entity->direction, sizeof(Direction), 1, file);
 }
 
 void serialize_area(World_Area* area, char* path)
@@ -164,21 +179,6 @@ void serialize_area(World_Area* area, char* path)
 	}
 }
 
-
-void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
-{
-	fread(&area->id, sizeof(isize), 1, area_file);
-	fread(&area->entities_count, sizeof(isize), 1, area_file);
-	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
-	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
-	fread(area->offset.e, sizeof(real), 2, area_file);
-	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
-	for(isize i = 0; i < area->entities_count; ++i) {
-		deserialize_entity(area->entities + i, area_file);
-	}
-	deserialize_tilemap(&area->map, area_file, arena);
-	deserialize_simulator(&area->sim, area_file, arena);
-}
 
 
 void serialize_world(World* world)
