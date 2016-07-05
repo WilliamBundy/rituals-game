@@ -85,7 +85,7 @@ enum World_Area_Biome
 {
 	AreaBiome_Grassland,
 	AreaBiome_Desert
-}
+};
 #define WorldAreaEntityCapacity (8192)
 #define WorldAreaTilemapWidth (64)
 #define WorldAreaTilemapHeight (64)
@@ -98,7 +98,7 @@ struct World_Area_Stub
 	Area_Link west;
 	Area_Link east;
 	World_Area_Biome biome;
-}
+};
 
 struct World_Area
 {
