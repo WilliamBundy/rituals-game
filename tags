@@ -2368,6 +2368,8 @@ world_area_update	src/rituals_world.cpp	/^void world_area_update(World_Area* are
 world_arena	src/rituals_game.cpp	/^	Memory_Arena* world_arena;$/;"	m	struct:Game_Main	file:
 world_load_area	src/rituals_world.cpp	/^World_Area* world_load_area(World* world, isize id)$/;"	f
 world_xy	src/rituals_main.cpp	/^	Vec2i world_xy;$/;"	m	struct:Play_State	file:
+wtf_1	src/rituals_serialization.cpp	/^void wtf_1(int32 help)$/;"	f
+wtf_2	src/rituals_serialization.cpp	/^void wtf_2(const char* why, int32 multiplier)$/;"	f
 x	src/rituals_game.cpp	/^	uint64 x, y;$/;"	m	struct:Random	file:
 x	src/rituals_math.cpp	/^		int32 x, y;$/;"	m	struct:Vec2i::__anon3	file:
 x	src/rituals_math.cpp	/^		real x, y;$/;"	m	struct:Vec2::__anon2	file:

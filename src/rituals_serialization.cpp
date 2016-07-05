@@ -172,7 +172,7 @@ void serialize_area(World_Area* area, char* path)
 void wtf_2(const char* why, int32 multiplier)
 {
 	for (isize j = 0; j < multiplier; ++j) {
-		printf("%s ");
+		printf("%s ", why);
 	}
 	printf("\n -- printed %s %d times", why, ++multiplier);
 }
