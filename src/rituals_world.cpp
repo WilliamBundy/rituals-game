@@ -146,6 +146,7 @@ World_Area* world_load_area(World* world, isize id)
 	//TODO(will) do snprintf error checking
 	FILE* fp = fopen(file, "r");
 	World_Area* area = NULL;
+	printf("%s: %s \n", file, fp ? "success": "failure");
 	if(fp != NULL) {
 		area = arena_push_struct(Game->play_arena, World_Area);
 		deserialize_area(area, fp, Game->play_arena);
