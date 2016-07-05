@@ -162,6 +162,15 @@ void deserialize_entity(Entity* entity, FILE* file)
 	fread(&entity->direction, sizeof(Direction), 1, file);
 }
 
+void wtf_2(const char* why, int32 multiplier)
+{
+	for (isize j = 0; j < multiplier; ++j) {
+		printf("%s ", why);
+	}
+	printf("\n -- printed %s %d times", why, ++multiplier);
+}
+
+void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena);
 
 void serialize_area(World_Area* area, char* path)
 {
@@ -185,13 +194,6 @@ void serialize_area(World_Area* area, char* path)
 	}
 }
 
-void wtf_2(const char* why, int32 multiplier)
-{
-	for (isize j = 0; j < multiplier; ++j) {
-		printf("%s ", why);
-	}
-	printf("\n -- printed %s %d times", why, ++multiplier);
-}
 
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
