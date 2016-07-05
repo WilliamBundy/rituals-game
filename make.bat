@@ -35,7 +35,7 @@ echo Building a debug build with %DEBUG_DEF% defined
 cl ^
 	/I %INCLUDES% ^
 	/Zi ^
-	/Md ^
+	/MTd ^
 	/W3 ^
 	/Gd ^
 	%DISABLED_WARNINGS% ^
