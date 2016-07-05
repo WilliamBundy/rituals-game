@@ -205,7 +205,6 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	fread(area->offset.e, sizeof(real), 2, area_file);
 	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
 	for(isize i = 0; i < area->entities_count; ++i) {
-		printf("area %d \n", ftell(area_file));
 		deserialize_entity(area->entities + i, area_file);
 	}
 	wtf_2("why?", 10);
