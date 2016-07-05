@@ -17,11 +17,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 void check_dir(char* dir)
 {
 	if(!PathFileExists(dir)) {
-		
 		CreateDirectory(dir, NULL);
 	}
 }
-
 
 void serialize_tile_state(Tile_State* state, FILE* file)
 {
@@ -48,11 +46,9 @@ void serialize_tilemap(Tilemap* map, FILE* file)
 }
 
 
-#define _f(s) printf("%s: %d \n", s, ftell(file))
-#define _v(t) printf("%d \n", t)
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
-	_f("tilemap start");
+	printf("Deserializing tilemap \n");
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
 	isize size = map->w * map->h;
