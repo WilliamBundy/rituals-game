@@ -37,6 +37,7 @@ void deserialize_tile_state(Tile_State* state, FILE* file)
 
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
+	printf("serializing: %d \n", ftell(file));
 	fwrite(&map->w, sizeof(isize), 1, file);
 	fwrite(&map->h, sizeof(isize), 1, file);
 	isize size = map->w * map->h;
@@ -48,6 +49,7 @@ void serialize_tilemap(Tilemap* map, FILE* file)
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
+	printf("deserializing: %d \n", ftell(file));
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
 	init_tilemap(map, map->w, map->h, arena);
@@ -88,7 +90,7 @@ void deserialize_sim_body(Sim_Body* body, FILE* file)
 
 void serialize_simulator(Simulator* sim, FILE* file)
 {
-	printf("serializing simulator: %d \n", ftell(file));
+	printf("serializing: %d \n", ftell(file));
 	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
 	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);
 	fwrite(&sim->next_body_id, sizeof(isize), 1, file);
