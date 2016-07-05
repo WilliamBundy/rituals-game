@@ -142,7 +142,7 @@ void deserialize_entity(Entity* entity, FILE* file)
 {
 	fread(&entity->id, sizeof(isize), 1, file);
 	fread(&entity->body_id, sizeof(isize), 1, file);
-	serialize_sprite(&entity->sprite, file);
+	deserialize_sprite(&entity->sprite, file);
 	fread(&entity->counter, sizeof(int32), 1, file);
 	fread(&entity->facing, sizeof(int32), 1, file);
 	//TODO(will) standardize size of enum?
