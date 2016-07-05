@@ -55,10 +55,9 @@ void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 	_f("tilemap start");
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
-	_v(map->w);
-	_v(map->h);
-	init_tilemap(map, map->w, map->h, arena);
 	isize size = map->w * map->h;
+	map->tiles = arena_push_array(arena, Tile, size);
+	map->states = arena_push_array(arena, Tile_State, size);
 	fread(map->tiles, sizeof(Tile), size, file);
 	for(isize i = 0; i < size; ++i) {
 		deserialize_tile_state(map->states + i, file);
@@ -182,7 +181,7 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	fread(area->offset.e, sizeof(real), 2, area_file);
 	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
 	for(isize i = 0; i < area->entities_count; ++i) {
-	printf("area %d \n", ftell(area_file));
+		printf("area %d \n", ftell(area_file));
 		deserialize_entity(area->entities + i, area_file);
 	}
 	printf("area %d \n", ftell(area_file));
