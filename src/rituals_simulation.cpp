@@ -250,7 +250,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 			a->shape.center += dpos * dt;
 			a->shape.center += a->collision_vel / SimIter * dt;
 			a->velocity = new_vel;
-			Tile_Info* tile = map->info + tilemap_get_at(map, a->shape.center);
+			Tile_Info* tile = Registry->tiles + tilemap_get_at(map, a->shape.center);
 			real damping = 1.0f;
 			if(Has_Flag(a->flags, Body_Flag_No_Friction)) {
 				damping = a->damping;
