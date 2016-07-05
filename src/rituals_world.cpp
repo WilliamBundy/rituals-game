@@ -113,92 +113,103 @@ struct World
 {
 	const char* name;
 
-	World_Area* areas;
+	World_Area_Stub* area_stubs;
 	isize next_area_id;
 	isize areas_count, areas_capacity;
 	isize areas_width, areas_height;
 
 	World_Area* current_area;
+	usize seed;
 };
 
-void init_world(World* world, isize width, isize height, Memory_Arena* arena)
+void init_world(World* world, isize width, isize height, usize seed, Memory_Arena* arena)
 {
+	world->seed = seed;
 	world->areas_capacity = width * height * 2;
-	world->areas = arena_push_array(arena, World_Area, world->areas_capacity);
+	world->area_stubs = arena_push_array(arena, World_Area, world->areas_capacity);
 	world->areas_count = 0;
 	world->areas_width = width;
 	world->areas_height = height;
 	world->next_area_id = 0;
 }
 
+World_Area* world_load_area(World* world, Area_Link link)
+{
+	//TODO(will) load from file here using deserialize_world_area
+	// then call world_init_area?
+	//world_switch_current_area(world, link);
+	World_Area_Stub* stub = world->area_stubs + world->areas_count++; 
+}
 
 void world_switch_current_area(World* world, Area_Link link)
 {
 	if(link.link == NULL) return;
-	World_Area* new_area = link.link;
-	world_area_init_player(new_area, link.position);
+	World_Area_Stub* new_area_stub = link.link;
 	world_area_deinit_player(world->current_area);
+	//TODO(will) free old current area
+	World_Area* new_area = world_load_area(world, link);
+	world_area_init_player(new_area, link.position);
 	world->current_area = new_area;
 }
 
-void generate_world(const char* name, World* world, Tile_Info* info, isize ti_count, uint64 seed, Memory_Arena* arena)
-{
-	Random r_s;
-	Random* r = &r_s;
-	init_random(r, seed);
-	world->name = name;
 
+//TODO(will) call init_world_area on area before calling
+void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
+{
+	area->stub = stub;
+	area->world = world;
+	generate_tilemap(&area->map, stub->seed);
+	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
+		Entity* e = world_area_get_next_entity(area);
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+		e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
+		b->shape.hw = 15;
+		b->shape.hh = 11;
+		b->inv_mass = 1.0f;
+		e->sprite.size = v2(32, 64);
+		e->sprite.center = v2(0, 20);
+		do {
+			b->shape.center = v2(
+					rand_range(r, 0, area->map.w * 32),
+					rand_range(r, 0, area->map.h * 32));
+		}
+		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
+	}
+	generate_statics_for_tilemap(&area->sim, &area->map);
+}
+
+void generate_world(const char* name, World* world, Memory_Arena* arena)
+{
+	world->name = name;
 
 	for(isize i = 0; i < world->areas_height; ++i) {
 		for(isize j = 0; j < world->areas_width; ++j) {
 			isize index = i * world->areas_width + j;
-			World_Area* area = world->areas + world->areas_count++; 
-			init_world_area(area, arena);
-			area->id = world->next_area_id++;
-			area->world = world;
-			area->map.info = info;
-			area->map.info_count = ti_count;
-			generate_tilemap(&area->map, next_random_uint64(r));
-			for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
-				Entity* e = world_area_get_next_entity(area);
-				Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-				e->sprite.texture = Get_Texture_Coordinates(0, 96, 32, 64);
-				b->shape.hw = 15;
-				b->shape.hh = 11;
-				b->inv_mass = 1.0f;
-				e->sprite.size = v2(32, 64);
-				e->sprite.center = v2(0, 20);
-				//entity_add_event_on_activate(e, test_on_activate);
-				do {
-					b->shape.center = v2(
-						rand_range(r, 0, area->map.w * 32),
-						rand_range(r, 0, area->map.h * 32));
-				}
-				while (info[tilemap_get_at(&area->map, b->shape.center)].solid);
-			}
-
-			generate_statics_for_tilemap(&area->sim, &area->map);
-
+			World_Area_Stub* stub = world->area_stubs + world->areas_count++; 
+			stub->id = world->next_area_id++;
+			stub->seed = world->seed + stub->id;
 			isize north_link = modulus(i - 1, world->areas_height) * world->areas_width + j;
 			isize south_link = modulus(i + 1, world->areas_height) * world->areas_width + j;
 			isize west_link = i * world->areas_width + modulus(j - 1, world->areas_width);
 			isize east_link = i * world->areas_width + modulus(j + 1, world->areas_width);
-			area->north = Area_Link {
+
+			stub->north = Area_Link {
 				v2i(WorldAreaTilemapWidth / 2,  WorldAreaTilemapHeight - 1), 
-				world->areas + north_link
+					world->area_stubs + north_link
 			};
-			area->south = Area_Link {
+			stub->south = Area_Link {
 				v2i(WorldAreaTilemapWidth / 2, 1),
-				world->areas + south_link
+					world->area_stubs + south_link
 			};
-			area->west = Area_Link {
+			stub->west = Area_Link {
 				v2i(WorldAreaTilemapWidth - 1, WorldAreaTilemapHeight / 2),
-				world->areas + west_link
+					world->area_stubs + west_link
 			};
-			area->east = Area_Link {
+			stub->east = Area_Link {
 				v2i(1, WorldAreaTilemapHeight / 2),
-				world->areas + east_link
+					world->area_stubs + east_link
 			};
+
 		}
 	}
 }

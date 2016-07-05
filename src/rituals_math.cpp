@@ -190,18 +190,20 @@ inline Vec2 v2_from_angle(real normal)
 	};
 }
 
-struct AABB
+union AABB
 {
-
-	Vec2 center;
-	union {
-		struct {
-			real hw, hh;
-		};
-		struct {
-			Vec2 hext;
+	struct {
+		Vec2 center;
+		union {
+			struct {
+				real hw, hh;
+			};
+			struct {
+				Vec2 hext;
+			};
 		};
 	};
+	real e[4];
 };
 
 #define AABB_x1(b) (b.center.x - b.hw)

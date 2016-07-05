@@ -16,8 +16,51 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 void check_dir(char* dir)
 {
 	if(!PathFileExists(dir)) {
+		
 		CreateDirectory(dir, NULL);
 	}
+}
+
+
+void serialize_tilemap(Tilemap* map, FILE* file)
+{
+
+}
+
+
+void serialize_sim_body(Sim_Body* body, FILE* file)
+{
+	fwrite(&body->id, sizeof(isize), 1, file);
+	fwrite(&body->shape.e, sizeof(real), 4, file);
+}
+
+void serialize_simulator(Simulator* sim, FILE* file)
+{
+	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
+	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);
+	fwrite(&sim->next_body_id, sizeof(isize), 1, file);
+	fwrite(&sim->sort_axis, sizeof(isize), 1, file);
+	for(isize i = 0; i < sim->bodies_count; ++i) {
+		serialize_sim_body(sim->bodies + i, file);
+	}
+
+}
+
+void serialize_sprite(Sprite* s, FILE* file)
+{
+	//TODO(will) maybe serialize each field separately?
+	fwrite(&s, sizeof(Sprite), 1, file);
+}
+
+void serialize_entity(Entity* entity, FILE* file)
+{
+	fwrite(&entity->id, sizeof(isize), 1, file);
+	fwrite(&entity->body_id, sizeof(isize), 1, file);
+	serialize_sprite(&entity->sprite, file);
+	fwrite(&entity->counter, sizeof(int32), 1, file);
+	fwrite(&entity->facing, sizeof(int32), 1, file);
+	//TODO(will) standardize size of enum?
+	fwrite(&entity->direction, sizeof(Direction), 1, file);
 }
 
 void serialize_area(World_Area* area, char* path)
@@ -26,6 +69,16 @@ void serialize_area(World_Area* area, char* path)
 	snprintf(file_name, FilePathMaxLength, "%s/area_%d.dat", path, area->id);
 	FILE* area_file = fopen(file_name, "w");
 	if(area_file != NULL) {
+		fwrite(&area->id, sizeof(isize), 1, area_file);
+		serialize_tilemap(&area->map, area_file);
+		serialize_simulator(&area->simulator, area_file);
+		fwrite(area->offset.e, sizeof(real), 2, area_file);
+		fwrite(&area->entities_count, sizeof(isize), 1, area_file);
+		fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
+		fwrite(&area->next_entity_id, sizeof(isize), 1, area_file);
+		for(isize i = 0; i < area->entities_count; ++i) {
+			serialize_entity(area->entities + i, area_file);
+		}
 		fclose(area_file);
 	}
 
@@ -50,6 +103,7 @@ void serialize_world(World* world)
 		fwrite(&world->areas_width, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
 		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
+		//TODO(will) write world area stubs here
 		fclose(world_file);
 	}
 

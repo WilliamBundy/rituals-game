@@ -74,34 +74,47 @@ struct Entity
 GenerateQuicksortForType(entity_sort_on_id, Entity, _entity_get_id)
 GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
 
-typedef struct World_Area World_Area;
+typedef struct World_Area_Stub World_Area_Stub;
 struct Area_Link
 {
 	Vec2i position;
-	World_Area* link;
+	World_Area_Stub* link;
 };
 
+enum World_Area_Biome
+{
+	AreaBiome_Grassland,
+	AreaBiome_Desert
+}
 #define WorldAreaEntityCapacity (8192)
 #define WorldAreaTilemapWidth (64)
 #define WorldAreaTilemapHeight (64)
+struct World_Area_Stub
+{
+	isize id;
+	usize seed;
+	Area_Link north;
+	Area_Link south;
+	Area_Link west;
+	Area_Link east;
+	World_Area_Biome biome;
+}
+
 struct World_Area
 {
 	isize id;
+	World_Area_Stub* stub;
 	World* world;
 	Simulator sim;
 	Tilemap map;
 	Vec2 offset;
 
-	Entity* player;
-	Sim_Body* player_body;
+	//Entity* player;
+	//Sim_Body* player_body;
 	Entity* entities;
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
 
-	Area_Link north;
-	Area_Link south;
-	Area_Link west;
-	Area_Link east;
 };
 
 void init_world_area(World_Area* area, Memory_Arena* arena)
