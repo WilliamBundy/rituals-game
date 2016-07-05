@@ -118,13 +118,13 @@ void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 void serialize_sprite(Sprite* s, FILE* file)
 {
 	//TODO(will) maybe serialize each field separately?
-	fwrite(&s, sizeof(Sprite), 1, file);
+	fwrite(&s, sizeof(real), 16, file);
 }
 
 void deserialize_sprite(Sprite* s, FILE* file)
 {
 	//TODO(will) maybe serialize each field separately?
-	fread(&s, sizeof(Sprite), 1, file);
+	fread(&s, sizeof(real), 16, file);
 }
 
 void serialize_entity(Entity* entity, FILE* file)
