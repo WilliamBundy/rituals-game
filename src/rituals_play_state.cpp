@@ -28,7 +28,7 @@ void play_state_start()
 	world->current_area = arena_push_struct(Game->play_arena, World_Area);
 	init_world_area(world->current_area, Game->play_arena);
 	generate_world_area(world, world->current_area, world->area_stubs);
-	printf("%d \n", area->entities_count);
+	printf("%d \n", world->current_area->entities_count);
 	serialize_world(world);
 
 	world->current_area = NULL;
