@@ -37,7 +37,6 @@ void deserialize_tile_state(Tile_State* state, FILE* file)
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
-	wtf_1(40);
 	printf("Deserializing tilemap \n");
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
@@ -52,8 +51,6 @@ void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
-	int32 s = 9;
-	wtf_3(&s);
 	printf("Serializing tilemap %d %d \n", map->w, map->h);
 	fwrite(&map->w, sizeof(isize), 1, file);
 	fwrite(&map->h, sizeof(isize), 1, file);
