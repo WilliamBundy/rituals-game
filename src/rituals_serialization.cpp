@@ -154,7 +154,7 @@ void serialize_area(World_Area* area, char* path)
 {
 	char file_name[FilePathMaxLength];
 	snprintf(file_name, FilePathMaxLength, "%s/area_%d.dat", path, area->id);
-	FILE* area_file = fopen(file_name, "w");
+	FILE* area_file = fopen(file_name, "wb");
 	if(area_file != NULL) {
 		fwrite(&area->id, sizeof(isize), 1, area_file);
 		fwrite(&area->entities_count, sizeof(isize), 1, area_file);
@@ -200,7 +200,7 @@ void serialize_world(World* world)
 	check_dir(save_dir);
 	
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/world.dat", Game->base_path, world->name);
-	FILE* world_file = fopen(save_dir, "w");
+	FILE* world_file = fopen(save_dir, "wb");
 	if(world_file != NULL) {
 		isize namelen = strlen(world->name);
 		fwrite(&namelen, sizeof(isize), 1, world_file);

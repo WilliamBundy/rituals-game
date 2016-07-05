@@ -144,7 +144,7 @@ World_Area* world_load_area(World* world, isize id)
 	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/areas/area_%d.dat", 
 			Game->base_path, world->name, id);
 	//TODO(will) do snprintf error checking
-	FILE* fp = fopen(file, "r");
+	FILE* fp = fopen(file, "rb");
 	World_Area* area = NULL;
 	printf("%s: %s \n", file, fp ? "success": "failure");
 	if(fp != NULL) {
