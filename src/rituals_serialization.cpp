@@ -141,7 +141,6 @@ void deserialize_entity(Entity* entity, FILE* file)
 	deserialize_sprite(&entity->sprite, file);
 	fread(&entity->counter, sizeof(int32), 1, file);
 	fread(&entity->facing, sizeof(int32), 1, file);
-	//TODO(will) standardize size of enum?
 	fread(&entity->direction, sizeof(Direction), 1, file);
 }
 
