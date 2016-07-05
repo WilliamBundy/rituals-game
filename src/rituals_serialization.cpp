@@ -126,6 +126,7 @@ void serialize_world(World* world)
 
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
 	check_dir(save_dir);
+	serialize_area(world->current_area, save_dir);
 
 }
 

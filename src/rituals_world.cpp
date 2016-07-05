@@ -139,6 +139,7 @@ World_Area* world_load_area(World* world, Area_Link link)
 	// then call world_init_area?
 	//world_switch_current_area(world, link);
 	World_Area_Stub* stub = world->area_stubs + world->areas_count++; 
+	return NULL;
 }
 
 void world_switch_current_area(World* world, Area_Link link)
