@@ -145,12 +145,12 @@ World_Area* world_load_area(World* world, Area_Link link)
 	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/area_%d.dat", 
 			Game->base_path, world->name, id);
 	//TODO(will) do snprintf error checking
-	FILE* file = fopen(file, "r");
+	FILE* fp = fopen(file, "r");
 	World_Area* area = NULL;
-	if(file != NULL) {
+	if(fp != NULL) {
 		area = arena_push_struct(Game->play_arena, World_Area);
-		deserialize_area(area, file, Game->play_arena);
-		fclose(file);
+		deserialize_area(area, fp, Game->play_arena);
+		fclose(fp);
 	}
 
 	return area;
