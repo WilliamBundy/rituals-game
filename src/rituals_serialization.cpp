@@ -29,6 +29,12 @@ void serialize_tile_state(Tile_State* state, FILE* file)
 	fwrite(&state->damage, sizeof(int32), 1, file);
 }
 
+void deserialize_tile_state(Tile_State* state, FILE* file)
+{
+	fread(&state->id, sizeof(isize), 1, file);
+	fread(&state->damage, sizeof(int32), 1, file);
+}
+
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
 	fwrite(&map->w, sizeof(isize), 1, file);
@@ -37,6 +43,18 @@ void serialize_tilemap(Tilemap* map, FILE* file)
 	fwrite(map->tiles, sizeof(Tile), size, file);
 	for(isize i = 0; i < size; ++i) {
 		serialize_tile_state(map->states + i, file);
+	}
+}
+
+void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
+{
+	fread(&map->w, sizeof(isize), 1, file);
+	fread(&map->h, sizeof(isize), 1, file);
+	init_tilemap(map, map->w, map->h, arena);
+	isize size = map->w * map->h;
+	fread(map->tiles, sizeof(Tile), size, file);
+	for(isize i = 0; i < size; ++i) {
+		deserialize_tile_state(map->states + i, file);
 	}
 }
 
@@ -54,6 +72,20 @@ void serialize_sim_body(Sim_Body* body, FILE* file)
 	fwrite(&body->entity_id, sizeof(isize), 1, file);
 }
 
+void deserialize_sim_body(Sim_Body* body, FILE* file)
+{
+	fread(&body->id, sizeof(isize), 1, file);
+	fread(&body->shape.e, sizeof(real), 4, file);
+	fread(&body->velocity.e, sizeof(real), 2, file);
+	fread(&body->force.e, sizeof(real), 2, file);
+	fread(&body->collision_vel.e, sizeof(real), 2, file);
+	fread(&body->inv_mass, sizeof(real), 1, file);
+	fread(&body->restitution, sizeof(real), 1, file);
+	fread(&body->damping, sizeof(real), 1, file);
+	fread(&body->flags, sizeof(uint64), 1, file);
+	fread(&body->entity_id, sizeof(isize), 1, file);
+}
+
 void serialize_simulator(Simulator* sim, FILE* file)
 {
 	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
@@ -64,11 +96,29 @@ void serialize_simulator(Simulator* sim, FILE* file)
 		serialize_sim_body(sim->bodies + i, file);
 	}
 }
+void deserialize_simulator(Simulator* sim, FILE* file)
+{
+	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
+	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);
+	fwrite(&sim->next_body_id, sizeof(isize), 1, file);
+	fwrite(&sim->sort_axis, sizeof(isize), 1, file);
+	sim->bodies = arena_push_array(arena, Sim_Body, sim->bodies_capacity);
+	for(isize i = 0; i < sim->bodies_count; ++i) {
+		deserialize_sim_body(sim->bodies + i, file);
+	}
+}
+
 
 void serialize_sprite(Sprite* s, FILE* file)
 {
 	//TODO(will) maybe serialize each field separately?
 	fwrite(&s, sizeof(Sprite), 1, file);
+}
+
+void deserialize_sprite(Sprite* s, FILE* file)
+{
+	//TODO(will) maybe serialize each field separately?
+	fread(&s, sizeof(Sprite), 1, file);
 }
 
 void serialize_entity(Entity* entity, FILE* file)
@@ -81,6 +131,18 @@ void serialize_entity(Entity* entity, FILE* file)
 	//TODO(will) standardize size of enum?
 	fwrite(&entity->direction, sizeof(Direction), 1, file);
 }
+
+void deserialize_entity(Entity* entity, FILE* file)
+{
+	fread(&entity->id, sizeof(isize), 1, file);
+	fread(&entity->body_id, sizeof(isize), 1, file);
+	serialize_sprite(&entity->sprite, file);
+	fread(&entity->counter, sizeof(int32), 1, file);
+	fread(&entity->facing, sizeof(int32), 1, file);
+	//TODO(will) standardize size of enum?
+	fread(&entity->direction, sizeof(Direction), 1, file);
+}
+
 
 void serialize_area(World_Area* area, char* path)
 {
@@ -101,6 +163,23 @@ void serialize_area(World_Area* area, char* path)
 		fclose(area_file);
 	}
 }
+
+void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
+{
+	fread(&area->id, sizeof(isize), 1, area_file);
+	deserialize_tilemap(&area->map, area_file, arena);
+	dserialize_simulator(&area->sim, area_file, arena);
+	fread(area->offset.e, sizeof(real), 2, area_file);
+	fread(&area->entities_count, sizeof(isize), 1, area_file);
+	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
+	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
+
+	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
+	for(isize i = 0; i < area->entities_count; ++i) {
+		deserialize_entity(area->entities + i, area_file);
+	}
+}
+
 
 void serialize_world(World* world)
 {
