@@ -30,6 +30,8 @@ void play_state_start()
 	generate_world_area(world, world->current_area, world->area_stubs);
 	printf("%d \n", world->current_area->entities_count);
 	printf("%d \n", world->current_area->sim.bodies_count);
+	printf("%d \n", world->current_area->map.w);
+	printf("%d \n", world->current_area->map.h);
 	serialize_world(world);
 
 	world->current_area = NULL;
@@ -37,6 +39,8 @@ void play_state_start()
 	world->current_area = world_load_area(world, -1);
 	printf("%d \n", world->current_area->entities_count);
 	printf("%d \n", world->current_area->sim.bodies_count);
+	printf("%d \n", world->current_area->map.w);
+	printf("%d \n", world->current_area->map.h);
 	world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
 
 	World_Area* area = world->current_area;
