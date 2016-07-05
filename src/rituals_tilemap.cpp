@@ -251,7 +251,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 	for(isize i = starty; i < endy; ++i) {
 		for(isize j = startx; j < endx; ++j) {
 			Tile tile = tilemap->tiles[i * tilemap->w + j];
-			Tile_Info* t = tilemap->info + tile;
+			Tile_Info* t = Registry->tiles + tile;
 			init_sprite(&s);
 			s.position = v2(j*Tile_Size + Half_TS, i*Tile_Size + Half_TS) + pos;
 			s.size = v2(Tile_Size, Tile_Size);
@@ -280,7 +280,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 				Tile tile = tilemap->tiles[i * tilemap->w + j];
 				Tile bottom_tile = tilemap_get_at(tilemap, j, i + 1);
 				if(tile != bottom_tile) {
-					Tile_Info* bottom = tilemap->info + tilemap_get_at(tilemap, j, i + 1);
+					Tile_Info* bottom = Registry->tiles + tilemap_get_at(tilemap, j, i + 1);
 					if(bottom->has_top_texture) {
 						init_sprite(&s);
 						s.position = v2(j*Tile_Size + Half_TS, i*Tile_Size) + pos;
