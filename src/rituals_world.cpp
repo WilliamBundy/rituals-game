@@ -140,7 +140,7 @@ World_Area* world_load_area(World* world, Area_Link link)
 	// then call world_init_area?
 	//world_switch_current_area(world, link);
 	
-	isize id = link.stub->id;
+	isize id = link.link->id;
 	char file[FilePathMaxLength];
 	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/area_%d.dat", 
 			game->base_path, world->name, id);
