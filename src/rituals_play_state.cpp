@@ -23,7 +23,7 @@ void play_state_start()
 {
 	World* world = play_state->world;
 	init_world(world, 4, 4, 1, Game->play_arena);
-	generate_world("World_0", world, 1, Game->play_arena);
+	generate_world("World_0", world, Game->play_arena);
 
 	world->current_area = arena_push_struct(Game->play_arena, World_Area);
 	init_world_area(world->current_area, Game->play_arena);

@@ -25,7 +25,7 @@ void check_dir(char* dir)
 void serialize_tile_state(Tile_State* state, FILE* file)
 {
 	fwrite(&state->id, sizeof(isize), 1, file);
-	fwrite(&state->damae, sizeof(int32), 1, file);
+	fwrite(&state->damage, sizeof(int32), 1, file);
 }
 
 void serialize_tilemap(Tilemap* map, FILE* file)
@@ -89,7 +89,7 @@ void serialize_area(World_Area* area, char* path)
 	if(area_file != NULL) {
 		fwrite(&area->id, sizeof(isize), 1, area_file);
 		serialize_tilemap(&area->map, area_file);
-		serialize_simulator(&area->simulator, area_file);
+		serialize_simulator(&area->sim, area_file);
 		fwrite(area->offset.e, sizeof(real), 2, area_file);
 		fwrite(&area->entities_count, sizeof(isize), 1, area_file);
 		fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
@@ -127,11 +127,6 @@ void serialize_world(World* world)
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
 	check_dir(save_dir);
 
-	printf("%d \n", world->areas_count);
-	for(isize i = 0; i < world->areas_count; ++i) {
-		serialize_area(world->areas + i, save_dir);
-
-	}
 }
 
 
