@@ -173,12 +173,14 @@ void serialize_area(World_Area* area, char* path)
 
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
+	printf("area %d \n", ftell(area_file));
 	fread(&area->id, sizeof(isize), 1, area_file);
 	fread(&area->entities_count, sizeof(isize), 1, area_file);
 	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
 	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
 	fread(area->offset.e, sizeof(real), 2, area_file);
 	area->entities = arena_push_array(arena, Entity, area->entities_capacity);
+	printf("area %d \n", ftell(area_file));
 	for(isize i = 0; i < area->entities_count; ++i) {
 		deserialize_entity(area->entities + i, area_file);
 	}
