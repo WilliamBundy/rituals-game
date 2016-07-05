@@ -45,6 +45,10 @@ void serialize_tilemap(Tilemap* map, FILE* file)
 	}
 }
 
+void wtf_1(int32 help)
+{
+	printf("Why why why why why why why %d \n", help++);
+}
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
@@ -165,6 +169,13 @@ void serialize_area(World_Area* area, char* path)
 	}
 }
 
+void wtf_2(const char* why, int32 multiplier)
+{
+	for (isize j = 0; j < multiplier; ++j) {
+		printf("%s ");
+	}
+	printf("\n -- printed %s %d times", why, ++multiplier);
+}
 
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
