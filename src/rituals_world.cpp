@@ -155,6 +155,7 @@ World_Area* world_load_area(World* world, isize id)
 	return area;
 }
 
+#if 0
 void world_switch_current_area(World* world, Area_Link link)
 {
 	if(link.link == NULL) return;
@@ -165,7 +166,7 @@ void world_switch_current_area(World* world, Area_Link link)
 	world_area_init_player(new_area, link.position);
 	world->current_area = new_area;
 }
-
+#endif
 
 //TODO(will) call init_world_area on area before calling
 void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
