@@ -33,8 +33,20 @@ void deserialize_tile_state(Tile_State* state, FILE* file)
 	fread(&state->damage, sizeof(int32), 1, file);
 }
 
+int32 wtf_3(int32* sanity)
+{
+	*sanity--;
+	printf("Sanity is %d \n", *sanity);
+	if(*sanity > 0) {
+		wtf_3(sanity);
+	}
+}
+
+
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
+	int32 s = 3;
+	wtf_3(&s);
 	printf("Serializing tilemap %d %d \n", map->w, map->h);
 	fwrite(&map->w, sizeof(isize), 1, file);
 	fwrite(&map->h, sizeof(isize), 1, file);
@@ -52,6 +64,7 @@ void wtf_1(int32 help)
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
+	wtf_1(40);
 	printf("Deserializing tilemap \n");
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
@@ -163,6 +176,7 @@ void serialize_area(World_Area* area, char* path)
 		for(isize i = 0; i < area->entities_count; ++i) {
 			serialize_entity(area->entities + i, area_file);
 		}
+		wtf_1(5);
 		serialize_tilemap(&area->map, area_file);
 		serialize_simulator(&area->sim, area_file);
 		fclose(area_file);
@@ -190,6 +204,7 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 		printf("area %d \n", ftell(area_file));
 		deserialize_entity(area->entities + i, area_file);
 	}
+	wtf_2("why?", 10);
 	printf("area %d \n", ftell(area_file));
 	deserialize_tilemap(&area->map, area_file, arena);
 	printf("area %d \n", ftell(area_file));
