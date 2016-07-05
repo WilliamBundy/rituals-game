@@ -226,6 +226,8 @@ void world_area_sort_entities_on_id(World_Area* area)
 
 void world_area_synchronize_entities_and_bodies(World_Area* area)
 {
+	world_area_sort_entities_on_id(area);
+	sim_sort_bodies_on_id(&area->sim);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		if(e->body_id == -1) continue;
