@@ -141,7 +141,7 @@ World_Area* world_load_area(World* world, isize id)
 	//world_switch_current_area(world, link);
 	
 	char file[FilePathMaxLength];
-	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/area_%d.dat", 
+	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/areas/area_%d.dat", 
 			Game->base_path, world->name, id);
 	//TODO(will) do snprintf error checking
 	FILE* fp = fopen(file, "r");
