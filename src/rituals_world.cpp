@@ -134,13 +134,12 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 }
 
 void deserialize_area(World_Area* area, FILE* file, Memory_Arena* arena);
-World_Area* world_load_area(World* world, Area_Link link)
+World_Area* world_load_area(World* world, isize id)
 {
 	//TODO(will) load from file here using deserialize_world_area
 	// then call world_init_area?
 	//world_switch_current_area(world, link);
 	
-	isize id = link.link->id;
 	char file[FilePathMaxLength];
 	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/area_%d.dat", 
 			Game->base_path, world->name, id);

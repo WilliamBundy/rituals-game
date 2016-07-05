@@ -1115,7 +1115,7 @@ _body_get_id	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	45;"	d	file:
-_check	src/rituals_world.cpp	235;"	d	file:
+_check	src/rituals_world.cpp	234;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	293;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	187;"	d	file:
@@ -2366,7 +2366,7 @@ world_area_sort_entities_on_id	src/rituals_world_area.cpp	/^void world_area_sort
 world_area_synchronize_entities_and_bodies	src/rituals_world_area.cpp	/^void world_area_synchronize_entities_and_bodies(World_Area* area)$/;"	f
 world_area_update	src/rituals_world.cpp	/^void world_area_update(World_Area* area)$/;"	f
 world_arena	src/rituals_game.cpp	/^	Memory_Arena* world_arena;$/;"	m	struct:Game_Main	file:
-world_load_area	src/rituals_world.cpp	/^World_Area* world_load_area(World* world, Area_Link link)$/;"	f
+world_load_area	src/rituals_world.cpp	/^World_Area* world_load_area(World* world, isize id)$/;"	f
 world_switch_current_area	src/rituals_world.cpp	/^void world_switch_current_area(World* world, Area_Link link)$/;"	f
 world_xy	src/rituals_main.cpp	/^	Vec2i world_xy;$/;"	m	struct:Play_State	file:
 x	src/rituals_game.cpp	/^	uint64 x, y;$/;"	m	struct:Random	file:
