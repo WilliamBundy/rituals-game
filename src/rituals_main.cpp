@@ -240,6 +240,7 @@ void update_screen()
 int main(int argc, char** argv)
 {
 	//stbi_set_flip_vertically_on_load(1);
+	printf("%d %d %d \n", sizeof(ptrdiff_t), sizeof(int64), sizeof(isize));
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 

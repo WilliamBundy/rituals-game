@@ -10,7 +10,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /* 
  * rituals_serialization.cpp
- *
+ * TODO(will) Convert all isize to int64 for serializaiton!!!
+ * ptrdiff_t may not equal int64
  */ 
 
 void check_dir(char* dir)
