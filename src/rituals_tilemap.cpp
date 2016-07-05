@@ -18,9 +18,6 @@ struct Tilemap
 	isize w, h;
 	Tile* tiles;
 	Tile_State* states;
-
-	Tile_Info* info;
-	isize info_count;
 };
 
 

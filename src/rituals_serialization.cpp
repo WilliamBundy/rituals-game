@@ -24,7 +24,7 @@ void check_dir(char* dir)
 
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
-
+	
 }
 
 
@@ -32,6 +32,14 @@ void serialize_sim_body(Sim_Body* body, FILE* file)
 {
 	fwrite(&body->id, sizeof(isize), 1, file);
 	fwrite(&body->shape.e, sizeof(real), 4, file);
+	fwrite(&body->velocity.e, sizeof(real), 2, file);
+	fwrite(&body->force.e, sizeof(real), 2, file);
+	fwrite(&body->collision_vel.e, sizeof(real), 2, file);
+	fwrite(&body->inv_mass, sizeof(real), 1, file);
+	fwrite(&body->restitution, sizeof(real), 1, file);
+	fwrite(&body->damping, sizeof(real), 1, file);
+	fwrite(&body->flags, sizeof(uint64), 1, file);
+	fwrite(&body->entity_id, sizeof(isize), 1, file);
 }
 
 void serialize_simulator(Simulator* sim, FILE* file)

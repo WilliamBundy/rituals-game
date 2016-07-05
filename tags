@@ -1742,8 +1742,6 @@ img_x	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__
 img_y	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon3
 immune_to_damage	src/rituals_game_info.cpp	/^	bool immune_to_damage;$/;"	m	struct:Tile_Info	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
-info	src/rituals_tilemap.cpp	/^	Tile_Info* info;$/;"	m	struct:Tilemap	file:
-info_count	src/rituals_tilemap.cpp	/^	isize info_count;$/;"	m	struct:Tilemap	file:
 init_body	src/rituals_simulation.cpp	/^void init_body(Sim_Body* b)$/;"	f
 init_entity	src/rituals_world_area.cpp	/^void init_entity(Entity* entity)$/;"	f
 init_game_registry	src/rituals_game_registry.cpp	/^void init_game_registry(Game_Registry* registry, Memory_Arena* arena)$/;"	f
