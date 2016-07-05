@@ -199,7 +199,7 @@ void update_tile_state_at(Tilemap* map, isize x, isize y)
 {
 	Tile_State* state = tilemap_get_state_at(map, x, y);
 	if(state != NULL) {
-		Tile_Info* info = map->info + tilemap_get_at(map, x, y);
+		Tile_Info* info = Registry->tiles + tilemap_get_at(map, x, y);
 		if(info->immune_to_damage) {
 			state->damage = 0;
 		} else {
