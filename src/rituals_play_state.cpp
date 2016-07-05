@@ -25,9 +25,12 @@ void play_state_start()
 	init_world(world, 4, 4, 1, Game->play_arena);
 	generate_world("World_0", world, Game->play_arena);
 
-	//world->current_area = arena_push_struct(Game->play_arena, World_Area);
-	//init_world_area(world->current_area, Game->play_arena);
-	//generate_world_area(world, world->current_area, world->area_stubs);
+	world->current_area = arena_push_struct(Game->play_arena, World_Area);
+	init_world_area(world->current_area, Game->play_arena);
+	generate_world_area(world, world->current_area, world->area_stubs);
+	serialize_world(world);
+
+	world->current_area = NULL;
 	
 	world->current_area = world_load_area(world, -1);
 	world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
