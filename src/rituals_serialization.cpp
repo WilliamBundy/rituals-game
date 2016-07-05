@@ -182,9 +182,9 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	for(isize i = 0; i < area->entities_count; ++i) {
 		deserialize_entity(area->entities + i, area_file);
 	}
-	printf("area %d \n", ftell(area_file);
+	printf("area %d \n", ftell(area_file));
 	deserialize_tilemap(&area->map, area_file, arena);
-	printf("area %d \n", ftell(area_file);
+	printf("area %d \n", ftell(area_file)x);
 	deserialize_simulator(&area->sim, area_file, arena);
 }
 
