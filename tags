@@ -1980,6 +1980,7 @@ screen_loc	src/rituals_renderer.cpp	/^	isize screen_loc, texture_size_loc;$/;"	m
 seed	src/rituals_world.cpp	/^	usize seed;$/;"	m	struct:World	file:
 seed	src/rituals_world_area.cpp	/^	usize seed;$/;"	m	struct:World_Area_Stub	file:
 serialize_area	src/rituals_serialization.cpp	/^void serialize_area(World_Area* area, char* path)$/;"	f
+serialize_entity	src/rituals_serialization.cpp	/^void serialize_entity(Entity* entity, FILE* file)$/;"	f
 serialize_sim_body	src/rituals_serialization.cpp	/^void serialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 serialize_simulator	src/rituals_serialization.cpp	/^void serialize_simulator(Simulator* sim, FILE* file)$/;"	f
 serialize_sprite	src/rituals_serialization.cpp	/^void serialize_sprite(Sprite* s, FILE* file)$/;"	f

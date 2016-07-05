@@ -123,6 +123,16 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s, sizeof(real), 16, file);
 }
 
+void deserialize_entity(Entity* entity, FILE* file)
+{
+	fread(&entity->id, sizeof(isize), 1, file);
+	fread(&entity->body_id, sizeof(isize), 1, file);
+	deserialize_sprite(&entity->sprite, file);
+	fread(&entity->counter, sizeof(int32), 1, file);
+	fread(&entity->facing, sizeof(int32), 1, file);
+	fread(&entity->direction, sizeof(Direction), 1, file);
+}
+
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
 	fread(&area->id, sizeof(isize), 1, area_file);
@@ -138,14 +148,15 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	deserialize_simulator(&area->sim, area_file, arena);
 }
 
-void deserialize_entity(Entity* entity, FILE* file)
+void serialize_entity(Entity* entity, FILE* file)
 {
-	fread(&entity->id, sizeof(isize), 1, file);
-	fread(&entity->body_id, sizeof(isize), 1, file);
-	deserialize_sprite(&entity->sprite, file);
-	fread(&entity->counter, sizeof(int32), 1, file);
-	fread(&entity->facing, sizeof(int32), 1, file);
-	fread(&entity->direction, sizeof(Direction), 1, file);
+	fwrite(&entity->id, sizeof(isize), 1, file);
+	fwrite(&entity->body_id, sizeof(isize), 1, file);
+	serialize_sprite(&entity->sprite, file);
+	fwrite(&entity->counter, sizeof(int32), 1, file);
+	fwrite(&entity->facing, sizeof(int32), 1, file);
+	//TODO(will) standardize size of enum?
+	fwrite(&entity->direction, sizeof(Direction), 1, file);
 }
 
 void serialize_area(World_Area* area, char* path)
