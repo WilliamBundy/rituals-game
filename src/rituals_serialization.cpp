@@ -37,6 +37,7 @@ void deserialize_tile_state(Tile_State* state, FILE* file)
 
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
+	printf("Serializing tilemap %d %d \n", map->w, map->h);
 	fwrite(&map->w, sizeof(isize), 1, file);
 	fwrite(&map->h, sizeof(isize), 1, file);
 	isize size = map->w * map->h;
