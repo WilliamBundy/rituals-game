@@ -60,9 +60,13 @@ struct Vec3
 	real x, y, z;
 };
 
-struct Vec4
+union Vec4
 {
-	real x, y, z, w;
+	struct {
+		real x, y, z, w;
+	};
+	real e[4];
+	
 };
 
 Vec4 v4(real x, real y, real z, real w)
