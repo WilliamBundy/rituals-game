@@ -212,9 +212,12 @@ union AABB
 #define AABB_y2(b) (b.center.y + b.hh)
 
 
-struct Rect2
+union Rect2
 {
-	real x, y, w, h;
+	struct {
+		real x, y, w, h;
+	};
+	real e[4];
 };
 
 struct Rect2i
