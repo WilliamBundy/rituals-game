@@ -125,7 +125,13 @@ void serialize_sprite(Sprite* s, FILE* file)
 void deserialize_sprite(Sprite* s, FILE* file)
 {
 	//TODO(will) maybe serialize each field separately?
-	fread(&s, sizeof(real), 16, file);
+	fread(&s->position.e, sizeof(real), 2, file);
+	fread(&s->center.e, sizeof(real), 2, file);
+	fread(&s->angle, sizeof(real), 1, file);
+	fread(&s->size.e, sizeof(real), 2, file);
+	fread(&s->texture.e, sizeof(real), 4, file);
+	fread(&s->color.e, sizeof(real), 4, file);
+	fread(&s->anchor, sizeof(uint32), 1, file);
 }
 
 void deserialize_entity(Entity* entity, FILE* file)
