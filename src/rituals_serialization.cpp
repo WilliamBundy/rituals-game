@@ -113,8 +113,13 @@ void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 
 void serialize_sprite(Sprite* s, FILE* file)
 {
-	//TODO(will) maybe serialize each field separately?
-	fwrite(&s, sizeof(real), 16, file);
+	fwrite(&s->position.e, sizeof(real), 2, file);
+	fwrite(&s->center.e, sizeof(real), 2, file);
+	fwrite(&s->angle, sizeof(real), 1, file);
+	fwrite(&s->size.e, sizeof(real), 2, file);
+	fwrite(&s->rectangle.e, sizeof(real), 4, file);
+	fwrite(&s->color.e, sizeof(real), 4, file);
+	fwrite(&s->anchor, sizeof(uint32), 1, file);
 }
 
 void deserialize_sprite(Sprite* s, FILE* file)
