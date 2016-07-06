@@ -117,7 +117,7 @@ void serialize_sprite(Sprite* s, FILE* file)
 	fwrite(&s->center.e, sizeof(real), 2, file);
 	fwrite(&s->angle, sizeof(real), 1, file);
 	fwrite(&s->size.e, sizeof(real), 2, file);
-	fwrite(&s->rectangle.e, sizeof(real), 4, file);
+	fwrite(&s->texture.e, sizeof(real), 4, file);
 	fwrite(&s->color.e, sizeof(real), 4, file);
 	fwrite(&s->anchor, sizeof(uint32), 1, file);
 }
