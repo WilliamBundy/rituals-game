@@ -191,6 +191,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	world_area_init_player(area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight /2));
 }
 
+void serialize_world(World* world);
 void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)
 {
 	if(link.link == NULL) return;
