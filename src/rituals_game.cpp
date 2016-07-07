@@ -163,7 +163,7 @@ void end_temp_arena(Memory_Arena* arena)
 
 void clear_arena(Memory_Arena* arena)
 {
-	memset(arena->data, 0, arena->capacity);
+	memset(arena->data, 0, arena->head - (isize)arena->data);
 	arena->head = (isize)arena->data;
 	arena->temp_head = -1;
 }
