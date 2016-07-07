@@ -22,17 +22,18 @@ void play_state_init()
 void play_state_start()
 {
 	World* world = play_state->world;
-	init_world(world, 4, 4, 1, Game->world_arena);
-	generate_world("World_0", world);
 
-#if 0
-	world->current_area = arena_push_struct(Game->play_arena, World_Area);
-	init_world_area(world->current_area, Game->play_arena);
-	generate_world_area(world, world->current_area, world->area_stubs);
-	serialize_world(world);
-#endif 
-	world->current_area = NULL;
-	world->current_area = world_load_area(world, -1, Game->play_arena);
+	FILE* fp = get_world_file("World_0", "rb");
+	if(fp != NULL) {
+		deserialize_world(world, fp);
+	} else {
+		init_world(world, 4, 4, 1, Game->world_arena);
+		generate_world("World_0", world);
+		world->current_area = world_start_in_area(
+				world,
+				world->area_stubs, 
+				Game->play_arena);
+	}
 }
 
 void play_state_update()

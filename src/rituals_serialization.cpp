@@ -280,14 +280,12 @@ void serialize_world(World* world)
 		for(isize i = 0; i < world->areas_count; ++i) {
 			serialize_world_area_stub(world->area_stubs + i, world_file);
 		}
+		FILE* area_file = get_area_file(world->name, world->current_area->id, "wb");
+		if(area_file != NULL) {
+			serialize_area(world->current_area, area_file);
+		}
 		fclose(world_file);
 	}
-
-	FILE* area_file = get_area_file(world->name, world->current_area->id, "wb");
-	if(area_file != NULL) {
-		serialize_area(world->current_area, area_file);
-	}
-
 }
 
 void deserialize_world(World* world, FILE* world_file)
