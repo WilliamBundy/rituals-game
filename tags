@@ -1211,6 +1211,7 @@ channel	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:
 character_padding	rituals_gui.cpp	/^	int32 character_padding;$/;"	m	struct:Spritefont	file:
 character_padding	src/rituals_gui.cpp	/^	int32 character_padding;$/;"	m	struct:Spritefont	file:
 check_dir	src/rituals_serialization.cpp	/^void check_dir(char* dir)$/;"	f
+check_path	src/rituals_serialization.cpp	/^bool check_path(char* path)$/;"	f
 clamp	src/rituals_math.cpp	/^inline real clamp(real x, real min, real max)$/;"	f
 clamp_01	src/rituals_math.cpp	/^real clamp_01(real x)$/;"	f
 clear_arena	src/rituals_game.cpp	/^void clear_arena(Memory_Arena* arena)$/;"	f

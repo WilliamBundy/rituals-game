@@ -29,25 +29,13 @@ void play_state_start()
 	world->current_area = arena_push_struct(Game->play_arena, World_Area);
 	init_world_area(world->current_area, Game->play_arena);
 	generate_world_area(world, world->current_area, world->area_stubs);
-	printf("%d \n", world->current_area->entities_count);
-	printf("%d \n", world->current_area->sim.bodies_count);
-	printf("%d \n", world->current_area->map.w);
-	printf("%d \n", world->current_area->map.h);
-	//serialize_world(world);
+	serialize_world(world);
 #endif 
 	world->current_area = NULL;
 	
 	world->current_area = world_load_area(world, -1);
 	world->current_area->world = world;
-	printf("%d \n", world->current_area->entities_count);
-	printf("%d \n", world->current_area->sim.bodies_count);
-	printf("%d \n", world->current_area->map.w);
-	printf("%d \n", world->current_area->map.h);
-	world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
-
-	World_Area* area = world->current_area;
-	world_area_init_player(world->current_area, 
-			v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
+	//world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
 }
 
 void play_state_update()

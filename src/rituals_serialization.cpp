@@ -14,6 +14,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * ptrdiff_t may not equal int64
  */ 
 
+bool check_path(char* path)
+{
+	return PathFileExists(path);
+}
+
 void check_dir(char* dir)
 {
 	if(!PathFileExists(dir)) {
@@ -37,7 +42,6 @@ void deserialize_tile_state(Tile_State* state, FILE* file)
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
-	printf("Deserializing tilemap \n");
 	fread(&map->w, sizeof(isize), 1, file);
 	fread(&map->h, sizeof(isize), 1, file);
 	isize size = map->w * map->h;
@@ -51,7 +55,6 @@ void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 
 void serialize_tilemap(Tilemap* map, FILE* file)
 {
-	printf("Serializing tilemap %d %d \n", map->w, map->h);
 	fwrite(&map->w, sizeof(isize), 1, file);
 	fwrite(&map->h, sizeof(isize), 1, file);
 	isize size = map->w * map->h;
