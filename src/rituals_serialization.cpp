@@ -201,7 +201,7 @@ void deserialize_area_link(Area_Link* link, World* world, FILE* fp)
 	fread(&link->position.y, sizeof(int32), 1, fp);
 	isize linkid = 0;
 	fread(&linkid, sizeof(isize), 1, fp);
-	link->link = world->area_stubs + i;
+	link->link = world->area_stubs + linkid;
 }
 
 void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
