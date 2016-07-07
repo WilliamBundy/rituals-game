@@ -230,12 +230,12 @@ FILE* get_world_file(const char* name, const char* mode)
 	char save_dir[FilePathMaxLength];
 	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
 	check_dir(save_dir);
-	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, world->name);
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, name);
 	check_dir(save_dir);
 	
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/world.dat", 
 			Game->base_path,
-			world->name);
+			name);
 	FILE* world_file = fopen(save_dir, mode);
 	return world_file;
 }
