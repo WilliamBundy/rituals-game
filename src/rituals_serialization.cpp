@@ -254,7 +254,7 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas/area_%d.dat",
 			Game->base_path,
-			world->name,
+			name,
 			id);
 
 	if(!check_path(save_dir)) {
