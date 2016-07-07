@@ -482,7 +482,7 @@ void world_area_update(World_Area* area)
 	}
 	
 	_player_animate(area, player_entity, player, move_impulse);
-	Vec2 target = player->shape.center;a
+	Vec2 target = player->shape.center;
 	if(target.x < 0) {
 		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);
 		play_state->world_xy.x--;
