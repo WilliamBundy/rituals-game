@@ -195,8 +195,8 @@ void serialize_area(World_Area* area, char* path)
 
 void serialize_area_link(Area_Link* link, FILE* fp)
 {
-	fwrite(position.e, sizeof(int32), 2, fp);
-	fwrite(link->link->id, sizeof(isize), 1, fp);
+	fwrite(link->position.e, sizeof(int32), 2, fp);
+	fwrite(&link->link->id, sizeof(isize), 1, fp);
 
 }
 
