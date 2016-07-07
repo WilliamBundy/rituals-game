@@ -19,6 +19,7 @@ void play_state_init()
 	play_state->world = arena_push_struct(Game->play_arena, World);
 }
 
+void deserialize_world(World* world, FILE* world_file);
 void play_state_start()
 {
 	World* world = play_state->world;
