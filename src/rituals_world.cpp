@@ -135,29 +135,13 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 }
 
 void deserialize_area(World_Area* area, FILE* file, Memory_Arena* arena);
+FILE* get_area_file(const char* name, isize id, const char* mode);
+FILE* get_world_file(const char* name, const char* mode);
 int check_path(char* path);
 World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 {
-	//TODO(will) load from file here using deserialize_world_area
-	// then call world_init_area?
-	//world_switch_current_area(world, link);
-	
-	char file[FilePathMaxLength];
-	isize len = snprintf(
-			file, FilePathMaxLength, 
-			"%ssave/%s/areas/area_%d.dat", 
-			Game->base_path, 
-			world->name,
-			id);
-	//TODO(will) do snprintf error checking
-
-	if(!check_path(file)) {
-		return NULL;
-	}
-
-	FILE* fp = fopen(file, "rb");
+	FILE* fp = get_area_file(world->name, id, "rb");
 	World_Area* area = NULL;
-	//printf("%s: %s \n", file, fp ? "success": "failure");
 	if(fp != NULL) {
 		area = arena_push_struct(arena, World_Area);
 		deserialize_area(area, fp, arena);
@@ -174,6 +158,7 @@ World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 
 	return area;
 }
+
 //TODO(will) call init_world_area on area before calling
 void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 {
@@ -220,6 +205,11 @@ void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena
 void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* arena)
 {
 	World_Area* new_area = world_load_area(world, area->id, arena);
+	if(new_area == NULL) {
+		new_area = arena_push_struct(arena, World_Area);
+		init_world_area(new_area, arena);
+		generate_world_area(world, new_area, area);
+	}
 	world_area_init_player(new_area, v2i(0, 0),  false);
 	world->current_area = new_area;
 }

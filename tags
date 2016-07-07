@@ -1115,7 +1115,7 @@ _body_get_id	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	45;"	d	file:
-_check	src/rituals_world.cpp	263;"	d	file:
+_check	src/rituals_world.cpp	253;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	293;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	187;"	d	file:
@@ -1293,12 +1293,15 @@ delta	src/thirdparty/stb_image.h	/^   int    delta[17];   \/\/ old 'firstsymbol'
 depth	src/thirdparty/stb_image.h	/^   int depth;$/;"	m	struct:__anon12
 dequant	src/thirdparty/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon6
 deserialize_area	src/rituals_serialization.cpp	/^void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)$/;"	f
+deserialize_area_link	src/rituals_serialization.cpp	/^void deserialize_area_link(Area_Link* link, FILE* fp)$/;"	f
 deserialize_entity	src/rituals_serialization.cpp	/^void deserialize_entity(Entity* entity, FILE* file)$/;"	f
 deserialize_sim_body	src/rituals_serialization.cpp	/^void deserialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 deserialize_simulator	src/rituals_serialization.cpp	/^void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)$/;"	f
 deserialize_sprite	src/rituals_serialization.cpp	/^void deserialize_sprite(Sprite* s, FILE* file)$/;"	f
 deserialize_tile_state	src/rituals_serialization.cpp	/^void deserialize_tile_state(Tile_State* state, FILE* file)$/;"	f
 deserialize_tilemap	src/rituals_serialization.cpp	/^void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)$/;"	f
+deserialize_world	src/rituals_serialization.cpp	/^void deserialize_world(World* world, FILE* world_file)$/;"	f
+deserialize_world_area_stub	src/rituals_serialization.cpp	/^void deserialize_world_area_stub(World_Area_Stub* stub, FILE* fp)$/;"	f
 direction	src/rituals_world_area.cpp	/^	Direction direction;$/;"	m	struct:Entity	file:
 e	src/rituals_math.cpp	/^	int32 e[2];$/;"	m	union:Vec2i	file:
 e	src/rituals_math.cpp	/^	real e[2];$/;"	m	union:Vec2	file:
@@ -1348,6 +1351,8 @@ generate_statics_for_tilemap	src/rituals_world.cpp	/^void generate_statics_for_t
 generate_tilemap	src/rituals_tilemap.cpp	/^void generate_tilemap(Tilemap* tilemap, uint64 seed)$/;"	f
 generate_world	src/rituals_world.cpp	/^void generate_world(const char* name, World* world)$/;"	f
 generate_world_area	src/rituals_world.cpp	/^void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)$/;"	f
+get_area_file	src/rituals_serialization.cpp	/^FILE* get_area_file(const char* name, isize id, const char* mode)$/;"	f
+get_world_file	src/rituals_serialization.cpp	/^FILE* get_world_file(const char* name, const char* mode)$/;"	f
 glActiveTexture	src/thirdparty/gl_core_3_3.h	1118;"	d
 glAttachShader	src/thirdparty/gl_core_3_3.h	1195;"	d
 glBeginConditionalRender	src/thirdparty/gl_core_3_3.h	1395;"	d
@@ -1982,7 +1987,7 @@ screen	src/rituals_renderer.cpp	/^	AABB screen;$/;"	m	struct:OpenGL_Renderer	fil
 screen_loc	src/rituals_renderer.cpp	/^	isize screen_loc, texture_size_loc;$/;"	m	struct:OpenGL_Renderer	file:
 seed	src/rituals_world.cpp	/^	usize seed;$/;"	m	struct:World	file:
 seed	src/rituals_world_area.cpp	/^	usize seed;$/;"	m	struct:World_Area_Stub	file:
-serialize_area	src/rituals_serialization.cpp	/^void serialize_area(World_Area* area, char* path)$/;"	f
+serialize_area	src/rituals_serialization.cpp	/^void serialize_area(World_Area* area, FILE* area_file)$/;"	f
 serialize_area_link	src/rituals_serialization.cpp	/^void serialize_area_link(Area_Link* link, FILE* fp)$/;"	f
 serialize_entity	src/rituals_serialization.cpp	/^void serialize_entity(Entity* entity, FILE* file)$/;"	f
 serialize_sim_body	src/rituals_serialization.cpp	/^void serialize_sim_body(Sim_Body* body, FILE* file)$/;"	f

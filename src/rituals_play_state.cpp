@@ -32,7 +32,6 @@ void play_state_start()
 	serialize_world(world);
 #endif 
 	world->current_area = NULL;
-	
 	world->current_area = world_load_area(world, -1, Game->play_arena);
 }
 

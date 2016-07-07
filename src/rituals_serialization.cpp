@@ -173,32 +173,33 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->direction, sizeof(Direction), 1, file);
 }
 
-void serialize_area(World_Area* area, char* path)
+void serialize_area(World_Area* area, FILE* area_file)
 {
-	char file_name[FilePathMaxLength];
-	snprintf(file_name, FilePathMaxLength, "%s/area_%d.dat", path, area->id);
-	FILE* area_file = fopen(file_name, "wb");
-	if(area_file != NULL) {
-		fwrite(&area->id, sizeof(isize), 1, area_file);
-		fwrite(&area->entities_count, sizeof(isize), 1, area_file);
-		fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
-		fwrite(&area->next_entity_id, sizeof(isize), 1, area_file);
-		fwrite(area->offset.e, sizeof(real), 2, area_file);
-		for(isize i = 0; i < area->entities_count; ++i) {
-			serialize_entity(area->entities + i, area_file);
-		}
-		serialize_tilemap(&area->map, area_file);
-		serialize_simulator(&area->sim, area_file);
-		fclose(area_file);
+	fwrite(&area->id, sizeof(isize), 1, area_file);
+	fwrite(&area->entities_count, sizeof(isize), 1, area_file);
+	fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
+	fwrite(&area->next_entity_id, sizeof(isize), 1, area_file);
+	fwrite(area->offset.e, sizeof(real), 2, area_file);
+	for(isize i = 0; i < area->entities_count; ++i) {
+		serialize_entity(area->entities + i, area_file);
 	}
+	serialize_tilemap(&area->map, area_file);
+	serialize_simulator(&area->sim, area_file);
+	fclose(area_file);
 }
 
 void serialize_area_link(Area_Link* link, FILE* fp)
 {
 	fwrite(link->position.e, sizeof(int32), 2, fp);
 	fwrite(&link->link->id, sizeof(isize), 1, fp);
-
 }
+
+void deserialize_area_link(Area_Link* link, FILE* fp)
+{
+	fread(link->position.e, sizeof(int32), 2, fp);
+	fread(&link->link->id, sizeof(isize), 1, fp);
+}
+
 
 void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
 {
@@ -211,7 +212,20 @@ void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
 	fwrite(&stub->biome, sizeof(World_Area_Biome), 1, fp);
 }
 
-void serialize_world(World* world)
+void deserialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
+{
+	fread(&stub->id, sizeof(isize), 1, fp);
+	fread(&stub->seed, sizeof(usize), 1, fp);
+	deserialize_area_link(&stub->north, fp);
+	deserialize_area_link(&stub->south, fp);
+	deserialize_area_link(&stub->east, fp);
+	deserialize_area_link(&stub->west, fp);
+	fread(&stub->biome, sizeof(World_Area_Biome), 1, fp);
+}
+
+
+
+FILE* get_world_file(const char* name, const char* mode)
 {
 	char save_dir[FilePathMaxLength];
 	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
@@ -219,8 +233,41 @@ void serialize_world(World* world)
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, world->name);
 	check_dir(save_dir);
 	
-	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/world.dat", Game->base_path, world->name);
-	FILE* world_file = fopen(save_dir, "wb");
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/world.dat", 
+			Game->base_path,
+			world->name);
+	FILE* world_file = fopen(save_dir, mode);
+	return world_file;
+}
+
+FILE* get_area_file(const char* name, isize id, const char* mode)
+{
+	char save_dir[FilePathMaxLength];
+	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
+	check_dir(save_dir);
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, world->name);
+	check_dir(save_dir);
+	
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
+	check_dir(save_dir);
+	
+
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas/area_%d.dat",
+			Game->base_path,
+			world->name,
+			id);
+
+	if(!check_path(save_dir)) {
+		return NULL;
+	}
+
+	FILE* area_file = fopen(save_dir, mode);
+	return area_file;
+}
+
+void serialize_world(World* world)
+{
+	FILE* world_file = get_world_file(world->name, "wb");
 	if(world_file != NULL) {
 		isize namelen = strlen(world->name);
 		fwrite(&namelen, sizeof(isize), 1, world_file);
@@ -230,17 +277,35 @@ void serialize_world(World* world)
 		fwrite(&world->areas_width, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
 		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
-		//TODO(will) write world area stubs here
 		for(isize i = 0; i < world->areas_count; ++i) {
 			serialize_world_area_stub(world->area_stubs + i, world_file);
 		}
 		fclose(world_file);
 	}
 
-	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
-	check_dir(save_dir);
-	serialize_area(world->current_area, save_dir);
+	FILE* area_file = get_area_file(world->name, world->current_area->id, "wb");
+	if(area_file != NULL) {
+		serialize_area(world->current_area, area_file);
+	}
 
+}
+
+void deserialize_world(World* world, FILE* world_file)
+{
+	isize namelen = 0;
+	fread(&namelen, sizeof(isize), 1, world_file);
+	fread(world->name, sizeof(char), namelen, world_file);
+	fread(&world->areas_count, sizeof(isize), 1, world_file);
+	fread(&world->areas_capacity, sizeof(isize), 1, world_file);
+	fread(&world->areas_width, sizeof(isize), 1, world_file);
+	fread(&world->areas_height, sizeof(isize), 1, world_file);
+	isize current_area_id = 0;
+	fread(&current_area_id, sizeof(isize), 1, world_file);
+	world->area_stubs = arena_push_array(Game->world_arena, World_Area_Stub, world->areas_count);
+	for(isize i = 0; i < world->areas_count; ++i) {
+		serialize_world_area_stub(world->area_stubs + i, world_file);
+	}
+	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
 }
 
 
