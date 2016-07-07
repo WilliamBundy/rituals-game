@@ -284,10 +284,15 @@ void serialize_world(World* world)
 			serialize_world_area_stub(world->area_stubs + i, world_file);
 		}
 		FILE* area_file = get_area_file(world->name, world->current_area->id, "wb");
+
 		if(area_file != NULL) {
 			serialize_area(world->current_area, area_file);
+		} else {
+			printf("Could not open area file\n");
 		}
 		fclose(world_file);
+	} else {
+		printf("Could not open world file \n");
 	}
 }
 
