@@ -245,10 +245,10 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 	char save_dir[FilePathMaxLength];
 	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
 	check_dir(save_dir);
-	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, world->name);
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s", Game->base_path, name);
 	check_dir(save_dir);
 	
-	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, world->name);
+	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, name);
 	check_dir(save_dir);
 	
 
