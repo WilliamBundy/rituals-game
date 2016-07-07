@@ -15,8 +15,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 void play_state_init()
 {
 	clear_arena(Game->play_arena);
-	play_state = arena_push_struct(Game->play_arena, Play_State);
-	play_state->world = arena_push_struct(Game->play_arena, World);
+	play_state = arena_push_struct(Game->game_arena, Play_State);
+	play_state->world = arena_push_struct(Game->world_arena, World);
 }
 
 void deserialize_world(World* world, FILE* world_file);
