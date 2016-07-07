@@ -25,6 +25,7 @@ void play_state_start()
 	init_world(world, 4, 4, 1, Game->play_arena);
 	generate_world("World_0", world, Game->play_arena);
 
+#if 0
 	world->current_area = arena_push_struct(Game->play_arena, World_Area);
 	init_world_area(world->current_area, Game->play_arena);
 	generate_world_area(world, world->current_area, world->area_stubs);
@@ -32,8 +33,8 @@ void play_state_start()
 	printf("%d \n", world->current_area->sim.bodies_count);
 	printf("%d \n", world->current_area->map.w);
 	printf("%d \n", world->current_area->map.h);
-	serialize_world(world);
-
+	//serialize_world(world);
+#endif 
 	world->current_area = NULL;
 	
 	world->current_area = world_load_area(world, -1);
