@@ -294,7 +294,7 @@ void deserialize_world(World* world, FILE* world_file)
 {
 	isize namelen = 0;
 	fread(&namelen, sizeof(isize), 1, world_file);
-	fread(world->name, sizeof(char), namelen, world_file);
+	fread((char*)world->name, sizeof(char), namelen, world_file);
 	fread(&world->areas_count, sizeof(isize), 1, world_file);
 	fread(&world->areas_capacity, sizeof(isize), 1, world_file);
 	fread(&world->areas_width, sizeof(isize), 1, world_file);
