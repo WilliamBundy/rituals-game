@@ -193,7 +193,7 @@ Entity* world_area_find_entity(World_Area* area, isize id)
 }
 
 //Make a player struct?
-void world_area_init_player(World_Area* area, Vec2i tile_pos)
+void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)
 {
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
@@ -201,7 +201,9 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos)
 		printf("Something went wrong! Couldn't find player entity....?");
 	}
 	///player->shape.center = v2(area->map.w * 16, area->map.h * 16);
-	player->shape.center = v2(tile_pos.x * Tile_Size, tile_pos.y * Tile_Size);
+	if(move_player) {
+		player->shape.center = v2(tile_pos.x * Tile_Size, tile_pos.y * Tile_Size);
+	}
 	player_entity->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
 	player->shape.hext = v2(5, 5);
 	player_entity->sprite.size = v2(32, 32);
@@ -212,11 +214,13 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos)
 	area->offset = player->shape.center;	
 }
 
-void world_area_deinit_player(World_Area* area)
+void world_area_deinit_player(World_Area* area, bool move_player=true)
 {
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-	player->shape.center = v2(-1000, -1000);
+	if(move_player) {
+		player->shape.center = v2(-1000, -1000);
+	}
 }
 
 void world_area_sort_entities_on_id(World_Area* area)

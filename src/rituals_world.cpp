@@ -131,52 +131,48 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	world->areas_width = width;
 	world->areas_height = height;
 	world->next_area_id = 0;
+	world->current_area = NULL;
 }
 
 void deserialize_area(World_Area* area, FILE* file, Memory_Arena* arena);
-World_Area* world_load_area(World* world, isize id)
+int check_path(char* path);
+World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 {
 	//TODO(will) load from file here using deserialize_world_area
 	// then call world_init_area?
 	//world_switch_current_area(world, link);
 	
 	char file[FilePathMaxLength];
-	isize len = snprintf(file, FilePathMaxLength, "%ssave/%s/areas/area_%d.dat", 
-			Game->base_path, world->name, id);
+	isize len = snprintf(
+			file, FilePathMaxLength, 
+			"%ssave/%s/areas/area_%d.dat", 
+			Game->base_path, 
+			world->name,
+			id);
 	//TODO(will) do snprintf error checking
+
+	if(!check_path(file)) {
+		return NULL;
+	}
+
 	FILE* fp = fopen(file, "rb");
 	World_Area* area = NULL;
-	printf("%s: %s \n", file, fp ? "success": "failure");
+	//printf("%s: %s \n", file, fp ? "success": "failure");
 	if(fp != NULL) {
-		area = arena_push_struct(Game->play_arena, World_Area);
-		deserialize_area(area, fp, Game->play_arena);
-#if 1 
+		area = arena_push_struct(arena, World_Area);
+		deserialize_area(area, fp, arena);
 		for(isize i = 0; i < area->entities_count; ++i) {
 			Entity* e = area->entities + i;
 			e->area = area;
 		}
 		world_area_synchronize_entities_and_bodies(area);
-#endif
+		world_area_init_player(area, vec2i(0,0), false);
 
 		fclose(fp);
 	}
 
 	return area;
 }
-
-#if 0
-void world_switch_current_area(World* world, Area_Link link)
-{
-	if(link.link == NULL) return;
-	World_Area_Stub* new_area_stub = link.link;
-	world_area_deinit_player(world->current_area);
-	//TODO(will) free old current area
-	World_Area* new_area = world_load_area(world, link);
-	world_area_init_player(new_area, link.position);
-	world->current_area = new_area;
-}
-#endif
-
 //TODO(will) call init_world_area on area before calling
 void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 {
@@ -203,6 +199,28 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
 	}
 	generate_statics_for_tilemap(&area->sim, &area->map);
+}
+
+void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)
+{
+	if(link.link == NULL) return;
+	world_area_deinit_player(world->current_area);
+	//TODO(will) free old current area
+	World_Area* new_area = world_load_area(world, link.link->id);
+	if(new_area == NULL) {
+		new_area = arena_push_struct(arena, World_Area);
+		init_world_area(new_area, arena);
+		generate_world_area(world, new_area, link.link);
+	}
+	world_area_init_player(new_area, link.position);
+	world->current_area = new_area;
+}
+
+void world_start_in_area(World* world, World_Area_Stub* area)
+{
+	World_Area* new_area = world_load_area(world, area->id);
+	world_area_init_player(new_area, area->id, false);
+	world->current_area = new_area;
 }
 
 void generate_world(const char* name, World* world, Memory_Arena* arena)
