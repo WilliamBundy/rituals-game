@@ -190,13 +190,15 @@ void serialize_area(World_Area* area, FILE* area_file)
 
 void serialize_area_link(Area_Link* link, FILE* fp)
 {
-	fwrite(link->position.e, sizeof(int32), 2, fp);
+	fwrite(&link->position.x, sizeof(int32), 1, fp);
+	fwrite(&link->position.y, sizeof(int32), 1, fp);
 	fwrite(&link->link->id, sizeof(isize), 1, fp);
 }
 
 void deserialize_area_link(Area_Link* link, FILE* fp)
 {
-	fread(link->position.e, sizeof(int32), 2, fp);
+	fread(&link->position.x, sizeof(int32), 1, fp);
+	fread(&link->position.y, sizeof(int32), 1, fp);
 	fread(&link->link->id, sizeof(isize), 1, fp);
 }
 
