@@ -202,13 +202,13 @@ void serialize_area_link(Area_Link* link, FILE* fp)
 
 void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
 {
-	fwrite(stub->id, sizeof(isize), 1, fp);
-	fwrite(stub->seed, sizeof(usize), 1, fp);
+	fwrite(&stub->id, sizeof(isize), 1, fp);
+	fwrite(&stub->seed, sizeof(usize), 1, fp);
 	serialize_area_link(stub->north, fp);
 	serialize_area_link(stub->south, fp);
 	serialize_area_link(stub->east, fp);
 	serialize_area_link(stub->west, fp);
-	fwrite(stub->biome, sizeof(World_Area_Biome), 1, fp);
+	fwrite(&stub->biome, sizeof(World_Area_Biome), 1, fp);
 }
 
 void serialize_world(World* world)
