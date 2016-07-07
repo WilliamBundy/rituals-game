@@ -216,9 +216,9 @@ void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena
 	world->current_area = new_area;
 }
 
-void world_start_in_area(World* world, World_Area_Stub* area)
+void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* arena)
 {
-	World_Area* new_area = world_load_area(world, area->id);
+	World_Area* new_area = world_load_area(world, area->id, arena);
 	world_area_init_player(new_area, v2i(0, 0),  false);
 	world->current_area = new_area;
 }

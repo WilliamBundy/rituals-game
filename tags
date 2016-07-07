@@ -2370,7 +2370,7 @@ world_area_synchronize_entities_and_bodies	src/rituals_world_area.cpp	/^void wor
 world_area_update	src/rituals_world.cpp	/^void world_area_update(World_Area* area)$/;"	f
 world_arena	src/rituals_game.cpp	/^	Memory_Arena* world_arena;$/;"	m	struct:Game_Main	file:
 world_load_area	src/rituals_world.cpp	/^World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)$/;"	f
-world_start_in_area	src/rituals_world.cpp	/^void world_start_in_area(World* world, World_Area_Stub* area)$/;"	f
+world_start_in_area	src/rituals_world.cpp	/^void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* arena)$/;"	f
 world_switch_current_area	src/rituals_world.cpp	/^void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)$/;"	f
 world_xy	src/rituals_main.cpp	/^	Vec2i world_xy;$/;"	m	struct:Play_State	file:
 x	src/rituals_game.cpp	/^	uint64 x, y;$/;"	m	struct:Random	file:
