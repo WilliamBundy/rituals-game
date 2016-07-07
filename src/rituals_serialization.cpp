@@ -202,7 +202,6 @@ void deserialize_area_link(Area_Link* link, FILE* fp)
 	fread(&link->link->id, sizeof(isize), 1, fp);
 }
 
-
 void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
 {
 	fwrite(&stub->id, sizeof(isize), 1, fp);
