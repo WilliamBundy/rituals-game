@@ -223,7 +223,7 @@ void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* aren
 	world->current_area = new_area;
 }
 
-void generate_world(const char* name, World* world, Memory_Arena* arena)
+void generate_world(const char* name, World* world)
 {
 	world->name = name;
 

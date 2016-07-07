@@ -22,8 +22,8 @@ void play_state_init()
 void play_state_start()
 {
 	World* world = play_state->world;
-	init_world(world, 4, 4, 1, Game->play_arena);
-	generate_world("World_0", world, Game->play_arena);
+	init_world(world, 4, 4, 1, Game->world_arena);
+	generate_world("World_0", world, Game->world_arena);
 
 #if 0
 	world->current_area = arena_push_struct(Game->play_arena, World_Area);
@@ -33,7 +33,7 @@ void play_state_start()
 #endif 
 	world->current_area = NULL;
 	
-	world->current_area = world_load_area(world, -1);
+	world->current_area = world_load_area(world, -1, game->play_arena);
 	world->current_area->world = world;
 	//world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
 }

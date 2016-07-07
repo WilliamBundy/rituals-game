@@ -331,12 +331,13 @@ int main(int argc, char** argv)
 		Game->window = window;
 		Game->state = Game_State_None;
 		Game->meta_arena = Allocate(Memory_Arena, 1);
-		init_memory_arena(Game->meta_arena, isz(Memory_Arena) * 10);
+		init_memory_arena(Game->meta_arena, isz(Memory_Arena) * 20);
 		Game->game_arena = new_memory_arena(Kilobytes(64), Game->meta_arena);
 		Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
 		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
 		Game->play_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
 		Game->renderer_arena = new_memory_arena(Megabytes(32), Game->meta_arena);
+		Game->world_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 		Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 
 		Game->base_path = SDL_GetBasePath();
