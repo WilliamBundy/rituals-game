@@ -253,16 +253,10 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 	
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas", Game->base_path, name);
 	check_dir(save_dir);
-	
-
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/areas/area_%d.dat",
 			Game->base_path,
 			name,
 			id);
-
-	if(!check_path(save_dir)) {
-		return NULL;
-	}
 
 	FILE* area_file = fopen(save_dir, mode);
 	return area_file;
