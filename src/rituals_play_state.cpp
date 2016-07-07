@@ -30,7 +30,7 @@ void play_state_start()
 	} else {
 		init_world(world, 4, 4, 1, Game->world_arena);
 		generate_world("World_0", world);
-		world->current_area = world_start_in_area(
+		world_start_in_area(
 				world,
 				world->area_stubs, 
 				Game->play_arena);
