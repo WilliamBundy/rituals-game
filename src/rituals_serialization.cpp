@@ -294,7 +294,9 @@ void deserialize_world(World* world, FILE* world_file)
 {
 	isize namelen = 0;
 	fread(&namelen, sizeof(isize), 1, world_file);
+	world->name = arena_push_array(Game->world_arena, char, namelen+1);
 	fread((char*)world->name, sizeof(char), namelen, world_file);
+	world->name[namelen] = '\0';
 	fread(&world->areas_count, sizeof(isize), 1, world_file);
 	fread(&world->areas_capacity, sizeof(isize), 1, world_file);
 	fread(&world->areas_width, sizeof(isize), 1, world_file);
