@@ -459,8 +459,6 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 	}
 }
 
-
-
 void world_area_update(World_Area* area)
 {
 	game_set_scale(2.0);
@@ -484,18 +482,18 @@ void world_area_update(World_Area* area)
 	}
 	
 	_player_animate(area, player_entity, player, move_impulse);
-	Vec2 target = player->shape.center;
+	Vec2 target = player->shape.center;a
 	if(target.x < 0) {
-		world_switch_current_area(play_state->world, area->west, Game->play_arena);
+		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);
 		play_state->world_xy.x--;
 	} else if(target.x > area->map.w * Tile_Size) {
-		world_switch_current_area(play_state->world, area->east, Game->play_arena);
+		world_switch_current_area(play_state->world, area->stub->east, Game->play_arena);
 		play_state->world_xy.x++;
 	} else if(target.y < 0) {
-		world_switch_current_area(play_state->world, area->north, Game->play_arena);
+		world_switch_current_area(play_state->world, area->stub->north, Game->play_arena);
 		play_state->world_xy.y--;
 	} else if(target.y > area->map.h * Tile_Size) {
-		world_switch_current_area(play_state->world, area->south, Game->play_arena);
+		world_switch_current_area(play_state->world, area->stub->south, Game->play_arena);
 		play_state->world_xy.y++;
 	}
 	area->offset += (target - area->offset) * 0.1f;
