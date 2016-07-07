@@ -166,7 +166,7 @@ World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 			e->area = area;
 		}
 		world_area_synchronize_entities_and_bodies(area);
-		world_area_init_player(area, vec2i(0,0), false);
+		world_area_init_player(area, v2i(0,0), false);
 
 		fclose(fp);
 	}
@@ -206,7 +206,7 @@ void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena
 	if(link.link == NULL) return;
 	world_area_deinit_player(world->current_area);
 	//TODO(will) free old current area
-	World_Area* new_area = world_load_area(world, link.link->id);
+	World_Area* new_area = world_load_area(world, link.link->id, arena);
 	if(new_area == NULL) {
 		new_area = arena_push_struct(arena, World_Area);
 		init_world_area(new_area, arena);
@@ -219,7 +219,7 @@ void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena
 void world_start_in_area(World* world, World_Area_Stub* area)
 {
 	World_Area* new_area = world_load_area(world, area->id);
-	world_area_init_player(new_area, area->id, false);
+	world_area_init_player(new_area, v2i(0, 0),  false);
 	world->current_area = new_area;
 }
 

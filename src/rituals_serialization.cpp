@@ -213,7 +213,7 @@ void serialize_world(World* world)
 		fwrite(&world->areas_capacity, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_width, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
-		fwrite(&world->current_area_id, sizeof(isize), 1, world_file);
+		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
 		//TODO(will) write world area stubs here
 		fclose(world_file);
 	}
