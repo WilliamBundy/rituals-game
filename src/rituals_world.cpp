@@ -198,6 +198,7 @@ void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena
 	//TODO(will) free old current area
 	clear_arena(arena);
 
+	printf("World name: [%s] \n", world->name);
 	World_Area* new_area = world_load_area(world, link.link->id, arena);
 	if(new_area == NULL) {
 		new_area = arena_push_struct(arena, World_Area);
