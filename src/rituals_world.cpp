@@ -197,7 +197,7 @@ void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena
 	//world_area_deinit_player(world->current_area);
 	//TODO(will) free old current area
 	
-	//clear_arena(arena);
+	clear_arena(arena);
 
 	World_Area* new_area = world_load_area(world, link.link->id, arena);
 	if(new_area == NULL) {
