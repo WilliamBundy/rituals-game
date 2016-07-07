@@ -305,7 +305,7 @@ void deserialize_world(World* world, FILE* world_file)
 	fread(&current_area_id, sizeof(isize), 1, world_file);
 	world->area_stubs = arena_push_array(Game->world_arena, World_Area_Stub, world->areas_count);
 	for(isize i = 0; i < world->areas_count; ++i) {
-		serialize_world_area_stub(world->area_stubs + i, world_file);
+		deserialize_world_area_stub(world->area_stubs + i, world_file);
 	}
 	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
 }
