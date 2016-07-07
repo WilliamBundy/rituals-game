@@ -1349,7 +1349,7 @@ game_set_scale	src/rituals_game.cpp	/^void game_set_scale(real scale)$/;"	f
 generate_statics_for_tilemap	src/rituals_win32.cpp	/^void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
 generate_statics_for_tilemap	src/rituals_world.cpp	/^void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
 generate_tilemap	src/rituals_tilemap.cpp	/^void generate_tilemap(Tilemap* tilemap, uint64 seed)$/;"	f
-generate_world	src/rituals_world.cpp	/^void generate_world(const char* name, World* world)$/;"	f
+generate_world	src/rituals_world.cpp	/^void generate_world(char* name, World* world)$/;"	f
 generate_world_area	src/rituals_world.cpp	/^void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)$/;"	f
 get_area_file	src/rituals_serialization.cpp	/^FILE* get_area_file(const char* name, isize id, const char* mode)$/;"	f
 get_world_file	src/rituals_serialization.cpp	/^FILE* get_world_file(const char* name, const char* mode)$/;"	f
