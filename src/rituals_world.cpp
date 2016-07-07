@@ -140,6 +140,7 @@ FILE* get_world_file(const char* name, const char* mode);
 int check_path(char* path);
 World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 {
+	printf("World name: [%s] \n", world->name);
 	FILE* fp = get_area_file(world->name, id, "rb");
 	World_Area* area = NULL;
 	if(fp != NULL) {
