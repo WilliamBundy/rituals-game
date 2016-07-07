@@ -192,8 +192,10 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)
 {
 	if(link.link == NULL) return;
-	world_area_deinit_player(world->current_area);
+	//world_area_deinit_player(world->current_area);
 	//TODO(will) free old current area
+	clear_arena(arena);
+
 	World_Area* new_area = world_load_area(world, link.link->id, arena);
 	if(new_area == NULL) {
 		new_area = arena_push_struct(arena, World_Area);
@@ -483,21 +485,19 @@ void world_area_update(World_Area* area)
 	
 	_player_animate(area, player_entity, player, move_impulse);
 	Vec2 target = player->shape.center;
-#if 0
 	if(target.x < 0) {
-		world_switch_current_area(play_state->world, area->west);
+		world_switch_current_area(play_state->world, area->west, Game->play_arena);
 		play_state->world_xy.x--;
 	} else if(target.x > area->map.w * Tile_Size) {
-		world_switch_current_area(play_state->world, area->east);
+		world_switch_current_area(play_state->world, area->east, Game->play_arena);
 		play_state->world_xy.x++;
 	} else if(target.y < 0) {
-		world_switch_current_area(play_state->world, area->north);
+		world_switch_current_area(play_state->world, area->north, Game->play_arena);
 		play_state->world_xy.y--;
 	} else if(target.y > area->map.h * Tile_Size) {
-		world_switch_current_area(play_state->world, area->south);
+		world_switch_current_area(play_state->world, area->south, Game->play_arena);
 		play_state->world_xy.y++;
 	}
-#endif
 	area->offset += (target - area->offset) * 0.1f;
 	area->offset -= Game->size * 0.5f;
 	if(area->offset.x < 0) 
