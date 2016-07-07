@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * ptrdiff_t may not equal int64
  */ 
 
-bool check_path(char* path)
+int check_path(char* path)
 {
 	return PathFileExists(path);
 }
