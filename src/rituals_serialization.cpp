@@ -195,11 +195,13 @@ void serialize_area_link(Area_Link* link, FILE* fp)
 	fwrite(&link->link->id, sizeof(isize), 1, fp);
 }
 
-void deserialize_area_link(Area_Link* link, FILE* fp)
+void deserialize_area_link(Area_Link* link, World* world, FILE* fp)
 {
 	fread(&link->position.x, sizeof(int32), 1, fp);
 	fread(&link->position.y, sizeof(int32), 1, fp);
-	fread(&link->link->id, sizeof(isize), 1, fp);
+	isize linkid = 0;
+	fread(&linkid, sizeof(isize), 1, fp);
+	link->link = world->area_stubs + i;
 }
 
 void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
@@ -213,14 +215,14 @@ void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
 	fwrite(&stub->biome, sizeof(World_Area_Biome), 1, fp);
 }
 
-void deserialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
+void deserialize_world_area_stub(World_Area_Stub* stub, World* world, FILE* fp)
 {
 	fread(&stub->id, sizeof(isize), 1, fp);
 	fread(&stub->seed, sizeof(usize), 1, fp);
-	deserialize_area_link(&stub->north, fp);
-	deserialize_area_link(&stub->south, fp);
-	deserialize_area_link(&stub->east, fp);
-	deserialize_area_link(&stub->west, fp);
+	deserialize_area_link(&stub->north, world, fp);
+	deserialize_area_link(&stub->south, world, fp);
+	deserialize_area_link(&stub->east, world, fp);
+	deserialize_area_link(&stub->west, world, fp);
 	fread(&stub->biome, sizeof(World_Area_Biome), 1, fp);
 }
 
@@ -304,7 +306,7 @@ void deserialize_world(World* world, FILE* world_file)
 	fread(&current_area_id, sizeof(isize), 1, world_file);
 	world->area_stubs = arena_push_array(Game->world_arena, World_Area_Stub, world->areas_count);
 	for(isize i = 0; i < world->areas_count; ++i) {
-		deserialize_world_area_stub(world->area_stubs + i, world_file);
+		deserialize_world_area_stub(world->area_stubs + i, world, world_file);
 	}
 	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
 }
