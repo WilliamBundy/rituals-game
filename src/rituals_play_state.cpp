@@ -34,8 +34,6 @@ void play_state_start()
 	world->current_area = NULL;
 	
 	world->current_area = world_load_area(world, -1, Game->play_arena);
-	world->current_area->world = world;
-	//world_area_init_player(world->current_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight / 2));
 }
 
 void play_state_update()

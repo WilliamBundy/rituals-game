@@ -193,7 +193,23 @@ void serialize_area(World_Area* area, char* path)
 	}
 }
 
+void serialize_area_link(Area_Link* link, FILE* fp)
+{
+	fwrite(position.e, sizeof(int32), 2, fp);
+	fwrite(link->link->id, sizeof(isize), 1, fp);
 
+}
+
+void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)
+{
+	fwrite(stub->id, sizeof(isize), 1, fp);
+	fwrite(stub->seed, sizeof(usize), 1, fp);
+	serialize_area_link(stub->north, fp);
+	serialize_area_link(stub->south, fp);
+	serialize_area_link(stub->east, fp);
+	serialize_area_link(stub->west, fp);
+	fwrite(stub->biome, sizeof(World_Area_Biome), 1, fp);
+}
 
 void serialize_world(World* world)
 {
@@ -215,6 +231,9 @@ void serialize_world(World* world)
 		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
 		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
 		//TODO(will) write world area stubs here
+		for(isize i = 0; i < world->areas_count; ++i) {
+			serialize_world_area_stub(world->area_stubs + i, world_file);
+		}
 		fclose(world_file);
 	}
 

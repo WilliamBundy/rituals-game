@@ -161,6 +161,7 @@ World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 	if(fp != NULL) {
 		area = arena_push_struct(arena, World_Area);
 		deserialize_area(area, fp, arena);
+		area->world = world;
 		for(isize i = 0; i < area->entities_count; ++i) {
 			Entity* e = area->entities + i;
 			e->area = area;

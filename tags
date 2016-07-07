@@ -1115,7 +1115,7 @@ _body_get_id	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	45;"	d	file:
-_check	src/rituals_world.cpp	262;"	d	file:
+_check	src/rituals_world.cpp	263;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	293;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	187;"	d	file:
@@ -1983,6 +1983,7 @@ screen_loc	src/rituals_renderer.cpp	/^	isize screen_loc, texture_size_loc;$/;"	m
 seed	src/rituals_world.cpp	/^	usize seed;$/;"	m	struct:World	file:
 seed	src/rituals_world_area.cpp	/^	usize seed;$/;"	m	struct:World_Area_Stub	file:
 serialize_area	src/rituals_serialization.cpp	/^void serialize_area(World_Area* area, char* path)$/;"	f
+serialize_area_link	src/rituals_serialization.cpp	/^void serialize_area_link(Area_Link* link, FILE* fp)$/;"	f
 serialize_entity	src/rituals_serialization.cpp	/^void serialize_entity(Entity* entity, FILE* file)$/;"	f
 serialize_sim_body	src/rituals_serialization.cpp	/^void serialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 serialize_simulator	src/rituals_serialization.cpp	/^void serialize_simulator(Simulator* sim, FILE* file)$/;"	f
@@ -1990,6 +1991,7 @@ serialize_sprite	src/rituals_serialization.cpp	/^void serialize_sprite(Sprite* s
 serialize_tile_state	src/rituals_serialization.cpp	/^void serialize_tile_state(Tile_State* state, FILE* file)$/;"	f
 serialize_tilemap	src/rituals_serialization.cpp	/^void serialize_tilemap(Tilemap* map, FILE* file)$/;"	f
 serialize_world	src/rituals_serialization.cpp	/^void serialize_world(World* world)$/;"	f
+serialize_world_area_stub	src/rituals_serialization.cpp	/^void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)$/;"	f
 shader_program	src/rituals_renderer.cpp	/^	GLuint shader_program, vbo, vao, texture;$/;"	m	struct:OpenGL_Renderer	file:
 shape	src/rituals_simulation.cpp	/^	AABB shape;$/;"	m	struct:Sim_Body	file:
 sim	src/rituals_win32.cpp	/^Simulator sim;$/;"	v
