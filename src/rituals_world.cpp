@@ -185,6 +185,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
 	}
 	generate_statics_for_tilemap(&area->sim, &area->map);
+	world_area_init_player(area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight /2));
 }
 
 void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)
