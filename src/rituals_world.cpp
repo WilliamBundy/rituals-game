@@ -171,7 +171,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	init_random(r, stub->seed);
 	generate_tilemap(&area->map, stub->seed);
 	area->id = stub->id;
-	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = Get_Texture_Coordinates(8*32, 0, 32, 64);
@@ -180,6 +180,24 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		e->sprite.size = v2(32, 64);
 		e->sprite.center = v2(0, 20);
+		do {
+			b->shape.center = v2(
+					rand_range(r, 0, area->map.w * 32),
+					rand_range(r, 0, area->map.h * 32));
+		}
+		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
+	}
+
+	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
+		Entity* e = world_area_get_next_entity(area);
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+		e->sprite.texture = Get_Texture_Coordinates(0, 128, 96, 128);
+		b->shape.hw = 15;
+		b->shape.hh = 11;
+		b->inv_mass = 1.0f;
+		b->flags = Body_Flag_Static;
+		e->sprite.size = v2(96, 128);
+		e->sprite.anchor = Anchor_Bottom;
 		do {
 			b->shape.center = v2(
 					rand_range(r, 0, area->map.w * 32),
