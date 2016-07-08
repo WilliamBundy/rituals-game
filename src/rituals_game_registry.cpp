@@ -147,22 +147,17 @@ void register_all_rituals_tile_info()
 	tile_void->texture = rect2(0, 0, 0, 0);
 
 	_new_tile(sand, 0.7, 0.999, 0, 1, false);
-	_new_tile(grassy_sand, 0.7, 0.999, 1, 1, false);
-	_new_tile(grass, 0.9, 0.5, 2, 1, false);
-	_new_tile(dense_grass, 0.9, 0.5, 3, 1, false);
-	_new_tile(desert_sand, 0.7, 0.999, 4, 1, false);
-	_new_tile(dug_earth, 0.9, 0.5, 5, 1, false);
+	_new_tile(grass, 0.9, 0.5, 1, 1, false);
+	_new_tile(dense_grass, 0.9, 0.5, 2, 1, false);
+	_new_tile(dug_earth, 0.9, 0.5, 3, 1, false);
 	tile_dug_earth->immune_to_damage = true;
 
-	_new_tile(rock_wall, 1, 1, 0, 2, true);
-	_new_tile(tree_wall, 1, 1, 1, 2, true);
-	tile_tree_wall->has_bottom_texture = true;
+	_new_tile(tree_wall, 1, 1, 1, 4, true);
 	tile_tree_wall->has_top_texture = true;
 	tile_tree_wall->top_texture = _tile_texture(1, 3);
-	tile_tree_wall->bottom_texture = _tile_texture(1, 4);
 
 
-	_new_tile(water, 1, 1, 2, 2, true);
+	_new_tile(water, 1, 1, 1, 2, true);
 	_new_tile(stone_road, 1.2, 0.99, 3, 2, false);
 	tile_stone_road->max_damage = 20;
 	_new_tile(earthen_wall, 1, 1, 4, 2, true);
