@@ -352,7 +352,7 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 		//ball->flags = Body_Flag_No_Friction;
 		ball_entity->sprite.size = v2(16, 32);
 		ball_entity->sprite.center = v2(0, 10);
-		ball_entity->sprite.texture  = Get_Texture_Coordinates(0, 96, 32, 64);
+		ball_entity->sprite.texture  = Get_Texture_Coordinates(8*32, 0, 32, 64);
 	}
 
 

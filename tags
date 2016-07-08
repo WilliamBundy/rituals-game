@@ -929,7 +929,7 @@ GenerateQuicksortForType	src/rituals_game.cpp	25;"	d	file:
 Get_Texture_Coordinates	src/rituals_renderer.cpp	221;"	d	file:
 Gigabytes	src/rituals_main.cpp	111;"	d	file:
 Gigabytes	src/rituals_win32.cpp	84;"	d	file:
-Half_TS	src/rituals_game_registry.cpp	114;"	d	file:
+Half_TS	src/rituals_game_registry.cpp	116;"	d	file:
 Has_Flag	src/rituals_simulation.cpp	16;"	d	file:
 Input	src/rituals_game.cpp	/^Game_Input* Input;$/;"	v
 Inventory	src/rituals_inventory.cpp	/^struct Inventory$/;"	s	file:
@@ -1066,7 +1066,8 @@ Tile_Dug_Earth	src/rituals_game_registry.cpp	/^isize Tile_Dug_Earth = 0;$/;"	v
 Tile_Grass	src/rituals_game_registry.cpp	/^isize Tile_Grass = 0;$/;"	v
 Tile_Info	src/rituals_game_info.cpp	/^struct Tile_Info$/;"	s	file:
 Tile_Sand	src/rituals_game_registry.cpp	/^isize Tile_Sand = 0;$/;"	v
-Tile_Size	src/rituals_game_registry.cpp	113;"	d	file:
+Tile_Shallow_Water	src/rituals_game_registry.cpp	/^isize Tile_Shallow_Water = 0;$/;"	v
+Tile_Size	src/rituals_game_registry.cpp	115;"	d	file:
 Tile_Slab_Wall	src/rituals_game_registry.cpp	/^isize Tile_Slab_Wall = 0;$/;"	v
 Tile_State	src/rituals_game_info.cpp	/^struct Tile_State$/;"	s	file:
 Tile_Stone_Road	src/rituals_game_registry.cpp	/^isize Tile_Stone_Road = 0;$/;"	v
@@ -1107,7 +1108,7 @@ __gl_h_	src/thirdparty/gl_core_3_3.h	22;"	d
 __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
-_add_item	src/rituals_game_registry.cpp	162;"	d	file:
+_add_item	src/rituals_game_registry.cpp	165;"	d	file:
 _body_get_id	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
@@ -1128,7 +1129,7 @@ _glerror	src/rituals_renderer.cpp	73;"	d	file:
 _isnt_spritefont_separator	rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _isnt_spritefont_separator	src/rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _naive_generate_statics_for_tilemap	src/rituals_win32.cpp	/^void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
-_new_tile	src/rituals_game_registry.cpp	117;"	d	file:
+_new_tile	src/rituals_game_registry.cpp	119;"	d	file:
 _passthru_macro	src/rituals_game.cpp	84;"	d	file:
 _player_animate	src/rituals_world.cpp	/^void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, Vec2 move_impulse)$/;"	f
 _player_controls	src/rituals_world.cpp	/^Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)$/;"	f
@@ -1138,7 +1139,7 @@ _set_registry_arrays	src/rituals_game_registry.cpp	42;"	d	file:
 _splitmix64	src/rituals_game.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 _th	src/rituals_win32.cpp	/^isize _tw, _th;$/;"	v
 _th	src/rituals_world.cpp	/^isize _tw, _th;$/;"	v
-_tile_texture	src/rituals_game_registry.cpp	116;"	d	file:
+_tile_texture	src/rituals_game_registry.cpp	118;"	d	file:
 _tiles	src/rituals_win32.cpp	/^uint8* _tiles;$/;"	v
 _tiles	src/rituals_world.cpp	/^uint8* _tiles;$/;"	v
 _tw	src/rituals_win32.cpp	/^isize _tw, _th;$/;"	v

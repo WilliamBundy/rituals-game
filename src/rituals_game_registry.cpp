@@ -91,6 +91,7 @@ isize Tile_Grass = 0;
 isize Tile_Dense_Grass = 0;
 isize Tile_Dug_Earth = 0;
 isize Tile_Tree_Wall = 0;
+isize Tile_Shallow_Water = 0;
 isize Tile_Water = 0;
 isize Tile_Stone_Road = 0;
 isize Tile_Slab_Wall = 0;
@@ -104,6 +105,7 @@ void finalize_game_registry()
 	Tile_Dense_Grass = lookup_tile("dense_grass")->id;
 	Tile_Dug_Earth = lookup_tile("dug_earth")->id;
 	Tile_Tree_Wall = lookup_tile("tree_wall")->id;
+	Tile_Shallow_Water = lookup_tile("shallow_water")->id;
 	Tile_Water = lookup_tile("water")->id;
 	Tile_Stone_Road = lookup_tile("stone_road")->id;
 	Tile_Slab_Wall = lookup_tile("slab_wall")->id;
@@ -152,6 +154,7 @@ void register_all_rituals_tile_info()
 
 
 	_new_tile(water, 1, 1, 1, 2, true);
+	_new_tile(shallow_water, 0.7, 0.99, 0, 2, false);
 	_new_tile(stone_road, 1.2, 0.99, 3, 2, false);
 	tile_stone_road->max_damage = 20;
 	_new_tile(slab_wall, 1, 1, 0, 4, true);

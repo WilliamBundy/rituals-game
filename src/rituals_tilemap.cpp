@@ -119,13 +119,15 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 
 
 			real height = fourth[index];
-			if(height < 0.25f) {
-				//water
+			if(height < 0.15f) {
 				tilemap->tiles[index] = Tile_Water;
-			} else if(height < 0.35f) {
+			}
+			else if(height < 0.25f) {
+				//water
+				tilemap->tiles[index] = Tile_Shallow_Water;
+			} else if(height < 0.30f) {
 				//sand
 				tilemap->tiles[index] = Tile_Sand;
-
 			} else if(height < 0.5f) {
 				//sparse grass
 				tilemap->tiles[index] = Tile_Grass;
