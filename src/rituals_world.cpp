@@ -179,7 +179,6 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->shape.hh = 11;
 		b->inv_mass = 1.0f;
 		e->sprite.size = v2(32, 64);
-		e->sprite.center = v2(0, 20);
 		do {
 			b->shape.center = v2(
 					rand_range(r, 0, area->map.w * 32),
@@ -197,7 +196,6 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
 		e->sprite.size = v2(96, 128) * 2;
-		e->sprite.center = v2(0, e->sprite.size.y / 3);
 		//e->sprite.anchor = Anchor_Bottom;
 		do {
 			b->shape.center = v2(
@@ -370,7 +368,6 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 		ball->shape.hext = v2(8, 6);
 		//ball->flags = Body_Flag_No_Friction;
 		ball_entity->sprite.size = v2(16, 32);
-		ball_entity->sprite.center = v2(0, 10);
 		ball_entity->sprite.texture  = Get_Texture_Coordinates(8*32, 0, 32, 64);
 	}
 
@@ -552,6 +549,8 @@ void world_area_update(World_Area* area)
 
 		if (b == NULL) continue;
 		e->sprite.position = b->shape.center;
+		e->sprite.position.y += b->shape.hh;
+		e->sprite.anchor = Anchor_Bottom;
 		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
 		
 		//TODO(will) align entity sprites by their bottom center
