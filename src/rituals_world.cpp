@@ -178,7 +178,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->shape.hw = 15;
 		b->shape.hh = 11;
 		b->inv_mass = 1.0f;
-		e->sprite.size = v2(64, 128);
+		e->sprite.size = v2(32, 64);
 		e->sprite.center = v2(0, 20);
 		do {
 			b->shape.center = v2(
@@ -196,7 +196,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->shape.hh = 11;
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
-		e->sprite.size = v2(96, 128);
+		e->sprite.size = v2(96, 128) * 2;
 		e->sprite.center = v2(0, 128/3);
 		//e->sprite.anchor = Anchor_Bottom;
 		do {
