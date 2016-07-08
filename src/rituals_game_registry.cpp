@@ -142,9 +142,9 @@ void register_all_rituals_tile_info()
 	_new_tile(void, 1.0, 0.5, 0, 0, true);
 	tile_void->texture = rect2(0, 0, 0, 0);
 
-	_new_tile(sand, 0.7, 0.999, 0, 1, false);
-	_new_tile(grass, 0.9, 0.5, 1, 1, false);
-	_new_tile(dense_grass, 0.9, 0.5, 2, 1, false);
+	_new_tile(sand, 0.9, 0.999, 0, 1, false);
+	_new_tile(grass, 1, 0.5, 1, 1, false);
+	_new_tile(dense_grass, 1, 0.5, 2, 1, false);
 	_new_tile(dug_earth, 0.9, 0.5, 3, 1, false);
 	tile_dug_earth->immune_to_damage = true;
 
