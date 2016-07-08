@@ -87,32 +87,23 @@ _generate_registry_lookup(lookup_item, sort_registered_items, Item_Info, items)
 
 isize Tile_Void = 0;
 isize Tile_Sand = 0;
-isize Tile_Grassy_Sand = 0;
 isize Tile_Grass = 0;
-isize Tile_Dense_Grass = 0;
-isize Tile_Desert_Sand = 0;
 isize Tile_Dug_Earth = 0;
-isize Tile_Rock_Wall = 0;
 isize Tile_Tree_Wall = 0;
 isize Tile_Water = 0;
 isize Tile_Stone_Road = 0;
-isize Tile_Earthen_Wall = 0;
 void finalize_game_registry()
 {
 	sort_registered_tiles();
 	sort_registered_items();
 	Tile_Void = lookup_tile("void")->id;
 	Tile_Sand = lookup_tile("sand")->id;
-	Tile_Grassy_Sand = lookup_tile("grassy_sand")->id;
 	Tile_Grass = lookup_tile("grass")->id;
 	Tile_Dense_Grass = lookup_tile("dense_grass")->id;
-	Tile_Desert_Sand = lookup_tile("desert_sand")->id;
 	Tile_Dug_Earth = lookup_tile("dug_earth")->id;
-	Tile_Rock_Wall = lookup_tile("rock_wall")->id;
 	Tile_Tree_Wall = lookup_tile("tree_wall")->id;
 	Tile_Water = lookup_tile("water")->id;
 	Tile_Stone_Road = lookup_tile("stone_road")->id;
-	Tile_Earthen_Wall = lookup_tile("earthen_wall")->id;
 }
 
 
