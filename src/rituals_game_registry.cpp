@@ -88,10 +88,12 @@ _generate_registry_lookup(lookup_item, sort_registered_items, Item_Info, items)
 isize Tile_Void = 0;
 isize Tile_Sand = 0;
 isize Tile_Grass = 0;
+isize Tile_Dense_Grass = 0;
 isize Tile_Dug_Earth = 0;
 isize Tile_Tree_Wall = 0;
 isize Tile_Water = 0;
 isize Tile_Stone_Road = 0;
+isize Tile_Slab_Wall = 0;
 void finalize_game_registry()
 {
 	sort_registered_tiles();
@@ -104,6 +106,7 @@ void finalize_game_registry()
 	Tile_Tree_Wall = lookup_tile("tree_wall")->id;
 	Tile_Water = lookup_tile("water")->id;
 	Tile_Stone_Road = lookup_tile("stone_road")->id;
+	Tile_Slab_Wall = lookup_tile("slab_wall")->id;
 }
 
 
@@ -151,7 +154,9 @@ void register_all_rituals_tile_info()
 	_new_tile(water, 1, 1, 1, 2, true);
 	_new_tile(stone_road, 1.2, 0.99, 3, 2, false);
 	tile_stone_road->max_damage = 20;
-	_new_tile(earthen_wall, 1, 1, 4, 2, true);
+	_new_tile(slab_wall, 1, 1, 0, 4, true);
+	tile_slab_wall->has_top_texture = true;
+	tile_slab_wall->top_texture = _tile_texture(0, 3);
 }
 
 #define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(#name, (s), _tile_texture(x, y)) 

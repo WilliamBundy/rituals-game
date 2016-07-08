@@ -135,9 +135,8 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 			} else if(height < 0.8f) {
 				// trees
 				tilemap->tiles[index] = Tile_Tree_Wall;
-			} else {
-				tilemap->tiles[index] = Tile_Earthen_Wall;
-
+			} else  {
+				tilemap->tiles[index] = Tile_Slab_Wall;
 			}
 		}
 	}
