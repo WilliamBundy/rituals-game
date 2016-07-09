@@ -230,7 +230,7 @@ void renderer_start()
 
 	glUseProgram(Renderer->shader_program);
 	glUniform4f(Renderer->screen_loc, 
-			,enderer->offset.x, Renderer->offset.y, 
+			Renderer->offset.x, Renderer->offset.y, 
 			Game->size.x + Renderer->offset.x,
 			Game->size.y + Renderer->offset.y);
 
