@@ -241,8 +241,8 @@ void renderer_start()
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
-	sp.center.x = (int)sp.center.x;
-	sp.center.y = (int)sp.center.y;
+	//sp.center.x = (int)sp.center.x;
+	//sp.center.y = (int)sp.center.y;
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
