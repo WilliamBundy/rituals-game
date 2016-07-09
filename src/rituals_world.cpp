@@ -192,8 +192,8 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = Get_Texture_Coordinates(0, 5*32, 96, 5*32);
-		b->shape.hw = 15;
-		b->shape.hh = 11;
+		b->shape.hw = 20;
+		b->shape.hh = 20,;
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
 		e->sprite.size = v2(96, 128) * 2;
