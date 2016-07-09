@@ -230,9 +230,9 @@ void renderer_start()
 
 	glUseProgram(Renderer->shader_program);
 	glUniform4f(Renderer->screen_loc, 
-			Renderer->offset.x, Renderer->offset.y, 
-			Game->size.x + Renderer->offset.x,
-			Game->size.y + Renderer->offset.y);
+			(int)Renderer->offset.x, (int)Renderer->offset.y, 
+			(int)Game->size.x + (int)Renderer->offset.x,
+			(int)Game->size.y + (int)Renderer->offset.y);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
@@ -241,8 +241,8 @@ void renderer_start()
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
-	//sp.center.x = (int)sp.center.x;
-	//sp.center.y = (int)sp.center.y;
+	sp.center.x = (int)sp.center.x;
+	sp.center.y = (int)sp.center.y;
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
