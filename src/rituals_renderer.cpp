@@ -240,7 +240,10 @@ void renderer_start()
 
 void renderer_push_sprite(Sprite* s)
 {
-	Renderer->sprite_data[Renderer->sprite_count++] = *s;
+	Sprite sp = *s;
+	sp.center.x = (int)sp.center.x;
+	sp.center.y = (int)sp.center.y;
+	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
 #define _get_sprite_y_base(s) (s.position.y + s.size.y / 2 - s.center.y)
