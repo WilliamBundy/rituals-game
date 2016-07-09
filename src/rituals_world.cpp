@@ -197,7 +197,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
 		e->sprite.size = v2(96, 128) * 2;
-		e->sprite.center = v2(0, e->sprite.size.y /3 + b->shape.hh * 2);
+		e->sprite.center = v2(0, e->sprite.size.y /3 - b->shape.hh * 2);
 		do {
 			b->shape.center = v2(
 					rand_range(r, 0, area->map.w * 32),
