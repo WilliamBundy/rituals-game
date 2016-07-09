@@ -230,9 +230,9 @@ void renderer_start()
 
 	glUseProgram(Renderer->shader_program);
 	glUniform4f(Renderer->screen_loc, 
-			(int)Renderer->offset.x, (int)Renderer->offset.y, 
-			(int)Game->size.x + (int)Renderer->offset.x,
-			(int)Game->size.y + (int)Renderer->offset.y);
+			,enderer->offset.x, Renderer->offset.y, 
+			Game->size.x + Renderer->offset.x,
+			Game->size.y + Renderer->offset.y);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
