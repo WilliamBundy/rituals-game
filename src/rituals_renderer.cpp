@@ -308,10 +308,10 @@ void renderer_push_sprite(Sprite* s)
 		if(!aabb_intersect(&raabb, &clipaabb)) return;
 
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
-		//sp.position.x = clip.r.x;
-		//sp.position.y = clip.r.y;
-		//sp.size.x = clip.r.w;
-		//sp.size.y = clip.r.h;
+		sp.position.x = clip.r.x;
+		sp.position.y = clip.r.y;
+		sp.size.x = clip.r.w;
+		sp.size.y = clip.r.h;
 		sp.texture.x += clip.diff.x / Renderer->texture_width;
 		sp.texture.y += clip.diff.y / Renderer->texture_height;
 		sp.texture.w += clip.diff.w / Renderer->texture_width;
