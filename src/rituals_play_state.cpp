@@ -16,7 +16,7 @@ void play_state_init()
 {
 	clear_arena(Game->play_arena);
 	clear_arena(Game->world_arena);
-	play_state->world = arena_push_struct(Game->world_arena, World);
+	play_state = arena_push_struct(Game->game_arena, Play_State);
 }
 
 void deserialize_world(World* world, FILE* world_file);

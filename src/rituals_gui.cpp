@@ -168,7 +168,7 @@ Vec2 spritefont_size_text(Spritefont* font, char* text)
 	return spritefont_size_text(font, text, strlen(text));
 }
 
-void spritefont_render_text(Spritefont* font,
+void spritefont_render_text_ex(Spritefont* font,
 		char* text, isize len, 
 		Vec2 position, 
 		int32 max_width = -1, 
@@ -217,8 +217,8 @@ void spritefont_render_text(Spritefont* font,
 					wrapped++;
 				}
 
-				draw_box_outline(initial_pos + position * scale, 
-						v2(word_width, font->glyph_height), v4(1, 1, 1, 1), 2);
+			//	draw_box_outline(initial_pos + position * scale, 
+			//			v2(word_width, font->glyph_height), v4(1, 1, 1, 1), 2);
 
 				for(isize j = wordstart; j <= i; ++j) {
 					c = text[j];

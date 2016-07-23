@@ -336,7 +336,7 @@ Sprite get_box_sprite(Vec2 pos, Vec2 size, Vec4 color)
 	Sprite s;
 	init_sprite(&s);
 	s.position = pos;
-	s.texture = Get_Texture_Coordinates(0, 0, 32, 32);
+	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
 	s.size = size;
 	s.color = color;
 	return s;
