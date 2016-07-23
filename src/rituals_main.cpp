@@ -214,14 +214,14 @@ Sprite* boxes;
 
 void test_init()
 {
-	boxes = arena_push_array(Game->play_arena, Sprite, 1000);
-	for(isize i = 0; i < 1000; ++i) {
+	boxes = arena_push_array(Game->play_arena, Sprite, 100);
+	for(isize i = 0; i < 100; ++i) {
 		//init_sprite(boxes + i);
 #if 1
 		boxes[i] = get_box_sprite(v2(
 			rand_range(&Game->r, 0,1000),
 			rand_range(&Game->r, 0,1000)),
-			v2(256, 8),
+			v2(256, 16),
 		v4(rand_range(&Game->r, 0.5f, 1.0), .8, .8, .9));
 #endif
 
@@ -233,7 +233,7 @@ void test_update()
 	game_set_scale(2.0);
 	renderer_start();
 	renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
-	for(isize i = 0; i < 1000; ++i) {
+	for(isize i = 0; i < 100; ++i) {
 		renderer_push_sprite(boxes + i);
 	}	
 	renderer_draw();
