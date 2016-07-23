@@ -252,6 +252,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	Rect2 o = r;
 	if(r.x < clip.x) {
 		diff.x = clip.x - r.x;
+		diff.w -= diff.x;
 		o.x = clip.x;
 		o.w -= diff.x;
 	} else if(r.x > (clip.x + clip.w)) {
@@ -265,6 +266,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 
 	if(r.y < clip.y) {
 		diff.y = clip.y - r.y;
+		diff.h -= diff.y;
 		o.y = clip.y;
 		o.h -= diff.y;
 	} else if(r.y > (clip.y + clip.h)) {
