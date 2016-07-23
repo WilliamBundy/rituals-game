@@ -291,7 +291,7 @@ static inline void renderer_set_clip_rect(real x, real y, real w, real h)
 	};
 }
 
-
+void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness);
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
@@ -316,6 +316,10 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.y += clip.diff.y / Renderer->texture_height;
 		sp.texture.w += clip.diff.w / Renderer->texture_width;
 		sp.texture.h += clip.diff.h / Renderer->texture_height;
+		Rect2 clip = Renderer->clip;
+		Renderer->clip = rect2(0, 0, 0, 0);
+		draw_box_outline(sp.position + sp.size / 2, sp.size, v4(1, 1, 1, 1), 2);
+		Renderer->clip = clip;
 	}
 
 
@@ -383,7 +387,7 @@ void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 
 void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
 {
-	size *= 0.5f;
+	size *= 0.5f;	
 	Vec2 tl = center - size;
 	Vec2 br = center + size;
 	draw_line(tl, v2(br.x, tl.y), color, thickness);
