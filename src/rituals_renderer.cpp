@@ -258,7 +258,7 @@ void renderer_start()
 	Renderer->screen.center = Renderer->offset;
 	Renderer->screen.hext = Game->size * 0.5;
 	Renderer->screen.center += v2(Renderer->screen.hw, Renderer->screen.hh);
-	Renderer->clip = {};
+	Renderer->clip = {0, 0, 0, 0};
 
 	glUseProgram(Renderer->shader_program);
 	//Renderer->offset.x = roundf(Renderer->offset.x);
