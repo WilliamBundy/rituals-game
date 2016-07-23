@@ -221,7 +221,7 @@ void test_init()
 			rand_range(&Game->r, 0,1000),
 			rand_range(&Game->r, 0,1000)),
 			v2(32, 32),
-		v4(rand_range(&Game->r, 0.5, 1.0), .8, .8, .5));
+		v4(rand_range(&Game->r, 0.5, 1.0), .8, .8, .9));
 
 	}
 }
