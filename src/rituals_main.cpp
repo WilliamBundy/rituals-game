@@ -266,7 +266,7 @@ void load_assets()
 #include "font.glyphs"
 			,
 			Game->asset_arena,
-			v2i(2048 - 1124, 0), 
+			2048 - 1124, 0, 
 			&Game->body_font->glyph_width,
 			&Game->body_font->glyph_height);
 	Body_Font = Game->body_font;
