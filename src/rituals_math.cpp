@@ -261,7 +261,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 
 	if((r.x + r.w) > (clip.x + clip.w)) {
 		diff.w = r.w;
-		o.w = (clip.x + clip.w) - (r.x + r.w);
+		o.w = (r.x + r.w) - (clip.x + clip.w);
 		diff.w = r.w - o.w;
 	}
 
