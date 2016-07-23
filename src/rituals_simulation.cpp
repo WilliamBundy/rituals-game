@@ -37,19 +37,13 @@ struct Sim_Body
 
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
-//GenerateInsertionSortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
-//GenerateInsertionSortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
-//GenerateQuicksortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
-//GenerateQuicksortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
 GenerateIntrosortForType(body_sort_on_x, Sim_Body, 12, _body_get_min_x)
 GenerateIntrosortForType(body_sort_on_y, Sim_Body, 12, _body_get_min_y)
 
 #define _body_get_not_static(e) (!Has_Flag(e.flags, Body_Flag_Static))
-//GenerateQuicksortForType(body_sort_static_first, Sim_Body, _body_get_not_static)
 GenerateIntrosortForType(body_sort_static_first, Sim_Body, 12, _body_get_not_static)
 
 #define _body_get_id(e) (e.id)
-//GenerateQuicksortForType(body_sort_on_id, Sim_Body, _body_get_id)
 GenerateIntrosortForType(body_sort_on_id, Sim_Body, 12, _body_get_id)
 GenerateBinarySearchForType(body_search_for_id, Sim_Body, isize, _body_get_id)
 
@@ -135,14 +129,11 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 {
 	Sim_Body *a, *b;
 	for(isize times = 0; times < SimIter_i; ++times) {
-//#if 0
 		if(sim->sort_axis == 0) {
 			body_sort_on_x(sim->bodies, sim->bodies_count);
 		} else if(sim->sort_axis == 1) {
 			body_sort_on_y(sim->bodies, sim->bodies_count);
 		}
-
-//#endif 
 		Vec2 center_sum1 = v2(0, 0);
 		Vec2 center_sum2 = v2(0, 0);
 		Vec2 variance = v2(0, 0);
@@ -164,7 +155,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 				uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
 				if(a_is_static && b_is_static) continue;
 
-//#if 0
 				if(sim->sort_axis == 0) {
 					if(AABB_x1(b->shape) > AABB_x2(a->shape)) {
 						break;
@@ -174,7 +164,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 						break;
 					}
 				}
-//#endif 
 			
 				if(aabb_intersect(&a->shape, &b->shape)) {
 					Vec2 overlap;

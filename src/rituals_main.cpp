@@ -260,8 +260,15 @@ void load_assets()
 	Renderer->texture_width = w;
 	Renderer->texture_height = h;
 
-	Game->body_font = load_spritefont("data/gohufont-14.glyphs", 
-			v2i(2048 - 1142, 0));
+	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
+	init_spritefont(Game->body_font);
+	Game->body_font->glyphs = parse_spritefont_Glyphs(
+#include "font.glyphs"
+			,
+			Game->asset_arena,
+			v2i(2048 - 1124, 0), 
+			&Game->body_font->glyph_width,
+			&Game->body_font->glyph_height);
 	Body_Font = Game->body_font;
 
 	init_game_registry(Registry, Game->registry_arena); 
