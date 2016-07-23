@@ -156,7 +156,7 @@ void init_menu_state()
 
 void main_menu_update()
 {
-	game_set_scale(4.0f);
+	game_set_scale(2.0f);
 	Renderer->offset = v2(0, 0);
 	renderer_start();
 	renderer_set_clip_rect(40, 10, 400, 400);
