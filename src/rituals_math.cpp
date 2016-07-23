@@ -242,7 +242,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 {
 	Rect2 diff = Rect2{1, 1, 1, 1};
 	Rect2 o = r;
-#if 0
+#if 1
 	if(r.x < clip.x) {
 		diff.x = clip.x - r.x;
 		o.x = clip.x;
