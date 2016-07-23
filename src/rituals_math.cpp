@@ -253,7 +253,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 
 	if((r.x + r.w) > (clip.x + clip.w)) {
 		diff.w = r.w;
-	//	o.w = (clip.x + clip.w) - (r.x + r.w);
+		o.w = (clip.x + clip.w) - (r.x + r.w);
 		diff.w = r.w - o.w;
 	}
 
@@ -265,7 +265,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	}*/
 
 	if((r.y + r.h) > (clip.y + clip.h)) {
-	//	o.h = (clip.y + clip.h) - (r.y + r.h);
+		o.h = (clip.y + clip.h) - (r.y + r.h);
 		diff.h = r.h - o.h;
 	}
 #endif
