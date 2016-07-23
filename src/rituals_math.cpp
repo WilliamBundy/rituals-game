@@ -241,7 +241,7 @@ struct Rect2_Clip_Info
 static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 {
 	Rect2 diff = Rect2{};
-	Rect2 o = Rect2{};
+	Rect2 o = r;
 	if(r.x < clip.x) {
 		diff.x = clip.x - r.x;
 		o.x = clip.x;
