@@ -233,7 +233,7 @@ void test_update()
 	for(isize i = 0; i < 1000; ++i) {
 		renderer_push_sprite(boxes + i);
 	}	
-	renderer_stop();
+	renderer_draw();
 }
 
 void update()
