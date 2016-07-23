@@ -298,8 +298,8 @@ void load_assets()
 	Game->state = Game_State_Menu;
 	play_state_init();
 	init_menu_state();
-	Game->state = Game_State_None;
-	test_init();
+	//Game->state = Game_State_None;
+	//test_init();
 }
 
 
