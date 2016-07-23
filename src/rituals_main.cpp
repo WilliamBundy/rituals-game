@@ -194,6 +194,7 @@ void main_menu_update()
 		check_dir(buf);
 		
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+		menu_state->handle.buffer_length = 0;
 	}
 
 
