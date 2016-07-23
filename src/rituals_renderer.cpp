@@ -281,7 +281,7 @@ void renderer_start()
 
 static inline bool renderer_has_clip_rect()
 {
-	return 0 == (Renderer->clip.w * Renderer->clip.h);
+	return 0 != (Renderer->clip.w * Renderer->clip.h);
 }
 void renderer_push_sprite(Sprite* s)
 {
@@ -307,10 +307,6 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.y += clip.diff.y / Renderer->texture_height;
 		sp.texture.w += clip.diff.w / Renderer->texture_width;
 		sp.texture.h += clip.diff.h / Renderer->texture_height;
-		
-
-
-
 	}
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
