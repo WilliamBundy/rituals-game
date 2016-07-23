@@ -14,7 +14,8 @@ SET RELEASE_DEF=RELEASE
 SET DISABLED_WARNINGS=/wd4477 ^
 	/wd4244 ^
 	/wd4267 ^
-	/wd4334 
+	/wd4334 ^
+	/wd4305
 
 SET LIBS=SDL2.lib ^
 	SDL2main.lib ^
