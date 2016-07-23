@@ -16,24 +16,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /* TODO(will) features
  *	- Improve physics system
- *		- Fixing the broadphase?
- *		- Real friction?
- *	- UI controls
- *		- Mostly artwork.
- *	- Main Menu
- *		- done, but not needed yet, really
- *  - Sound effects, music
- *  - Make a new palette, do some art
- *  - Game_Registry for all the <thing>_info types
- *  	- also to catalogue event handlers
- *  - Inventory management
- *  - Item entities
- *  - Different types of world
- *  - Game loop (die, respawn)
- *  - Rituals! They need to be in the game at some point.
- *
- *
- * - Thank you for watching the stream
+ *		- Investigate different types of broadphases
+ *			- currently using sweep and prune
+ *			- most big engines use the b2 style dynamic tree?
+ *		- Weird behavior caused by oversimplified friction
+ *			- need to simulate both static and dynamic friction
+ *			- static friction: objects at rest experience higher friction
+ *			- dynamic friction: once objects have a certain speed/momentum
+ *								use a different friction value (lower)
+ *	- Main menu
+ *		- World select is pretty much done?
+ *		- Create new world submenu
+ *			- Need text input
+ *			- Double check which characters are legal in filenames
+ *			- Scrollable panels 
+ *				- Probably requires additions to the renderer?
+ *				- Gotta clip sprite size and texture, adjusting for anchor?
+ *		- Create options submenu
+ *			- Might need to wait until some stuff is finalized before we 
+ *			  can have options for it, no?
+ * - 
  *
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
@@ -60,6 +62,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 //3rd party imports
 #include <SDL.h>
+
 #include "thirdparty.h"
 
 //Some defines
@@ -113,97 +116,44 @@ typedef size_t usize;
 //local imports
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
-typedef struct World World;
-struct Play_State
-{
-	usize current_time = 0, prev_time = 0;
-	real accumulator = 0;
-	World* world;
-
-	Vec2i world_xy;
-};
-Play_State* play_state;
 
 #include "rituals_renderer.cpp"
 #include "rituals_gui.cpp"
-
-#include "rituals_game_info.cpp"
-#include "rituals_game_registry.cpp"
-
-#include "rituals_inventory.cpp"
-
-#include "rituals_tilemap.cpp"
-
-#include "rituals_simulation.cpp"
-
-#include "rituals_world_area.cpp"
-#include "rituals_world.cpp"
-
-#include "rituals_play_state.cpp"
-
-#include "rituals_serialization.cpp"
-
-void main_menu_update()
-{
-	game_set_scale(2.0f);
-	renderer_start();
-
-	Sprite s;
-	init_sprite(&s);
-	s.size = v2(15 * 16, 4 * 16);
-	s.position = v2(16 + s.size.x / 2, Game->size.y / 2 - s.size.y / 2);
-	s.texture = Get_Texture_Coordinates(
-			Renderer->texture_width - s.size.x,
-			2 * 16, 
-			s.size.x, s.size.y);
-	renderer_push_sprite(&s);
-
-	if(gui_add_button(v2(40 + 16, s.position.y + s.size.y / 2 + 16), "Start")) {
-		Game->state = Game_State_Play;
-	}
-	renderer_draw();
-}
-
-Item_Info* item_types;
-isize item_types_count;
-Inventory inventory;
-
-void load_test_assets()
-{
-	
-	init_inventory(&inventory, 9, 6, Game->play_arena);
-	Item_Stack* stack = new_item_stack(item_types + 1, Game->play_arena);
-	printf("%0x \n", (usize)stack);
-	inventory_add_item(&inventory, &stack);
-	printf("%0x \n", (usize)stack);
-}
-
-void test_update()
-{
-	game_set_scale(2.0f);
-	renderer_start();
-	render_inventory(&inventory, v2(16, 16));
-	renderer_draw();
-}
-
 void update()
 {
 	switch(Game->state) {
 		case Game_State_None:
-#if DEBUG
 			test_update();
-#endif
 			break;
 		case Game_State_Menu:
 			main_menu_update();
+			SDL_StartTextInput();
 			break;
 		case Game_State_Play:
+			SDL_StopTextInput();
 			play_state_update();
 			break;
 		default:
 			break;
 	}
 }
+
+
+void stop()
+{
+	switch(Game->state) {
+		case Game_State_None:
+			break;
+		case Game_State_Menu:
+			break;
+		case Game_State_Play:
+			play_state_stop();
+			break;
+		default:
+			break;
+	}
+}
+
 
 void load_assets()
 {
@@ -220,13 +170,16 @@ void load_assets()
 	register_everything_in_rituals();
 	finalize_game_registry();
 
-	Game->state = Game_State_Play;
-	play_state_init();
-	play_state_start();
-#if DEBUG
-	//load_test_assets();
-	//Game->state = Game_State_None;
-#endif
+	init_menu_state();
+	Game->state = Game_State_Menu;
+	char buf[FilePathMaxLength];
+	isize len = snprintf(buf, FilePathMaxLength, "%ssave", Game->base_path);
+
+	test_string = arena_push_array(Game->temp_arena, char, 2048);
+	test_string_length = 0;
+
+	tinydir_open_sorted(&Menu->saves, buf);
+	init_text_input_handle(&handle, 256, Game->temp_arena);
 }
 
 
@@ -264,7 +217,7 @@ int main(int argc, char** argv)
 #if 1
 	window_display_index = 1;
 #endif
-	SDL_Window* window = SDL_CreateWindow("Rituals", 
+	SDL_Window* window = SDL_CreateWindow("Spaceship Draft", 
 			SDL_WINDOWPOS_CENTERED_DISPLAY(window_display_index), 
 			SDL_WINDOWPOS_CENTERED_DISPLAY(window_display_index),
 			1280, 720, 
@@ -288,43 +241,6 @@ int main(int argc, char** argv)
 	}
 
 	int ret = SDL_GL_SetSwapInterval(-1);
-
-	{
-#define _check_gl_attribute(attr, val) int _##attr##_val; \
-	int _##attr##_success = SDL_GL_GetAttribute(attr, &_##attr##_val); \
-	gl_checks[gl_check_count++] = _##attr##_val == val; \
-	gl_names[gl_check_count - 1] = #attr; \
-	gl_vals[gl_check_count - 1] = _##attr##_val; \
-	gl_exp_vals[gl_check_count - 1] = val; 
-			 
-		//check if we got everything
-		bool gl_checks[64];
-		char* gl_names[64];
-		int gl_vals[64];
-		int gl_exp_vals[64];
-		isize gl_check_count = 0;
-
-		_check_gl_attribute(SDL_GL_RED_SIZE, 8);
-		_check_gl_attribute(SDL_GL_GREEN_SIZE, 8);
-		_check_gl_attribute(SDL_GL_BLUE_SIZE, 8);
-		_check_gl_attribute(SDL_GL_ALPHA_SIZE, 8);
-		_check_gl_attribute(SDL_GL_DOUBLEBUFFER, 1);
-		_check_gl_attribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		_check_gl_attribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		_check_gl_attribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
-		_check_gl_attribute(SDL_GL_ACCELERATED_VISUAL, 1);
-		_check_gl_attribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-		for(isize i = 0; i < gl_check_count; ++i) {
-			printf("%s %s: wanted %d, got %d \n", 
-					gl_names[i], 
-					gl_checks[i] ? "succeeeded" : "failed", 
-					gl_exp_vals[i], 
-					gl_vals[i]);
-		}
-
-	}	
-
 	// Game initializiation
 	Game = Allocate(Game_Main, 1);
 	{
@@ -344,9 +260,16 @@ int main(int argc, char** argv)
 		Game->base_path_length = strlen(Game->base_path);
 
 		Game->input = arena_push_struct(Game->game_arena, Game_Input);
-		Game->input->scancodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
-		Game->input->keycodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
-		Game->input->mouse = arena_push_array(Game->game_arena, int8, 16);
+		Input = Game->input;
+		Input->scancodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
+		Input->keycodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
+		Input->mouse = arena_push_array(Game->game_arena, int8, 16);
+		Input->mouse_pos = v2i(0, 0);
+		Input->text = arena_push_array(Game->game_arena, char, InputTextCapacity);
+		Input->text_count = 0;
+		Input->capture_newlines = false;
+		Input->capture_tabs = false;
+
 
 		init_random(&Game->r, time(NULL));
 		//TODO(will) load window settings from file
@@ -360,25 +283,20 @@ int main(int argc, char** argv)
 
 		Registry = Game->registry;
 		Renderer = Game->renderer;
-		Input = Game->input;
+		//init_gui_colors();
 	}
 
 	load_assets();
 
 	bool running = true;
 	SDL_Event event;
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0, 0, 0, 1);
 	//glClearColor(1, 1, 1, 1);
 
-	play_state->current_time = SDL_GetTicks();
-	play_state->prev_time = play_state->current_time;
+	isize input_text_length = 0;
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 
-		if(Game->input->num_keys_down < 0) Game->input->num_keys_down = 0;
-		if(Game->input->num_mouse_down < 0) Game->input->num_mouse_down = 0;
-
-		if(Game->input->num_keys_down > 0)
 		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
 			int8* t = Game->input->scancodes + i;
 			if(*t == State_Just_Released) {
@@ -393,7 +311,6 @@ int main(int argc, char** argv)
 				*t = State_Pressed;
 			}
 		}
-		if(Game->input->num_mouse_down > 0)
 		for(int64 i = 0; i < 16; ++i) {
 			int8* t = Game->input->mouse + i;
 			if(*t == State_Just_Released) {
@@ -408,13 +325,40 @@ int main(int argc, char** argv)
 			//TODO(will) handle text input
 			switch(event.type) {
 				case SDL_QUIT:
+					stop();
 					running = false;
 					break;
 				case SDL_WINDOWEVENT:
 					update_screen();
 					break;
+				case SDL_TEXTINPUT:
+					input_text_length = strlen(event.text.text);
+					if((input_text_length + Input->text_count) < InputTextCapacity) {
+						memcpy(Input->text + Input->text_count, 
+								event.text.text, 
+								input_text_length);
+						Input->text_count += input_text_length;
+						input_text_length = 0;
+					}
+					break;
 				case SDL_KEYDOWN:
 					Game->input->num_keys_down++;
+					if((event.key.keysym.sym == SDLK_BACKSPACE)) {
+						input_text_append_char(Backspace);
+						if(event.key.keysym.mod & KMOD_CTRL) {
+							input_text_append_char('\7');
+						}
+					} else if(event.key.keysym.sym == SDLK_RETURN || 
+							event.key.keysym.sym == SDLK_RETURN2) {
+						if(Input->capture_newlines) {
+							input_text_append_char('\n');
+						}
+					} else if(event.key.keysym.sym == SDLK_TAB) {
+						if(Input->capture_tabs) {
+							input_text_append_char('\t');
+						}
+					}
+
 					if(!event.key.repeat) {
 						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
@@ -452,8 +396,6 @@ int main(int argc, char** argv)
 		update();
 
 		SDL_GL_SwapWindow(window);
-		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-		//if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
 	}
 
 	SDL_Quit();

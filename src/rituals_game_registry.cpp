@@ -99,6 +99,13 @@ void finalize_game_registry()
 {
 	sort_registered_tiles();
 	sort_registered_items();
+
+	for(isize i = 0; i < Registry->tiles_count; ++i) {
+		Tile_Info* t = Registry->tiles + i;
+		t->break_to_id = lookup_tile(t->break_to_name)->id;
+	}
+
+	
 	Tile_Void = lookup_tile("void")->id;
 	Tile_Sand = lookup_tile("sand")->id;
 	Tile_Grass = lookup_tile("grass")->id;
@@ -116,9 +123,9 @@ void finalize_game_registry()
 #define Half_TS (16)
 
 #define _tile_texture(x, y) Get_Texture_Coordinates(Tile_Size * (x), Tile_Size * (y), Tile_Size, Tile_Size)
-#define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(#name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, Tile_Dug_Earth)
+#define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(#name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, "dug_earth")
 
-Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, isize break_to_id)
+Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, char* break_to_name)
 {
 	Tile_Info* t = Registry->tiles + Registry->tiles_count++;
 	t->id = Registry->tiles_count - 1;
@@ -130,7 +137,8 @@ Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction
 	t->friction = friction;
 	t->max_damage = 5;
 	t->immune_to_damage = false;
-	t->break_to_id = break_to_id;
+	t->break_to_id = 0;
+	t->break_to_name = break_to_name;
 
 	Registry->tiles_hash[Registry->tiles_count - 1] = t->hash;
 

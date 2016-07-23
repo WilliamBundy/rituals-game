@@ -15,21 +15,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 void play_state_init()
 {
 	clear_arena(Game->play_arena);
-	play_state = arena_push_struct(Game->game_arena, Play_State);
+	clear_arena(Game->world_arena);
 	play_state->world = arena_push_struct(Game->world_arena, World);
 }
 
 void deserialize_world(World* world, FILE* world_file);
-void play_state_start()
+void play_state_start(char* world_name_in)
 {
 	World* world = play_state->world;
-
-	FILE* fp = get_world_file("World_0", "rb");
+	isize wnl = strlen(world_name_in);
+	char* world_name = arena_push_array(Game->world_arena, char, wnl + 1);
+	memcpy(world_name, world_name_in, wnl+1);
+	FILE* fp = get_world_file(world_name, "rb");
 	if(fp != NULL) {
 		deserialize_world(world, fp);
+		world->name = world_name;
 	} else {
-		init_world(world, 4, 4, 1, Game->world_arena);
-		generate_world("World_0", world);
+	
+		init_world(world, 4, 4, next_random_uint64(&Game->r), Game->world_arena);
+		generate_world(world_name, world);
 		world_start_in_area(
 				world,
 				world->area_stubs, 
@@ -39,5 +43,11 @@ void play_state_start()
 
 void play_state_update()
 {
-	world_area_update(play_state->world->current_area);
+	world_area_update(play_state->world->current_area, play_state->world);
 }
+
+void play_state_stop()
+{
+	serialize_world(play_state->world);
+}
+

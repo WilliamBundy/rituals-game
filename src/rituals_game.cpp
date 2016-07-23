@@ -59,6 +59,41 @@ void func_name(T* array, isize count) \
 	} \
 }
 
+#define GenerateIntrosortForType(func_name, T, Cutoff, Member_Macro) \
+void func_name(T* array, isize count) \
+{ \
+	if(count > 1) \
+	if(count > Cutoff) { \
+		T tmp = array[0]; \
+		array[0] = array[count / 2]; \
+		array[count / 2] = tmp; \
+		isize pivot = 0; \
+		for(isize i = 1; i < count; ++i) { \
+			if(Member_Macro(array[i]) < Member_Macro(array[0])) { \
+				tmp = array[++pivot]; \
+				array[pivot] = array[i]; \
+				array[i] = tmp; \
+			} \
+		} \
+		tmp = array[0]; \
+		array[0] = array[pivot]; \
+		array[pivot] = tmp; \
+		func_name(array, pivot); \
+		func_name(array + pivot + 1, count - (pivot + 1)); \
+	} else for(isize i = 1; i < count; ++i) { \
+		T x = array[i]; \
+		isize j = i - 1; \
+		while((j >= 0) && (Member_Macro(array[j]) > Member_Macro(x))) { \
+			array[j + 1] = array[j]; \
+			j--; \
+		} \
+		array[j+1] = x; \
+	} \
+}
+
+
+
+
 // Returns -1 on fail to find.
 #define GenerateBinarySearchForType(func_name, T, K, Member_Key_Macro) \
 isize func_name(K key, T* array, isize count) \
@@ -163,7 +198,13 @@ void end_temp_arena(Memory_Arena* arena)
 
 void clear_arena(Memory_Arena* arena)
 {
-	memset(arena->data, 0, arena->head - (isize)arena->data);
+	//memset(arena->data, 0, arena->head - (isize)arena->data);
+	VirtualFree(arena->data, arena->capacity, MEM_DECOMMIT);
+	arena->data = (uint8*)VirtualAlloc(arena->data, arena->capacity, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	if(arena->data == NULL) {
+		Log_Error("There was an error recommitting memory");
+	}
+	
 	arena->head = (isize)arena->data;
 	arena->temp_head = -1;
 }
@@ -248,6 +289,7 @@ enum Button_State
 	Button_State_Count
 };
 
+#define InputTextCapacity (1024)
 struct Game_Input
 {
 	isize num_keys_down;
@@ -257,6 +299,11 @@ struct Game_Input
 	int8* mouse;
 	int32 mouse_x;
 	int32 mouse_y;
+	Vec2i mouse_pos;
+	bool capture_tabs;
+	bool capture_newlines;
+	char* text;
+	isize text_count;
 };
 
 enum Game_State
@@ -319,3 +366,124 @@ void game_set_scale(real scale)
 	Game->scale = scale;
 	Game->size = v2(Game->window_size) * (1.0f / Game->scale);
 }
+
+#define Backspace ('\b')
+#define BackspaceStr ("\b")
+
+void input_text_append_char(char c)
+{
+	if((Input->text_count + 1) < InputTextCapacity) {
+		Input->text[Input->text_count++] = c;
+	}
+}
+
+
+bool is_valid_filename_char(char c)
+{
+	return !((c == '?') || 
+			(c == '/') || 
+			(c == '\\') ||
+			(c == '<') ||
+			(c == '>') ||
+			(c == '|') || 
+			(c == '*') ||
+			(c == ':') || 
+			(c == '"') ||
+			(c <= 31));
+}
+
+char replace_filename_char(char c, char replace)
+{
+	if(!is_valid_filename_char(c)) return replace;
+	return c;
+}
+
+isize replace_invalid_filename_chars(char* str, isize len, char replace)
+{
+	for(isize i = 0; i < len; ++i) {
+		if(!is_valid_filename_char(str[i])) {
+			str[i] = replace;
+		}
+	}
+	while(isspace(str[len]) || (str[len] == '.')) len--;
+	return len;
+}
+
+isize append_input_text(char* str, isize str_cap, isize str_len, isize insert_from_end=0)
+{
+	if(Input->text_count <= 0) return str_len;
+	isize index = str_len;
+	start_temp_arena(Game->temp_arena);
+	char* extra_chars = NULL;
+	if((insert_from_end <= str_len) && (insert_from_end != 0)) {
+		index -= insert_from_end;
+		if(index >= 0) {
+			extra_chars = arena_push_array(Game->temp_arena, char, insert_from_end + 32);
+			memset(extra_chars, 0, insert_from_end + 32);
+			memcpy(extra_chars, str + index, insert_from_end);
+			extra_chars[insert_from_end] = '\0';
+		} else {
+			index = 0;
+		}
+	}
+
+	if((str_len + Input->text_count) > str_cap) {
+		if(Input->text[0] != '\b')
+			Input->text_count = str_cap - str_len;
+	}
+	isize bufsize = Input->text_count + str_len;
+	char* buffer = arena_push_array(Game->temp_arena, char, bufsize + 32);
+	memset(buffer, 0, bufsize);
+	memcpy(buffer, str, index);
+	memcpy(buffer + index, Input->text, Input->text_count);
+	if(extra_chars != NULL) {
+		memcpy(buffer + index + Input->text_count, extra_chars, insert_from_end);
+	}
+
+	isize idx = 0;
+	bool contains_bs = false;
+	char* buffer2 = NULL; 
+	for(isize i = 0; i < Input->text_count; ++i) {
+		if(Input->text[i] == Backspace) {
+			contains_bs = true;
+			break;
+		}
+	}
+	contains_bs = true;
+	if(contains_bs) {
+		buffer2 = arena_push_array(Game->temp_arena, char, bufsize + 32);
+		memset(buffer2, 0, bufsize);
+		for(isize i = 0; i < bufsize; ++i) {
+			if(buffer[i] != Backspace) {
+				buffer2[idx] = buffer[i];
+				idx++;
+			} else if(idx != 0) {
+				if(buffer[i+1] == '\7') {
+					while(idx >= 0 && isspace(buffer[idx])) idx--;
+					while(idx >= 0 && !isspace(buffer[idx])) idx--;
+					while(idx >= 0 && isspace(buffer[idx])) idx--;
+					idx++;
+					i++;
+				} else {
+					idx--;
+				}
+			} else {
+				if(buffer[i] == Backspace && buffer[i+1] == '\7') {
+					i++;
+				}
+			}
+		}
+	} else {
+		buffer2 = buffer;
+		idx = str_len + Input->text_count;
+	}
+	memcpy(str, buffer2, idx);
+	
+	Input->text_count = 0;
+	if(idx > str_cap) {
+		idx = str_cap;
+	}
+	end_temp_arena(Game->temp_arena);
+	return idx;
+}
+

@@ -39,14 +39,18 @@ struct Sim_Body
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
 //GenerateInsertionSortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
 //GenerateInsertionSortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
-GenerateQuicksortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
-GenerateQuicksortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
+//GenerateQuicksortForType(body_sort_on_x, Sim_Body, _body_get_min_x)
+//GenerateQuicksortForType(body_sort_on_y, Sim_Body, _body_get_min_y)
+GenerateIntrosortForType(body_sort_on_x, Sim_Body, 12, _body_get_min_x)
+GenerateIntrosortForType(body_sort_on_y, Sim_Body, 12, _body_get_min_y)
 
 #define _body_get_not_static(e) (!Has_Flag(e.flags, Body_Flag_Static))
-GenerateQuicksortForType(body_sort_static_first, Sim_Body, _body_get_not_static)
+//GenerateQuicksortForType(body_sort_static_first, Sim_Body, _body_get_not_static)
+GenerateIntrosortForType(body_sort_static_first, Sim_Body, 12, _body_get_not_static)
 
 #define _body_get_id(e) (e.id)
-GenerateQuicksortForType(body_sort_on_id, Sim_Body, _body_get_id)
+//GenerateQuicksortForType(body_sort_on_id, Sim_Body, _body_get_id)
+GenerateIntrosortForType(body_sort_on_id, Sim_Body, 12, _body_get_id)
 GenerateBinarySearchForType(body_search_for_id, Sim_Body, isize, _body_get_id)
 
 void init_body(Sim_Body* b)

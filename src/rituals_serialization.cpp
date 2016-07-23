@@ -13,6 +13,53 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * TODO(will) Convert all isize to int64 for serializaiton!!!
  * ptrdiff_t may not equal int64
  */ 
+int delete_file(char* path, isize path_length, char* file)
+{
+	char buf[FilePathMaxLength];
+	snprintf(buf, FilePathMaxLength, "%.*s/%s", path_length, path, file);
+	return DeleteFile(buf);
+}
+
+int delete_folder(char* path, isize path_length)
+{
+	path[path_length] = '\0';
+	return RemoveDirectory(path);
+}
+
+int _recursive_delete(const char* last_path, isize last_path_len, char* path)
+{
+	isize buf_size = last_path_len + 1 + strlen(path);
+	char* buf = arena_push_array(Game->temp_arena, char, buf_size);
+	isize len = snprintf(buf, FilePathMaxLength, "%.*s/%s", last_path_len, last_path, path);
+	tinydir_dir dir;
+	tinydir_open_sorted(&dir, buf);
+	for(usize i = 0; i < dir.n_files; ++i) {
+		tinydir_file f;
+		tinydir_readfile_n(&dir, &f, i);
+		if(f.name[0] != '.') {
+			if(f.is_dir) {
+				_recursive_delete(buf, len, f.name);
+			} else {
+				delete_file(buf, len, f.name);
+			}
+		}
+	}
+	tinydir_close(&dir);
+	delete_folder(buf, len);
+		
+	
+	return 1;
+}
+
+
+int recursively_delete_folder(char* path)
+{
+	start_temp_arena(Game->temp_arena);
+	_recursive_delete(Game->base_path, Game->base_path_length-1, path); 
+	end_temp_arena(Game->temp_arena);
+	return 1;
+}
+
 
 int check_path(char* path)
 {
@@ -123,11 +170,11 @@ void serialize_sprite(Sprite* s, FILE* file)
 	fwrite(&s->texture.e, sizeof(real), 4, file);
 	fwrite(&s->color.e, sizeof(real), 4, file);
 	fwrite(&s->anchor, sizeof(uint32), 1, file);
+	fwrite(&s->sort_point_offset.e, sizeof(real), 2, file);
 }
 
 void deserialize_sprite(Sprite* s, FILE* file)
 {
-	//TODO(will) maybe serialize each field separately?
 	fread(&s->position.e, sizeof(real), 2, file);
 	fread(&s->center.e, sizeof(real), 2, file);
 	fread(&s->angle, sizeof(real), 1, file);
@@ -135,6 +182,7 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s->texture.e, sizeof(real), 4, file);
 	fread(&s->color.e, sizeof(real), 4, file);
 	fread(&s->anchor, sizeof(uint32), 1, file);
+	fread(&s->sort_point_offset.e, sizeof(real), 2, file);
 }
 
 void deserialize_entity(Entity* entity, FILE* file)
@@ -239,6 +287,7 @@ FILE* get_world_file(const char* name, const char* mode)
 	snprintf(save_dir, FilePathMaxLength, "%ssave/%s/world.dat", 
 			Game->base_path,
 			name);
+	//printf("%s\n", save_dir);
 	FILE* world_file = fopen(save_dir, mode);
 	return world_file;
 }
@@ -264,6 +313,10 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 
 void serialize_world(World* world)
 {
+	if(world->name[0] == '\0') {
+		printf("Could not save world -- name was null\n");
+		return;
+	}
 	FILE* world_file = get_world_file(world->name, "wb");
 	if(world_file != NULL) {
 		isize namelen = strlen(world->name);
@@ -273,6 +326,7 @@ void serialize_world(World* world)
 		fwrite(&world->areas_capacity, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_width, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
+		fwrite(&world->next_area_id, sizeof(isize), 1, world_file);
 		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
 		for(isize i = 0; i < world->areas_count; ++i) {
 			serialize_world_area_stub(world->area_stubs + i, world_file);
@@ -301,6 +355,7 @@ void deserialize_world(World* world, FILE* world_file)
 	fread(&world->areas_capacity, sizeof(isize), 1, world_file);
 	fread(&world->areas_width, sizeof(isize), 1, world_file);
 	fread(&world->areas_height, sizeof(isize), 1, world_file);
+	fread(&world->next_area_id, sizeof(isize), 1, world_file);
 	isize current_area_id = 0;
 	fread(&current_area_id, sizeof(isize), 1, world_file);
 	world->area_stubs = arena_push_array(Game->world_arena, World_Area_Stub, world->areas_count);

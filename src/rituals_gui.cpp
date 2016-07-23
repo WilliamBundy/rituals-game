@@ -12,7 +12,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_gui.cpp
  *
  */
-
 #define AsciiPrintableStart (32)
 #define AsciiPrintableEnd   (128)
 #define AsciiPrintableCount (128-32)
@@ -30,7 +29,7 @@ struct Spritefont
 
 void init_spritefont(Spritefont* font)
 {
-	font->line_padding = 8;
+	font->line_padding = 0;
 	font->character_padding = 0;
 	font->tab_size = 4; // * space width?
 	font->glyphs = NULL;
@@ -137,7 +136,7 @@ Spritefont* load_spritefont(char* filepath, Vec2i offset)
 
 Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)
 {
-	Vec2 position = v2(0, 0);
+	Vec2 position = v2(0, font->glyph_height);
 	Vec2 size = v2(font->glyph_width, font->glyph_height);
 	int32 wrapped = 0;
 	for(isize i = 0; i < len; ++i) {
@@ -174,47 +173,89 @@ void spritefont_render_text(Spritefont* font,
 		Vec2 position, 
 		int32 max_width = -1, 
 		Sprite_Anchor anchor = Anchor_Top_Left,
+		real scale = 1.0f,
 		Vec2* region = NULL)
 {
 	Vec2 initial_pos = position;
+	position = v2(0, 0);
 	Vec2 size = v2(font->glyph_width, font->glyph_height);
 	Sprite s;
 	int32 wrapped = 0;
+	isize wordstart = -1;
 	for(isize i = 0; i < len; ++i) {
 		char c = text[i];
-		
 		init_sprite(&s);
-		switch(c) {
-			case '\n':
-				position.y += font->glyph_height + font->line_padding;
-				position.x = 0;
-				wrapped ++;
-				break;
-			case '\t':
-				position.x += font->glyph_width * font->tab_size;
-				break;
-			case '\r':
-				continue;
-			default: 
-				break;
-		}
-		if(c < AsciiPrintableStart || c > AsciiPrintableEnd) continue;
+		if(wordstart == -1) {
+			switch(c) {
+				case '\n':
+					position.y += font->glyph_height + font->line_padding;
+					position.x = 0;
+					wrapped ++;
+					break;
+				case '\t':
+					position.x += font->glyph_width * font->tab_size;
+					break;
+				case '\r':
+					continue;
+				case ' ':
+					//position.x += font->glyph_width;
+					continue;
+				default: 
+					if(c >= AsciiPrintableStart && c <= AsciiPrintableEnd) {
+						wordstart = i;
+					}
 
-		s.position = position;
-		s.texture = font->glyphs[c - AsciiPrintableStart];
-		s.size = size;
-		s.color = font->color;
-		s.angle = 0;
-		s.anchor = anchor;
-		
-		if((max_width > 0) && (s.position.x + s.size.x > (max_width + initial_pos.x))) {
-			position.y += font->glyph_height + font->line_padding;
-			position.x = 0;
-			wrapped ++;
+					break;
+			}
+		} else {
+			if(isspace(c) || (i==len-1)) {
+				isize chars = i - wordstart;
+				real word_width = (chars * font->glyph_width) * scale;
+				if((max_width > 0) && ((position.x + word_width) > (max_width))) {
+					position.y += font->glyph_height + font->line_padding;
+					position.x = 0;
+					wrapped++;
+				}
+
+				draw_box_outline(initial_pos + position * scale, 
+						v2(word_width, font->glyph_height), v4(1, 1, 1, 1), 2);
+
+				for(isize j = wordstart; j <= i; ++j) {
+					c = text[j];
+					switch(c) {
+						case '\n':
+							position.y += font->glyph_height + font->line_padding;
+							position.x = 0;
+							wrapped ++;
+							break;
+						case '\t':
+							position.x += font->glyph_width * font->tab_size;
+							break;
+						case '\r':
+							continue;
+						case ' ':
+							position.x += font->glyph_width;
+							continue;
+						default:
+							break;
+					}
+
+					if(c < AsciiPrintableStart || c > AsciiPrintableEnd) {
+						continue;
+					}
+					s.position = initial_pos + position * scale;
+					s.texture = font->glyphs[c - AsciiPrintableStart];
+					s.size = size * scale;
+					s.color = font->color;
+					s.angle = 0;
+					s.anchor = anchor;
+					renderer_push_sprite(&s);
+					position.x += size.x + font->character_padding;
+				}
+				wordstart = -1;
+				i--;
+			}
 		}
-			
-		renderer_push_sprite(&s);
-		position.x += size.x + font->character_padding;
 	}
 	if(region != NULL) {
 		*region = position - initial_pos;
@@ -224,11 +265,11 @@ void spritefont_render_text(Spritefont* font,
 	}
 }
 
-void spritefont_render_text(Spritefont* font, char* text, Vec2 position, Sprite_Anchor anchor = Anchor_Top_Left)
+void spritefont_render_text(Spritefont* font, char* text, Vec2 position, Sprite_Anchor anchor = Anchor_Top_Left, real scale = 1.0f)
 {
 	spritefont_render_text(font,
 		text, strlen(text), 
-		position,-1,  anchor);
+		position,-1,  anchor, scale);
 }
 
 void spritefont_render_text_background(Spritefont* font, char* text, Vec2 position, Vec4 background) 
@@ -239,19 +280,18 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	s.size = v2(text_size.x + 16,  Body_Font->glyph_height + 8);
 	s.position = position - v2(8, 4);
 	s.color = background;
-	s.texture = Get_Texture_Coordinates(0, Renderer->texture_height - 16, 16, 16);
+	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
 	s.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&s);
 
 }
 
-
-void render_body_text(char* text, Vec2 position, bool background=false)
+void render_body_text(char* text, Vec2 position, bool background=false, real scale = 1.0f)
 {
 	if(background) {
 		spritefont_render_text_background(Body_Font, text, position, v4(0, 0, 0, 0.8f));
 	}
-	spritefont_render_text(Body_Font, text, position, Anchor_Top_Left);
+	spritefont_render_text(Body_Font, text, position, Anchor_Top_Left, scale);
 }
 
 void render_title_text(char* text, Vec2 position)
@@ -259,29 +299,227 @@ void render_title_text(char* text, Vec2 position)
 	spritefont_render_text(Title_Font, text, position);
 }
 
-bool gui_add_button(Vec2 position, char* text)
+#define _color(x, y, z, w) Vec4{ (real)(x), (real)(y), (real)(z), (real)(w) }
+
+Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 1);
+Vec4 Gui_ButtonRestColor = _color(.8, .8, .8, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonDownColor = _color(.5, .5, .5, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonTextColor = _color(0, 0, 0, 1) ;
+Vec4 Gui_ButtonTextDownColor = Gui_ButtonTextColor;
+
+Vec4 Gui_ButtonOutlineRestColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonOutlineActiveColor = _color(1, 1, 1, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonOutlineDownColor = _color(.4, .4, .4, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonOutlineRestColor2 = _color(0.5, 0.5, 0.5, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonOutlineActiveColor2 = _color(0.5, 0.5, 0.5, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonOutlineDownColor2 = _color(.7, .7, .7, 1) * Gui_ButtonTint;
+
+bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 {
 	Vec2 dmouse = v2(
 			Input->mouse_x / Game->scale, 
 			Input->mouse_y / Game->scale) + Renderer->offset;
 	int32 state = 0;
-	if(aabb_intersect(aabb(position, 5 * 16, 24), aabb(dmouse, 0, 0))) {
+
+	Vec2 txs = spritefont_size_text(Body_Font, text, strlen(text));
+	if(txs.x < minimum_size.x) txs.x = minimum_size.x;
+	if(txs.y < minimum_size.y) txs.y = minimum_size.y;
+	
+	if(aabb_intersect(aabb(position + txs/2 + v2(4, 2), txs.x/2 + 8, txs.y/2 + 4), aabb(dmouse, 0, 0))) {
 		state = 1;
 		if(Input->mouse[SDL_BUTTON_LEFT] >= State_Pressed) {
 			state = 2;
 		}
 	}
-
-	Sprite s;
-	init_sprite(&s);
-	s.position = position;
-	s.size = v2(5 * 16, 24);
-	s.texture = Get_Texture_Coordinates(Renderer->texture_width - 5 * 16, 6 * 16 + s.size.y * state, 5 * 16, 24);
+	Sprite s = get_box_sprite(position, txs + v2(16, 8), Gui_ButtonRestColor);
+	s.anchor = Anchor_Top_Left;
+	Vec4 color1 = Gui_ButtonOutlineRestColor;
+	Vec4 color2 = Gui_ButtonOutlineRestColor;
+	switch(state) {
+		case 0:
+			color1 = Gui_ButtonOutlineRestColor;
+			color2 = Gui_ButtonOutlineRestColor2;
+			Body_Font->color = Gui_ButtonTextColor;
+			s.color = Gui_ButtonRestColor;
+			break;
+		case 1:
+			Body_Font->color = Gui_ButtonTextColor;
+			color1 = Gui_ButtonOutlineActiveColor;
+			color2 = Gui_ButtonOutlineActiveColor2;
+			s.color = Gui_ButtonActiveColor;
+			break;
+		case 2:
+			Body_Font->color = Gui_ButtonTextDownColor;
+			color1 = Gui_ButtonOutlineDownColor;
+			color2 = Gui_ButtonOutlineDownColor2;
+			s.color = Gui_ButtonDownColor;
+			break;
+		default:
+			break;
+	}
+	//s.position -= v2(8, 4);
 	renderer_push_sprite(&s);
-	Body_Font->color = v4(0, 0, 0, 1);
-	render_body_text(text, v2(
-				position.x - s.size.x/2 + 8 + Body_Font->glyph_width / 2,
-				position.y));
+	render_body_text(text, v2(8, 4) + v2(
+				position.x,
+				position.y + (s.size.y - txs.y) / 2 - 4));
 
-	return state > 0 && Input->mouse[SDL_BUTTON_LEFT] == State_Just_Released;
+
+	Vec4 colors[4] = {
+		color1, color1,
+		color2, color2
+	};
+	draw_box_outline(s.position + s.size/2, s.size, colors, 2);
+
+	return (state > 0) && (Input->mouse[SDL_BUTTON_LEFT] == State_Just_Released);
 }
+bool gui_add_button(Vec2 position, char* text)
+{
+	return gui_add_button(position, text, v2(0, 0));
+}
+
+struct Gui_Window_Handle
+{
+	Vec2 position;
+	char* title;
+	int32 z;
+};
+
+struct Gui_Text_Input_Handle
+{
+	char* buffer;
+	isize buffer_length, buffer_capacity;
+	isize max_chars_by_width;
+	isize cursor, selection_start;
+	bool active;
+	bool accept_newlines;
+	bool accept_tabs;
+};
+
+void init_text_input_handle(Gui_Text_Input_Handle* handle, char* buf, isize capacity, isize length)
+{
+	handle->buffer_length = 0;
+	handle->cursor = 0;
+	handle->selection_start = -1;
+	handle->active = false;
+	handle->accept_newlines = false;
+	handle->accept_tabs = false;
+	handle->max_chars_by_width = capacity;
+	handle->buffer = buf;
+	handle->buffer_capacity = capacity;
+	handle->buffer_length = length;
+}
+
+void init_text_input_handle(Gui_Text_Input_Handle* handle, real width, Memory_Arena* arena)
+{
+	isize max_chars_by_width = (isize)(width / Body_Font->glyph_width);
+	isize buffer_capacity = max_chars_by_width * 2;
+	char* buffer = arena_push_array(arena, char, buffer_capacity);
+	init_text_input_handle(handle, buffer, buffer_capacity, 0);
+	handle->max_chars_by_width = max_chars_by_width;
+}
+
+void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)
+{
+	Vec2 dmouse = v2(
+			Input->mouse_x / Game->scale, 
+			Input->mouse_y / Game->scale) + Renderer->offset;
+	Vec2 text_offset = v2(4, (size.y-Body_Font->glyph_height)/2);
+	size.x += 8;
+	Sprite s = get_box_sprite(position + size / 2, size, Gui_ButtonDownColor);
+	renderer_push_sprite(&s);
+	
+	if(handle->active) {
+		if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+			if(!aabb_intersect(aabb(position + size / 2, size.x / 2, size.y / 2), aabb(dmouse, 0, 0))) {
+				handle->active = false;
+			} else {
+				Vec2 localmouse = dmouse - position;
+				localmouse -= text_offset;
+				handle->cursor = roundf(localmouse.x / Body_Font->glyph_width);
+			}
+		}
+	} else {
+		if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+			if(aabb_intersect(aabb(position + size / 2, size.x / 2, size.y / 2), aabb(dmouse, 0, 0))) {
+				handle->active = true;
+			}
+		}
+	}
+
+	if(handle->active) {
+		Input->capture_newlines = handle->accept_newlines;
+		Input->capture_tabs = handle->accept_tabs;
+		isize last_len = handle->buffer_length;
+		handle->buffer_length = append_input_text(handle->buffer,
+				handle->max_chars_by_width,
+				handle->buffer_length,
+				handle->buffer_length - handle->cursor);
+		if(Input->keycodes[SDLK_v] == State_Just_Pressed) {
+			if(Input->scancodes[SDL_SCANCODE_LCTRL] == State_Pressed) {
+				if(SDL_HasClipboardText()) {
+					char* clipboard_text = SDL_GetClipboardText();
+					isize text_len = strlen(clipboard_text);
+					char* input_text = Input->text;
+					isize input_len = Input->text_count;
+					Input->text = clipboard_text;
+					Input->text_count = text_len;
+					handle->buffer_length = append_input_text(handle->buffer,
+							handle->max_chars_by_width,
+							handle->buffer_length,
+							handle->buffer_length - handle->cursor);
+					Input->text = input_text;
+					Input->text_count = input_len;
+				}
+			}
+		}
+		handle->cursor += handle->buffer_length - last_len;
+		//TODO(will) handle repeat with cooldown system
+		if(Input->scancodes[SDL_SCANCODE_LEFT] == State_Just_Pressed) {
+			if(Input->scancodes[SDL_SCANCODE_LCTRL]) {
+				while(handle->cursor >= 0 && isspace(handle->buffer[handle->cursor])) handle->cursor--;
+				while(handle->cursor >= 0 && !isspace(handle->buffer[handle->cursor])) handle->cursor--;
+			} else {
+				handle->cursor--;
+			}
+		} 
+		if(Input->scancodes[SDL_SCANCODE_RIGHT] == State_Just_Pressed) {
+			if(Input->scancodes[SDL_SCANCODE_LCTRL]) {
+				while(handle->cursor >= 0 && isspace(handle->buffer[handle->cursor])) handle->cursor++;
+				while(handle->cursor >= 0 && !isspace(handle->buffer[handle->cursor])) handle->cursor++;
+			} else {
+				handle->cursor++;
+			}
+		}
+
+		if(handle->cursor < 0) handle->cursor = 0;
+		else if(handle->cursor >= handle->buffer_length) 
+			handle->cursor = handle->buffer_length;
+
+		//TODO(will) cursor blinking
+		draw_line(text_offset + position + v2(handle->cursor * Body_Font->glyph_width + 1, 0),
+				text_offset + position + v2(handle->cursor * Body_Font->glyph_width + 1, Body_Font->glyph_height), v4(1, 1, 1, 1), 1);
+
+	}
+
+
+	Body_Font->color = v4(1, 1, 1, 1);
+	spritefont_render_text(Body_Font,
+		handle->buffer, handle->buffer_length,
+		position + text_offset); 
+	Vec4 color1 = Gui_ButtonOutlineDownColor;
+	Vec4 color2 = Gui_ButtonOutlineDownColor2;
+	Vec4 colors[4] = {
+		color1, color1,
+		color2, color2
+	};
+	draw_box_outline(s.position, s.size, colors, 2);
+}
+
+struct Gui_Context
+{
+	Vec2 last_pos;
+	Vec2 next_pos;
+	isize axis;
+};
+

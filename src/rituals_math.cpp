@@ -68,6 +68,11 @@ union Vec4
 	real e[4];
 	
 };
+static inline Vec4 operator*(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
 
 Vec4 v4(real x, real y, real z, real w)
 {
@@ -75,6 +80,7 @@ Vec4 v4(real x, real y, real z, real w)
 		x, y, z, w
 	};
 }
+
 
 
 Vec4 color_to_v4(Color* c)
@@ -224,6 +230,45 @@ union Rect2
 	real e[4];
 };
 
+struct Rect2_Clip_Info
+{
+	Rect2 r;
+	Rect2 diff;
+};
+
+
+
+static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
+{
+	Rect2 diff;
+	Rect2 o;
+	if(r.x < clip.x) {
+		diff.x = clip.x - r.x;
+		o.x = clip.x;
+	} else if(r.x > (clip.x + clip.w)) {
+		return Rect2_Clip_Info{Rect2{}, diff};
+	}
+
+	if((r.x + r.w) > (clip.x + clip.w)) {
+		diff.w = r.w;
+		o.w = (clip.x + clip.w) - (r.x + r.w);
+		diff.w = r.w - o.w;
+	}
+
+	if(r.y < clip.y) {
+		diff.y = clip.y - r.y;
+		o.y = clip.y;
+	} else if(r.y > (clip.y + clip.h)) {
+		return Rect2_Clip_Info{Rect2{}, diff};
+	}
+
+	if((r.y + r.h) > (clip.y + clip.h)) {
+		o.h = (clip.y + clip.h) - (r.y + r.h);
+		diff.h = r.h - o.h;
+	}
+	
+}
+
 struct Rect2i
 {
 	int32 x, y, w, h;
@@ -235,13 +280,6 @@ static inline Rect2i rect2i(int32 x, int32 y, int32 w, int32 h)
 		x, y, w, h
 	};
 }
-
-union Rectangle
-{
-	AABB aabb;
-	Rect2 rect;
-	Rect2i intrect;
-};
 
 static inline bool aabb_intersect(AABB* a, AABB* b)
 {

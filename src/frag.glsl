@@ -10,16 +10,32 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 R"shader(
 #version 330 core
+in vec2 f_pixel;
 in vec2 f_texcoords;
 in vec4 f_color;
 
+uniform vec2 texture_size;
+// window size and scale, x=width, y=height, z=scale
+uniform vec3 window;
 
+uniform vec4 screen;
 uniform sampler2D local_texture;
-
 
 void main()
 {
-	gl_FragColor = texture(local_texture, f_texcoords) * f_color * f_color.aaaa;
+	//vec2 uv = floor(f_texcoords) + 0.5;
+
+	vec2 pixel = f_pixel;
+	vec2 uv = f_texcoords;
+	#if 0
+	uv.x *= texture_size.x;
+	uv.y *= texture_size.y;
+	//uv = floor(uv) + 0.5;
+	uv += 1.0 - clamp((1.0 - fract(pixel)) * window.z, 0.0, 1.0);
+	uv.x /= texture_size.x;
+	uv.y /= texture_size.y;
+	#endif
+	gl_FragColor = texture(local_texture, uv) * f_color * f_color.aaaa;
 }
 
 )shader"

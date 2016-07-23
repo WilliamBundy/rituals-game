@@ -32,6 +32,7 @@ layout (location = 5) in vec4 v_color;
 //anchor (0 - 8)
 layout (location = 6) in uint v_anchor;
 
+out vec2 f_pixel;
 out vec2 f_texcoords;
 out vec4 f_color;
 
@@ -110,6 +111,7 @@ void main()
 		0, 0, 0, 1
 	);
 	gl_Position = vec4(coords, 0, 1) * ortho; 
+	f_pixel = gl_Position.xy;
 	f_color = v_color;
 
 }

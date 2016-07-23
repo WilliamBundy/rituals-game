@@ -41,6 +41,7 @@ struct Tile_Info
 
 	int32 max_damage;
 	bool immune_to_damage;
+	char* break_to_name;
 	isize break_to_id;
 
 	//maybe change to flags

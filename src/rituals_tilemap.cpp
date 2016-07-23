@@ -119,13 +119,13 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 
 
 			real height = fourth[index];
-			if(height < 0.15f) {
+			if(height < 0.10f) {
 				tilemap->tiles[index] = Tile_Water;
 			}
-			else if(height < 0.25f) {
+			else if(height < 0.22f) {
 				//water
 				tilemap->tiles[index] = Tile_Shallow_Water;
-			} else if(height < 0.30f) {
+			} else if(height < 0.25f) {
 				//sand
 				tilemap->tiles[index] = Tile_Sand;
 			} else if(height < 0.5f) {
@@ -284,10 +284,11 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 					Tile_Info* bottom = Registry->tiles + tilemap_get_at(tilemap, j, i + 1);
 					if(bottom->has_top_texture) {
 						init_sprite(&s);
-						s.position = v2(j*Tile_Size + Half_TS, i*Tile_Size) + pos;
-						s.center.y = -Half_TS - 1; 
+						s.position = v2(j*Tile_Size + Half_TS, (i+1)*Tile_Size) + pos;
 						s.size = v2(Tile_Size, Tile_Size);
 						s.texture = bottom->top_texture;
+						s.anchor = Anchor_Bottom;
+						s.sort_point_offset = v2(0, Tile_Size);
 						renderer_push_sprite(&s);
 					}
 				}

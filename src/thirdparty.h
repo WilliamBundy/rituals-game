@@ -23,4 +23,5 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "thirdparty/gl_core_3_3.h"
 #include "thirdparty/gl_core_3_3.c"
 
+#include "thirdparty/tinydir.h"
 

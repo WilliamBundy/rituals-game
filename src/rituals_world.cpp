@@ -140,7 +140,6 @@ FILE* get_world_file(const char* name, const char* mode);
 int check_path(char* path);
 World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 {
-	printf("World name: [%s] \n", world->name);
 	FILE* fp = get_area_file(world->name, id, "rb");
 	World_Area* area = NULL;
 	if(fp != NULL) {
@@ -174,12 +173,13 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		e->sprite.texture = Get_Texture_Coordinates(8*32, 0, 32, 64);
+		e->sprite.texture = Get_Texture_Coordinates(8*32, 16, 32, 48);
 		b->shape.hw = 15;
 		b->shape.hh = 11;
 		b->inv_mass = 1.0f;
-		e->sprite.size = v2(32, 64);
-		e->sprite.center = v2(0, 20);
+		e->sprite.size = v2(32, 48);
+		e->sprite.anchor = Anchor_Bottom;
+		//e->sprite.center = v2(0, 20);
 		do {
 			b->shape.center = v2(
 					rand_range(r, 0, area->map.w * 32),
@@ -191,13 +191,16 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		e->sprite.texture = Get_Texture_Coordinates(0, 5*32, 96, 5*32);
-		b->shape.hw = 20;
-		b->shape.hh = 20;
+		e->sprite.texture = Get_Texture_Coordinates(0, 5*32, 96, 144);
+		b->shape.hw = 16;
+		b->shape.hh = 15;
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
-		e->sprite.size = v2(96, 128) * 2;
-		e->sprite.center = v2(0, e->sprite.size.y /3 - b->shape.hh);
+		e->sprite.size = v2(96, 144) * 2;
+		e->sprite.anchor = Anchor_Bottom;
+		e->sprite.sort_point_offset = v2(0, -60);
+		e->sprite.center = v2(2, -b->shape.hh * 2);
+		
 		do {
 			b->shape.center = v2(
 					rand_range(r, 0, area->map.w * 32),
@@ -349,7 +352,7 @@ void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, 
 }
 
 void serialize_world(World* world);
-void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Body* player)
+void _player_handle_interactions(World* world, World_Area* area, Entity* player_entity, Sim_Body* player)
 {
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
 		Entity* ball_entity = world_area_get_next_entity(area);
@@ -369,8 +372,9 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 		ball->shape.hext = v2(8, 6);
 		//ball->flags = Body_Flag_No_Friction;
 		ball_entity->sprite.size = v2(16, 32);
-		ball_entity->sprite.center = v2(0, 10);
 		ball_entity->sprite.texture  = Get_Texture_Coordinates(8*32, 0, 32, 64);
+		ball_entity->sprite.anchor = Anchor_Bottom;
+		
 	}
 
 
@@ -403,7 +407,8 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 	}
 
 	if(Input->scancodes[SDL_SCANCODE_ESCAPE] >= State_Just_Pressed) {
-		serialize_world(area->world);
+		serialize_world(world);
+		Game->state = Game_State_Menu;
 	}
 
 	Sprite s;
@@ -481,7 +486,7 @@ void _player_handle_interactions(World_Area* area, Entity* player_entity, Sim_Bo
 	}
 }
 
-void world_area_update(World_Area* area)
+void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
 
@@ -530,7 +535,7 @@ void world_area_update(World_Area* area)
 	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - Game->size.y;
 
-	_player_handle_interactions(area, player_entity, player);
+	_player_handle_interactions(world, area, player_entity, player);
 
 	Renderer->offset = area->offset;
 	area->offset += Game->size * 0.5f;
@@ -551,13 +556,24 @@ void world_area_update(World_Area* area)
 
 		if (b == NULL) continue;
 		e->sprite.position = b->shape.center;
+		e->sprite.position.y += b->shape.hh;
 		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
 		
 		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
 	}
-
 	renderer_sort(sprite_count_offset);
+
+#if 0
+	for(isize i = 0; i < area->sim.bodies_count; ++i) {
+		Sim_Body* b = area->sim.bodies + i;
+
+		if (b == NULL) continue;
+		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(1, 1, 1, 1), 1);
+	}
+#endif
+
+
 
 	renderer_draw();
 }

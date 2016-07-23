@@ -28,6 +28,30 @@ enum Sprite_Anchor
 	Anchor_Left = 8
 };
 
+real SpriteAnchorX[] = {
+	0.0f,
+	-0.5f,
+	0.0f,
+	0.5f, 
+	0.5f,
+	0.5f, 
+	0.0f, 
+	-0.5f,
+	-0.5f
+};
+
+real SpriteAnchorY[] = {
+	0.0f,
+	-0.5f,
+	-0.5f,
+	-0.5f,
+	0.0f,
+	0.5f,
+	0.5f,
+	0.5f,
+	0.0f
+};
+
 struct Sprite
 {
 	Vec2 position;
@@ -37,6 +61,7 @@ struct Sprite
 	Rect2 texture;
 	Vec4 color;
 	uint32 anchor;
+	Vec2 sort_point_offset;
 };
 
 struct OpenGL_Renderer
@@ -45,8 +70,9 @@ struct OpenGL_Renderer
 	AABB screen;
 	real texture_width, texture_height;
 	Vec2 offset;
+	Rect2 clip;
 
-	isize screen_loc, texture_size_loc;
+	isize screen_loc, texture_size_loc, window_loc;
 	Vec4 ortho;
 
 	Sprite* sprite_data;
@@ -65,6 +91,7 @@ void init_sprite(Sprite* s)
 	s->texture = rect2(0, 0, 1, 1);
 	s->color = v4(1, 1, 1, 1);
 	s->anchor = Anchor_Center;
+	s->sort_point_offset = v2(0, 0);
 }
 
 
@@ -173,6 +200,7 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	glDeleteShader(fragment_shader);
 
 	renderer->screen_loc = glGetUniformLocation(renderer->shader_program, "screen");
+	renderer->window_loc = glGetUniformLocation(renderer->shader_program, "window");
 	renderer->texture_size_loc = glGetUniformLocation(renderer->shader_program, "texture_size");
 }
 
@@ -184,10 +212,13 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#if 0
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#else 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+#endif
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	//TODO(will) do error checking?
@@ -227,8 +258,18 @@ void renderer_start()
 	Renderer->screen.center = Renderer->offset;
 	Renderer->screen.hext = Game->size * 0.5;
 	Renderer->screen.center += v2(Renderer->screen.hw, Renderer->screen.hh);
+	Renderer->clip = {};
 
 	glUseProgram(Renderer->shader_program);
+	//Renderer->offset.x = roundf(Renderer->offset.x);
+	//Renderer->offset.y = roundf(Renderer->offset.y);
+	glUniform2f(Renderer->texture_size_loc, 
+			Renderer->texture_width,
+			Renderer->texture_height);
+	glUniform3f(Renderer->window_loc,
+			Game->window_size.x, 
+			Game->window_size.y,
+			Game->scale);
 	glUniform4f(Renderer->screen_loc, 
 			Renderer->offset.x, Renderer->offset.y, 
 			Game->size.x + Renderer->offset.x,
@@ -238,23 +279,47 @@ void renderer_start()
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
 }
 
+static inline bool renderer_has_clip_rect()
+{
+	return 0 == (Renderer->clip.w * Renderer->clip.h);
+}
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
-	sp.center.x = (int)sp.center.x;
-	sp.center.y = (int)sp.center.y;
+	if(renderer_has_clip_rect()) {
+		Rect2 r;
+		r.x = sp.position.x;
+		r.y = sp.position.y;
+		r.w = sp.size.x;
+		r.h = sp.size.y;
+		r.x += r.w * SpriteAnchorX[sp.anchor];
+		r.h += r.h * SpriteAnchorX[sp.anchor];
+	}
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
-#define _get_sprite_y_base(s) (s.position.y + s.size.y / 2 - s.center.y)
-GenerateQuicksortForType(sort_sprites_on_y_base, Sprite, _get_sprite_y_base)
+#define _get_sprite_y_base(s) (s.position.y - s.center.y + s.sort_point_offset.y)
+GenerateIntrosortForType(sort_sprites_on_y_base, Sprite, 12, _get_sprite_y_base)
 
 void renderer_sort(isize offset)
 {
 	sort_sprites_on_y_base(Renderer->sprite_data + offset,
 			Renderer->sprite_count - offset);
+#if 0 // Debug draw sprite base
+	isize initial_count = Renderer->sprite_count;
+	for(isize i = offset; i < initial_count; ++i) {
+		Sprite s; 
+		init_sprite(&s);
+		Sprite spr = Renderer->sprite_data[i];
+		s.position = v2(
+				spr.position.x,
+				_get_sprite_y_base(spr));
+		s.size = v2(4,4);
+		s.texture = Get_Texture_Coordinates(32 * 2, 0, 32, 32);
+		renderer_push_sprite(&s);
+	}
+#endif
 }
-
 void renderer_draw()
 {
 	glBindVertexArray(Renderer->vao);
@@ -264,4 +329,81 @@ void renderer_draw()
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, Renderer->sprite_count);
 	glBindVertexArray(0);
 }
+
+
+Sprite get_box_sprite(Vec2 pos, Vec2 size, Vec4 color)
+{
+	Sprite s;
+	init_sprite(&s);
+	s.position = pos;
+	s.texture = Get_Texture_Coordinates(0, 0, 32, 32);
+	s.size = size;
+	s.color = color;
+	return s;
+}
+
+void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
+{
+	Vec2 dline = end - start;
+	real angle = atan2f(dline.y, dline.x);
+	Sprite s;
+	init_sprite(&s);
+	s.position = start + dline / 2;
+	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
+	s.size = v2(sqrtf(v2_dot(dline, dline)), thickness);
+	s.angle = -angle;
+	s.color = color;
+	renderer_push_sprite(&s);
+}
+
+void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
+{
+	size *= 0.5f;
+	Vec2 tl = center - size;
+	Vec2 br = center + size;
+	draw_line(tl, v2(br.x, tl.y), color, thickness);
+	draw_line(v2(br.x, tl.y), br, color, thickness);
+	draw_line(br, v2(tl.x, br.y), color, thickness);
+	draw_line(v2(tl.x, br.y), tl, color, thickness);
+}
+void draw_box_outline(Vec2 center, Vec2 size, Vec4 colors[4], int32 thickness)
+{
+	size *= 0.5f;
+	Vec2 tl = center - size;
+	Vec2 br = center + size;
+	draw_line(tl, v2(br.x, tl.y), colors[0], thickness);
+	draw_line(v2(br.x, tl.y), br, colors[1], thickness);
+	draw_line(br, v2(tl.x, br.y), colors[2], thickness);
+	draw_line(v2(tl.x, br.y), tl, colors[3], thickness);
+}
+void draw_box_outline(Vec2 center, Vec2 size, real angle, Vec4 color, int32 thickness)
+{
+	size *= 0.5f;
+	Vec2 tl = -size;
+	Vec2 br = size;
+	Vec2 tr = v2(br.x, tl.y);
+	Vec2 bl = v2(tl.x, br.y);
+	Vec2 rot = v2(cosf(angle), sinf(angle));
+	Mat2 rotmat = {
+		rot.x, rot.y, 
+		-rot.y, rot.x
+	};
+	tl = v2(rot.x * tl.x + rot.y * tl.y, -rot.y * tl.x + rot.x * tl.y);	
+	br = v2(rot.x * br.x + rot.y * br.y, -rot.y * br.x + rot.x * br.y);	
+	bl = v2(rot.x * bl.x + rot.y * bl.y, -rot.y * bl.x + rot.x * bl.y);	
+	tr = v2(rot.x * tr.x + rot.y * tr.y, -rot.y * tr.x + rot.x * tr.y);	
+	tl += center;
+	br += center;
+	bl += center;
+	tr += center;
+	draw_line(tl, tr, color, thickness);
+	draw_line(tr, br, color, thickness);
+	draw_line(br, bl, color, thickness);
+	draw_line(bl, tl, color, thickness);
+}
+
+
+
+
+
 
