@@ -267,6 +267,9 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 		diff.h = r.h - o.h;
 	}
 	
+	return Rect2_Clip_Info{
+		o, diff
+	};
 }
 
 struct Rect2i
