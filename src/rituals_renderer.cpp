@@ -318,7 +318,7 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.h += clip.diff.h / Renderer->texture_height;
 		Rect2 rclip = Renderer->clip;
 		Renderer->clip = rect2(0, 0, 0, 0);
-		draw_box_outline(sp.position + sp.size, sp.size, v4(1, 1, 1, 1), 2);
+		draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, 1), 2);
 		Renderer->clip = rclip;
 	}
 
