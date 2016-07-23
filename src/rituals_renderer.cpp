@@ -308,7 +308,7 @@ void renderer_push_sprite(Sprite* s)
 		if(!aabb_intersect(&raabb, &clipaabb)) return;
 		Rect2 rclip = Renderer->clip;
 		Renderer->clip = rect2(0, 0, 0, 0);
-		draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, 1), .5);
+		draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, 1), 1);
 		draw_box_outline(v2(rclip.x, rclip.y) + v2(rclip.w/2, rclip.h/2), v2(rclip.w, rclip.h), v4(0.5, 1, 0.5, 1), 2);
 
 		Renderer->clip = rclip;
