@@ -313,6 +313,7 @@ void renderer_push_sprite(Sprite* s)
 		Renderer->clip = rclip;
 
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
+		if(clip.r == rect2(0, 0, 0, 0)) return;
 		sp.position.x = clip.r.x;
 		sp.position.y = clip.r.y;
 		sp.size.x = clip.r.w;

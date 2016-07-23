@@ -230,6 +230,14 @@ union Rect2
 	real e[4];
 };
 
+
+static inline bool operator==(Rect2 a, Rect2 b)
+{
+	return (a.x == b.x) && (a.y == b.y) && (a.w == b.w) && (a.h == b.h);
+}
+
+
+
 struct Rect2_Clip_Info
 {
 	Rect2 r;
@@ -247,10 +255,9 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 		diff.x = clip.x - r.x;
 		o.x = clip.x;
 		o.w -= diff.x;
-	}
-	/*else if(r.x > (clip.x + clip.w)) {
+	} else if(r.x > (clip.x + clip.w)) {
 		return Rect2_Clip_Info{Rect2{}, diff};
-	} */
+	}
 
 	if((r.x + r.w) > (clip.x + clip.w)) {
 		diff.w = r.w;
@@ -262,9 +269,9 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 		diff.y = clip.y - r.y;
 		o.y = clip.y;
 		o.h -= diff.y;
-	}/* else if(r.y > (clip.y + clip.h)) {
+	} else if(r.y > (clip.y + clip.h)) {
 		return Rect2_Clip_Info{Rect2{}, diff};
-	}*/
+	}
 
 	if((r.y + r.h) > (clip.y + clip.h)) {
 		o.h = (clip.y + clip.h) - (r.y + r.h);
