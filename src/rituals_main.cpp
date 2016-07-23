@@ -230,7 +230,7 @@ void test_update()
 {
 	game_set_scale(2.0);
 	renderer_start();
-	//renderer_set_clip_rect(100, 100, 100, 100);
+	renderer_set_clip_rect(100, 100, 100, 100);
 	for(isize i = 0; i < 1000; ++i) {
 		renderer_push_sprite(boxes + i);
 	}	
