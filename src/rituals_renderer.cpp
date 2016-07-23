@@ -324,7 +324,7 @@ void renderer_push_sprite(Sprite* s)
 	}
 
 
-	sp = *s;
+	//sp = *s;
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
