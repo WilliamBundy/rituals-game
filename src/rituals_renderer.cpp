@@ -301,8 +301,8 @@ void renderer_push_sprite(Sprite* s)
 		r.y = sp.position.y;
 		r.w = sp.size.x;
 		r.h = sp.size.y;
-		//r.x += r.w * SpriteAnchorX[sp.anchor];
-		//r.h += r.h * SpriteAnchorX[sp.anchor];
+		r.x += r.w * SpriteAnchorX[sp.anchor];
+		r.y += r.h * SpriteAnchorX[sp.anchor];
 		AABB raabb = rect_to_aabb(&r);
 		AABB clipaabb = rect_to_aabb(&Renderer->clip);
 		if(!aabb_intersect(&raabb, &clipaabb)) return;
