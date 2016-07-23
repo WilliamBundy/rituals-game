@@ -1158,7 +1158,7 @@ _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	43;"	d	file:
 _check	src/rituals_world.cpp	282;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	332;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	363;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	180;"	d	file:
 _color	src/rituals_gui.cpp	360;"	d	file:
@@ -1277,6 +1277,7 @@ body	src/rituals_world_area.cpp	/^	Sim_Body* body;$/;"	m	struct:Entity	file:
 body_font	src/rituals_game.cpp	/^	Spritefont* body_font;$/;"	m	struct:Game_Main	file:
 body_id	src/rituals_world_area.cpp	/^	isize body_id;$/;"	m	struct:Entity	file:
 bottom_texture	src/rituals_game_info.cpp	/^	Rect2 bottom_texture;$/;"	m	struct:Tile_Info	file:
+boxes	src/rituals_main.cpp	/^Sprite* boxes;$/;"	v
 bpp	src/thirdparty/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon14
 break_to_id	src/rituals_game_info.cpp	/^	isize break_to_id;$/;"	m	struct:Tile_Info	file:
 break_to_name	src/rituals_game_info.cpp	/^	char* break_to_name;$/;"	m	struct:Tile_Info	file:
@@ -2414,6 +2415,8 @@ tab_size	rituals_gui.cpp	/^	int32 tab_size;$/;"	m	struct:Spritefont	file:
 tab_size	src/rituals_gui.cpp	/^	int32 tab_size;$/;"	m	struct:Spritefont	file:
 temp_arena	src/rituals_game.cpp	/^	Memory_Arena* temp_arena;$/;"	m	struct:Game_Main	file:
 temp_head	src/rituals_game.cpp	/^	isize temp_head;$/;"	m	struct:Memory_Arena	file:
+test_init	src/rituals_main.cpp	/^void test_init()$/;"	f
+test_update	src/rituals_main.cpp	/^void test_update()$/;"	f
 text	src/rituals_game.cpp	/^	char* text;$/;"	m	struct:Game_Input	file:
 text_count	src/rituals_game.cpp	/^	isize text_count;$/;"	m	struct:Game_Input	file:
 texture	src/rituals_game_info.cpp	/^	Rect2 texture;$/;"	m	struct:Item_Info	file:

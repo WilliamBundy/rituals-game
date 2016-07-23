@@ -208,10 +208,39 @@ void main_menu_update()
 	renderer_draw();
 }
 
+
+Sprite* boxes;
+
+
+void test_init()
+{
+	boxes = arena_push_array(Game->play_arena, Sprite, 1000);
+	for(isize i = 0; i < 1000; ++i) {
+		init_sprite(boxes + i);
+		boxes[i].position = v2(
+			rand_range(&Game->r, 0, Game->size.x),
+			rand_range(&Game->r, 0, Game->size.y));
+		boxes[i].size = v2(32, 32);
+
+	}
+}
+
+void test_update()
+{
+	game_set_scale(2.0);
+	renderer_start();
+
+	for(isize i = 0; i < 1000; ++i) {
+		renderer_push_sprite(boxes + i);
+	}	
+	renderer_stop();
+}
+
 void update()
 {
 	switch(Game->state) {
 		case Game_State_None:
+			test_update();
 			break;
 		case Game_State_Menu:
 			SDL_StartTextInput();
@@ -266,6 +295,8 @@ void load_assets()
 	Game->state = Game_State_Menu;
 	play_state_init();
 	init_menu_state();
+	Game->state = Game_State_None;
+	test_init();
 }
 
 
