@@ -294,8 +294,8 @@ void renderer_push_sprite(Sprite* s)
 		r.h = sp.size.y;
 		r.x += r.w * SpriteAnchorX[sp.anchor];
 		r.h += r.h * SpriteAnchorX[sp.anchor];
-		AABB raabb = rect_to_aabb(r);
-		AABB clipaabb = rect_to_aabb(Rectangle->clip);
+		AABB raabb = rect_to_aabb(&r);
+		AABB clipaabb = rect_to_aabb(&Rectangle->clip);
 		if(!aabb_intersect(&raabb, &clipaabb)) return;
 
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
