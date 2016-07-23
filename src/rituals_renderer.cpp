@@ -317,6 +317,9 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.w += clip.diff.w / Renderer->texture_width;
 		sp.texture.h += clip.diff.h / Renderer->texture_height;
 	}
+
+
+	sp = *s;
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
