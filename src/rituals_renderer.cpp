@@ -308,9 +308,8 @@ void renderer_push_sprite(Sprite* s)
 		if(!aabb_intersect(&raabb, &clipaabb)) return;
 		Rect2 rclip = Renderer->clip;
 		Renderer->clip = rect2(0, 0, 0, 0);
-		draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, 1), 1);
+		draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, 1), .5);
 		draw_box_outline(v2(rclip.x, rclip.y) + v2(rclip.w/2, rclip.h/2), v2(rclip.w, rclip.h), v4(0.5, 1, 0.5, 1), 2);
-		Renderer->clip = rclip;
 
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
 		if(clip.r == rect2(0, 0, 0, 0)) return;
@@ -323,6 +322,8 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.w += clip.diff.w / Renderer->texture_width;
 		sp.texture.h += clip.diff.h / Renderer->texture_height;
 		sp.anchor = Anchor_Top_Left;
+		draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, 1), 0.5);
+		Renderer->clip = rclip;
 	}
 
 
