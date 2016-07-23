@@ -217,12 +217,12 @@ void test_init()
 	boxes = arena_push_array(Game->play_arena, Sprite, 1000);
 	for(isize i = 0; i < 1000; ++i) {
 		//init_sprite(boxes + i);
-#if 0
+#if 1
 		boxes[i] = get_box_sprite(v2(
 			rand_range(&Game->r, 0,1000),
 			rand_range(&Game->r, 0,1000)),
 			v2(32, 32),
-		v4(rand_range(&Game->r, 0.5, 1.0), .8, .8, .9));
+		v4(rand_range(&Game->r, 0.5f, 1.0), .8, .8, .9));
 #endif
 
 	}
