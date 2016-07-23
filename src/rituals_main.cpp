@@ -221,7 +221,7 @@ void test_init()
 		boxes[i] = get_box_sprite(v2(
 			rand_range(&Game->r, 0,1000),
 			rand_range(&Game->r, 0,1000)),
-			v2(32, 32),
+			v2(48, 32),
 		v4(rand_range(&Game->r, 0.5f, 1.0), .8, .8, .9));
 #endif
 
@@ -298,8 +298,8 @@ void load_assets()
 	Game->state = Game_State_Menu;
 	play_state_init();
 	init_menu_state();
-	//Game->state = Game_State_None;
-	//test_init();
+	Game->state = Game_State_None;
+	test_init();
 }
 
 
