@@ -1158,10 +1158,10 @@ _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	47;"	d	file:
 _check	src/rituals_world.cpp	282;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	295;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	336;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	191;"	d	file:
-_color	src/rituals_gui.cpp	302;"	d	file:
+_color	src/rituals_gui.cpp	360;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _entity_get_id	src/rituals_world_area.cpp	73;"	d	file:
@@ -1380,6 +1380,7 @@ dec_str_to_int	src/rituals_gui.cpp	/^static inline int32 dec_str_to_int(char* st
 delay	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 delete_file	src/rituals_serialization.cpp	/^int delete_file(char* path, isize path_length, char* file)$/;"	f
 delete_folder	src/rituals_serialization.cpp	/^int delete_folder(char* path, isize path_length)$/;"	f
+delete_index	src/rituals_main.cpp	/^	isize delete_index;$/;"	m	struct:Menu_State	file:
 delta	src/thirdparty/stb_image.h	/^   int    delta[17];   \/\/ old 'firstsymbol' - old 'firstcode'$/;"	m	struct:__anon5
 depth	src/thirdparty/stb_image.h	/^   int depth;$/;"	m	struct:__anon12
 dequant	src/thirdparty/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon6
@@ -2032,7 +2033,6 @@ path	src/thirdparty/tinydir.h	/^	_tinydir_char_t path[_TINYDIR_PATH_MAX];$/;"	m	
 play_arena	src/rituals_game.cpp	/^	Memory_Arena* play_arena;$/;"	m	struct:Game_Main	file:
 play_state	src/rituals_main.cpp	/^Play_State* play_state;$/;"	v
 play_state_init	src/rituals_play_state.cpp	/^void play_state_init()$/;"	f
-play_state_start	src/rituals_play_state.cpp	/^void play_state_start(char* world_name_in)$/;"	f
 play_state_stop	src/rituals_play_state.cpp	/^void play_state_stop()$/;"	f
 play_state_update	src/rituals_play_state.cpp	/^void play_state_update()$/;"	f
 position	src/rituals_gui.cpp	/^	Vec2 position;$/;"	m	struct:Gui_Window_Handle	file:
@@ -2099,6 +2099,8 @@ rgb	src/thirdparty/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon6
 rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon12
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon6
+save_dir	src/rituals_main.cpp	/^	char save_dir[FilePathMaxLength];$/;"	m	struct:Menu_State	file:
+save_dir_len	src/rituals_main.cpp	/^	isize save_dir_len;$/;"	m	struct:Menu_State	file:
 saves	src/rituals_main.cpp	/^	tinydir_dir saves;$/;"	m	struct:Menu_State	file:
 scale	src/rituals_game.cpp	/^	real scale;$/;"	m	struct:Game_Main	file:
 scale_x	src/rituals_math.cpp	/^	real scale_x;$/;"	m	struct:Transform	file:
@@ -2150,10 +2152,12 @@ sprite_data	src/rituals_renderer.cpp	/^	Sprite* sprite_data;$/;"	m	struct:OpenGL
 spritefont_render_text	rituals_gui.cpp	/^void spritefont_render_text(Spritefont* font, char* text, Vec2 position)$/;"	f
 spritefont_render_text	rituals_gui.cpp	/^void spritefont_render_text(Spritefont* font,$/;"	f
 spritefont_render_text	src/rituals_gui.cpp	/^void spritefont_render_text(Spritefont* font, char* text, Vec2 position, Sprite_Anchor anchor = Anchor_Top_Left, real scale = 1.0f)$/;"	f
+spritefont_render_text	src/rituals_gui.cpp	/^void spritefont_render_text(Spritefont* font,$/;"	f
 spritefont_render_text_background	src/rituals_gui.cpp	/^void spritefont_render_text_background(Spritefont* font, char* text, Vec2 position, Vec4 background) $/;"	f
 spritefont_render_text_ex	src/rituals_gui.cpp	/^void spritefont_render_text_ex(Spritefont* font,$/;"	f
 spritefont_size_text	src/rituals_gui.cpp	/^Vec2 spritefont_size_text(Spritefont* font, char* text) $/;"	f
 spritefont_size_text	src/rituals_gui.cpp	/^Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)$/;"	f
+start_play_state	src/rituals_play_state.cpp	/^void start_play_state(char* world_name_in)$/;"	f
 start_temp_arena	src/rituals_game.cpp	/^void start_temp_arena(Memory_Arena* arena)$/;"	f
 start_x	src/thirdparty/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon17
 start_y	src/thirdparty/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon17

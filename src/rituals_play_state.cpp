@@ -17,10 +17,11 @@ void play_state_init()
 	clear_arena(Game->play_arena);
 	clear_arena(Game->world_arena);
 	play_state = arena_push_struct(Game->game_arena, Play_State);
+	play_state->world = arena_push_struct(Game->world_arena, World);
 }
 
 void deserialize_world(World* world, FILE* world_file);
-void play_state_start(char* world_name_in)
+void start_play_state(char* world_name_in)
 {
 	World* world = play_state->world;
 	isize wnl = strlen(world_name_in);

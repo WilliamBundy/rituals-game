@@ -146,8 +146,11 @@ Play_State* play_state;
 
 struct Menu_State
 {
+	char save_dir[FilePathMaxLength];
+	isize save_dir_len;
 	tinydir_dir saves;
 	Gui_Text_Input_Handle handle;
+	isize delete_index;
 };
 Menu_State* menu_state;
 
@@ -155,17 +158,61 @@ void init_menu_state()
 {
 	menu_state = arena_push_struct(Game->game_arena, Menu_State);
 	init_text_input_handle(&menu_state->handle, 256, Game->game_arena);
+	menu_state->delete_index = -1;
 
+	menu_state->save_dir_len = snprintf(menu_state->save_dir, FilePathMaxLength, "%ssave", Game->base_path);
+	check_dir(menu_state->save_dir);
+	tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 }
 
 
 void main_menu_update()
 {
-	game_set_scale(2.0f);
+	game_set_scale(1.0f);
+	Renderer->offset = v2(0, 0);
 	renderer_start();
 
+	real lasty = 32;
+	Body_Font->color = v4(1, 1, 1, 1);
 	render_body_text("Rituals", v2(32, 32), false, 4.0f);
-	gui_add_text_input(&menu_state->handle, v2(32, 32 + 16 + Body_Font->glyph_height * 4), v2(256, 32));
+	lasty += 16;
+	lasty += Body_Font->glyph_height * 4;
+	gui_add_text_input(&menu_state->handle, v2(32, lasty), v2(256, Body_Font->glyph_height + 8));
+
+	bool saves_dirty = false;
+	if(gui_add_button(v2(256 + 32 + 16 , lasty), "Create", v2(64, 0))) {
+		saves_dirty = true;
+	}
+	if(Input->scancodes[SDL_SCANCODE_RETURN] == State_Just_Pressed) {
+		saves_dirty = true;
+	}
+
+	if(saves_dirty) {
+		tinydir_close(&menu_state->saves);
+		char buf[FilePathMaxLength];
+	 	snprintf(buf, FilePathMaxLength, "%ssave/%.*s", Game->base_path, menu_state->handle.buffer_length, menu_state->handle.buffer);
+		check_dir(buf);
+		
+		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+	}
+
+
+	lasty += 32 + 16;
+
+
+	for(usize i = 0; i < menu_state->saves.n_files; ++i) {
+		tinydir_file file;
+		tinydir_readfile_n(&menu_state->saves, &file, i);
+		if(file.is_dir && (file.name[0] != '.')) {
+			if(gui_add_button(v2(32, lasty), file.name, v2(144, 0))) {
+				start_play_state(file.name);
+				Game->state = Game_State_Play;
+			}
+			lasty += 32;
+		}
+	}
+
+	
 	
 
 
@@ -190,9 +237,6 @@ void update()
 	}
 }
 
-
-
-
 void stop()
 {
 	switch(Game->state) {
@@ -207,9 +251,6 @@ void stop()
 			break;
 	}
 }
-
-
-
 
 void load_assets()
 {
@@ -383,10 +424,6 @@ int main(int argc, char** argv)
 	while(running) {
 		uint64 start_ticks = SDL_GetTicks();
 
-		if(Game->input->num_keys_down < 0) Game->input->num_keys_down = 0;
-		if(Game->input->num_mouse_down < 0) Game->input->num_mouse_down = 0;
-
-		if(Game->input->num_keys_down > 0)
 		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
 			int8* t = Game->input->scancodes + i;
 			if(*t == State_Just_Released) {
@@ -401,7 +438,6 @@ int main(int argc, char** argv)
 				*t = State_Pressed;
 			}
 		}
-		if(Game->input->num_mouse_down > 0)
 		for(int64 i = 0; i < 16; ++i) {
 			int8* t = Game->input->mouse + i;
 			if(*t == State_Just_Released) {

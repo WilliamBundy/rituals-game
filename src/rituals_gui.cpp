@@ -168,6 +168,64 @@ Vec2 spritefont_size_text(Spritefont* font, char* text)
 	return spritefont_size_text(font, text, strlen(text));
 }
 
+void spritefont_render_text(Spritefont* font,
+		char* text, isize len, 
+		Vec2 position, 
+		int32 max_width = -1, 
+		Sprite_Anchor anchor = Anchor_Top_Left,
+		real scale = 1.0f,
+		Vec2* region = NULL)
+{
+	Vec2 initial_pos = position;
+	position = v2(0, 0);
+	Vec2 size = v2(font->glyph_width, font->glyph_height);
+	Sprite s;
+	int32 wrapped = 0;
+	for(isize i = 0; i < len; ++i) {
+		char c = text[i];
+		
+		init_sprite(&s);
+		switch(c) {
+			case '\n':
+				position.y += font->glyph_height + font->line_padding;
+				position.x = 0;
+				wrapped ++;
+				break;
+			case '\t':
+				position.x += font->glyph_width * font->tab_size;
+				break;
+			case '\r':
+				continue;
+			default: 
+				break;
+		}
+		if(c < AsciiPrintableStart || c > AsciiPrintableEnd) continue;
+
+		s.position = initial_pos + position * scale;
+		s.texture = font->glyphs[c - AsciiPrintableStart];
+		s.size = size * scale;
+		s.color = font->color;
+		s.angle = 0;
+		s.anchor = anchor;
+		
+		if((max_width > 0) && (s.position.x + s.size.x > (max_width + initial_pos.x))) {
+			position.y += font->glyph_height + font->line_padding;
+			position.x = 0;
+			wrapped ++;
+		}
+			
+		renderer_push_sprite(&s);
+		position.x += size.x + font->character_padding;
+	}
+	if(region != NULL) {
+		*region = position - initial_pos;
+		if(wrapped > 0) {
+			region->x = max_width;
+		}
+	}
+}
+
+//TODO(will) fix--implement and fix wordwrap
 void spritefont_render_text_ex(Spritefont* font,
 		char* text, isize len, 
 		Vec2 position, 
