@@ -262,7 +262,7 @@ void load_assets()
 
 	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
 	init_spritefont(Game->body_font);
-	Game->body_font->glyphs = parse_spritefont_glyphs(
+	Game->body_font->glyphs = parse_spritefont_rectangles(
 #include "font.glyphs"
 			,
 			Game->asset_arena,
