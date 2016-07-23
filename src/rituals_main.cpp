@@ -159,7 +159,7 @@ void main_menu_update()
 	game_set_scale(2.0f);
 	Renderer->offset = v2(0, 0);
 	renderer_start();
-	renderer_set_clip_rect(40, 10, 400, 400);
+	renderer_set_clip_rect(40, 40, 100, 100);
 	real lasty = 32;
 	Body_Font->color = v4(1, 1, 1, 1);
 	render_body_text("Rituals", v2(32, 32), false, 4.0f);
