@@ -246,7 +246,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 		diff.x = clip.x - r.x;
 		o.x = clip.x;
 	} else if(r.x > (clip.x + clip.w)) {
-		return Rect2_Clip_Info{Rect{}, diff};
+		return Rect2_Clip_Info{Rect2{}, diff};
 	}
 
 	if((r.x + r.w) > (clip.x + clip.w)) {
