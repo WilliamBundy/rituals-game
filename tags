@@ -1173,7 +1173,7 @@ _generate_registry_lookup	src/rituals_game_registry.cpp	55;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
-_get_sprite_y_base	src/rituals_renderer.cpp	314;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	323;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	98;"	d	file:
 _glerror	src/rituals_renderer.cpp	100;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
@@ -2085,6 +2085,7 @@ renderer_draw	src/rituals_renderer.cpp	/^void renderer_draw()$/;"	f
 renderer_has_clip_rect	src/rituals_renderer.cpp	/^static inline bool renderer_has_clip_rect()$/;"	f	file:
 renderer_init	src/rituals_renderer.cpp	/^void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)$/;"	f
 renderer_push_sprite	src/rituals_renderer.cpp	/^void renderer_push_sprite(Sprite* s)$/;"	f
+renderer_set_clip_rect	src/rituals_renderer.cpp	/^static inline void renderer_set_clip_rect(real x, real y, real w, real h)$/;"	f	file:
 renderer_sort	src/rituals_renderer.cpp	/^void renderer_sort(isize offset)$/;"	f
 renderer_start	src/rituals_renderer.cpp	/^void renderer_start()$/;"	f
 replace_filename_char	src/rituals_game.cpp	/^char replace_filename_char(char c, char replace)$/;"	f

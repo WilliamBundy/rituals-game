@@ -283,6 +283,15 @@ static inline bool renderer_has_clip_rect()
 {
 	return 0 != (Renderer->clip.w * Renderer->clip.h);
 }
+
+static inline void renderer_set_clip_rect(real x, real y, real w, real h)
+{
+	Renderer->clip = Rect2 {
+		x, y, w, h
+	};
+}
+
+
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
