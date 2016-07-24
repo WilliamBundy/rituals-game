@@ -232,6 +232,9 @@ union Rect2
 	struct {
 		real x, y, w, h;
 	};
+	struct {
+		Vec2 position, size;
+	}
 	real e[4];
 };
 

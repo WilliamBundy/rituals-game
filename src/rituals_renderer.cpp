@@ -329,14 +329,10 @@ void renderer_push_sprite(Sprite* s)
 		Vec2 tdp2 = clip.diff2 * tex_scale;
 		Vec2 tp1 = v2(sp.texture.x, sp.texture.y);
 		Vec2 tp2 = tp1 + v2(sp.texture.w, sp.texture.h);
-
 		tp1 += tdp1;
 		tp2 -= tdp2;
-		sp.texture.x = tp1.x;
-		sp.texture.y = tp1.y;
-		sp.texture.w = tp2.x - tp1.x;
-		sp.texture.h = tp2.y - tp1.y;
-
+		sp.texture.position = tp1;
+		sp.texture.size = tp2 - tp1;
 		sp.position = clip.rp1;
 		sp.size = clip.rp2 - clip.rp1;
 		sp.anchor = Anchor_Top_Left;
