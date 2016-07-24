@@ -396,14 +396,28 @@ Sprite get_box_sprite(Vec2 pos, Vec2 size, Vec4 color)
 void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 {
 	Vec2 dline = end - start;
-	real angle = atan2f(dline.y, dline.x);
 	Sprite s;
-	init_sprite(&s);
-	s.position = start + dline / 2;
-	s.texture = Get_Texture_Coordinates(128, 3*32, 32, 32);
-	s.size = v2(sqrtf(v2_dot(dline, dline)), thickness);
-	s.angle = -angle;
-	s.color = color;
+	if(dline.y == 0) {
+		if(dline.x < 0) {
+			dline.x *= -1;
+			Vec2 temp = end;
+			end = start;
+			start = temp;
+		}
+		s = get_box_sprite(start + v2(dline.x / 2, 0), v2(dline.x, thickness), color);
+	} else if(dline.x == 0) {
+		if(dline.y < 0) {
+			dline.y *= -1;
+			Vec2 temp = end;
+			end = start;
+			start = temp;
+		}
+		s = get_box_sprite(start + v2(0, dline.y / 2), v2(thickness, dline.y), color);
+	} else {
+		s = get_box_sprite(start + dline/2, v2(sqrtf(v2_dot(dline, dline)), thickness), color);
+		real angle = atan2f(dline.y, dline.x);
+		s.angle = -angle;
+	}
 	renderer_push_sprite(&s);
 }
 
