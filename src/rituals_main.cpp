@@ -162,7 +162,7 @@ void main_menu_update()
 	
 	draw_box_outline(v2(140, 140), v2(200, 200), v4(0.5f, 1.0f, 0.5f, 1), 2);
 	renderer_set_clip_rect(40, 40, 200, 200);
-//	renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
+	renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
 	real lasty = 32;
 	Body_Font->color = v4(1, 1, 1, 1);
 	render_body_text("Rituals", v2(32, 32), false, 4.0f);
