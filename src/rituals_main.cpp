@@ -161,12 +161,12 @@ void main_menu_update()
 	renderer_start();
 	
 	//draw_box_outline(v2(140, 140), v2(200, 200), v4(0.5f, 1.0f, 0.5f, 1), 2);
-	renderer_set_clip_rect(0, 0, 40, 200);
+	renderer_set_clip_rect(0, 0, 16, 200);
 	//renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
 	render_clip_rect();
 	real lasty = 32;
 	Body_Font->color = v4(1, 1, 1, 1);
-	render_body_text("Rituals", v2(32, 32), false, 4.0f);
+	render_body_text("Rituals", v2(16, 32), false, 4.0f);
 	lasty += 16;
 	lasty += Body_Font->glyph_height * 4;
 	gui_add_text_input(&menu_state->handle, v2(32, lasty), v2(256, Body_Font->glyph_height + 8));
