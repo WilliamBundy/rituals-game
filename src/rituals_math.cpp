@@ -258,10 +258,10 @@ struct Rect2_Clip_Info
 
 static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 {
-	Vec2 rp1 = v2(r.x, r.y);
-	Vec2 rp2 = rp1 + v2(r.w, r.h);
-	Vec2 cp1 = v2(clip.x, clip.y);
-	Vec2 cp2 = cp1 + v2(clip.w, clip.h);
+	Vec2 rp1 = r.position;
+	Vec2 rp2 = rp1 + r.size;
+	Vec2 cp1 = clip.position;
+	Vec2 cp2 = cp1 + clip.size;
 	Vec2 diff1 = v2(0, 0);
 	Vec2 diff2 = v2(0, 0);
 

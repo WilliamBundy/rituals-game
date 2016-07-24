@@ -310,10 +310,8 @@ void renderer_push_sprite(Sprite* s)
 		Rect2 c = Renderer->clip;
 
 		Rect2 r;
-		r.x = sp.position.x;
-		r.y = sp.position.y;
-		r.w = sp.size.x;
-		r.h = sp.size.y;
+		r.position = sp.position;
+		r.size = sp.size;
 		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
 		r.y -= r.h * (0.5f + SpriteAnchorY[sp.anchor]);
 
