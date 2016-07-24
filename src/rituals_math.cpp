@@ -278,6 +278,11 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 		o.h = (clip.y + clip.h) - o.y;
 		diff.h = o.h - r.h;
 	}
+
+	diff.x = o.x - r.x;
+	diff.y = o.y - r.y;
+	diff.w = o.w - r.w;
+	diff.h = o.h - r.h;
 	
 	return Rect2_Clip_Info{
 		o, diff
