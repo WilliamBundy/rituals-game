@@ -323,7 +323,7 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.y += clip.diff.y / (Renderer->texture_height * clip.r.h);
 		sp.texture.w += clip.diff.w / (Renderer->texture_width * clip.r.w);
 		sp.texture.h += clip.diff.h / (Renderer->texture_height * clip.r.h);
-		//sp.anchor = Anchor_Top_Left;
+		sp.anchor = Anchor_Top_Left;
 	//	Renderer->clip = rect2(0, 0, 0, 0);
 	//	draw_box_outline(sp.position + sp.size /2 , sp.size, v4(1, 1, 1, .5), 1);
 		//Renderer->clip = rclip;
