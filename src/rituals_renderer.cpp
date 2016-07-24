@@ -305,12 +305,14 @@ void renderer_push_sprite(Sprite* s)
 		r.x += r.w * SpriteAnchorX[sp.anchor];
 		r.y += r.h * SpriteAnchorY[sp.anchor];
 		sp.angle = 0;
-		AABB raabb = rect_to_aabb(&r);
-		AABB clipaabb = rect_to_aabb(&Renderer->clip);
-		if(!aabb_intersect(&raabb, &clipaabb)) return;
-		Rect2 rclip = Renderer->clip;
+
+		{
+
+			AABB raabb = rect_to_aabb(&r);
+			AABB clipaabb = rect_to_aabb(&Renderer->clip);
+			if(!aabb_intersect(&raabb, &clipaabb)) return;
+		}
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
-		if(clip.r == rect2(0, 0, 0, 0)) return;
 #if 1
 		sp.texture.x *= (Renderer->texture_width);
 		sp.texture.y *= (Renderer->texture_height);
