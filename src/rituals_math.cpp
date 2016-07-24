@@ -234,7 +234,7 @@ union Rect2
 	};
 	struct {
 		Vec2 position, size;
-	}
+	};
 	real e[4];
 };
 

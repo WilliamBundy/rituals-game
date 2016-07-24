@@ -1406,7 +1406,7 @@ e	src/rituals_math.cpp	/^	int32 e[2];$/;"	m	union:Vec2i	file:
 e	src/rituals_math.cpp	/^	real e[2];$/;"	m	union:Vec2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:AABB	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Mat2	file:
-e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Rect2	typeref:struct:Rect2::__anon10	file:
+e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Rect2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Vec4	file:
 e	src/rituals_math.cpp	/^	real e[9];$/;"	m	union:Mat3	file:
 east	src/rituals_world_area.cpp	/^	Area_Link east;$/;"	m	struct:World_Area_Stub	file:
