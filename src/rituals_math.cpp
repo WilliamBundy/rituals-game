@@ -322,7 +322,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	diff.h /= o.h;
 #endif
 	return Rect2_Clip_Info{
-		o, diff
+		o, diff,
 		rp1, rp2, diff1, diff2
 	};
 }
