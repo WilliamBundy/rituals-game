@@ -303,11 +303,6 @@ void render_clip_rect()
 	Renderer->clip = r;
 }
 
-void renderer_push_sprite_noclip(Sprite* s)
-{
-	Renderer->sprite_data[Renderer->sprite_count++] = *s;
-}
-
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
