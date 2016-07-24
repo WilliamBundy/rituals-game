@@ -158,6 +158,11 @@ static inline Vec2 operator*(real s, Vec2 a)
 	return Vec2{a.x * s, a.y * s};
 }
 
+static inline Vec2 operator*(Vec2 a, Vec2 b)
+{
+	return Vec2{a.x * b.x, a.y * b.y};
+}
+
 static inline Vec2& operator+=(Vec2& a, Vec2 b)
 {
 	a = a + b;

@@ -1,8 +1,8 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	219;"	d	file:
-AABB_x2	src/rituals_math.cpp	220;"	d	file:
-AABB_y1	src/rituals_math.cpp	221;"	d	file:
-AABB_y2	src/rituals_math.cpp	222;"	d	file:
+AABB_x1	src/rituals_math.cpp	224;"	d	file:
+AABB_x2	src/rituals_math.cpp	225;"	d	file:
+AABB_y1	src/rituals_math.cpp	226;"	d	file:
+AABB_y2	src/rituals_math.cpp	227;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	80;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
@@ -1173,7 +1173,7 @@ _generate_registry_lookup	src/rituals_game_registry.cpp	55;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
-_get_sprite_y_base	src/rituals_renderer.cpp	336;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	337;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	98;"	d	file:
 _glerror	src/rituals_renderer.cpp	100;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
@@ -2010,6 +2010,7 @@ ogl_LoadStatus	src/thirdparty/gl_core_3_3.h	/^enum ogl_LoadStatus$/;"	g
 ogl_add_texture	src/rituals_renderer.cpp	/^GLuint ogl_add_texture(uint8* data, isize w, isize h) $/;"	f
 ogl_load_texture	src/rituals_renderer.cpp	/^GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)$/;"	f
 old_out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ output buffer (always 4 components)$/;"	m	struct:__anon17
+operator *	src/rituals_math.cpp	/^static inline Vec2 operator*(Vec2 a, Vec2 b)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec2 operator*(Vec2 a, real s)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec2 operator*(real s, Vec2 a)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec4 operator*(Vec4 a, Vec4 b)$/;"	f	file:
