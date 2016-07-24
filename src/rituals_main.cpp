@@ -223,7 +223,7 @@ void test_init()
 		boxes[i] = get_box_sprite(v2(
 			rand_range(&Game->r, 0,1000),
 			rand_range(&Game->r, 0,1000)),
-			v2(256, 16),
+			v2(32, 16),
 		v4(rand_range(&Game->r, 0.5f, 1.0), .8, .8, .9));
 #endif
 
