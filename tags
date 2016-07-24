@@ -2058,7 +2058,7 @@ raw_data	src/thirdparty/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	st
 read	src/thirdparty/stb_image.h	/^   int      (*read)  (void *user,char *data,int size);   \/\/ fill 'data' with 'size' bytes.  return number of bytes actually read$/;"	m	struct:__anon2
 read_from_callbacks	src/thirdparty/stb_image.h	/^   int read_from_callbacks;$/;"	m	struct:__anon3
 real	src/rituals_game.cpp	/^_generate_sort_and_search_for_numeric_type(real);$/;"	v
-real	src/rituals_main.cpp	/^typedef real64 real;$/;"	t	file:
+real	src/rituals_main.cpp	/^typedef real32 real;$/;"	t	file:
 real	src/rituals_win32.cpp	/^typedef real32 real;$/;"	t	file:
 real32	src/rituals_game.cpp	/^_generate_sort_and_search_for_numeric_type(real32);$/;"	v
 real32	src/rituals_main.cpp	/^typedef float real32;$/;"	t	file:

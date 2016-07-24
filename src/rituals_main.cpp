@@ -65,7 +65,7 @@ typedef float real32;
 typedef double real64;
 
 //TODO(will): use this as all floating point sizes
-typedef real64 real;
+typedef real32 real;
 
 typedef ptrdiff_t isize;
 typedef size_t usize;
