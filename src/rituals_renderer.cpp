@@ -311,10 +311,6 @@ void renderer_push_sprite(Sprite* s)
 		Rect2 rclip = Renderer->clip;
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
 		if(clip.r == rect2(0, 0, 0, 0)) return;
-		sp.position.x = clip.r.x;
-		sp.position.y = clip.r.y;
-		sp.size.x = clip.r.w;
-		sp.size.y = clip.r.h;
 #if 1
 		sp.texture.x *= (Renderer->texture_width);
 		sp.texture.y *= (Renderer->texture_height);
@@ -336,6 +332,10 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.w /= (Renderer->texture_width);
 		sp.texture.h /= (Renderer->texture_height);
 #endif 
+		sp.position.x = clip.r.x;
+		sp.position.y = clip.r.y;
+		sp.size.x = clip.r.w;
+		sp.size.y = clip.r.h;
 		sp.anchor = Anchor_Top_Left;
 	}
 
