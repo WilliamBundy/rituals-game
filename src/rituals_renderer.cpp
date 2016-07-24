@@ -390,7 +390,7 @@ void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 	Sprite s;
 	init_sprite(&s);
 	s.position = start + dline / 2;
-	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
+	s.texture = Get_Texture_Coordinates(128, 3*32, 32, 32);
 	s.size = v2(sqrtf(v2_dot(dline, dline)), thickness);
 	s.angle = -angle;
 	s.color = color;
