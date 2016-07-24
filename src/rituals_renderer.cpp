@@ -307,6 +307,8 @@ void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
 	if(renderer_has_clip_rect()) {
+		Rect2 c = Renderer->clip;
+
 		Rect2 r;
 		r.x = sp.position.x;
 		r.y = sp.position.y;
@@ -316,13 +318,14 @@ void renderer_push_sprite(Sprite* s)
 		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
 		r.y -= r.h * (0.5f + SpriteAnchorY[sp.anchor]);
 		sp.angle = 0;
-		{
-			AABB raabb = rect_to_aabb(&r);
-			AABB clipaabb = rect_to_aabb(&Renderer->clip);
-			if(!aabb_intersect(&raabb, &clipaabb)) return;
-		}
+
+		if(r.x > (c.x + c.w)) return;
+		if((r.x + r.w) < c.x) return;
+		if(r.y > (c.y + c.h)) return;
+		if((r.y + r.h) < c.y) return;
+
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
-#if 1
+
 		sp.texture.x *= (Renderer->texture_width);
 		sp.texture.y *= (Renderer->texture_height);
 		sp.texture.w *= (Renderer->texture_width);
@@ -347,11 +350,9 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.y /= (Renderer->texture_height);
 		sp.texture.w /= (Renderer->texture_width);
 		sp.texture.h /= (Renderer->texture_height);
-#endif 
-		sp.position.x = clip.r.x;
-		sp.position.y = clip.r.y;
-		sp.size.x = clip.r.w;
-		sp.size.y = clip.r.h;
+
+		sp.position = clip.rp1;
+		sp.size = clip.rp2 - clip.rp1;
 		sp.anchor = Anchor_Top_Left;
 	}
 
