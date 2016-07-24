@@ -1395,7 +1395,6 @@ deserialize_tile_state	src/rituals_serialization.cpp	/^void deserialize_tile_sta
 deserialize_tilemap	src/rituals_serialization.cpp	/^void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)$/;"	f
 deserialize_world	src/rituals_serialization.cpp	/^void deserialize_world(World* world, FILE* world_file)$/;"	f
 deserialize_world_area_stub	src/rituals_serialization.cpp	/^void deserialize_world_area_stub(World_Area_Stub* stub, World* world, FILE* fp)$/;"	f
-diff	src/rituals_math.cpp	/^	Rect2 diff;$/;"	m	struct:Rect2_Clip_Info	file:
 diff1	src/rituals_math.cpp	/^	Vec2 diff1;$/;"	m	struct:Rect2_Clip_Info	file:
 diff2	src/rituals_math.cpp	/^	Vec2 diff2;$/;"	m	struct:Rect2_Clip_Info	file:
 direction	src/rituals_world_area.cpp	/^	Direction direction;$/;"	m	struct:Entity	file:
@@ -2050,7 +2049,6 @@ prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
 r	src/rituals_game.cpp	/^	Random r;$/;"	m	struct:Game_Main	file:
 r	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
-r	src/rituals_math.cpp	/^	Rect2 r;$/;"	m	struct:Rect2_Clip_Info	file:
 rand_range	src/rituals_game.cpp	/^real rand_range(Random* r, real min, real max)$/;"	f
 ratio	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 raw_coeff	src/thirdparty/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon6::__anon7

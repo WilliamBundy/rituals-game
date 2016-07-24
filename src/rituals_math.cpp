@@ -245,8 +245,6 @@ static inline bool operator==(Rect2 a, Rect2 b)
 
 struct Rect2_Clip_Info
 {
-	Rect2 r;
-	Rect2 diff;
 	Vec2 rp1;
 	Vec2 rp2;
 	Vec2 diff1;
@@ -257,8 +255,6 @@ struct Rect2_Clip_Info
 
 static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 {
-	Rect2 diff = Rect2{0, 0, 0, 0};
-	Rect2 o = r;
 	Vec2 rp1 = v2(r.x, r.y);
 	Vec2 rp2 = rp1 + v2(r.w, r.h);
 	Vec2 cp1 = v2(clip.x, clip.y);
@@ -286,43 +282,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	}
 
 
-
-	if(r.x < clip.x) {
-		diff.x = clip.x - r.x;
-		diff.w -= diff.x;
-		o.x = clip.x;
-		o.w -= diff.x;
-	} 
-
-	if((o.x + o.w) > (clip.x + clip.w)) {
-		o.w = (clip.x + clip.w) - o.x;
-		diff.w = o.w - r.w;
-	}
-
-	if(o.y < clip.y) {
-		diff.y = clip.y - o.y;
-		diff.h -= diff.y;
-		o.y = clip.y;
-		o.h -= diff.y;
-	}
-
-	if((o.y + o.h) > (clip.y + clip.h)) {
-		o.h = (clip.y + clip.h) - o.y;
-		diff.h = o.h - r.h;
-	}
-
-	diff.x = o.x - r.x;
-	diff.y = o.y - r.y;
-	diff.w = o.w - r.w;
-	diff.h = o.h - r.h;
-#if 0
-	diff.x /= o.w;
-	diff.w /= o.w;
-	diff.y /= o.h;
-	diff.h /= o.h;
-#endif
 	return Rect2_Clip_Info{
-		o, diff,
 		rp1, rp2, diff1, diff2
 	};
 }
