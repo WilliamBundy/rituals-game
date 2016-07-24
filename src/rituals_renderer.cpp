@@ -352,7 +352,7 @@ void renderer_push_sprite(Sprite* s)
 		sp.position.y = clip.r.y;
 		sp.size.x = clip.r.w;
 		sp.size.y = clip.r.h;
-		//sp.anchor = Anchor_Top_Left;
+		sp.anchor = Anchor_Top_Left;
 	}
 
 
