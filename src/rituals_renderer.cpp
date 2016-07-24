@@ -313,7 +313,7 @@ void renderer_push_sprite(Sprite* s)
 		r.w = sp.size.x;
 		r.h = sp.size.y;
 		Vec2 anchor = v2(SpriteAnchorX[sp.anchor], SpriteAnchorY[sp.anchor]);
-		r.x += r.w * (0.5f + SpriteAnchorX[sp.anchor]);
+		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
 		r.y += r.h * (0.5f + SpriteAnchorY[sp.anchor]);
 		sp.angle = 0;
 		{
