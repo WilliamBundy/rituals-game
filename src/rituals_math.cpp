@@ -272,7 +272,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	}
 
 	if(rp2.x > cp2.x) {
-		diff2.x = rp2.x - cp1.x;
+		diff2.x = rp2.x - cp2.x;
 		rp2.x = cp2.x;
 	}
 	if(rp1.y < cp1.y) {
@@ -281,7 +281,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	}
 
 	if(rp2.y > cp2.y) {
-		diff2.y = rp2.y - cp1.y;
+		diff2.y = rp2.y - cp2.y;
 		rp2.y = cp2.y;
 	}
 
