@@ -322,8 +322,8 @@ void renderer_push_sprite(Sprite* s)
 		sp.texture.h *= (Renderer->texture_height);
 
 		Vec2 tex_scale = v2(sp.size.x / sp.texture.w, sp.size.y / sp.texture.h);
-		Vec2 tp1 = clip.rp1 * tex_scale;
-		Vec2 tp2 = clip.rp2 * tex_scale;
+		Vec2 tp1 = clip.diff1 * tex_scale;
+		Vec2 tp2 = clip.diff2 * tex_scale;
 
 
 		sp.texture.x += clip.diff.x * (sp.texture.w / sp.size.x);
