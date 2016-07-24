@@ -166,7 +166,7 @@ void main_menu_update()
 	render_clip_rect();
 	real lasty = 32;
 	Body_Font->color = v4(1, 1, 1, 1);
-	render_body_text("Rituals", v2(32, 32), false, 4.0f);
+	render_body_text("Rituals", v2(300 + 32, 32), false, 4.0f);
 	lasty += 16;
 	lasty += Body_Font->glyph_height * 4;
 	gui_add_text_input(&menu_state->handle, v2(32, lasty), v2(256, Body_Font->glyph_height + 8));
