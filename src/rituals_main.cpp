@@ -161,7 +161,7 @@ void main_menu_update()
 	renderer_start();
 	
 	//draw_box_outline(v2(140, 140), v2(200, 200), v4(0.5f, 1.0f, 0.5f, 1), 2);
-	renderer_set_clip_rect(0, 0, Input->mouse_x / Game->scale, 200);
+	renderer_set_clip_rect(0, 0, 40, 200);
 	//renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
 	render_clip_rect();
 	real lasty = 32;
