@@ -1173,7 +1173,7 @@ _generate_registry_lookup	src/rituals_game_registry.cpp	55;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
-_get_sprite_y_base	src/rituals_renderer.cpp	342;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	347;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	98;"	d	file:
 _glerror	src/rituals_renderer.cpp	100;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
@@ -1396,6 +1396,8 @@ deserialize_tilemap	src/rituals_serialization.cpp	/^void deserialize_tilemap(Til
 deserialize_world	src/rituals_serialization.cpp	/^void deserialize_world(World* world, FILE* world_file)$/;"	f
 deserialize_world_area_stub	src/rituals_serialization.cpp	/^void deserialize_world_area_stub(World_Area_Stub* stub, World* world, FILE* fp)$/;"	f
 diff	src/rituals_math.cpp	/^	Rect2 diff;$/;"	m	struct:Rect2_Clip_Info	file:
+diff1	src/rituals_math.cpp	/^	Vec2 diff1;$/;"	m	struct:Rect2_Clip_Info	file:
+diff2	src/rituals_math.cpp	/^	Vec2 diff2;$/;"	m	struct:Rect2_Clip_Info	file:
 direction	src/rituals_world_area.cpp	/^	Direction direction;$/;"	m	struct:Entity	file:
 draw_box_outline	src/rituals_renderer.cpp	/^void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness)$/;"	f
 draw_box_outline	src/rituals_renderer.cpp	/^void draw_box_outline(Vec2 center, Vec2 size, Vec4 colors[4], int32 thickness)$/;"	f
@@ -2101,6 +2103,8 @@ restart_interval	src/thirdparty/stb_image.h	/^   int restart_interval, todo;$/;"
 restitution	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/;"	m	struct:Sim_Body	file:
 rgb	src/thirdparty/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon6
 rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
+rp1	src/rituals_math.cpp	/^	Vec2 rp1;$/;"	m	struct:Rect2_Clip_Info	file:
+rp2	src/rituals_math.cpp	/^	Vec2 rp2;$/;"	m	struct:Rect2_Clip_Info	file:
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon12
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon6
 save_dir	src/rituals_main.cpp	/^	char save_dir[FilePathMaxLength];$/;"	m	struct:Menu_State	file:

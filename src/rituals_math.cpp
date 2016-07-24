@@ -247,6 +247,10 @@ struct Rect2_Clip_Info
 {
 	Rect2 r;
 	Rect2 diff;
+	Vec2 rp1;
+	Vec2 rp2;
+	Vec2 diff1;
+	Vec2 diff2;
 };
 
 
@@ -255,6 +259,34 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 {
 	Rect2 diff = Rect2{0, 0, 0, 0};
 	Rect2 o = r;
+	Vec2 rp1 = v2(r.x, r.y);
+	Vec2 rp2 = rp1 + v2(r.w, r.h);
+	Vec2 cp1 = v2(clip.x, clip.y);
+	Vec2 cp2 = cp1 + v2(clip.w, clip.h);
+	Vec2 diff1 = v2(0, 0);
+	Vec2 diff2 = v2(0, 0);
+
+	if(rp1.x < cp1.x) {
+		diff1.x = cp1.x - rp1.x;
+		rp1.x = cp1.x;
+	}
+
+	if(rp2.x > cp2.x) {
+		diff2.x = rp2.x - cp1.x;
+		rp2.x = cp2.x;
+	}
+	if(rp1.y < cp1.y) {
+		diff1.y = cp1.y - rp1.y;
+		rp1.y = cp1.y;
+	}
+
+	if(rp2.y > cp2.y) {
+		diff2.y = rp2.y - cp1.y;
+		rp2.y = cp2.y;
+	}
+
+
+
 	if(r.x < clip.x) {
 		diff.x = clip.x - r.x;
 		diff.w -= diff.x;
@@ -291,6 +323,7 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 #endif
 	return Rect2_Clip_Info{
 		o, diff
+		rp1, rp2, diff1, diff2
 	};
 }
 
