@@ -315,7 +315,7 @@ void renderer_push_sprite(Sprite* s)
 		sp.position.y = clip.r.y;
 		sp.size.x = clip.r.w;
 		sp.size.y = clip.r.h;
-#if 1
+#if 0
 		sp.texture.x += clip.diff.x / (Renderer->texture_width * clip.r.w);
 		sp.texture.y += clip.diff.y / (Renderer->texture_height * clip.r.h);
 		sp.texture.w += clip.diff.w / (Renderer->texture_width * clip.r.w);
