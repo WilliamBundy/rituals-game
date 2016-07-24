@@ -326,30 +326,22 @@ void renderer_push_sprite(Sprite* s)
 
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
 
-		sp.texture.x *= (Renderer->texture_width);
-		sp.texture.y *= (Renderer->texture_height);
-		sp.texture.w *= (Renderer->texture_width);
-		sp.texture.h *= (Renderer->texture_height);
-
-		Vec2 tex_scale = v2(sp.texture.w / sp.size.x, sp.texture.h / sp.size.y );
+		Vec2 tex_scale = v2(sp.texture.w / sp.size.x, sp.texture.h / sp.size.y);
 		Vec2 tdp1 = clip.diff1 * tex_scale;
 		Vec2 tdp2 = clip.diff2 * tex_scale;
-
+		tdp1.x /= Renderer->texture_width;
+		tdp1.y /= Renderer->texture_height;
+		tdp2.x /= Renderer->texture_width;
+		tdp2.y /= Renderer->texture_height;
 		Vec2 tp1 = v2(sp.texture.x, sp.texture.y);
 		Vec2 tp2 = tp1 + v2(sp.texture.w, sp.texture.h);
 
 		tp1 += tdp1;
 		tp2 -= tdp2;
-
 		sp.texture.x = tp1.x;
 		sp.texture.y = tp1.y;
 		sp.texture.w = tp2.x - tp1.x;
 		sp.texture.h = tp2.y - tp1.y;
-
-		sp.texture.x /= (Renderer->texture_width);
-		sp.texture.y /= (Renderer->texture_height);
-		sp.texture.w /= (Renderer->texture_width);
-		sp.texture.h /= (Renderer->texture_height);
 
 		sp.position = clip.rp1;
 		sp.size = clip.rp2 - clip.rp1;
