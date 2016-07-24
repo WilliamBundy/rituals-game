@@ -929,7 +929,7 @@ GenerateBinarySearchForType	src/rituals_game.cpp	98;"	d	file:
 GenerateInsertionSortForType	src/rituals_game.cpp	48;"	d	file:
 GenerateIntrosortForType	src/rituals_game.cpp	62;"	d	file:
 GenerateQuicksortForType	src/rituals_game.cpp	25;"	d	file:
-Get_Texture_Coordinates	src/rituals_renderer.cpp	252;"	d	file:
+Get_Texture_Coordinates	src/rituals_renderer.cpp	253;"	d	file:
 Gigabytes	src/rituals_main.cpp	99;"	d	file:
 Gigabytes	src/rituals_win32.cpp	84;"	d	file:
 Gui_ButtonActiveColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;$/;"	v
@@ -1174,8 +1174,8 @@ _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_world.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_sprite_y_base	src/rituals_renderer.cpp	363;"	d	file:
-_gl_offset	src/rituals_renderer.cpp	98;"	d	file:
-_glerror	src/rituals_renderer.cpp	100;"	d	file:
+_gl_offset	src/rituals_renderer.cpp	99;"	d	file:
+_glerror	src/rituals_renderer.cpp	101;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
 _isnt_spritefont_separator	rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _isnt_spritefont_separator	src/rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
