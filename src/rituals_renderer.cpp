@@ -316,10 +316,15 @@ void renderer_push_sprite(Sprite* s)
 		sp.size.x = clip.r.w;
 		sp.size.y = clip.r.h;
 #if 1
-		sp.texture.x += clip.diff.x / (Renderer->texture_width);
-		sp.texture.y += clip.diff.y / (Renderer->texture_height);
-		sp.texture.w += clip.diff.w / (Renderer->texture_width);
-		sp.texture.h += clip.diff.h / (Renderer->texture_height);
+		sp.texture.x = clip.diff.x  + (sp.texture.x * Renderer->texture_width);
+		sp.texture.y = clip.diff.y + (sp.texture.y * Renderer->texture_height);
+		sp.texture.w = clip.diff.w + (sp.texture.w * Renderer->texture_width);
+		sp.texture.h = clip.diff.h + (sp.texture.h * Renderer->texture_height);
+
+		sp.texture.x /= (Renderer->texture_width);
+		sp.texture.y /= (Renderer->texture_height);
+		sp.texture.w /= (Renderer->texture_width);
+		sp.texture.h /= (Renderer->texture_height);
 #endif 
 		sp.anchor = Anchor_Top_Left;
 	}
