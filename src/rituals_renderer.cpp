@@ -303,6 +303,11 @@ void render_clip_rect()
 	Renderer->clip = r;
 }
 
+void renderer_push_sprite_noclip(Sprite* s)
+{
+	Renderer->sprite_data[Renderer->sprite_count++] = *s;
+}
+
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
@@ -316,7 +321,6 @@ void renderer_push_sprite(Sprite* s)
 		r.h = sp.size.y;
 		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
 		r.y -= r.h * (0.5f + SpriteAnchorY[sp.anchor]);
-		sp.angle = 0;
 
 		if(r.x > (c.x + c.w)) return;
 		if((r.x + r.w) < c.x) return;
@@ -341,10 +345,9 @@ void renderer_push_sprite(Sprite* s)
 		sp.position = clip.rp1;
 		sp.size = clip.rp2 - clip.rp1;
 		sp.anchor = Anchor_Top_Left;
+		sp.angle = 0;
 	}
 
-
-	//sp = *s;
 	Renderer->sprite_data[Renderer->sprite_count++] = sp;
 }
 
