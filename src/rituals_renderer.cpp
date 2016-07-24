@@ -308,11 +308,11 @@ void renderer_push_sprite(Sprite* s)
 		AABB clipaabb = rect_to_aabb(&Renderer->clip);
 		if(!aabb_intersect(&raabb, &clipaabb)) return;
 		Rect2 rclip = Renderer->clip;
-		Renderer->clip = rect2(0, 0, 0, 0);
-		draw_box_outline(sp.position + sp.size * anchor , sp.size, v4(1, 1, 1, .5), 1);
-		draw_box_outline(v2(rclip.x, rclip.y) + v2(rclip.w/2, rclip.h/2), v2(rclip.w, rclip.h), v4(0.5, 1, 0.5, 1), 2);
+	//	Renderer->clip = rect2(0, 0, 0, 0);
+	//	draw_box_outline(sp.position + sp.size * anchor , sp.size, v4(1, 1, 1, .5), 1);
+	//	draw_box_outline(v2(rclip.x, rclip.y) + v2(rclip.w/2, rclip.h/2), v2(rclip.w, rclip.h), v4(0.5, 1, 0.5, 1), 2);
 
-		Renderer->clip = rclip;
+	//	Renderer->clip = rclip;
 		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
 		if(clip.r == rect2(0, 0, 0, 0)) return;
 		sp.position.x = clip.r.x;
