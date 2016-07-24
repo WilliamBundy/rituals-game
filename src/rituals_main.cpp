@@ -160,6 +160,7 @@ void main_menu_update()
 	Renderer->offset = v2(0, 0);
 	renderer_start();
 	
+	draw_box_outline(v2(140, 140), v2(200, 200), v4(0.5f, 1.0f, 0.5f, 1), 2);
 	renderer_set_clip_rect(40, 40, 200, 200);
 //	renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
 	real lasty = 32;
