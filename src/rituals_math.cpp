@@ -283,10 +283,10 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	diff.y = o.y - r.y;
 	diff.w = o.w - r.w;
 	diff.h = o.h - r.h;
-	//diff.x /= o.w;
-	//diff.w /= o.w;
-	//diff.y /= o.h;
-	//diff.h /= o.h;
+	diff.x /= o.w;
+	diff.w /= o.w;
+	diff.y /= o.h;
+	diff.h /= o.h;
 	return Rect2_Clip_Info{
 		o, diff
 	};
