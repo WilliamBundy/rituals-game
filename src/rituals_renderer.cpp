@@ -292,6 +292,16 @@ static inline void renderer_set_clip_rect(real x, real y, real w, real h)
 }
 
 void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness);
+void render_clip_rect()
+{
+	Rect2 r = Renderer->clip;
+	Renderer->clip = Rect2{};
+
+	Vec2 rw = v2(r.w, r.h);
+	draw_box_outline(v2(r.x, r.y) + rw / 2, rw, v4(0.5f, 1, 0.5f, 1), 1);
+	Renderer->clip = r;
+}
+
 void renderer_push_sprite(Sprite* s)
 {
 	Sprite sp = *s;
