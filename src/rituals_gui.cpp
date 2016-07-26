@@ -363,17 +363,23 @@ bool gui_query_mouse(Rect2 region, Vec2 parent)
 {
 	region.position -= parent;
 	Rect2 r = region;
-	Rect2 c = Renderer->clip;
-	if(r.x > (c.x + c.w)) return false;
-	if((r.x + r.w) < c.x) return false;
-	if(r.y > (c.y + c.h)) return false;
-	if((r.y + r.h) < c.y) return false;
-	Rect2_Clip_Info clip = rect2_clip(r, c);
-	Vec2 rp1 = clip.rp1;
-	Vec2 rp2 = clip.rp2;
 	Vec2 p = Input->mouse_pos;
+	Vec2 rp1, rp2;
+	if(renderer_has_clip_rect()) {
+		Rect2 c = Renderer->clip; 
+		if(r.x > (c.x + c.w)) return false;
+		if((r.x + r.w) < c.x) return false;
+		if(r.y > (c.y + c.h)) return false;
+		if((r.y + r.h) < c.y) return false;
+		Rect2_Clip_Info clip = rect2_clip(r, c);
+		rp1 = clip.rp1;
+		rp2 = clip.rp2;
+	} else {
+		rp1 = r.position;
+		rp2 = r.position + r.size;
+	}
 	return (p.x >= rp1.x) && (p.x <= rp2.x) && 
-	   (p.y >= rp1.y) && (p.y <= rp2.y);
+		   (p.y >= rp1.y) && (p.y <= rp2.y);
 }
 
 
