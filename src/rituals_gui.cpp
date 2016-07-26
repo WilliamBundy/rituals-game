@@ -472,7 +472,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		color2, color2,
 		color1, color1
 	};
-	draw_box_outline(position, size, colors, 2);
+	draw_box_outline(position + size/2, size, colors, 2);
 
 	position += v2(4, size.y / 2 - Body_Font->glyph_height / 2);
 	size -= v2(8, 2);
