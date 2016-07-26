@@ -514,6 +514,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	r.size = handle.size;
 
 	if(gui_query_mouse(r, v2(0, 0))) {
+		handle.color = v4(1, 1, 1, 1);
 		if(active != NULL) {
 			if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
 				*active = true; 
