@@ -274,10 +274,6 @@ void spritefont_render_text_ex(Spritefont* font,
 					position.x = 0;
 					wrapped++;
 				}
-
-			//	draw_box_outline(initial_pos + position * scale, 
-			//			v2(word_width, font->glyph_height), v4(1, 1, 1, 1), 2);
-
 				for(isize j = wordstart; j <= i; ++j) {
 					c = text[j];
 					switch(c) {
@@ -454,10 +450,22 @@ bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 
 	return (state > 0) && (Input->mouse[SDL_BUTTON_LEFT] == State_Just_Released);
 }
+
 bool gui_add_button(Vec2 position, char* text)
 {
 	return gui_add_button(position, text, v2(0, 0));
 }
+
+bool gui_add_checkbox(Vec2 position, char* text, bool* value)
+{
+	return *value;
+}
+
+real gui_add_slider(Vec2 position, char* label, real min, real max, real* value)
+{
+	return *value;
+}
+
 
 struct Gui_Window_Handle
 {
