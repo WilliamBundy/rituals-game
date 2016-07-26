@@ -503,6 +503,33 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	Vec2 line_offset = v2(0, 8);
 	draw_line(begin + line_offset, end + line_offset, v4(1, 1, 1, 0.9f), 2);
 	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), v4(1, 1, 1, 1));
+
+	Rect2 r;
+	r.position = handle.position - handle.size / 2;
+	r.size = handle.size;
+
+	if(gui_query_mouse(r, v2(0, 0))) {
+		if(active != NULL) {
+			if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+				*active = true; 
+			}
+		}
+	} 
+	if(Input->mouse[SDL_BUTTON_LEFT] <= State_Released) {
+		if(active != NULL) {
+			*active = false;
+		}
+	}
+	if(active != NULL && *active) {
+		Vec2 m = Input->mouse_pos;
+		m.y = 0;
+		if(m.x < begin.x) m.x = begin.x;
+		else if (m.x > end.x) m.x = end.x;
+		m.x -= begin.x;
+		m.x /= (end.x - begin.x);
+		perc = m.x;
+	}
+
 	handle.position.x += perc * (end.x - begin.x);
 
 	renderer_push_sprite(&handle);
