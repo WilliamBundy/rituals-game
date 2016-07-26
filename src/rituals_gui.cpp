@@ -378,6 +378,7 @@ bool gui_query_mouse(Rect2 region, Vec2 parent)
 		rp1 = r.position;
 		rp2 = r.position + r.size;
 	}
+	draw_box_outline(r.position + r.size / 2, r.size, v4(1, 0.5, 0.5, 1), 1);
 	return (p.x >= rp1.x) && (p.x <= rp2.x) && 
 		   (p.y >= rp1.y) && (p.y <= rp2.y);
 }
