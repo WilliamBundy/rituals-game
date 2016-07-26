@@ -425,7 +425,7 @@ int main(int argc, char** argv)
 		Input->scancodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
 		Input->keycodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
 		Input->mouse = arena_push_array(Game->game_arena, int8, 16);
-		Input->mouse_pos = 	v2i(0, 0);
+		Input->mouse_pos = 	v2(0, 0);
 		Input->text = arena_push_array(Game->game_arena, char, InputTextCapacity);
 		Input->text_count = 0;
 		Input->capture_newlines = false;
