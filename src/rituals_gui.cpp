@@ -543,7 +543,6 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)
 					Input->text = clipboard_text;
 					Input->text_count = text_len;
 					handle->buffer_length = append_input_text(handle->buffer,
-					!z!3
 							handle->buffer_length,
 							handle->buffer_length - handle->cursor);
 					Input->text = input_text;
