@@ -535,7 +535,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		}
 		char number[32];
 		isize len = snprintf(number, 32, "%.*f", precision, *in_value);
-		render_body_text(number, handle.position - v2(len * Body_Font->glyph_width / 2, Body_Font->glyph_height * 2));
+		render_body_text(number, handle.position - v2(len * Body_Font->glyph_width / 2, Body_Font->glyph_height - 4 - handle.size.y / 2));
 	}
 
 	renderer_push_sprite(&handle);
