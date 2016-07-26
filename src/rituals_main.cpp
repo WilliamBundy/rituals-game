@@ -154,6 +154,8 @@ void init_menu_state()
 }
 
 
+bool b = false;;
+real r = 0;
 void main_menu_update()
 {
 	game_set_scale(2.0f);
@@ -192,7 +194,8 @@ void main_menu_update()
 
 	lasty += 32 + 16;
 
-	gui_add_slider(v2(32, lasty), v2(256, 22), "Slider", 0, 100, 0, NULL, NULL);
+
+	gui_add_slider(v2(32, lasty), v2(256, 22), "Slider", 0, 100, 0, &r, &b);
 
 
 	lasty += 32 + 16;

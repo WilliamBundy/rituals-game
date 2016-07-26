@@ -1158,7 +1158,7 @@ _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	43;"	d	file:
 _check	src/rituals_world.cpp	282;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	395;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	398;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	180;"	d	file:
 _color	src/rituals_gui.cpp	356;"	d	file:
@@ -1259,6 +1259,7 @@ arena_push_array	src/rituals_game.cpp	147;"	d	file:
 arena_push_struct	src/rituals_game.cpp	146;"	d	file:
 asset_arena	src/rituals_game.cpp	/^	Memory_Arena* asset_arena;$/;"	m	struct:Game_Main	file:
 axis	src/rituals_gui.cpp	/^	isize axis;$/;"	m	struct:Gui_Context	file:
+b	src/rituals_main.cpp	/^bool b = false;;$/;"	v
 b	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 b	src/rituals_tilemap.cpp	/^bool b = 0;$/;"	v
 b1	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:
@@ -2052,6 +2053,7 @@ prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	s
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
 r	src/rituals_game.cpp	/^	Random r;$/;"	m	struct:Game_Main	file:
+r	src/rituals_main.cpp	/^real r = 0;$/;"	v
 r	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 rand_range	src/rituals_game.cpp	/^real rand_range(Random* r, real min, real max)$/;"	f
 ratio	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
