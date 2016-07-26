@@ -312,7 +312,7 @@ void spritefont_render_text_ex(Spritefont* font,
 		}
 	}
 	if(region != NULL) {
-		*region = position;
+		*region = position + v2(0, font->height);
 		if(wrapped > 0) {
 			region->x = max_width;
 		}
@@ -482,7 +482,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	Vec2 max_str_reg;
     spritefont_render_text(Body_Font,
 		max_str, max_str_len,
-		position - v2(min_str_reg.x, 0), 
+		position + v2(min_str_reg.x, 0), 
 		-1, 
 		Anchor_Top_Left,
 		1.0f,
