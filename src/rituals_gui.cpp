@@ -331,8 +331,8 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	Vec2 text_size = spritefont_size_text(font, text);
 	Sprite s; 
 	init_sprite(&s);
-	s.size = v2(text_size.x + 16,  Body_Font->glyph_height + 8);
-	s.position = position - v2(8, 4);
+	s.size = v2(text_size.x + 8,  Body_Font->glyph_height + 4);
+	s.position = position - v2(4, 2);
 	s.color = background;
 	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
 	s.anchor = Anchor_Top_Left;
