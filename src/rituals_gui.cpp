@@ -461,7 +461,7 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 	return *value;
 }
 
-void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active)
+void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool always_show_value = false)
 {
 	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
@@ -481,13 +481,24 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	char max_str[16];
 	isize min_str_len = snprintf(min_str, 16, "%.*f", precision, min);
 	isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
+	real offset = 0;
+	if(always_show_value) {
+		Vec2 val_region;
+		char val_str[16];
+		isize val_str_len = snprintf(val_str, 16, "%.*f", precision, val);
+		spritefont_render_text(Body_Font,
+				val_str, val_str_len,
+				position, -1, Anchor_Top_Left, 1.0f, &val_region);
+		offset = val_region.x;
+
+	}
 	Vec2 min_str_reg;
 	Body_Font->color = v4(1, 1, 1, 1);
     spritefont_render_text(Body_Font,
 		min_str, min_str_len,
-		position, -1, Anchor_Top_Left, 1.0f, &min_str_reg);
+		position + v2(offset.x, 0), -1, Anchor_Top_Left, 1.0f, &min_str_reg);
 	Vec2 max_str_reg;
-	Vec2 begin = position + v2(min_str_reg.x, 0);
+	Vec2 begin = position + v2(min_str_reg.x, 0) + offset;
 	Vec2 end = position + v2(
 			size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1),
 			0);
