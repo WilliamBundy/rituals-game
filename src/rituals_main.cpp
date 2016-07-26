@@ -219,6 +219,11 @@ void main_menu_update()
 		}
 	}
 
+	if(saves_dirty) {
+		tinydir_close(&menu_state->saves);
+		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+	}
+
 	
 	
 
