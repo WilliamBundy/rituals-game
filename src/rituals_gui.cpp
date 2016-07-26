@@ -374,7 +374,7 @@ bool gui_query_mouse(Gui_Context* ctx, Rect2 region, Vec2 parent)
 	Vec2 rp2 = clip.rp2;
 	Vec2 p = Input->mouse_pos;
 	return (p.x >= rp1.x) && (p.x <= rp2.x) && 
-	   (p.y >= rp1.y) && (p.y <= rp2.y));
+	   (p.y >= rp1.y) && (p.y <= rp2.y);
 }
 
 
