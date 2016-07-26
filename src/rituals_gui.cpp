@@ -472,6 +472,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	isize min_str_len = snprintf(min_str, 16, "%.*f", precision, min);
 	isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
 	Vec2 min_str_reg;
+	Body_Font->color = v4(1, 1, 1, 1);
     spritefont_render_text(Body_Font,
 		min_str, min_str_len,
 		position, 
@@ -479,7 +480,6 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		Anchor_Top_Left,
 		1.0f,
 		&min_str_reg);
-	printf("%.2f %.2f \n", min_str_reg.x, min_str_reg.y);
 	Vec2 max_str_reg;
     spritefont_render_text(Body_Font,
 		max_str, max_str_len,
