@@ -187,6 +187,7 @@ void main_menu_update()
 		
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 		menu_state->handle.buffer_length = 0;
+		saves_dirty = false;
 	}
 
 
@@ -213,6 +214,7 @@ void main_menu_update()
 				if(gui_add_button(v2(32 + 144 + 32 + 64 + 32, lasty), "Confirm", v2(64, 0))) {
 					recursively_delete_folder(file.path);
 					menu_state->delete_index = -1;
+					saves_dirty = true;
 				}
 			}
 			lasty += 32;
