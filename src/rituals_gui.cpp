@@ -312,7 +312,7 @@ void spritefont_render_text_ex(Spritefont* font,
 		}
 	}
 	if(region != NULL) {
-		*region = position - initial_pos;
+		*region = position;
 		if(wrapped > 0) {
 			region->x = max_width;
 		}
