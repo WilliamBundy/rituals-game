@@ -211,8 +211,8 @@ void main_menu_update()
 					menu_state->delete_index = -1;
 				}
 				if(gui_add_button(v2(32 + 144 + 32 + 64 + 32, lasty), "Confirm", v2(64, 0))) {
-					printf("%s \n", file.path);
-
+					recursively_delete_folder(file.path);
+					menu_state->delete_index = -1;
 				}
 			}
 			lasty += 32;
