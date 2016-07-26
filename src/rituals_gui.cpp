@@ -498,7 +498,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		value = *in_value;
 		perc = (value - min) / (max - min);
 	}
-	draw_line(begin + v2(0, 8), end + v2(0, 8), v4(1, 1, 1, 1), 2);
+	draw_line(begin + v2(2, 8), end + v2(0, 8), v4(1, 1, 1, 1), 2);
 
 
 
