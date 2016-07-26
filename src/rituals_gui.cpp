@@ -218,7 +218,7 @@ void spritefont_render_text(Spritefont* font,
 		position.x += size.x + font->character_padding;
 	}
 	if(region != NULL) {
-		*region = position - initial_pos;
+		*region = position;
 		if(wrapped > 0) {
 			region->x = max_width;
 		}
