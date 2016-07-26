@@ -493,7 +493,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 
 	}
 	Vec2 min_str_reg;
-	Body_Font->color = v4(.8, .8, .8, 1);
+	Body_Font->color = v4(1, 1, 1, 1);
     spritefont_render_text(Body_Font,
 		min_str, min_str_len,
 		position + v2(offset, 0), -1, Anchor_Top_Left, 1.0f, &min_str_reg);
