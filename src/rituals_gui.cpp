@@ -461,7 +461,7 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 	return *value;
 }
 
-void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* value, bool* active)
+void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active)
 {
 	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
@@ -481,14 +481,30 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		1.0f,
 		&min_str_reg);
 	Vec2 max_str_reg;
+	Vec2 begin = position + v2(min_str_reg.x, 0);
+	Vec2 end = position + v2(size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1), 0);
     spritefont_render_text(Body_Font,
 		max_str, max_str_len,
-		position + v2(size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1), 0),
+		end, 
 		-1, 
 		Anchor_Top_Left,
 		1.0f,
 		&max_str_reg); 
 	render_body_text(label, position + v2(size.x - Body_Font->glyph_width * strlen(label), 0));
+
+	real value = 0;
+	real perc = 0;
+	if(in_value != NULL) {
+		value = *in_value;
+		perc = (value - min) / (max - min);
+	}
+	draw_line(begin, end, v4(1, 1, 1, 1), 2);
+
+
+
+
+
+
 
 	return; 
 }
