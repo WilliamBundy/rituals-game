@@ -943,7 +943,7 @@ Gui_ButtonOutlineRestColor2	src/rituals_gui.cpp	/^Vec4 Gui_ButtonOutlineRestColo
 Gui_ButtonRestColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonRestColor = _color(.8, .8, .8, 1) * Gui_ButtonTint;$/;"	v
 Gui_ButtonTextColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTextColor = _color(0, 0, 0, 1) ;$/;"	v
 Gui_ButtonTextDownColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTextDownColor = Gui_ButtonTextColor;$/;"	v
-Gui_ButtonTint	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 0.5);$/;"	v
+Gui_ButtonTint	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 1);$/;"	v
 Gui_Context	src/rituals_gui.cpp	/^struct Gui_Context$/;"	s	file:
 Gui_Text_Input_Handle	src/rituals_gui.cpp	/^struct Gui_Text_Input_Handle$/;"	s	file:
 Gui_Window_Handle	src/rituals_gui.cpp	/^struct Gui_Window_Handle$/;"	s	file:
