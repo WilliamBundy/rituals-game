@@ -201,9 +201,11 @@ void main_menu_update()
 				start_play_state(file.name);
 				Game->state = Game_State_Play;
 			}
-			if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(48, 0))) {
-
-			}
+			if(menu_state->delete_index != i) {
+				if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(32, 0))) {
+					menu_state->delete_index = i;
+				}
+			} 
 			lasty += 32;
 		}
 	}
