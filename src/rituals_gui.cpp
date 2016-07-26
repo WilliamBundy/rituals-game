@@ -359,6 +359,26 @@ void render_title_text(char* text, Vec2 position)
 
 #define _color(x, y, z, w) Vec4{ (real)(x), (real)(y), (real)(z), (real)(w) }
 
+typedef struct Gui_Context Gui_Context;
+bool gui_query_mouse(Gui_Context* ctx, Rect2 region, Vec2 parent)
+{
+	region.position -= parent;
+	Rect2 r = region;
+	Rect2 c = Renderer->clip;
+	if(r.x > (c.x + c.w)) return false;
+	if((r.x + r.w) < c.x) return false;
+	if(r.y > (c.y + c.h)) return false;
+	if((r.y + r.h) < c.y) return false;
+	Rect2_Clip_Info clip = rect2_clip(r, c);
+	Vec2 rp1 = clip.rp1;
+	Vec2 rp2 = clip.rp2;
+	Vec2 p = Input->mouse_pos;
+	return (p.x >= rp1.x) && (p.x <= rp2.x) && 
+	   (p.y >= rp1.y) && (p.y <= rp2.y));
+}
+
+
+
 Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 1);
 Vec4 Gui_ButtonRestColor = _color(.8, .8, .8, 1) * Gui_ButtonTint;
 Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;
@@ -523,7 +543,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)
 					Input->text = clipboard_text;
 					Input->text_count = text_len;
 					handle->buffer_length = append_input_text(handle->buffer,
-							handle->max_chars_by_width,
+					!z!3
 							handle->buffer_length,
 							handle->buffer_length - handle->cursor);
 					Input->text = input_text;

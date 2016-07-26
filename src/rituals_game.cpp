@@ -299,7 +299,8 @@ struct Game_Input
 	int8* mouse;
 	int32 mouse_x;
 	int32 mouse_y;
-	Vec2i mouse_pos;
+	Vec2i screen_mouse_pos;
+	Vec2 mouse_pos;
 	bool capture_tabs;
 	bool capture_newlines;
 	char* text;
