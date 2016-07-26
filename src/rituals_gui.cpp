@@ -485,21 +485,15 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	Body_Font->color = v4(1, 1, 1, 1);
     spritefont_render_text(Body_Font,
 		min_str, min_str_len,
-		position, 
-		-1, 
-		Anchor_Top_Left,
-		1.0f,
-		&min_str_reg);
+		position, -1, Anchor_Top_Left, 1.0f, &min_str_reg);
 	Vec2 max_str_reg;
 	Vec2 begin = position + v2(min_str_reg.x, 0);
-	Vec2 end = position + v2(size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1), 0);
+	Vec2 end = position + v2(
+			size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1),
+			0);
     spritefont_render_text(Body_Font,
 		max_str, max_str_len,
-		end, 
-		-1, 
-		Anchor_Top_Left,
-		1.0f,
-		&max_str_reg); 
+		end, -1, Anchor_Top_Left, 1.0f, &max_str_reg); 
 	render_body_text(label, position + v2(size.x - Body_Font->glyph_width * strlen(label), 0));
 
 	real value = 0;
@@ -512,7 +506,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	end.x -= 8;
 	Vec2 line_offset = v2(0, 8);
 	draw_line(begin + line_offset, end + line_offset, v4(1, 1, 1, 0.9f), 2);
-	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), v4(1, 1, 1, 1));
+	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), Gui_ButtonTint);
 	handle.position.x += perc * (end.x - begin.x);
 	
 	Rect2 r;
@@ -545,18 +539,13 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		}
 		char number[32];
 		isize len = snprintf(number, 32, "%.*f", precision + 1, *in_value);
-		render_body_text(number, handle.position - v2(len * Body_Font->glyph_width / 2, Body_Font->glyph_height + 4 + handle.size.y / 2), true);
+		render_body_text(number, handle.position - v2(
+					len * Body_Font->glyph_width / 2, 
+					Body_Font->glyph_height + 4 + handle.size.y / 2), true);
 	}
 
 	renderer_push_sprite(&handle);
 	
-
-
-
-
-
-
-
 	return; 
 }
 
