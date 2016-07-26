@@ -195,7 +195,7 @@ void main_menu_update()
 	lasty += 32 + 16;
 
 
-	gui_add_slider(v2(32, lasty), v2(256, 22), "Volume", 0, 100, 0, &r, &b);
+	gui_add_slider(v2(32, lasty), v2(256, 22), "Volume", 0, 100, 0, &r, &b, true);
 
 
 	lasty += 32 + 16;
