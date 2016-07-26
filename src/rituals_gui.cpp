@@ -461,11 +461,36 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 	return *value;
 }
 
-void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, real* value, bool* active)
+void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* value, bool* active)
 {
 	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&bg);
+
+	char min_str[16];
+	char max_str[16];
+	isize min_str_len = snprintf(min_str, 16, "%.*f", precision, min);
+	isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
+	Vec2 min_str_reg;
+    spritefont_render_text(Spritefont* font,
+		min_str, min_str_len,
+		position, 
+		-1, 
+		Anchor_Top_Left,
+		1.0f,
+		&min_str_reg);
+	Vec2 max_str_reg;
+    spritefont_render_text(Spritefont* font,
+		max_str, max_str_len,
+		position + v2(min_str_reg.x, 0), 
+		-1, 
+		Anchor_Top_Left,
+		1.0f,
+		&max_str_reg); 
+
+
+
+	
 
 	return; 
 }
