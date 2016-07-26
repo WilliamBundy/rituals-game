@@ -59,7 +59,7 @@ int recursively_delete_folder(char* path, bool append_base_path = false)
 
 		_recursive_delete(Game->base_path, Game->base_path_length-1, path); 
 	} else {
-		_recursive_delete(path, strlen(path), NULL);
+		_recursive_delete(path, strlen(path), "");
 	}
 	end_temp_arena(Game->temp_arena);
 	return 1;
