@@ -359,8 +359,7 @@ void render_title_text(char* text, Vec2 position)
 
 #define _color(x, y, z, w) Vec4{ (real)(x), (real)(y), (real)(z), (real)(w) }
 
-typedef struct Gui_Context Gui_Context;
-bool gui_query_mouse(Gui_Context* ctx, Rect2 region, Vec2 parent)
+bool gui_query_mouse(Rect2 region, Vec2 parent)
 {
 	region.position -= parent;
 	Rect2 r = region;
@@ -395,16 +394,16 @@ Vec4 Gui_ButtonOutlineDownColor2 = _color(.7, .7, .7, 1) * Gui_ButtonTint;
 
 bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 {
-	Vec2 dmouse = v2(
-			Input->mouse_x / Game->scale, 
-			Input->mouse_y / Game->scale) + Renderer->offset;
 	int32 state = 0;
 
 	Vec2 txs = spritefont_size_text(Body_Font, text, strlen(text));
 	if(txs.x < minimum_size.x) txs.x = minimum_size.x;
 	if(txs.y < minimum_size.y) txs.y = minimum_size.y;
 	
-	if(aabb_intersect(aabb(position + txs/2 + v2(4, 2), txs.x/2 + 8, txs.y/2 + 4), aabb(dmouse, 0, 0))) {
+	Rect2 region;
+	region.position = position;
+	region.size = txs;
+	if(gui_query_mouse(region, v2(0,0))) {
 		state = 1;
 		if(Input->mouse[SDL_BUTTON_LEFT] >= State_Pressed) {
 			state = 2;
@@ -441,8 +440,6 @@ bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 	render_body_text(text, v2(8, 4) + v2(
 				position.x,
 				position.y + (s.size.y - txs.y) / 2 - 4));
-
-
 	Vec4 colors[4] = {
 		color1, color1,
 		color2, color2

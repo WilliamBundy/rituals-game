@@ -945,7 +945,6 @@ Gui_ButtonTextColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTextColor = _color(0, 0
 Gui_ButtonTextDownColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTextDownColor = Gui_ButtonTextColor;$/;"	v
 Gui_ButtonTint	src/rituals_gui.cpp	/^Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 1);$/;"	v
 Gui_Context	src/rituals_gui.cpp	/^struct Gui_Context$/;"	s	file:
-Gui_Context	src/rituals_gui.cpp	/^typedef struct Gui_Context Gui_Context;$/;"	t	typeref:struct:Gui_Context	file:
 Gui_Text_Input_Handle	src/rituals_gui.cpp	/^struct Gui_Text_Input_Handle$/;"	s	file:
 Gui_Window_Handle	src/rituals_gui.cpp	/^struct Gui_Window_Handle$/;"	s	file:
 Half_TS	src/rituals_game_registry.cpp	123;"	d	file:
@@ -1808,7 +1807,7 @@ glyphs	src/rituals_gui.cpp	/^	Rect2* glyphs;$/;"	m	struct:Spritefont	file:
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text)$/;"	f
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)$/;"	f
 gui_add_text_input	src/rituals_gui.cpp	/^void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)$/;"	f
-gui_query_mouse	src/rituals_gui.cpp	/^bool gui_query_mouse(Gui_Context* ctx, Rect2 region, Vec2 parent)$/;"	f
+gui_query_mouse	src/rituals_gui.cpp	/^bool gui_query_mouse(Rect2 region, Vec2 parent)$/;"	f
 h	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
 h	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon9	file:
 h	src/rituals_math.cpp	/^	int32 x, y, w, h;$/;"	m	struct:Rect2i	file:
