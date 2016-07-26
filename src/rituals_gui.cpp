@@ -493,7 +493,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	render_body_text(label, position + v2(size.x - Body_Font->glyph_width * strlen(label), 0));
 
 	real value = 0;
-	real perc = 0;
+	real perc = .5; 
 	if(in_value != NULL) {
 		value = *in_value;
 		perc = (value - min) / (max - min);
