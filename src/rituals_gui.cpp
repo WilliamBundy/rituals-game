@@ -498,7 +498,8 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		value = *in_value;
 		perc = (value - min) / (max - min);
 	}
-	begin.x += 2;
+	begin.x += 8;
+	end.x -= 8;
 	Vec2 line_offset = v2(0, 8);
 	draw_line(begin + line_offset, end + line_offset, v4(1, 1, 1, 1), 2);
 	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), v4(1, 1, 1, 1));
