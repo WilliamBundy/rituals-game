@@ -1,3 +1,3 @@
 git add --all
-git commit -m "rituals build 577" 
+git commit -m "rituals build 578" 
 git push 
