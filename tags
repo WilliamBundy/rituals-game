@@ -1158,7 +1158,7 @@ _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	43;"	d	file:
 _check	src/rituals_world.cpp	282;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	391;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	394;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	180;"	d	file:
 _color	src/rituals_gui.cpp	356;"	d	file:
@@ -1807,7 +1807,7 @@ glyphs	src/rituals_gui.cpp	/^	Rect2* glyphs;$/;"	m	struct:Spritefont	file:
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text)$/;"	f
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)$/;"	f
 gui_add_checkbox	src/rituals_gui.cpp	/^bool gui_add_checkbox(Vec2 position, char* text, bool* value)$/;"	f
-gui_add_slider	src/rituals_gui.cpp	/^real gui_add_slider(Vec2 position, char* label, real min, real max, real* value)$/;"	f
+gui_add_slider	src/rituals_gui.cpp	/^real gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, real* value, bool* active)$/;"	f
 gui_add_text_input	src/rituals_gui.cpp	/^void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)$/;"	f
 gui_query_mouse	src/rituals_gui.cpp	/^bool gui_query_mouse(Rect2 region, Vec2 parent)$/;"	f
 h	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
