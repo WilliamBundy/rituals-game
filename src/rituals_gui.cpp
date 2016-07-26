@@ -467,7 +467,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	bg.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&bg);
 	position += v2(4, size.y / 2 - Body_Font->glyph_height / 2);
-	size -= v2(4, 2);
+	size -= v2(8, 2);
 
 	char min_str[16];
 	char max_str[16];
