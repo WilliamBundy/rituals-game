@@ -202,7 +202,7 @@ void main_menu_update()
 				Game->state = Game_State_Play;
 			}
 			if(menu_state->delete_index != i) {
-				if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(32, 0))) {
+				if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(64, 0))) {
 					menu_state->delete_index = i;
 				}
 			} 
