@@ -52,10 +52,15 @@ int _recursive_delete(const char* last_path, isize last_path_len, char* path)
 }
 
 
-int recursively_delete_folder(char* path)
+int recursively_delete_folder(char* path, bool append_base_path = false)
 {
 	start_temp_arena(Game->temp_arena);
-	_recursive_delete(Game->base_path, Game->base_path_length-1, path); 
+	if(append_base_path) {
+
+		_recursive_delete(Game->base_path, Game->base_path_length-1, path); 
+	} else {
+		_recursive_delete(path, strlen(path), NULL);
+	}
 	end_temp_arena(Game->temp_arena);
 	return 1;
 }

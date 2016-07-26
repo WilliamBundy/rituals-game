@@ -2073,7 +2073,7 @@ rect2_clip	src/rituals_math.cpp	/^static inline Rect2_Clip_Info rect2_clip(Rect2
 rect2i	src/rituals_math.cpp	/^static inline Rect2i rect2i(int32 x, int32 y, int32 w, int32 h)$/;"	f	file:
 rect_to_aabb	src/rituals_math.cpp	/^static inline AABB rect_to_aabb(Rect2* r)$/;"	f	file:
 rect_to_intrect	src/rituals_math.cpp	/^static inline Rect2i rect_to_intrect(Rect2* ir)$/;"	f	file:
-recursively_delete_folder	src/rituals_serialization.cpp	/^int recursively_delete_folder(char* path)$/;"	f
+recursively_delete_folder	src/rituals_serialization.cpp	/^int recursively_delete_folder(char* path, bool append_base_path = false)$/;"	f
 register_all_rituals_item_info	src/rituals_game_registry.cpp	/^void register_all_rituals_item_info()$/;"	f
 register_all_rituals_tile_info	src/rituals_game_registry.cpp	/^void register_all_rituals_tile_info()$/;"	f
 register_everything_in_rituals	src/rituals_game_registry.cpp	/^void register_everything_in_rituals()$/;"	f
