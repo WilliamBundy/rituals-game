@@ -463,7 +463,7 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 
 void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, real* value, bool* active)
 {
-	Sprite bg = get_box_sprite(position, size, _color(1, 1, 1, .5));
+	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&bg);
 
