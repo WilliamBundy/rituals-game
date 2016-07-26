@@ -498,7 +498,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		min_str, min_str_len,
 		position + v2(offset, 0), -1, Anchor_Top_Left, 1.0f, &min_str_reg);
 	Vec2 max_str_reg;
-	Vec2 begin = position + v2(min_str_reg.x, 0) + offset;
+	Vec2 begin = position + v2(min_str_reg.x + offset, 0);
 	Vec2 end = position + v2(
 			size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1),
 			0);
