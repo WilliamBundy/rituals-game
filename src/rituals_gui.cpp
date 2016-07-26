@@ -528,7 +528,11 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		m.x -= begin.x;
 		m.x /= (end.x - begin.x);
 		perc = m.x;
+		if(in_value != NULL) {
+			*in_value = perc * (max - min);
+		}
 	}
+
 
 	handle.position.x += perc * (end.x - begin.x);
 
