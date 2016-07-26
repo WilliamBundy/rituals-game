@@ -527,6 +527,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		}
 	}
 	if(active != NULL && *active) {
+		handle.color = v4(1, 1, 1, 1);
 		Vec2 m = Input->mouse_pos;
 		m.y = 0;
 		if(m.x < begin.x) m.x = begin.x;
