@@ -466,7 +466,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
 	renderer_push_sprite(&bg);
-	position += v2(4, 2);
+	position += v2(4, size.y / 2 - Body_Font->glyph_height / 2);
 	size -= v2(4, 2);
 
 	char min_str[16];
