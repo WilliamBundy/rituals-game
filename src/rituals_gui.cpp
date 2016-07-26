@@ -488,7 +488,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		Anchor_Top_Left,
 		1.0f,
 		&max_str_reg); 
-
+	render_body_text(label, position);
 
 
 	
