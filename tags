@@ -1259,9 +1259,8 @@ arena_push_array	src/rituals_game.cpp	147;"	d	file:
 arena_push_struct	src/rituals_game.cpp	146;"	d	file:
 asset_arena	src/rituals_game.cpp	/^	Memory_Arena* asset_arena;$/;"	m	struct:Game_Main	file:
 axis	src/rituals_gui.cpp	/^	isize axis;$/;"	m	struct:Gui_Context	file:
-b	src/rituals_main.cpp	/^bool b = false;;$/;"	v
+b	src/rituals_main.cpp	/^bool b = false;$/;"	v
 b	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
-b	src/rituals_tilemap.cpp	/^bool b = 0;$/;"	v
 b1	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:
 b1	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 b2	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:

@@ -222,7 +222,6 @@ void update_tile_state_at(Tilemap* map, Vec2 pos)
 
 
 
-bool b = 0;
 void render_tilemap(Tilemap* tilemap, Vec2 pos)
 {
 	Sprite s;

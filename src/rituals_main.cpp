@@ -154,7 +154,7 @@ void init_menu_state()
 }
 
 
-bool b = false;;
+bool b = false;
 real r = 0;
 void main_menu_update()
 {
