@@ -205,7 +205,15 @@ void main_menu_update()
 				if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(64, 0))) {
 					menu_state->delete_index = i;
 				}
-			} 
+			} else {
+
+				if(gui_add_button(v2(32 + 144 + 32, lasty), "Cancel", v2(64, 0))) {
+					menu_state->delete_index = -1;
+				}
+				if(gui_add_button(v2(32 + 144 + 32 + 64 + 16, lasty), "Confirm", v2(64, 0))) {
+					menu_state->delete_index = i;
+				}
+			}
 			lasty += 32;
 		}
 	}
