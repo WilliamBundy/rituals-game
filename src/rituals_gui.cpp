@@ -507,6 +507,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	Rect2 r;
 	r.position = handle.position - handle.size / 2;
 	r.size = handle.size;
+	handle.position.x += perc * (end.x - begin.x);
 
 	if(gui_query_mouse(r, v2(0, 0))) {
 		if(active != NULL) {
@@ -532,9 +533,9 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 			*in_value = perc * (max - min);
 		}
 	}
+	handle.position.x = begin.x + line_offset.x + perc * (end.x - begin.x);
 
 
-	handle.position.x += perc * (end.x - begin.x);
 
 	renderer_push_sprite(&handle);
 	
