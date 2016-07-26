@@ -192,7 +192,7 @@ void main_menu_update()
 
 	lasty += 32 + 16;
 
-	gui_add_slider(v2(32, lasty), v2(256, 22), "Slider", 0, 100, 2, NULL, NULL);
+	gui_add_slider(v2(32, lasty), v2(256, 22), "Slider", 0, 100, 0, NULL, NULL);
 
 
 	lasty += 32 + 16;
