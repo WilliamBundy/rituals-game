@@ -409,7 +409,7 @@ bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 	
 	Rect2 region;
 	region.position = position;
-	region.size = txs;
+	region.size = txs + v2(16, 8);
 	if(gui_query_mouse(region, v2(0,0))) {
 		state = 1;
 		if(Input->mouse[SDL_BUTTON_LEFT] >= State_Pressed) {
