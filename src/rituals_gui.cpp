@@ -378,14 +378,14 @@ bool gui_query_mouse(Rect2 region, Vec2 parent)
 		rp1 = r.position;
 		rp2 = r.position + r.size;
 	}
-	draw_box_outline(r.position + r.size / 2, r.size, v4(1, 0.5, 0.5, 1), 1);
+	draw_box_outline((rp1 + rp2) * 0.5, rp2 - rp1, v4(1, 0.5, 0.5, 1), 1);
 	return (p.x >= rp1.x) && (p.x <= rp2.x) && 
 		   (p.y >= rp1.y) && (p.y <= rp2.y);
 }
 
 
 
-Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 1);
+Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 0.5);
 Vec4 Gui_ButtonRestColor = _color(.8, .8, .8, 1) * Gui_ButtonTint;
 Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;
 Vec4 Gui_ButtonDownColor = _color(.5, .5, .5, 1) * Gui_ButtonTint;
