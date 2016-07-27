@@ -480,7 +480,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	Body_Font->color = v4(1, 1, 1, 1);
 	Vec2 begin, end;
 	end = position + v2(
-			size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1),
+			size.x - Body_Font->glyph_width * (strlen(label)),
 			0);
 	render_body_text(label, end);
 	if(show_bounds) {
