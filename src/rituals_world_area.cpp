@@ -45,6 +45,20 @@ enum Direction
 
 #define EntityMaxCallbacksPerFrame (16)
 
+struct Entity_Event
+{
+	void* callback;
+	isize callback_count;
+};
+
+union Entity_Userdata
+{
+	struct {
+		Vec2 va, vb, vc, vd, vx, vy, vz, vw;
+		char* sa, sb, sc, sd;
+		isize la, lb, lc, ld;
+	} registers;
+};
 
 struct Entity
 {
@@ -63,11 +77,16 @@ struct Entity
 	//TODO(will) Implement entity callback hashtable
 	// Right now save and load with function pointers will break
 	// Can't verify whether pointers will be the same between dll loads
-	Entity_On_Activate* event_on_activate;
-	isize event_on_activate_count;
+	//Entity_On_Activate* event_on_activate;
+	//isize event_on_activate_count;
+	Entity_Event events;
 
 	//userdata
+
+	//eventually we'll swap these two
 	isize held_entity_id;
+	//isize userdata_kind;
+	Entity_Userdata userdata;
 };
 
 #define _entity_get_id(e) (e.id)
@@ -140,10 +159,11 @@ void init_entity(Entity* entity)
 	init_sprite(&entity->sprite);
 	entity->counter = 0;
 	entity->area = NULL;
-	entity->event_on_activate = NULL;
-	entity->event_on_activate_count = 0;
+	//entity->event_on_activate = NULL;
+	//entity->event_on_activate_count = 0;
 }
 
+/*
 isize entity_add_event_on_activate(Entity* e, Entity_On_Activate event)
 {
 	if(e != NULL) {
@@ -162,7 +182,7 @@ isize entity_add_event_on_activate(Entity* e, Entity_On_Activate event)
 	}
 	return e->event_on_activate_count - 1;
 }
-
+*/
 
 
 Entity* world_area_get_next_entity(World_Area* area)

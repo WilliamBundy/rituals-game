@@ -363,7 +363,7 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 		dmouse -= player->shape.center;
 		real angle = atan2f(dmouse.y, dmouse.x);
 		Vec2 normal = v2(cosf(angle), sinf(angle));
-		entity_add_event_on_activate(ball_entity, delete_on_activate);
+		//entity_add_event_on_activate(ball_entity, delete_on_activate);
 
 		ball->damping = 0.9999f;
 		ball->shape.hext = v2(8, 16);
@@ -378,6 +378,7 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 	}
 
 
+	/*
 	if(Input->mouse[SDL_BUTTON_RIGHT] == State_Just_Pressed) {
 		Vec2 dmouse = v2(
 			Input->mouse_x / Game->scale, 
@@ -396,7 +397,7 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 			}
 		}
 	}
-
+*/
 	if(Input->scancodes[SDL_SCANCODE_F] == State_Just_Pressed) {
 		//tilemap_set_at(&area->map, player->shape.center, Tile_Dug_Earth);
 		Tile_State* state = tilemap_get_state_at(&area->map, player->shape.center);

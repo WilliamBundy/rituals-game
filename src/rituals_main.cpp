@@ -162,10 +162,6 @@ void main_menu_update()
 	Renderer->offset = v2(0, 0);
 	renderer_start();
 	
-	//draw_box_outline(v2(140, 140), v2(200, 200), v4(0.5f, 1.0f, 0.5f, 1), 2);
-	//renderer_set_clip_rect(0, 0, 16, 200);
-	//renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
-	//render_clip_rect();
 	real lasty = 32;
 	Body_Font->color = v4(1, 1, 1, 1);
 	render_body_text("Rituals", v2(32, 32), false, 4.0f);
@@ -345,7 +341,8 @@ void update_screen()
 int main(int argc, char** argv)
 {
 	//stbi_set_flip_vertically_on_load(1);
-	printf("%d %d %d \n", sizeof(ptrdiff_t), sizeof(int64), sizeof(isize));
+	
+	printf("%d %d \n", sizeof(Entity), sizeof(Entity_Userdata));
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 
