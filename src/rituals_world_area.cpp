@@ -53,7 +53,7 @@ struct Entity_Event
 
 union Entity_Userdata
 {
-	uint8 bytes[112];
+	uint8 bytes[256];
 	struct {
 		Vec2  va, vb, vc, vd, vx, vy, vz, vw;
 		char* sa, sb, sc, sd;

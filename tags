@@ -1288,7 +1288,7 @@ buffer_capacity	src/rituals_gui.cpp	/^	isize buffer_length, buffer_capacity;$/;"
 buffer_length	src/rituals_gui.cpp	/^	isize buffer_length, buffer_capacity;$/;"	m	struct:Gui_Text_Input_Handle	file:
 buffer_start	src/thirdparty/stb_image.h	/^   stbi_uc buffer_start[128];$/;"	m	struct:__anon3
 buflen	src/thirdparty/stb_image.h	/^   int buflen;$/;"	m	struct:__anon3
-bytes	src/rituals_world_area.cpp	/^	uint8 bytes[112];$/;"	m	union:Entity_Userdata	file:
+bytes	src/rituals_world_area.cpp	/^	uint8 bytes[256];$/;"	m	union:Entity_Userdata	file:
 c1	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 c2	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 c3	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
