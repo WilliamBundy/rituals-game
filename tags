@@ -1117,9 +1117,9 @@ WIN32_LEAN_AND_MEAN	src/thirdparty/tinydir.h	48;"	d
 World	src/rituals_game_info.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
-WorldAreaEntityCapacity	src/rituals_world_area.cpp	108;"	d	file:
-WorldAreaTilemapHeight	src/rituals_world_area.cpp	110;"	d	file:
-WorldAreaTilemapWidth	src/rituals_world_area.cpp	109;"	d	file:
+WorldAreaEntityCapacity	src/rituals_world_area.cpp	110;"	d	file:
+WorldAreaTilemapHeight	src/rituals_world_area.cpp	109;"	d	file:
+WorldAreaTilemapWidth	src/rituals_world_area.cpp	108;"	d	file:
 World_Area	src/rituals_game_info.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
 World_Area	src/rituals_world_area.cpp	/^struct World_Area$/;"	s	file:
 World_Area	src/rituals_world_area.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:

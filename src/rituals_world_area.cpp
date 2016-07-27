@@ -105,9 +105,9 @@ enum World_Area_Biome
 	AreaBiome_Grassland,
 	AreaBiome_Desert
 };
-#define WorldAreaEntityCapacity (8192)
 #define WorldAreaTilemapWidth (64)
 #define WorldAreaTilemapHeight (64)
+#define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight * 16)
 struct World_Area_Stub
 {
 	isize id;
