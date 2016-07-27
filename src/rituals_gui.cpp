@@ -510,7 +510,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		spritefont_render_text(Body_Font,
 				val_str, val_str_len,
 				position, -1, Anchor_Top_Left, 1.0f, &val_region);
-		begin = val_region.x;
+		begin = v2(val_region.x, position.y);
 
 
 	}
