@@ -558,11 +558,13 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		if(in_value != NULL) {
 			*in_value = perc * (max - min);
 		}
-		char number[32];
-		isize len = snprintf(number, 32, "%.*f", precision + 1, *in_value);
-		render_body_text(number, handle.position - v2(
-					len * Body_Font->glyph_width / 2, 
-					Body_Font->glyph_height + 4 + handle.size.y / 2), true);
+		if(show_bounds) {
+			char number[32];
+			isize len = snprintf(number, 32, "%.*f", precision + 1, *in_value);
+			render_body_text(number, handle.position - v2(
+						len * Body_Font->glyph_width / 2, 
+						Body_Font->glyph_height + 4 + handle.size.y / 2), true);
+		}
 	}
 
 	renderer_push_sprite(&handle);
