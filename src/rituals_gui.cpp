@@ -500,6 +500,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 				max_str, max_str_len,
 				end, -1, Anchor_Top_Left, 1.0f, &max_str_reg); 
 	} else {
+		precision++;
 		char max_str[16];
 		isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
 		Vec2 val_region;
