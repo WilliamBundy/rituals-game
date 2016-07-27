@@ -25,7 +25,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- Checkbox
  *  		- Radio button
  *  	- Entity/physics inspector?
- *  	- Memory pool entities and bodies
+ *  	- Entity events and serialization?
+ *  		- "best" thing to do is to index entities by package
+ *  		- each package registers any number of function pointers
+ *  		- entities are sorted by package and priority
+ *  		- pass each package event function a pointer to its entity array
+ *  		- 
  *  	
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation

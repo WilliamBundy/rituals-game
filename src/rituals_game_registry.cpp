@@ -60,7 +60,7 @@ return_type* lookup_func_name(const char* name) \
 	return Registry->array_base_name + index; \
 } \
 struct _game_registry__##return_type##_pair { return_type v; usize k; }; \
-GenerateQuicksortForType(_game_registry__##return_type##_pair_sort, _game_registry__##return_type##_pair, _game_registry__key_macro) \
+GenerateIntrosortForType(_game_registry__##return_type##_pair_sort, _game_registry__##return_type##_pair, 12, _game_registry__key_macro) \
 void sort_func_name() \
 { \
 	start_temp_arena(Game->temp_arena); \
