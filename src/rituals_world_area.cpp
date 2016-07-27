@@ -65,18 +65,10 @@ struct Entity
 	
 	World_Area* area;
 	
-	//TODO(will) Implement entity callback hashtable
-	// Right now save and load with function pointers will break
-	// Can't verify whether pointers will be the same between dll loads
-	//Entity_On_Activate* event_on_activate;
-	//isize event_on_activate_count;
-	Entity_Event events;
-
-	//userdata
-
-	//eventually we'll swap these two
+	//deprecated
 	isize held_entity_id;
-	//isize userdata_kind;
+
+	//probably overkill?
 	isize userdata_id_major;
 	isize userdata_id_minor;
 	void* userdata;
@@ -152,8 +144,9 @@ void init_entity(Entity* entity)
 	init_sprite(&entity->sprite);
 	entity->counter = 0;
 	entity->area = NULL;
-	//entity->event_on_activate = NULL;
-	//entity->event_on_activate_count = 0;
+	entity->userdata = NULL;
+	entity->userdata_id_major = -1;
+	entity->userdata_id_minor = -1;
 }
 
 /*

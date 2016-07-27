@@ -30,6 +30,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- each package registers any number of function pointers
  *  		- entities are sorted by package and priority
  *  		- pass each package event function a pointer to its entity array
+ *  		- ???
+ *  - Packages
+ *  	- 
  *  	
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
