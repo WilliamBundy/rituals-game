@@ -492,7 +492,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		Vec2 min_str_reg;
 		spritefont_render_text(Body_Font,
 				min_str, min_str_len,
-				position, 0), -1, Anchor_Top_Left, 1.0f, &min_str_reg);
+				position, -1, Anchor_Top_Left, 1.0f, &min_str_reg);
 		Vec2 max_str_reg;
 		begin = position + v2(min_str_reg.x, 0);
 		end.x -= max_str_len * Body_Font->glyph_width;
