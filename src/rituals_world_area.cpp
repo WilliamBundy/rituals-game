@@ -51,16 +51,6 @@ struct Entity_Event
 	isize callback_count;
 };
 
-union Entity_Userdata
-{
-	uint8 bytes[128];
-	struct {
-		Vec2  va, vb, vc, vd, vx, vy, vz, vw;
-		char* sa, sb, sc, sd;
-		isize la, lb, lc, ld;
-	} registers;
-};
-
 struct Entity
 {
 	isize id;
@@ -87,7 +77,9 @@ struct Entity
 	//eventually we'll swap these two
 	isize held_entity_id;
 	//isize userdata_kind;
-	Entity_Userdata userdata;
+	isize userdata_id_major;
+	isize userdata_id_minor;
+	void* userdata;
 };
 
 #define _entity_get_id(e) (e.id)
