@@ -18,10 +18,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  - Physics
  *  	- Static and dynamic friction
  *  	- Look at dynamic tree broadphase
- *  - Renderer
- *  	- Viewport/scrolling
  *  - Play
+ *  	- New/more UI controls 
+ *  		- Scrollable frame
+ *  		- Floating window
+ *  		- Checkbox
+ *  		- Radio button
  *  	- Entity/physics inspector?
+ *  	- Memory pool entities and bodies
  *  	
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
@@ -143,7 +147,7 @@ struct Menu_State
 Menu_State* menu_state;
 
 void init_menu_state()
-{
+{	
 	menu_state = arena_push_struct(Game->game_arena, Menu_State);
 	init_text_input_handle(&menu_state->handle, 256, Game->game_arena);
 	menu_state->delete_index = -1;
