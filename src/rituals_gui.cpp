@@ -461,7 +461,7 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 	return *value;
 }
 
-void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool always_show_value = false)
+void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool show_bounds = false)
 {
 	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
@@ -477,35 +477,45 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	position += v2(4, size.y / 2 - Body_Font->glyph_height / 2);
 	size -= v2(8, 2);
 
-	char min_str[16];
-	char max_str[16];
-	isize min_str_len = snprintf(min_str, 16, always_show_value ? "|%.*f":"%.*f", precision, min);
-	isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
-	real offset = 0;
 	Body_Font->color = v4(1, 1, 1, 1);
-	if(always_show_value) {
+	Vec2 begin, end;
+	end = position + v2(
+			size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1),
+			0);
+	render_body_text(label, end);
+	if(show_bounds) {
+		char min_str[16];
+		char max_str[16];
+		isize min_str_len = snprintf(min_str, 16, "%.*f", precision, min);
+		isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
+
+		real offset = 0;
+
+
+		Vec2 min_str_reg;
+		spritefont_render_text(Body_Font,
+				min_str, min_str_len,
+				position + v2(offset, 0), -1, Anchor_Top_Left, 1.0f, &min_str_reg);
+		Vec2 max_str_reg;
+		begin = position + v2(min_str_reg.x + offset, 0);
+		spritefont_render_text(Body_Font,
+				max_str, max_str_len,
+				end, -1, Anchor_Top_Left, 1.0f, &max_str_reg); 
+	} else {
+		char max_str[16];
+		isize max_str_len = snprintf(max_str, 16, "%.*f", precision, max);
 		Vec2 val_region;
 		char val_str[16];
 		isize val_str_len = snprintf(val_str, 16, "%.*f", precision, *in_value);
 		spritefont_render_text(Body_Font,
 				val_str, val_str_len,
 				position, -1, Anchor_Top_Left, 1.0f, &val_region);
-		offset = (max_str_len) * Body_Font->glyph_width + 4;
+		begin = val_region.x;
+
 
 	}
-	Vec2 min_str_reg;
-    spritefont_render_text(Body_Font,
-		min_str, min_str_len,
-		position + v2(offset, 0), -1, Anchor_Top_Left, 1.0f, &min_str_reg);
-	Vec2 max_str_reg;
-	Vec2 begin = position + v2(min_str_reg.x + offset, 0);
-	Vec2 end = position + v2(
-			size.x - Body_Font->glyph_width * (strlen(label) + max_str_len + 1),
-			0);
-    spritefont_render_text(Body_Font,
-		max_str, max_str_len,
-		end, -1, Anchor_Top_Left, 1.0f, &max_str_reg); 
-	render_body_text(label, position + v2(size.x - Body_Font->glyph_width * strlen(label), 0));
+
+
 
 	real value = 0;
 	real perc = .5; 

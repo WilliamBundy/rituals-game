@@ -1809,7 +1809,7 @@ glyphs	src/rituals_gui.cpp	/^	Rect2* glyphs;$/;"	m	struct:Spritefont	file:
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text)$/;"	f
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)$/;"	f
 gui_add_checkbox	src/rituals_gui.cpp	/^bool gui_add_checkbox(Vec2 position, char* text, bool* value)$/;"	f
-gui_add_slider	src/rituals_gui.cpp	/^void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool always_show_value = false)$/;"	f
+gui_add_slider	src/rituals_gui.cpp	/^void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool show_bounds = false)$/;"	f
 gui_add_text_input	src/rituals_gui.cpp	/^void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)$/;"	f
 gui_query_mouse	src/rituals_gui.cpp	/^bool gui_query_mouse(Rect2 region, Vec2 parent)$/;"	f
 h	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
