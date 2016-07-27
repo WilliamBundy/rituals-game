@@ -30,13 +30,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- each package registers any number of function pointers
  *  		- entities are sorted by package and priority
  *  		- pass each package event function a pointer to its entity array
- *  		- 
  *  	
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
  */
-
-
 
 //platform imports
 #include <windows.h>
@@ -351,7 +348,7 @@ int main(int argc, char** argv)
 {
 	//stbi_set_flip_vertically_on_load(1);
 	
-	printf("%d %d \n", sizeof(Entity), sizeof(Sim_Body));
+	printf("%d %d \n", sizeof(Entity), sizeof(Entity_Userdata));
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 

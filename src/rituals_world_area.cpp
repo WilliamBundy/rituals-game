@@ -54,7 +54,7 @@ struct Entity_Event
 union Entity_Userdata
 {
 	struct {
-		Vec2 va, vb, vc, vd, vx, vy, vz, vw;
+		Vec2  va, vb, vc, vd, vx, vy, vz, vw;
 		char* sa, sb, sc, sd;
 		isize la, lb, lc, ld;
 	} registers;
