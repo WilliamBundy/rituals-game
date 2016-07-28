@@ -365,7 +365,7 @@ int main(int argc, char** argv)
 	Entity e;
 	e.sprite.position.x = 3;
 	e.sprite.position.y = 8.14;
-	char* p = &e;
+	char* p = (char*)&e;
 	p += 8 + 8 + 8 + 4 + 4 + 4;
 	printf("%.2f \n", ((float*)p)*);
 
