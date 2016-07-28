@@ -63,6 +63,7 @@ void play_state_update()
 		render_body_text("Paused", v2(32, 32), false, 4.0f);
 		if(gui_add_button(v2(32, Game->size.y / 2), "Exit to main menu", v2(144, 0))) {
 			serialize_world(play_state->world);
+			play_state_init();
 			Game->state = Game_State_Menu;
 		}
 		renderer_draw();
