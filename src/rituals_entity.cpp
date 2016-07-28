@@ -36,14 +36,6 @@ struct Entity
 GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
 GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
 
-typedef void (*ProcessEntitiesFunc)(Entity* entities, isize count, World_Area* area, World* world);
-struct Package
-{
-	ProcessEntitiesFunc sim, walk, interact, animate, 
-						create, frame_tick, slow_tick, 
-						destroy;
-}
-
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
 {

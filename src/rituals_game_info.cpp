@@ -107,6 +107,14 @@ enum Rituals_Entity_Kinds
 
 
 /*
+typedef void (*ProcessEntitiesFunc)(Entity* entities, isize count, World_Area* area, World* world);
+struct Package
+{
+	ProcessEntitiesFunc sim, walk, interact, animate, 
+						create, frame_tick, slow_tick, 
+						destroy;
+};
+
 //TODO(will) go into game registry
 struct Rituals_Entity_Kinds
 {
