@@ -399,7 +399,6 @@ void world_area_update(World_Area* area, World* world)
 
 	Renderer->offset = area->offset;
 	area->offset += Game->size * 0.5f;
-	// throw a ball
 
 	renderer_start();
 
