@@ -53,8 +53,9 @@ real SpriteAnchorY[] = {
 };
 
 
-struct Sprite
+class Sprite
 {
+public:
 	Vec2 position;
 	Vec2 center;
 	real angle;

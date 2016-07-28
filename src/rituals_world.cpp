@@ -342,6 +342,7 @@ void world_area_interact(World_Area* area, World* world)
 	rituals_interact_entities(area->entities, area->entities_count, area, world);
 }
 
+//TODO(will) Fix camera seasickness
 
 void world_area_render(World_Area* area, World* world)
 {	
