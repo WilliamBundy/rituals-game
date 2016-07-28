@@ -35,7 +35,7 @@ void main()
 	uv.x /= texture_size.x;
 	uv.y /= texture_size.y;
 	#endif
-	gl_FragColor = texture(local_texture, uv) * v4(f_color.rgb, 1) * f_color.aaaa;
+	gl_FragColor = texture(local_texture, uv) * v4(f_color.r, f_color.g, f_color.b, 1) * f_color.aaaa;
 }
 
 )shader"
