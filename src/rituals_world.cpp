@@ -52,7 +52,6 @@ World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 		area->stub = world->area_stubs + id;
 		for(isize i = 0; i < area->entities_count; ++i) {
 			Entity* e = area->entities + i;
-			e->area = area;
 		}
 		world_area_synchronize_entities_and_bodies(area);
 		world_area_init_player(area, v2i(0,0), false);

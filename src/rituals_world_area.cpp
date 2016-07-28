@@ -115,7 +115,6 @@ void init_entity(Entity* entity)
 	entity->body_id = 0;
 	init_sprite(&entity->sprite);
 	entity->counter = 0;
-	entity->area = NULL;
 	entity->userdata = NULL;
 	entity->userdata_id_major = -1;
 	entity->userdata_id_minor = -1;
