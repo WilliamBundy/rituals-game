@@ -45,7 +45,7 @@ void start_play_state(char* world_name_in)
 
 void play_state_update()
 {
-	if(_check(ESCAPE) == State_Just_Pressed) {
+	if(_scancode(ESCAPE) == State_Just_Pressed) {
 		play_state->running = !play_state->running;
 	}
 	world_area_update(play_state->world->current_area, play_state->world);
