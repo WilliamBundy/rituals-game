@@ -184,6 +184,7 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=t
 	player->flags = Body_Flag_No_Friction;
 	player_entity->kind = EntityKind_Player;
 	area->offset = player->shape.center;	
+	area->target = player->shape.center;
 }
 
 void world_area_deinit_player(World_Area* area, bool move_player=true)
