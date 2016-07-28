@@ -2118,6 +2118,7 @@ restitution	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/
 rgb	src/thirdparty/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon6
 rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
 rituals_animate_entities	src/rituals_entity_events.cpp	/^void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
+rituals_interact_entities	src/rituals_entity_events.cpp	/^void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity_events.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rp1	src/rituals_math.cpp	/^	Vec2 rp1;$/;"	m	struct:Rect2_Clip_Info	file:
@@ -2542,14 +2543,17 @@ window_loc	src/rituals_renderer.cpp	/^	isize screen_loc, texture_size_loc, windo
 window_size	src/rituals_game.cpp	/^	Vec2i window_size;$/;"	m	struct:Game_Main	file:
 world	src/rituals_main.cpp	/^	World* world;$/;"	m	struct:Play_State	file:
 world	src/rituals_world_area.cpp	/^	World* world;$/;"	m	struct:World_Area	file:
+world_area_animate_entities	src/rituals_world.cpp	/^void world_area_animate_entities(World_Area* area, World* world)$/;"	f
 world_area_deinit_player	src/rituals_world_area.cpp	/^void world_area_deinit_player(World_Area* area, bool move_player=true)$/;"	f
 world_area_find_entity	src/rituals_world_area.cpp	/^Entity* world_area_find_entity(World_Area* area, isize id)$/;"	f
 world_area_get_next_entity	src/rituals_world_area.cpp	/^Entity* world_area_get_next_entity(World_Area* area)$/;"	f
 world_area_init_player	src/rituals_world_area.cpp	/^void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)$/;"	f
+world_area_interact	src/rituals_world.cpp	/^void world_area_interact(World_Area* area, World* world)$/;"	f
 world_area_remove_entity	src/rituals_world_area.cpp	/^void world_area_remove_entity(World_Area* area, Entity* entity)$/;"	f
 world_area_sort_entities_on_id	src/rituals_world_area.cpp	/^void world_area_sort_entities_on_id(World_Area* area)$/;"	f
 world_area_synchronize_entities_and_bodies	src/rituals_world_area.cpp	/^void world_area_synchronize_entities_and_bodies(World_Area* area)$/;"	f
 world_area_update	src/rituals_world.cpp	/^void world_area_update(World_Area* area, World* world)$/;"	f
+world_area_walk_entities	src/rituals_world.cpp	/^void world_area_walk_entities(World_Area* area, World* world)$/;"	f
 world_arena	src/rituals_game.cpp	/^	Memory_Arena* world_arena;$/;"	m	struct:Game_Main	file:
 world_load_area	src/rituals_world.cpp	/^World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)$/;"	f
 world_start_in_area	src/rituals_world.cpp	/^void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* arena)$/;"	f

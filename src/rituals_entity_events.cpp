@@ -18,6 +18,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
+		e->walk_impulse = Vec2{};	
 		if(e->kind == EntityKind_Player) {
 			real movespeed = 800;
 			Vec2 move_impulse = v2(0, 0);
@@ -101,5 +102,11 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				s->texture = Get_Texture_Coordinates(0  + frame * 32, 0, 32, 32);
 			}
 		}
+	}
+}
+void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)
+{
+	for(isize i = 0; i < count; ++i) {
+		Entity* e = entities + i;
 	}
 }

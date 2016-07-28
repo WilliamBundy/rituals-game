@@ -180,79 +180,7 @@ void generate_world(char* name, World* world)
 		}
 	}
 }
-
 #if 0
-Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)
-{
-	real movespeed = 800;
-	Vec2 move_impulse = v2(0, 0);
-
-	if(_check(LEFT, A, State_Pressed)) {
-		move_impulse.x -= movespeed;
-	}
-	if(_check(RIGHT, D, State_Pressed)) {
-		move_impulse.x += movespeed;
-	}
-	if(_check(UP, W, State_Pressed)) {
-		move_impulse.y -= movespeed;
-	}
-	if(_check(DOWN, S, State_Pressed)) {
-		move_impulse.y += movespeed;
-	}
-
-	if(fabsf(move_impulse.x * move_impulse.y) > 0.01f) {
-		move_impulse *= Math_InvSqrt2;
-	}
-
-	Tile_Info* player_tile = Registry->tiles + tilemap_get_at(&area->map, player->shape.center);
-
-	move_impulse *= player_tile->movement_modifier;
-	return move_impulse;
-}
-
-//TODO(will) store move impulse on entities to reference later
-void _player_animate(World_Area* area, Entity* player_entity, Sim_Body* player, Vec2 move_impulse)
-{
-	Direction old_direction = player_entity->direction;
-	if(move_impulse.y < 0) {
-		player_entity->direction = Direction_North;
-	} else if(move_impulse.y > 0) {
-		player_entity->direction = Direction_South;
-	}
-
-	if(move_impulse.x < 0) {
-		player_entity->facing = -1;
-		player_entity->direction = Direction_West;
-	} else if(move_impulse.x > 0) {
-		player_entity->facing = 1;
-		player_entity->direction = Direction_East;
-	}
-	if(Input->scancodes[SDL_SCANCODE_SPACE] == State_Pressed) {
-		player_entity->direction = old_direction;
-	}
-	Sprite* plr_spr = &player_entity->sprite;
-	int32 player_frame = 0;
-	if(v2_dot(move_impulse, move_impulse) > 0){
-		player_entity->counter++;
-		player_frame = 1;
-		if(player_entity->counter > 15) {
-			player_frame = 0;
-			if(player_entity->counter > 30) {
-				player_entity->counter = 0;
-			}
-		}
-	} else {
-		player_entity->counter = 0;
-		player_frame = 0;
-	}
-
-	if(player_entity->facing == -1) {
-		plr_spr->texture = Get_Texture_Coordinates(32 + player_frame * 32, 0, -32, 32);
-	} else if(player_entity->facing == 1) {
-		plr_spr->texture = Get_Texture_Coordinates(0  + player_frame * 32, 0, 32, 32);
-	}
-}
-
 void serialize_world(World* world);
 void _player_handle_interactions(World* world, World_Area* area, Entity* player_entity, Sim_Body* player)
 {
@@ -393,6 +321,27 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 }
 
 #endif
+
+//TODO(will) Implement packages -- hook up using function pointers
+//For the time being we're just going to use forward declarations
+void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
+void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world);
+void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world);
+
+void world_area_walk_entities(World_Area* area, World* world)
+{
+	rituals_walk_entities(area->entities, area->entities_count, area, world);
+}
+void world_area_animate_entities(World_Area* area, World* world)
+{
+	rituals_animate_entities(area->entities, area->entities_count, area, world);
+}
+
+void world_area_interact(World_Area* area, World* world)
+{
+	rituals_interact_entities(area->entities, area->entities_count, area, world);
+}
+
 void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
@@ -404,14 +353,16 @@ void world_area_update(World_Area* area, World* world)
 	play_state->prev_time = play_state->current_time;
 	sim_sort_bodies_on_id(&area->sim);
 	area->player = world_area_find_entity(area, 0);
-	//Entity* player_entity = world_area_find_entity(area, 0);
-	//Sim_Body* player = player_entity->body;
 
-	//Vec2 move_impulse = _player_controls(area, player_entity, player);
+	world_area_walk_entities(area, world);
 
 	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;
-		//player->velocity += move_impulse;
+		//TODO(will) use same sorted array as world_area_walk_entities
+		for(isize i = 0; i < area->entities_count; ++i) {
+			Entity* e = area->entities + i;
+			e->body->velocity += e->walk_impulse;
+		}
 		sim_update(&area->sim, &area->map, TimeStep);
 	}
 	
