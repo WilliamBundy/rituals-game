@@ -144,9 +144,9 @@ Play_State* play_state;
 
 #include "rituals_simulation.cpp"
 
-#include "rituals_entity.cpp"
 #include "rituals_world_area.cpp"
 #include "rituals_world.cpp"
+#include "rituals_entity_events.cpp"
 
 #include "rituals_play_state.cpp"
 

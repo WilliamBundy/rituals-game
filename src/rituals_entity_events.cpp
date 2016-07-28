@@ -9,32 +9,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 /* 
- * rituals_entity.cpp
+ * rituals_entity_events.cpp
  *
  */ 
-
-struct Entity
-{
-	isize id;
-	isize body_id;
-	Sim_Body* body;
-	Vec2 walk_impulse;
-
-	Sprite sprite;
-	isize kind;
-
-	int32 counter;
-
-	int32 facing;
-	Direction direction;
-
-	uint64 events;
-	void* userdata;
-};
-
-#define _entity_get_id(e) (e.id)
-GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
-GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
 
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
