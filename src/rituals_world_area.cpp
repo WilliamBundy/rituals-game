@@ -14,41 +14,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 
-typedef struct World_Area World_Area;
-
-enum Direction 
-{
-	Direction_North,
-	Direction_South,
-	Direction_East,
-	Direction_West
-};
-
-struct Entity
-{
-	isize id;
-	isize body_id;
-	Sim_Body* body;
-	Sprite sprite;
-
-	int32 counter;
-
-	int32 facing;
-	Direction direction;
-	
-	//deprecated
-	isize held_entity_id;
-
-	//probably overkill?
-	isize userdata_id_major;
-	isize userdata_id_minor;
-	void* userdata;
-};
-
-#define _entity_get_id(e) (e.id)
-GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
-GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
-
 typedef struct World_Area_Stub World_Area_Stub;
 struct Area_Link
 {
@@ -85,8 +50,6 @@ struct World_Area
 	Tilemap map;
 	Vec2 offset;
 
-	//Entity* player;
-	//Sim_Body* player_body;
 	Entity* entities;
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
