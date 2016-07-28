@@ -85,4 +85,63 @@ struct Item_Info
 	Rect2 texture;
 };
 
+enum Entity_Event_Type
+{
+	EntityEvent_Sim = Flag(0),
+	EntityEvent_Walk = Flag(1),
+	EntityEvent_Interact = Flag(2),
+	EntityEvent_Animate = Flag(3),
+	EntityEvent_Create = Flag(4),
+	EntityEvent_FrameTick = Flag(5),
+	EntityEvent_SlowTick = Flag(6),
+	EntityEvent_Destroy = Flag(7)
+};	
+
+enum Rituals_Entity_Kinds
+{
+	EntityKind_PropEntity,
+	EntityKind_StaticEntity,
+	EntityKind_PlayerEntity,
+	EntityKind_EnemyEntity,
+};
+
+
+/*
+//TODO(will) go into game registry
+struct Rituals_Entity_Kinds
+{
+	isize PropEntity,
+		  StaticEntity,
+		  PlayerEntity,
+		  EnemyEntity;
+};
+Rituals_Entity_Kinds RitualsEntityKinds;
+
+//TODO(will) serialize -- translate from old to new on deserialization
+isize _next_entity_kind = 0;
+static inline isize get_next_entity_kind()
+{
+	return _next_entity_kind++;
+}
+	
+
+void rituals_assign_entity_kinds(Rituals_Entity_Kinds* kinds)
+{
+	kinds->PropEntity = get_next_entity_kind();
+	kinds->StaticEntity = get_next_entity_kind();
+	kinds->PlayerEntity = get_next_entity_kind();
+	kinds->EnemyEntity = get_next_entity_kind();
+}*/
+
+
+
+
+struct Rituals_Entity_Userdata
+{
+	union {
+		struct {
+			isize held_entity_id;
+		} player;
+	} data;
+};
 

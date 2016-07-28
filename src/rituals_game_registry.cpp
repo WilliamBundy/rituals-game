@@ -32,6 +32,8 @@ struct Game_Registry
 	Item_Info* items;
 	usize* items_hash;
 	isize items_count;
+	
+	
 };
 
 Game_Registry* Registry;

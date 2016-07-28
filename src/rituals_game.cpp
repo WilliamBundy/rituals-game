@@ -488,3 +488,11 @@ isize append_input_text(char* str, isize str_cap, isize str_len, isize insert_fr
 	return idx;
 }
 
+enum Direction 
+{
+	Direction_North,
+	Direction_South,
+	Direction_East,
+	Direction_West
+};
+
