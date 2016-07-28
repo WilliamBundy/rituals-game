@@ -366,7 +366,7 @@ void world_area_update(World_Area* area, World* world)
 		sim_update(&area->sim, &area->map, TimeStep);
 	}
 	
-	Vec2 target = player->shape.center;
+	Vec2 target = area->player->shape.center;
 
 
 	world_area_animate_entities(area, world);
