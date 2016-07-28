@@ -12,9 +12,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_simulation.cpp
  */
 
-#define Flag(x) (1 << x)
-#define Has_Flag(x, y) (x & y)
-
 enum Sim_Body_Flags
 {
 	Body_Flag_None,

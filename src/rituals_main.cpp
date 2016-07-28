@@ -110,6 +110,8 @@ typedef size_t usize;
 #define Min(x,y) ((x<y)?x:y)
 #define Max(x,y) ((x>y)?x:y)
 
+#define Flag(x) (1 << x)
+#define Has_Flag(x, y) (x & y)
 
 #define Kilobytes(b) (b * UINT64_C(1024))
 #define Megabytes(b) (Kilobytes(b) * UINT64_C(1024))
