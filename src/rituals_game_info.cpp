@@ -99,10 +99,10 @@ enum Entity_Event_Type
 
 enum Rituals_Entity_Kinds
 {
-	EntityKind_PropEntity,
-	EntityKind_StaticEntity,
-	EntityKind_PlayerEntity,
-	EntityKind_EnemyEntity,
+	EntityKind_Prop,
+	EntityKind_Static,
+	EntityKind_Player,
+	EntityKind_Enemy,
 };
 
 

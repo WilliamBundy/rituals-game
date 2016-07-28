@@ -59,10 +59,10 @@ EntityEvent_Interact	src/rituals_game_info.cpp	/^	EntityEvent_Interact = Flag(2)
 EntityEvent_Sim	src/rituals_game_info.cpp	/^	EntityEvent_Sim = Flag(0),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_SlowTick	src/rituals_game_info.cpp	/^	EntityEvent_SlowTick = Flag(6),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_Walk	src/rituals_game_info.cpp	/^	EntityEvent_Walk = Flag(1),$/;"	e	enum:Entity_Event_Type	file:
-EntityKind_EnemyEntity	src/rituals_game_info.cpp	/^	EntityKind_EnemyEntity,$/;"	e	enum:Rituals_Entity_Kinds	file:
-EntityKind_PlayerEntity	src/rituals_game_info.cpp	/^	EntityKind_PlayerEntity,$/;"	e	enum:Rituals_Entity_Kinds	file:
-EntityKind_PropEntity	src/rituals_game_info.cpp	/^	EntityKind_PropEntity,$/;"	e	enum:Rituals_Entity_Kinds	file:
-EntityKind_StaticEntity	src/rituals_game_info.cpp	/^	EntityKind_StaticEntity,$/;"	e	enum:Rituals_Entity_Kinds	file:
+EntityKind_Enemy	src/rituals_game_info.cpp	/^	EntityKind_Enemy,$/;"	e	enum:Rituals_Entity_Kinds	file:
+EntityKind_Player	src/rituals_game_info.cpp	/^	EntityKind_Player,$/;"	e	enum:Rituals_Entity_Kinds	file:
+EntityKind_Prop	src/rituals_game_info.cpp	/^	EntityKind_Prop,$/;"	e	enum:Rituals_Entity_Kinds	file:
+EntityKind_Static	src/rituals_game_info.cpp	/^	EntityKind_Static,$/;"	e	enum:Rituals_Entity_Kinds	file:
 EntityOnActivateDecl	src/rituals_game_info.cpp	/^typedef EntityOnActivateDecl((*Entity_On_Activate));$/;"	t	file:
 EntityOnActivateDecl	src/rituals_game_info.cpp	22;"	d	file:
 Entity_Event_Type	src/rituals_game_info.cpp	/^enum Entity_Event_Type$/;"	g	file:
