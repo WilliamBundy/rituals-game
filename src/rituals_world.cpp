@@ -346,7 +346,6 @@ void world_area_interact(World_Area* area, World* world)
 void world_area_render(World_Area* area, World* world)
 {	
 	Renderer->offset = area->offset;
-	area->offset += Game->size * 0.5f;
 	renderer_start();
 
 	Rect2 screen = rect2(
@@ -441,6 +440,7 @@ void world_area_update(World_Area* area, World* world)
 		area->offset.y = 0;
 	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - Game->size.y;
+	area->offset += Game->size * 0.5f;
 
 	//_player_handle_interactions(world, area, player_entity, player);
 
