@@ -2051,6 +2051,7 @@ play_state_init	src/rituals_play_state.cpp	/^void play_state_init()$/;"	f
 play_state_stop	src/rituals_play_state.cpp	/^void play_state_stop()$/;"	f
 play_state_update	src/rituals_play_state.cpp	/^void play_state_update()$/;"	f
 player	src/rituals_game_info.cpp	/^		} player;$/;"	m	union:Rituals_Entity_Userdata::__anon1	typeref:struct:Rituals_Entity_Userdata::__anon1::__anon2	file:
+player	src/rituals_world_area.cpp	/^	Entity* player;$/;"	m	struct:World_Area	file:
 position	src/rituals_gui.cpp	/^	Vec2 position;$/;"	m	struct:Gui_Window_Handle	file:
 position	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon10	file:
 position	src/rituals_math.cpp	/^	Vec2 position;$/;"	m	struct:Transform	file:

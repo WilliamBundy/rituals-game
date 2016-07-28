@@ -77,6 +77,8 @@ struct World_Area
 	Entity* entities;
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
+	
+	Entity* player;
 
 };
 

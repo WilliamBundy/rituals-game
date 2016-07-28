@@ -42,7 +42,16 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 			Tile_Info* player_tile = Registry->tiles + tilemap_get_at(&area->map, e->body->shape.center);
 
 			move_impulse *= player_tile->movement_modifier;
+			e->walk_impulse = move_impulse;
+		} else if(e->kind == EntityKind_Enemy) {
+			real movespeed = 200;
+			Vec2 walk = Vec2{};
+			Vec2 dpos = e->body->shape->center - area->player->shape->center;
+			real angle = atan2f(dpos.y, dpos.x);
+			walk.x = cosf(angle) * movespeed;
+			walk.y = sinf(angle) * movespeed;
 
+			e->walk_impulse = walk;
 		}
 	}
 }
