@@ -316,6 +316,7 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 	Sprite s;
 
 
+	/*
 	if(Input->scancodes[SDL_SCANCODE_SPACE] >= State_Pressed) {
 		init_sprite(&s);
 		s.position = player->shape.center;
@@ -349,6 +350,7 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 	} else {
 		player_entity->held_entity_id = -1;
 	}
+	*/
 
 	char debug_str[256];
 	if(player_entity->held_entity_id > 0) {
