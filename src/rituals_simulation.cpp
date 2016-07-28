@@ -169,10 +169,11 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 					if (ovl_mag < 0.0001f) continue;
 					Vec2 normal = overlap * (1.0f / ovl_mag);
 
-					if(a->id == 0 || b->id  == 0) {
-						aabb_intersect(&a->shape, &b->shape);
-					}
-					
+					//if(a->id == 0 || b->id  == 0) {
+					//	aabb_intersect(&a->shape, &b->shape);
+					//}
+
+					//add_collision_event(a, b, overlap);			
 
 					#define _collision_slop (0.8f)
 					if(a_is_static && !b_is_static) {

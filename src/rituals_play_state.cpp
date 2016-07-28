@@ -54,6 +54,7 @@ void play_state_update()
 	if(!play_state->running) {
 		Renderer->offset = Vec2{};
 		renderer_start();
+		Body_Font->color = v4(1, 1, 1, 1);
 		render_body_text("Paused", v2(32, 32), true, 4.0f);
 
 

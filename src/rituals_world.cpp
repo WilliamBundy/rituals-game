@@ -345,10 +345,21 @@ void world_area_interact(World_Area* area, World* world)
 
 void world_area_render(World_Area* area, World* world)
 {	
+	area->offset += (target - area->offset) * 0.1f;
+	area->offset -= Game->size * 0.5f;
+	if(area->offset.x < 0) 
+		area->offset.x = 0;
+	else if((area->offset.x + Game->size.x) > area->map.w * Tile_Size)
+		area->offset.x = area->map.w * Tile_Size - Game->size.x;
+
+	if(area->offset.y < 0) 
+		area->offset.y = 0;
+	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
+		area->offset.y = area->map.h * Tile_Size - Game->size.y;
+
 	Renderer->offset = area->offset;
-	if(play_state->running) {
-		area->offset += Game->size * 0.5f;
-	}
+	area->offset += Game->size * 0.5f;
+
 	renderer_start();
 
 	Rect2 screen = rect2(
@@ -432,18 +443,6 @@ void world_area_update(World_Area* area, World* world)
 		world_switch_current_area(play_state->world, area->stub->south, Game->play_arena);
 		play_state->world_xy.y++;
 	}
-	area->offset += (target - area->offset) * 0.1f;
-	area->offset -= Game->size * 0.5f;
-	if(area->offset.x < 0) 
-		area->offset.x = 0;
-	else if((area->offset.x + Game->size.x) > area->map.w * Tile_Size)
-		area->offset.x = area->map.w * Tile_Size - Game->size.x;
-
-	if(area->offset.y < 0) 
-		area->offset.y = 0;
-	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
-		area->offset.y = area->map.h * Tile_Size - Game->size.y;
-
 	//_player_handle_interactions(world, area, player_entity, player);
 
 	world_area_render(area, world);
