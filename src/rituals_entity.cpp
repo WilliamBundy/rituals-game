@@ -66,7 +66,6 @@ void rituals_assign_entity_kinds(Rituals_Entity_Kinds* kinds)
 
 struct Rituals_Entity_Userdata
 {
-	Rituals_Entity_Kind kind;
 	union {
 		struct {
 			isize held_entity_id;
@@ -81,8 +80,6 @@ struct Entity
 	Sim_Body* body;
 	Vec2 walk_impulse;
 
-
-
 	Sprite sprite;
 	isize kind;
 
@@ -91,6 +88,7 @@ struct Entity
 	int32 facing;
 	Direction direction;
 
+	uint64 events;
 	void* userdata;
 };
 

@@ -1174,14 +1174,14 @@ _body_get_id	src/rituals_simulation.cpp	46;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	38;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	39;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	43;"	d	file:
-_check	src/rituals_entity.cpp	109;"	d	file:
+_check	src/rituals_entity.cpp	107;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	411;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	180;"	d	file:
 _color	src/rituals_gui.cpp	356;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
-_entity_get_id	src/rituals_entity.cpp	97;"	d	file:
+_entity_get_id	src/rituals_entity.cpp	95;"	d	file:
 _ep	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_ep;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _f	src/thirdparty/tinydir.h	/^	WIN32_FIND_DATA _f;$/;"	m	struct:tinydir_dir
 _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_dir
@@ -1444,6 +1444,7 @@ entry_index	helping_gb.cpp	/^	isize entry_index;$/;"	m	struct:MapFindResult	file
 entry_prev	helping_gb.cpp	/^	isize entry_prev;$/;"	m	struct:MapFindResult	file:
 eob_run	src/thirdparty/stb_image.h	/^   int            eob_run;$/;"	m	struct:__anon6
 eof	src/thirdparty/stb_image.h	/^   int      (*eof)   (void *user);                       \/\/ returns nonzero if we are at end of file\/data$/;"	m	struct:__anon2
+events	src/rituals_entity.cpp	/^	uint64 events;$/;"	m	struct:Entity	file:
 expanded	src/thirdparty/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon12
 extension	src/thirdparty/tinydir.h	/^	_tinydir_char_t *extension;$/;"	m	struct:tinydir_file
 facing	src/rituals_entity.cpp	/^	int32 facing;$/;"	m	struct:Entity	file:
@@ -1945,7 +1946,6 @@ items_count	src/rituals_game_registry.cpp	/^	isize items_count;$/;"	m	struct:Gam
 items_hash	src/rituals_game_registry.cpp	/^	usize* items_hash;$/;"	m	struct:Game_Registry	file:
 key	helping_gb.cpp	/^	u64 key;$/;"	m	struct:MapEntry	file:
 keycodes	src/rituals_game.cpp	/^	int8* keycodes;$/;"	m	struct:Game_Input	file:
-kind	src/rituals_entity.cpp	/^	Rituals_Entity_Kind kind;$/;"	m	struct:Rituals_Entity_Userdata	file:
 kind	src/rituals_entity.cpp	/^	isize kind;$/;"	m	struct:Entity	file:
 last_pos	src/rituals_gui.cpp	/^	Vec2 last_pos;$/;"	m	struct:Gui_Context	file:
 last_sprite_id	src/rituals_renderer.cpp	/^	isize last_sprite_id; $/;"	m	struct:OpenGL_Renderer	file:
