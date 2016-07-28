@@ -397,7 +397,6 @@ void world_area_render(World_Area* area, World* world)
 
 }
 
-
 void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
