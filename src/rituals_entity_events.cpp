@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */ 
 
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
-#define _scancode(s1, state) ((Input->scancodes[SDL_SCANCODE_##s1]))
+#define _scancode(s1) ((Input->scancodes[SDL_SCANCODE_##s1]))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
