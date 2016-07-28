@@ -181,7 +181,6 @@ void generate_world(char* name, World* world)
 	}
 }
 
-#define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)
 {
 	real movespeed = 800;
@@ -475,9 +474,6 @@ void world_area_update(World_Area* area, World* world)
 		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(1, 1, 1, 1), 1);
 	}
 #endif
-
-
-
 	renderer_draw();
 }
 
