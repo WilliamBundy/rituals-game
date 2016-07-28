@@ -339,7 +339,7 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	renderer_push_sprite(&s);
 
 }
-v4 Gui_TextBackgroundColor = Vec4{0, 0, 0, 0.8f};
+Vec4 Gui_TextBackgroundColor = Vec4{0, 0, 0, 0.8f};
 void render_body_text(char* text, Vec2 position, bool background=false, real scale = 1.0f)
 {
 	if(background) {
