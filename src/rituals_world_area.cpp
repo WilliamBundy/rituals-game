@@ -14,23 +14,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 
-/*
-enum Entity_Event_Type
-{
-	Entity_Event_On_Activate
-}
-struct Entity_Event 
-{
-	union {
-		Entity_On_Activate on_activate;
-
-	} event;
-	isize hash;
-	const char* name;
-	real priority;
-};
-*/
-
 typedef struct World_Area World_Area;
 
 enum Direction 
@@ -39,16 +22,6 @@ enum Direction
 	Direction_South,
 	Direction_East,
 	Direction_West
-};
-
-
-
-#define EntityMaxCallbacksPerFrame (16)
-
-struct Entity_Event
-{
-	void* callback;
-	isize callback_count;
 };
 
 struct Entity
@@ -62,8 +35,6 @@ struct Entity
 
 	int32 facing;
 	Direction direction;
-	
-	World_Area* area;
 	
 	//deprecated
 	isize held_entity_id;
@@ -90,6 +61,7 @@ enum World_Area_Biome
 	AreaBiome_Grassland,
 	AreaBiome_Desert
 };
+
 #define WorldAreaTilemapWidth (64)
 #define WorldAreaTilemapHeight (64)
 #define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight * 16)
