@@ -181,6 +181,7 @@ void generate_world(char* name, World* world)
 	}
 }
 
+#if 0
 Vec2 _player_controls(World_Area* area, Entity* player_entity, Sim_Body* player)
 {
 	real movespeed = 800;
@@ -391,10 +392,11 @@ void _player_handle_interactions(World* world, World_Area* area, Entity* player_
 #endif
 }
 
+#endif
 void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
-
+	//Simulation timing
 	play_state->current_time = SDL_GetTicks();
 	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
 	dt = clamp(dt, 0, 1.2f);
@@ -402,17 +404,18 @@ void world_area_update(World_Area* area, World* world)
 	play_state->prev_time = play_state->current_time;
 
 	sim_sort_bodies_on_id(&area->sim);
-	Entity* player_entity = world_area_find_entity(area, 0);
-	Sim_Body* player = player_entity->body;
+	//Entity* player_entity = world_area_find_entity(area, 0);
+	//Sim_Body* player = player_entity->body;
 
-	Vec2 move_impulse = _player_controls(area, player_entity, player);
+	//Vec2 move_impulse = _player_controls(area, player_entity, player);
 
 	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;
-		player->velocity += move_impulse;
+		//player->velocity += move_impulse;
 		sim_update(&area->sim, &area->map, TimeStep);
 	}
 	
+#if 0
 	_player_animate(area, player_entity, player, move_impulse);
 	Vec2 target = player->shape.center;
 	if(target.x < 0) {
@@ -446,6 +449,7 @@ void world_area_update(World_Area* area, World* world)
 	area->offset += Game->size * 0.5f;
 	// throw a ball
 
+#endif 
 	renderer_start();
 
 	Rect2 screen = rect2(
