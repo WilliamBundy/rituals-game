@@ -362,7 +362,12 @@ int main(int argc, char** argv)
 {
 	//stbi_set_flip_vertically_on_load(1);
 	
-	printf("%d %d \n", sizeof(Entity), sizeof(void*));
+	Entity e;
+	e.sprite.position.x = 3;
+	e.sprite.position.y = 8.14;
+	void* p = &e;
+	p += 8 + 8 + 8 + 4 + 4 + 4;
+	printf("%.2f \n", ((float*)p)*);
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 
