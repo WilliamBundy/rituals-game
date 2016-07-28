@@ -401,7 +401,6 @@ void world_area_update(World_Area* area, World* world)
 	area->offset += Game->size * 0.5f;
 	// throw a ball
 
-#endif 
 	renderer_start();
 
 	Rect2 screen = rect2(
