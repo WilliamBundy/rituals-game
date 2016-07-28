@@ -331,7 +331,7 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	Vec2 text_size = spritefont_size_text(font, text) * scale;
 	Sprite s; 
 	init_sprite(&s);
-	s.size = v2(text_size.x + 8,  text_size + 4);
+	s.size = v2(text_size.x + 8,  text_size.y + 4);
 	s.position = position - v2(4, 2);
 	s.color = background;
 	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
