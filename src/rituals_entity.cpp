@@ -102,7 +102,7 @@ struct Package
 	ProcessEntitiesFunc sim, walk, interact, animate, 
 						create, frame_tick, slow_tick, 
 						destroy;
-}
+};
 
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
