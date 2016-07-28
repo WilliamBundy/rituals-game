@@ -345,7 +345,7 @@ void world_area_interact(World_Area* area, World* world)
 
 void world_area_render(World_Area* area, World* world)
 {	
-	Vec2 target = area->player->body->shape.center;
+	Vec2 target = area->target;
 	area->offset += (target - area->offset) * 0.1f;
 	area->offset -= Game->size * 0.5f;
 	if(area->offset.x < 0) 
@@ -402,6 +402,7 @@ void world_area_update(World_Area* area, World* world)
 	game_set_scale(2.0);
 	//Simulation timing
 	
+	area->player = world_area_find_entity(area, 0);
 	if(!play_state->running) {
 		world_area_render(area, world);
 		return;
@@ -428,8 +429,7 @@ void world_area_update(World_Area* area, World* world)
 	}
 	
 	Vec2 target = area->player->body->shape.center;
-
-
+	area->target = target;
 	world_area_animate_entities(area, world);
 	if(target.x < 0) {
 		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);

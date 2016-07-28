@@ -2441,6 +2441,7 @@ suffix	src/thirdparty/stb_image.h	/^   stbi_uc suffix;$/;"	m	struct:__anon16
 t	src/rituals_renderer.cpp	/^int32 t = 0;$/;"	v
 tab_size	rituals_gui.cpp	/^	int32 tab_size;$/;"	m	struct:Spritefont	file:
 tab_size	src/rituals_gui.cpp	/^	int32 tab_size;$/;"	m	struct:Spritefont	file:
+target	src/rituals_world_area.cpp	/^	Vec2 target;$/;"	m	struct:World_Area	file:
 temp_arena	src/rituals_game.cpp	/^	Memory_Arena* temp_arena;$/;"	m	struct:Game_Main	file:
 temp_head	src/rituals_game.cpp	/^	isize temp_head;$/;"	m	struct:Memory_Arena	file:
 test_init	src/rituals_main.cpp	/^void test_init()$/;"	f

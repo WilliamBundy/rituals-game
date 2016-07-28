@@ -73,6 +73,7 @@ struct World_Area
 	Simulator sim;
 	Tilemap map;
 	Vec2 offset;
+	Vec2 target;
 
 	Entity* entities;
 	bool entities_dirty;
