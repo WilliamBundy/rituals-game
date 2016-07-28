@@ -81,12 +81,12 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 			}
 			int32 frame = 0;
 			if(v2_dot(walk, walk) > 0){
-				player_entity->counter++;
+				e->counter++;
 				frame = 1;
-				if(player_entity->counter > 15) {
+				if(e->counter > 15) {
 					frame = 0;
-					if(player_entity->counter > 30) {
-						player_entity->counter = 0;
+					if(e->counter > 30) {
+						e->counter = 0;
 					}
 				}
 			} else {
