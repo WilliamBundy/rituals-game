@@ -387,7 +387,7 @@ void world_area_update(World_Area* area, World* world)
 	//Simulation timing
 	
 	if(!play_state->running) {
-		world_area_render();
+		world_area_render(area, world);
 		return;
 	}
 
