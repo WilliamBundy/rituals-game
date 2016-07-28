@@ -129,7 +129,6 @@ Entity* world_area_get_next_entity(World_Area* area)
 
 	Entity* e = area->entities + area->entities_count++;
 	init_entity(e);
-	e->area = area;
 	e->body = sim_get_next_body(&area->sim);
 	e->body_id = e->body->id;
 	e->id = area->next_entity_id++;
