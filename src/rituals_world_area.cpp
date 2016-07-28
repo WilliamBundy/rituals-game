@@ -79,8 +79,6 @@ void init_entity(Entity* entity)
 	init_sprite(&entity->sprite);
 	entity->counter = 0;
 	entity->userdata = NULL;
-	entity->userdata_id_major = -1;
-	entity->userdata_id_minor = -1;
 }
 
 Entity* world_area_get_next_entity(World_Area* area)
