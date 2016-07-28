@@ -41,7 +41,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
-		if(e->kind == RitualsEntityKinds.PlayerEntity) {
+		if(e->kind == EntityKind_PlayerEntity) {
 			real movespeed = 800;
 			Vec2 move_impulse = v2(0, 0);
 
