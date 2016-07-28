@@ -54,8 +54,13 @@ void play_state_update()
 	if(!play_state->running) {
 		Renderer->offset = Vec2{};
 		renderer_start();
+		
+		Sprite s = get_box_sprite(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.5f));
+		s.anchor = Anchor_Top_Left;
+		renderer_push_sprite(&s);
+
 		Body_Font->color = v4(1, 1, 1, 1);
-		render_body_text("Paused", v2(32, 32), true, 4.0f);
+		render_body_text("Paused", v2(32, 32), false, 4.0f);
 
 
 		renderer_draw();
