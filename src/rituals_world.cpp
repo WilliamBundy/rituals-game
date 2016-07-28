@@ -366,9 +366,10 @@ void world_area_update(World_Area* area, World* world)
 		sim_update(&area->sim, &area->map, TimeStep);
 	}
 	
-#if 0
-	_player_animate(area, player_entity, player, move_impulse);
 	Vec2 target = player->shape.center;
+
+
+	world_area_animate_entities(area, world);
 	if(target.x < 0) {
 		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);
 		play_state->world_xy.x--;
@@ -394,7 +395,7 @@ void world_area_update(World_Area* area, World* world)
 	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - Game->size.y;
 
-	_player_handle_interactions(world, area, player_entity, player);
+	//_player_handle_interactions(world, area, player_entity, player);
 
 	Renderer->offset = area->offset;
 	area->offset += Game->size * 0.5f;
