@@ -1128,9 +1128,9 @@ WIN32_LEAN_AND_MEAN	src/thirdparty/tinydir.h	48;"	d
 World	src/rituals_game_info.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
-WorldAreaEntityCapacity	src/rituals_world_area.cpp	57;"	d	file:
-WorldAreaTilemapHeight	src/rituals_world_area.cpp	56;"	d	file:
-WorldAreaTilemapWidth	src/rituals_world_area.cpp	55;"	d	file:
+WorldAreaEntityCapacity	src/rituals_world_area.cpp	56;"	d	file:
+WorldAreaTilemapHeight	src/rituals_world_area.cpp	55;"	d	file:
+WorldAreaTilemapWidth	src/rituals_world_area.cpp	54;"	d	file:
 World_Area	src/rituals_game_info.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
 World_Area	src/rituals_world_area.cpp	/^struct World_Area$/;"	s	file:
 World_Area_Biome	src/rituals_world_area.cpp	/^enum World_Area_Biome$/;"	g	file:
@@ -1177,7 +1177,7 @@ _collision_slop	src/rituals_simulation.cpp	178;"	d	file:
 _color	src/rituals_gui.cpp	356;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
-_entity_get_id	src/rituals_world_area.cpp	36;"	d	file:
+_entity_get_id	src/rituals_world_area.cpp	35;"	d	file:
 _ep	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_ep;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _f	src/thirdparty/tinydir.h	/^	WIN32_FIND_DATA _f;$/;"	m	struct:tinydir_dir
 _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_dir
@@ -1420,7 +1420,6 @@ e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Mat2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Rect2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Vec4	file:
 e	src/rituals_math.cpp	/^	real e[9];$/;"	m	union:Mat3	file:
-e	src/rituals_world_area.cpp	/^	uint8 e;$/;"	m	struct:Entity	file:
 east	src/rituals_world_area.cpp	/^	Area_Link east;$/;"	m	struct:World_Area_Stub	file:
 eflags	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 end_temp_arena	src/rituals_game.cpp	/^void end_temp_arena(Memory_Arena* arena)$/;"	f
