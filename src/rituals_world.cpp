@@ -345,6 +345,7 @@ void world_area_interact(World_Area* area, World* world)
 
 void world_area_render(World_Area* area, World* world)
 {	
+	Vec2 target = area->player->body->shape.center;
 	area->offset += (target - area->offset) * 0.1f;
 	area->offset -= Game->size * 0.5f;
 	if(area->offset.x < 0) 
