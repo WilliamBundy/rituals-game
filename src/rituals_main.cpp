@@ -367,7 +367,7 @@ int main(int argc, char** argv)
 	e.sprite.position.y = 8.14;
 	char* p = (char*)&e;
 	p += 8 + 8 + 8 + 4 + 4 + 4;
-	printf("%.2f \n", ((float*)p)*);
+	printf("%.2f \n", *((float*)p));
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 
