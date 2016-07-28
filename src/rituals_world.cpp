@@ -342,10 +342,55 @@ void world_area_interact(World_Area* area, World* world)
 	rituals_interact_entities(area->entities, area->entities_count, area, world);
 }
 
+
+void world_area_render(World_Area* area, World* world)
+{	
+	renderer_start();
+
+	Rect2 screen = rect2(
+			area->offset.x - Game->size.x / 2,
+			area->offset.y - Game->size.y / 2, 
+			Game->size.x, Game->size.y);
+
+	isize sprite_count_offset = render_tilemap(&area->map, v2(0,0), screen);
+
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+
+		if (b == NULL) continue;
+		e->sprite.position = b->shape.center;
+		e->sprite.position.y += b->shape.hh;
+		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
+		
+		//TODO(will) align entity sprites by their bottom center
+		renderer_push_sprite(&e->sprite);
+	}
+	renderer_sort(sprite_count_offset);
+
+#if 0
+	for(isize i = 0; i < area->sim.bodies_count; ++i) {
+		Sim_Body* b = area->sim.bodies + i;
+
+		if (b == NULL) continue;
+		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(1, 1, 1, 1), 1);
+	}
+#endif
+	renderer_draw();
+
+}
+
+
 void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
 	//Simulation timing
+	
+	if(!play_state->running) {
+		world_area_render();
+		return;
+	}
+
 	play_state->current_time = SDL_GetTicks();
 	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
 	dt = clamp(dt, 0, 1.2f);
@@ -399,39 +444,7 @@ void world_area_update(World_Area* area, World* world)
 
 	Renderer->offset = area->offset;
 	area->offset += Game->size * 0.5f;
-
-	renderer_start();
-
-	Rect2 screen = rect2(
-			area->offset.x - Game->size.x / 2,
-			area->offset.y - Game->size.y / 2, 
-			Game->size.x, Game->size.y);
-
-	isize sprite_count_offset = render_tilemap(&area->map, v2(0,0), screen);
-
-	for(isize i = 0; i < area->entities_count; ++i) {
-		Entity* e = area->entities + i;
-		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-
-		if (b == NULL) continue;
-		e->sprite.position = b->shape.center;
-		e->sprite.position.y += b->shape.hh;
-		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
-		
-		//TODO(will) align entity sprites by their bottom center
-		renderer_push_sprite(&e->sprite);
-	}
-	renderer_sort(sprite_count_offset);
-
-#if 0
-	for(isize i = 0; i < area->sim.bodies_count; ++i) {
-		Sim_Body* b = area->sim.bodies + i;
-
-		if (b == NULL) continue;
-		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(1, 1, 1, 1), 1);
-	}
-#endif
-	renderer_draw();
+	world_area_render(area, world);
 }
 
 

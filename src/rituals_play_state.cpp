@@ -18,6 +18,7 @@ void play_state_init()
 	clear_arena(Game->world_arena);
 	play_state = arena_push_struct(Game->game_arena, Play_State);
 	play_state->world = arena_push_struct(Game->world_arena, World);
+	play_state->running = true;
 }
 
 void deserialize_world(World* world, FILE* world_file);
@@ -44,6 +45,9 @@ void start_play_state(char* world_name_in)
 
 void play_state_update()
 {
+	if(_check(ESCAPE) == State_Just_Pressed) {
+		play_state->running = !play_state->running;
+	}
 	world_area_update(play_state->world->current_area, play_state->world);
 }
 

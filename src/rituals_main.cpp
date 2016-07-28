@@ -127,6 +127,8 @@ struct Play_State
 	real accumulator = 0;
 	World* world;
 
+	bool running;
+
 	Vec2i world_xy;
 };
 Play_State* play_state;
