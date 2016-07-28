@@ -49,6 +49,16 @@ void play_state_update()
 		play_state->running = !play_state->running;
 	}
 	world_area_update(play_state->world->current_area, play_state->world);
+
+
+	if(!play_state->running) {
+		Renderer->offset = Vec2{};
+		renderer_start();
+		render_body_text("Paused", v2(32, 32), true, 4.0f);
+
+
+		renderer_draw();
+	}
 }
 
 void play_state_stop()

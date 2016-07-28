@@ -345,6 +345,8 @@ void world_area_interact(World_Area* area, World* world)
 
 void world_area_render(World_Area* area, World* world)
 {	
+	Renderer->offset = area->offset;
+	area->offset += Game->size * 0.5f;
 	renderer_start();
 
 	Rect2 screen = rect2(
@@ -442,8 +444,6 @@ void world_area_update(World_Area* area, World* world)
 
 	//_player_handle_interactions(world, area, player_entity, player);
 
-	Renderer->offset = area->offset;
-	area->offset += Game->size * 0.5f;
 	world_area_render(area, world);
 }
 
