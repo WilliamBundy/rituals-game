@@ -97,7 +97,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 			Sprite* s = &e->sprite;
 			if(e->facing == -1) {
 				s->texture = Get_Texture_Coordinates(32 + frame * 32, 0, -32, 32);
-			} else if(player_entity->facing == 1) {
+			} else if(e->facing == 1) {
 				s->texture = Get_Texture_Coordinates(0  + frame * 32, 0, 32, 32);
 			}
 		}
