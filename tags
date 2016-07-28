@@ -2117,6 +2117,7 @@ restart_interval	src/thirdparty/stb_image.h	/^   int restart_interval, todo;$/;"
 restitution	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/;"	m	struct:Sim_Body	file:
 rgb	src/thirdparty/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon6
 rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
+rituals_animate_entities	src/rituals_entity_events.cpp	/^void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity_events.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rp1	src/rituals_math.cpp	/^	Vec2 rp1;$/;"	m	struct:Rect2_Clip_Info	file:

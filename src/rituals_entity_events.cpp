@@ -56,3 +56,50 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 	}
 }
 
+void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)
+{
+	for(isize i = 0; i < count; ++i) {
+		Entity* e = entities + i;
+		if(e->kind == EntityKind_Player) {
+			Direction old_direction = e->direction;
+			Vec2 walk = e->walk_impulse;
+			if(walk.y < 0) {
+				e->direction = Direction_North;
+			} else if(walk.y > 0) {
+				e->direction = Direction_South;
+			}
+
+			if(walk.x < 0) {
+				e->facing = -1;
+				e->direction = Direction_West;
+			} else if(walk.x > 0) {
+				e->facing = 1;
+				e->direction = Direction_East;
+			}
+			if(Input->scancodes[SDL_SCANCODE_SPACE] == State_Pressed) {
+				e->direction = old_direction;
+			}
+			int32 frame = 0;
+			if(v2_dot(walk, walk) > 0){
+				player_entity->counter++;
+				frame = 1;
+				if(player_entity->counter > 15) {
+					frame = 0;
+					if(player_entity->counter > 30) {
+						player_entity->counter = 0;
+					}
+				}
+			} else {
+				e->counter = 0;
+				frame = 0;
+			}
+
+			Sprite* s = &e->sprite;
+			if(e->facing == -1) {
+				s->texture = Get_Texture_Coordinates(32 + frame * 32, 0, -32, 32);
+			} else if(player_entity->facing == 1) {
+				s->texture = Get_Texture_Coordinates(0  + frame * 32, 0, 32, 32);
+			}
+		}
+	}
+}
