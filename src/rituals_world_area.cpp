@@ -149,28 +149,6 @@ void init_entity(Entity* entity)
 	entity->userdata_id_minor = -1;
 }
 
-/*
-isize entity_add_event_on_activate(Entity* e, Entity_On_Activate event)
-{
-	if(e != NULL) {
-		if(e->event_on_activate == NULL) {
-			e->event_on_activate = arena_push_array(
-					Game->play_arena, 
-					Entity_On_Activate,
-					EntityMaxCallbacksPerFrame);
-		}
-		if(e->event_on_activate_count < EntityMaxCallbacksPerFrame) {
-			e->event_on_activate[e->event_on_activate_count++] = event;
-		} else {
-			Log_Error("Entity exceeded on_activate_count callbacks");
-		}
-
-	}
-	return e->event_on_activate_count - 1;
-}
-*/
-
-
 Entity* world_area_get_next_entity(World_Area* area)
 {
 	if(area->entities_count + 1 >= area->entities_capacity) {
@@ -196,6 +174,34 @@ Entity* world_area_find_entity(World_Area* area, isize id)
 	}
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
 	return index == -1 ? NULL : area->entities + index;
+}
+
+void world_area_sort_entities_on_id(World_Area* area)
+{
+	entity_sort_on_id(area->entities, area->entities_count);
+}
+
+void world_area_synchronize_entities_and_bodies(World_Area* area)
+{
+	world_area_sort_entities_on_id(area);
+	sim_sort_bodies_on_id(&area->sim);
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		if(e->body_id == -1) continue;
+		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+		b->entity = e;
+		b->entity_id = e->id;
+		e->body = b;
+	}
+}
+
+void world_area_remove_entity(World_Area* area, Entity* entity)
+{
+	sim_remove_body(&area->sim, entity->body_id);
+	isize index = entity_search_for_id(entity->id, area->entities, area->entities_count);
+	area->entities[index] = area->entities[--area->entities_count];
+	world_area_sort_entities_on_id(area);
+	world_area_synchronize_entities_and_bodies(area);
 }
 
 //Make a player struct?
@@ -230,39 +236,3 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 	}
 }
 
-void world_area_sort_entities_on_id(World_Area* area)
-{
-	entity_sort_on_id(area->entities, area->entities_count);
-}
-
-void world_area_synchronize_entities_and_bodies(World_Area* area)
-{
-	world_area_sort_entities_on_id(area);
-	sim_sort_bodies_on_id(&area->sim);
-	for(isize i = 0; i < area->entities_count; ++i) {
-		Entity* e = area->entities + i;
-		if(e->body_id == -1) continue;
-		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		b->entity = e;
-		b->entity_id = e->id;
-		e->body = b;
-	}
-}
-
-void world_area_remove_entity(World_Area* area, Entity* entity)
-{
-	sim_remove_body(&area->sim, entity->body_id);
-	isize index = entity_search_for_id(entity->id, area->entities, area->entities_count);
-	area->entities[index] = area->entities[--area->entities_count];
-	world_area_sort_entities_on_id(area);
-	world_area_synchronize_entities_and_bodies(area);
-}
-
-EntityOnActivateDecl(test_on_activate)
-{
-	printf("%d was clicked \n", entity->id);
-}
-EntityOnActivateDecl(delete_on_activate)
-{
-	world_area_remove_entity(area, entity);
-}

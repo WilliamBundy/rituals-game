@@ -260,3 +260,100 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 	body_sort_on_id(sim->bodies, sim->bodies_count);
 }
 
+isize _tw, _th;
+uint8* _tiles;
+uint8 _get_at(isize x, isize y)
+{
+	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return false;
+	isize index = y * _tw + x;
+	if((index < 0) || (index >= _tw * _th)) return false;
+	return _tiles[index];
+
+}
+
+void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
+{
+	start_temp_arena(Game->temp_arena);
+	_tw = tilemap->w;
+	_th = tilemap->h;
+	isize map_size = tilemap->w * tilemap->h;
+	uint8* tiles = arena_push_array(Game->temp_arena, uint8, map_size + 1);
+	for(isize i = 0; i < map_size; ++i) {
+		tiles[i] = Registry->tiles[tilemap->tiles[i]].solid;
+	}
+	_tiles = tiles;
+	isize work = 0;
+
+	Rect2i* rects = arena_push_array(Game->temp_arena, Rect2i, map_size / 2);
+	isize rects_count = 0;
+	isize last_rects = 0;
+	do {
+		last_rects = rects_count;
+		for(isize y = 0; y < tilemap->h; ++y) {
+			for(isize x = 0; x < tilemap->w; ++x) {
+				if(_get_at(x, y)) {
+					if(!_get_at(x, y - 1)) {
+						Rect2i* r = rects + rects_count++;
+						r->x = x;
+						r->y = y;
+						r->w = 1;
+						r->h = 1;
+						do {
+							x++;
+						}
+						while(_get_at(x, y) && !_get_at(x, y - 1) && (x < tilemap->w));
+
+						if(x != r->x) {
+							r->w = x - r->x;
+						}
+					}	
+				}
+			}
+		}
+
+		for(isize i = last_rects; i < rects_count; ++i) {
+			Rect2i* r = rects + i;
+			bool solid = true;
+			isize y = r->y;
+			while(solid && (y < tilemap->h)) {
+				for(isize local_x = 0; local_x < r->w; ++local_x) {
+					solid = solid && _get_at(r->x + local_x, y + 1);
+					if(!solid) break;
+				}
+				if(solid) {
+					y++;
+					r->h++;
+				}
+			}
+		}
+
+		for(isize i = 0; i < rects_count; ++i) {
+			Rect2i* r = rects + i;
+			for(isize local_y = 0; local_y < r->h; ++local_y) {
+				for(isize local_x = 0; local_x < r->w; ++local_x) {
+					isize index = (local_y + r->y) * tilemap->w + (local_x + r->x);
+					//printf("%d ", index);
+					tiles[index] = false;
+				}
+			}
+		}
+		work = 0;
+		for(isize i = 0; i < map_size; ++i) {
+			work += tiles[i];
+		}
+	} while(work);
+	
+	for(isize i = 0; i < rects_count; ++i) {
+		Rect2i* r = rects + i;
+		Sim_Body* e = sim_get_next_body(sim);
+		e->shape.center.x = (r->x + r->w / 2.0f) * Tile_Size;//+ Half_TS;
+		e->shape.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
+		e->shape.hw = r->w * Half_TS;
+		e->shape.hh = r->h * Half_TS;
+		e->restitution = 0.3f;
+		e->inv_mass = 0.0f;
+		e->flags = Body_Flag_Static;
+	}
+	end_temp_arena(Game->temp_arena);
+}
+

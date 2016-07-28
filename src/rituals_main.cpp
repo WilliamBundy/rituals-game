@@ -32,7 +32,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- pass each package event function a pointer to its entity array
  *  		- ???
  *  - Packages
- *  	- 
+ *  	- Provide code and data for game 
+ *  	- Need to create header for everything in game.
+ *  		- Ties in with possible metaprogramming plans.
+ *  	- Improved texture atlasing
+ *  		- Packages need to be able to supply textures that
+ *  		  get compiled into the game's texture atlas
+ *  		- Switch from using logical texture coordinates to pixels in code
+ *  		- Divide by texture size in shader.
+ *  	- Add a bunch of function pointer calls in game.
  *  	
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
@@ -197,10 +205,8 @@ void main_menu_update()
 		saves_dirty = false;
 	}
 
-	lasty += 32 + 16;
-
-
-	gui_add_slider(v2(32, lasty), v2(256, 22), "Volume", 0, 100, 1, &r, &b);
+	//lasty += 32 + 16;
+	//gui_add_slider(v2(32, lasty), v2(256, 22), "Volume", 0, 100, 1, &r, &b);
 
 
 	lasty += 32 + 16;
