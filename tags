@@ -1083,8 +1083,8 @@ STBI_grey_alpha	src/thirdparty/stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:
 STBI_rgb	src/thirdparty/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon1
 STBI_rgb_alpha	src/thirdparty/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon1
 STB_IMAGE_IMPLEMENTATION	src/thirdparty.h	19;"	d
-SimIter	src/rituals_simulation.cpp	137;"	d	file:
-SimIter_i	src/rituals_simulation.cpp	136;"	d	file:
+SimIter	src/rituals_simulation.cpp	139;"	d	file:
+SimIter_i	src/rituals_simulation.cpp	138;"	d	file:
 Sim_Body	src/rituals_simulation.cpp	/^struct Sim_Body$/;"	s	file:
 Sim_Body_Flags	src/rituals_simulation.cpp	/^enum Sim_Body_Flags$/;"	g	file:
 Sim_Contact	src/rituals_simulation.cpp	/^struct Sim_Contact$/;"	s	file:
@@ -1120,7 +1120,7 @@ Tile_Tree_Wall	src/rituals_game_registry.cpp	/^isize Tile_Tree_Wall = 0;$/;"	v
 Tile_Void	src/rituals_game_registry.cpp	/^isize Tile_Void = 0;$/;"	v
 Tile_Water	src/rituals_game_registry.cpp	/^isize Tile_Water = 0;$/;"	v
 Tilemap	src/rituals_tilemap.cpp	/^struct Tilemap$/;"	s	file:
-TimeStep	src/rituals_simulation.cpp	135;"	d	file:
+TimeStep	src/rituals_simulation.cpp	137;"	d	file:
 Time_Step	src/rituals_win32.cpp	225;"	d	file:
 Title_Font	src/rituals_game.cpp	/^Spritefont* Title_Font;$/;"	v
 Transform	src/rituals_math.cpp	/^struct Transform$/;"	s	file:
@@ -1172,15 +1172,15 @@ __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
 _add_item	src/rituals_game_registry.cpp	175;"	d	file:
-_body_get_id	src/rituals_simulation.cpp	51;"	d	file:
-_body_get_min_x	src/rituals_simulation.cpp	43;"	d	file:
-_body_get_min_y	src/rituals_simulation.cpp	44;"	d	file:
-_body_get_not_static	src/rituals_simulation.cpp	48;"	d	file:
+_body_get_id	src/rituals_simulation.cpp	53;"	d	file:
+_body_get_min_x	src/rituals_simulation.cpp	45;"	d	file:
+_body_get_min_y	src/rituals_simulation.cpp	46;"	d	file:
+_body_get_not_static	src/rituals_simulation.cpp	50;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	16;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	420;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
-_collision_slop	src/rituals_simulation.cpp	201;"	d	file:
+_collision_slop	src/rituals_simulation.cpp	205;"	d	file:
 _color	src/rituals_gui.cpp	357;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
@@ -1972,6 +1972,7 @@ load_spritefont	src/rituals_gui.cpp	/^Spritefont* load_spritefont(char* filepath
 load_spritefont	src/rituals_gui.cpp	/^void load_spritefont(Spritefont* font, char* file_path_in, Vec2i offset)$/;"	f
 lpal	src/thirdparty/stb_image.h	/^   stbi_uc lpal[256][4];$/;"	m	struct:__anon17
 ma	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
+mag	src/rituals_simulation.cpp	/^	real mag;$/;"	m	struct:Sim_Contact	file:
 main	git_post_rev.py	/^def main(tracking_file):$/;"	f
 main	src/rituals_main.cpp	/^int main(int argc, char** argv)$/;"	f
 main	src/rituals_win32.cpp	/^int main(int argc, char** argv)$/;"	f
@@ -2026,6 +2027,7 @@ next_random_double	src/rituals_game.cpp	/^real64 next_random_double(Random* r)$/
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_game.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
 nomore	src/thirdparty/stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon6
+normal	src/rituals_simulation.cpp	/^	Vec2 normal;$/;"	m	struct:Sim_Contact	file:
 north	src/rituals_world_area.cpp	/^	Area_Link north;$/;"	m	struct:World_Area_Stub	file:
 num_bits	src/thirdparty/stb_image.h	/^   int num_bits;$/;"	m	struct:__anon10
 num_keys_down	src/rituals_game.cpp	/^	isize num_keys_down;$/;"	m	struct:Game_Input	file:
