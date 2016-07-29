@@ -149,33 +149,34 @@ enum Rituals_Enemy_Kinds
 	EnemyKind_Goblin_Knight,
 };
 
-struct Rituals_Entity_Userdata
+ 
+
+union Rituals_Entity_Userdata
 {
-	union {
-		struct {
-			isize held_entity_id;
-		} player;
-		struct {
-			isize kind;
-			isize mode;
-			real speed;
-			real alert_dist;
-			real follow_dist;
-			union {
-				struct {
-					real last_dist_to_player;
-					real perc;
-					Vec2 perch;
-				} bat;
-				struct {
-					Vec2 patrol_start;
-					Vec2 patrol_end;
-				} goblin_knight;
-			} data;
-		} enemy;
-		struct {
-			void* ptr;
-		} unknown;
-	} data;
+	struct {
+		isize held_entity_id;
+	} player;
+	struct {
+		isize kind;
+		isize mode;
+		real speed;
+		real alert_dist;
+		real follow_dist;
+		union {
+			struct {
+				real last_dist_to_player;
+				real perc;
+				Vec2 perch;
+			} bat;
+			struct {
+				Vec2 patrol_start;
+				Vec2 patrol_end;
+			} goblin_knight;
+		} data;
+	} enemy;
+	struct {
+		void* ptr;
+	} unknown;
+} data;
 };
 
