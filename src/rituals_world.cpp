@@ -453,9 +453,9 @@ void world_area_update(World_Area* area, World* world)
 		e->kind = EntityKind_Enemy;
 		e->sprite.texture = Get_Texture_Coordinates(0, 10*32, 32, 32);
 		e->sprite.size = v2(32, 32);
-		e->body->shape.center = Input->mouse_pos;
+		e->body->shape.center = Input->mouse_pos + v2(rand_range(&Game->r, -10, 10) rand_range(&Game->r, -10, 10));
 		e->sprite.anchor = Anchor_Bottom;
-		e->body->shape.hext = v2(10, 10);
+		e->body->shape.hext = v2(16, 10);
 		e->sprite.sort_point_offset.y += rand_range(&Game->r, 0, 10);
 	}
 
