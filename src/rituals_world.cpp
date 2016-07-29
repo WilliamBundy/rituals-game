@@ -452,7 +452,7 @@ void world_area_update(World_Area* area, World* world)
 		Entity* e = world_area_get_next_entity(area);
 		e->kind = EntityKind_Enemy;
 		e->sprite.texture = Get_Texture_Coordinates(0, 10*32, 32, 32);
-		e->size = v2(32, 32);
+		e->sprite.size = v2(32, 32);
 		e->body->shape.center = Input->mouse_pos;
 		e->sprite.anchor = Anchor_Bottom;
 		e->body->shape.hext = v2(10, 10);
