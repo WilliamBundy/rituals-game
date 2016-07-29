@@ -448,7 +448,7 @@ void world_area_update(World_Area* area, World* world)
 	//_player_handle_interactions(world, area, player_entity, player);
 	world_area_interact(area, world);
 
-	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
 		Entity* e = world_area_get_next_entity(area);
 		e->kind = EntityKind_Enemy;
 		e->sprite.texture = Get_Texture_Coordinates(0, 10*32, 32, 32);
