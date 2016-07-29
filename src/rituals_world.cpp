@@ -180,6 +180,7 @@ void generate_world(char* name, World* world)
 		}
 	}
 }
+
 #if 0
 void serialize_world(World* world);
 void _player_handle_interactions(World* world, World_Area* area, Entity* player_entity, Sim_Body* player)
@@ -446,6 +447,16 @@ void world_area_update(World_Area* area, World* world)
 	}
 	//_player_handle_interactions(world, area, player_entity, player);
 	world_area_interact(area, world);
+
+	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+		Entity* e = world_area_get_next_entity(area);
+		e->kind = EntityKind_Enemy;
+		e->sprite.texture = Get_Texture_Coordinates(0, 10*32, 32, 32);
+		e->size = v2(32, 32);
+		e->body->shape.center = Input->mouse_pos;
+		e->sprite.anchor = Anchor_Bottom;
+		e->body->shape.hext = v2(10, 10);
+	}
 
 	world_area_render(area, world);
 }
