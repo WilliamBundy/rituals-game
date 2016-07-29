@@ -159,9 +159,10 @@ struct Rituals_Entity_Userdata
 			isize kind;
 			union {
 				struct {
+
 			
 				} slime;
-			}
+			} data;
 		} enemy;
 	} data;
 };

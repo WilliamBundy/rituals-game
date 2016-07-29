@@ -1344,6 +1344,7 @@ cursor	src/rituals_gui.cpp	/^	isize cursor, selection_start;$/;"	m	struct:Gui_Te
 damage	src/rituals_game_info.cpp	/^	int32 damage;$/;"	m	struct:Tile_State	file:
 damping	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/;"	m	struct:Sim_Body	file:
 data	src/rituals_game.cpp	/^	uint8* data;$/;"	m	struct:Memory_Arena	file:
+data	src/rituals_game_info.cpp	/^			} data;$/;"	m	struct:Rituals_Entity_Userdata::__anon1::__anon3	typeref:union:Rituals_Entity_Userdata::__anon1::__anon3::__anon4	file:
 data	src/rituals_game_info.cpp	/^	} data;$/;"	m	struct:Rituals_Entity_Userdata	typeref:union:Rituals_Entity_Userdata::__anon1	file:
 data	src/thirdparty/stb_image.h	/^      stbi_uc *data;$/;"	m	struct:__anon6::__anon7
 data_index	src/rituals_renderer.cpp	/^	isize data_index, sprite_count;$/;"	m	struct:OpenGL_Renderer	file:
