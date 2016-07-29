@@ -456,7 +456,7 @@ void world_area_update(World_Area* area, World* world)
 		e->body->shape.center = Input->mouse_pos;
 		e->sprite.anchor = Anchor_Bottom;
 		e->body->shape.hext = v2(10, 10);
-		e->sprite->sort_point_offset.y += rand_range(&Game->r, 0, 10);
+		e->sprite.sort_point_offset.y += rand_range(&Game->r, 0, 10);
 	}
 
 	world_area_render(area, world);
