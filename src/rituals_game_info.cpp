@@ -164,6 +164,7 @@ struct Rituals_Entity_Userdata
 				} slime;
 			} data;
 		} enemy;
+
 	} data;
 };
 
