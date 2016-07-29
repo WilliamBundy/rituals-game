@@ -16,7 +16,8 @@ enum Sim_Body_Flags
 {
 	Body_Flag_None,
 	Body_Flag_Static = Flag(1),
-	Body_Flag_No_Friction = Flag(2)
+	Body_Flag_No_Friction = Flag(2),
+	Body_Flag_Sensor = Flag(3)
 };
 
 
@@ -30,6 +31,13 @@ struct Sim_Body
 	uint64 flags;
 	isize entity_id;
 	Entity* entity;
+};
+
+struct Sim_Contact
+{
+	isize a_id;
+	isize b_id;
+	Vec2 overlap;
 };
 
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
@@ -59,6 +67,9 @@ struct Simulator
 {
 	Sim_Body* bodies;
 	isize bodies_count, bodies_capacity, next_body_id;
+	Sim_Contact* contacts;
+	isize contacts_count, contacts_capacity;
+
 	isize sort_axis;
 };
 
@@ -83,6 +94,8 @@ void init_simulator(Simulator* sim, isize cap, Memory_Arena* arena)
 	sim->sort_axis = 0;
 	sim->next_body_id = 0;
 	sim->bodies = arena_push_array(arena, Sim_Body, cap);
+	sim->contacts_capacity = Max(512, cap / 16);
+	sim->contacts = arena_push_array(arena, Sim_Contact, sim->contacts_capacity);
 }
 
 Sim_Body* sim_find_body(Simulator* sim, isize id)
@@ -124,6 +137,7 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define SimIter ((real)SimIter_i)
 void sim_update(Simulator* sim, Tilemap* map, real dt)
 {
+	sim->contacts_count = 0;
 	Sim_Body *a, *b;
 	for(isize times = 0; times < SimIter_i; ++times) {
 		if(sim->sort_axis == 0) {
@@ -173,7 +187,15 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 					//	aabb_intersect(&a->shape, &b->shape);
 					//}
 
-					//add_collision_event(a, b, overlap);			
+					if(times == 0) {
+						Sim_Contact c;
+						c.a_id = a->id;
+						c.b_id = b->id;
+						c.overlap = overlap;
+						if(sim->contacts_count < sim->contacts_capacity) {
+							sim->contacts[sim->contacts_count++] = c;
+						}
+					}
 
 					#define _collision_slop (0.8f)
 					if(a_is_static && !b_is_static) {

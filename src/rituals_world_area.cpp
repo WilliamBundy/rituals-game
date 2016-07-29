@@ -18,6 +18,7 @@ struct Entity
 	isize id;
 	isize body_id;
 	Sim_Body* body;
+	AABB hitbox;
 	Vec2 walk_impulse;
 
 	Sprite sprite;

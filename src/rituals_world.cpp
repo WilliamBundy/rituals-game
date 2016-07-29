@@ -428,6 +428,12 @@ void world_area_update(World_Area* area, World* world)
 		}
 		sim_update(&area->sim, &area->map, TimeStep);
 	}
+
+	real lasty = 16;
+	for(isize i = 0; i < sim->contacts_count; ++i) {
+
+	}
+
 	
 	Vec2 target = area->player->body->shape.center;
 	area->target = target;
