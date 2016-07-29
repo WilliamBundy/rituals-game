@@ -466,6 +466,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_render(area, world);
 	
 	Renderer->offset = v2(0, 0);
+	game_calc_mouse_pos(Renderer->offset);
 	renderer_start();
 	real lasty = 16;
 	for(isize i = 0; i < area->sim.contacts_count; ++i) {
