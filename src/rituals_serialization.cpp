@@ -198,6 +198,8 @@ void deserialize_entity(Entity* entity, FILE* file)
 	fread(&entity->counter, sizeof(int32), 1, file);
 	fread(&entity->facing, sizeof(int32), 1, file);
 	fread(&entity->direction, sizeof(Direction), 1, file);
+	fread(&entity->kind, sizeof(isize), 1, file);
+	fread(&entity->events, sizeof(uint64), 1, file);
 }
 
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
@@ -224,6 +226,9 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->facing, sizeof(int32), 1, file);
 	//TODO(will) standardize size of enum?
 	fwrite(&entity->direction, sizeof(Direction), 1, file);
+	fwrite(&entity->kind, sizeof(isize), 1, file);
+	fwrite(&entity->events, sizeof(uint64), 1, file);
+	//TODO(will) serialize userdata
 }
 
 void serialize_area(World_Area* area, FILE* area_file)
