@@ -419,6 +419,7 @@ void world_area_update(World_Area* area, World* world)
 
 	world_area_walk_entities(area, world);
 
+	isize times = 0;
 	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;
 		//TODO(will) use same sorted array as world_area_walk_entities
@@ -426,7 +427,8 @@ void world_area_update(World_Area* area, World* world)
 			Entity* e = area->entities + i;
 			e->body->velocity += e->walk_impulse;
 		}
-		sim_update(&area->sim, &area->map, TimeStep);
+		sim_update(&area->sim, &area->map, TimeStep, times == 0);
+		times++;
 	}
 
 	

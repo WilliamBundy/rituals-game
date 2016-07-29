@@ -1180,7 +1180,7 @@ _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	16;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	420;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
-_collision_slop	src/rituals_simulation.cpp	200;"	d	file:
+_collision_slop	src/rituals_simulation.cpp	201;"	d	file:
 _color	src/rituals_gui.cpp	356;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
@@ -2180,7 +2180,7 @@ sim_query_aabb	src/rituals_simulation.cpp	/^Sim_Body* sim_query_aabb(Simulator* 
 sim_remove_body	src/rituals_simulation.cpp	/^void sim_remove_body(Simulator* sim, Sim_Body* body)$/;"	f
 sim_remove_body	src/rituals_simulation.cpp	/^void sim_remove_body(Simulator* sim, isize body)$/;"	f
 sim_sort_bodies_on_id	src/rituals_simulation.cpp	/^void sim_sort_bodies_on_id(Simulator* sim)$/;"	f
-sim_update	src/rituals_simulation.cpp	/^void sim_update(Simulator* sim, Tilemap* map, real dt)$/;"	f
+sim_update	src/rituals_simulation.cpp	/^void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = true)$/;"	f
 size	src/rituals_game.cpp	/^	Vec2 size;$/;"	m	struct:Game_Main	file:
 size	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
 size	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon10	file:

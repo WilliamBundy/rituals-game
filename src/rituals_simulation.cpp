@@ -135,9 +135,10 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define TimeStep (1.0f/60.0f)
 #define SimIter_i (8)
 #define SimIter ((real)SimIter_i)
-void sim_update(Simulator* sim, Tilemap* map, real dt)
+void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = true)
 {
-	//sim->contacts_count = 0;
+	if(capture_contacts)
+		sim->contacts_count = 0;
 	Sim_Body *a, *b;
 	for(isize times = 0; times < SimIter_i; ++times) {
 		if(sim->sort_axis == 0) {
@@ -187,7 +188,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt)
 					//	aabb_intersect(&a->shape, &b->shape);
 					//}
 
-					if(times == 0) {
+					if(capture_contacts && times == 0) {
 						Sim_Contact c;
 						c.a_id = a->id;
 						c.b_id = b->id;
