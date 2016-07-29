@@ -445,6 +445,7 @@ void world_area_update(World_Area* area, World* world)
 		play_state->world_xy.y++;
 	}
 	//_player_handle_interactions(world, area, player_entity, player);
+	world_area_interact(area, world);
 
 	world_area_render(area, world);
 }
