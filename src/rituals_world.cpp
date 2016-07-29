@@ -472,7 +472,7 @@ void world_area_update(World_Area* area, World* world)
 		Sim_Contact* c = area->sim.contacts + i;
 		char buf[256];
 		snprintf(buf, 256, "A:%d B:%d (%.2f, %.2f)", c->a_id, c->b_id, c->overlap.x, c->overlap.y);
-		render_body_text("contact", v2(16, lasty), true);
+		render_body_text(buf, v2(16, lasty), true);
 		lasty += 24;
 	}
 	renderer_draw();
