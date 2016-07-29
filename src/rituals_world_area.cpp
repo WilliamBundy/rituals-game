@@ -30,7 +30,8 @@ struct Entity
 	Direction direction;
 
 	uint64 events;
-	void* userdata;
+	//void* userdata;
+	Rituals_Entity_Userdata userdata;
 };
 
 #define _entity_get_id(e) (e.id)

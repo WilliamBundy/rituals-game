@@ -203,6 +203,10 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 					}
 
 
+					if(Has_Flag(a->flags, Body_Flag_Sensor) ||
+					   Has_Flag(b->flags, Body_Flag_Sensor)) {
+							continue;
+					}
 					#define _collision_slop (0.8f)
 					if(a_is_static && !b_is_static) {
 						b->shape.center += overlap;

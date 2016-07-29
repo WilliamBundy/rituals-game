@@ -157,14 +157,25 @@ struct Rituals_Entity_Userdata
 		} player;
 		struct {
 			isize kind;
+			isize mode;
+			real speed;
+			real alert_dist;
+			real follow_dist;
 			union {
 				struct {
-
-			
-				} slime;
+					real last_dist_to_player;
+					real perc;
+					Vec2 perch;
+				} bat;
+				struct {
+					Vec2 patrol_start;
+					Vec2 patrol_end;
+				} goblin_knight;
 			} data;
 		} enemy;
-
+		struct {
+			void* ptr;
+		} unknown;
 	} data;
 };
 

@@ -455,30 +455,33 @@ void world_area_update(World_Area* area, World* world)
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
 		Entity* e = world_area_get_next_entity(area);
 		e->kind = EntityKind_Enemy;
-		e->sprite.texture = Get_Texture_Coordinates(rand_range_int(&Game->r, 0, 4)*32, 10*32, 32, 32);
+		e->userdata.enemy.kind = rand_range_int(&Game->r, 0, 4);
+		e->sprite.texture = Get_Texture_Coordinates(
+				e->userdata.enemy.kind *32, 10*32, 32, 32);
 		e->sprite.size = v2(32, 32);
 		e->body->shape.center = Input->mouse_pos + v2(rand_range(&Game->r, -32, 32) ,rand_range(&Game->r, -32, 32));
 		e->sprite.anchor = Anchor_Bottom;
 		e->body->shape.hext = v2(8, 5);
+		auto enemy = e->userdata.enemy;
+		enemy.mode = 0;
+		switch(enemy.kind) {
+			case EnemyKind_Slime:
+
+				break;
+			case EnemyKind_Bat:
+				break;
+			case EnemyKind_Snake:
+				break;
+			case EnemyKind_Goblin_Knight:
+				break;
+		}
+
+
+
 		//e->sprite.sort_point_offset.y += rand_range(&Game->r, 0, 10);
 	}
 
 	world_area_render(area, world);
-	
-	Renderer->offset = Vec2{
-
-	};
-	renderer_start();
-	real lasty = 16;
-	for(isize i = 0; i < area->sim.contacts_count; ++i) {
-		Sim_Contact* c = area->sim.contacts + i;
-		char buf[256];
-		snprintf(buf, 256, "A:%d B:%d (%.2f, %.2f)", c->a_id, c->b_id, c->overlap.x, c->overlap.y);
-		render_body_text(buf, v2(16, lasty), true);
-		lasty += 24;
-	}
-	renderer_draw();
-	
 }
 
 
