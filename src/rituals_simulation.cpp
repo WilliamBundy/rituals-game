@@ -181,13 +181,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 					Vec2 overlap;
 					aabb_overlap(&a->shape, &b->shape, &overlap);
 					real ovl_mag = sqrtf(v2_dot(overlap, overlap));
-					if (ovl_mag < 0.0001f) continue;
-					Vec2 normal = overlap * (1.0f / ovl_mag);
-
-					//if(a->id == 0 || b->id  == 0) {
-					//	aabb_intersect(&a->shape, &b->shape);
-					//}
-
 					if(capture_contacts && times == 0) {
 						Sim_Contact c;
 						c.a_id = a->id;
@@ -197,6 +190,13 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 							sim->contacts[sim->contacts_count++] = c;
 						}
 					}
+					if (ovl_mag < 0.0001f) continue;
+					Vec2 normal = overlap * (1.0f / ovl_mag);
+
+					//if(a->id == 0 || b->id  == 0) {
+					//	aabb_intersect(&a->shape, &b->shape);
+					//}
+
 
 					#define _collision_slop (0.8f)
 					if(a_is_static && !b_is_static) {
