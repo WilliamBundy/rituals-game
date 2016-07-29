@@ -49,7 +49,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 			real movespeed = 200;
 			Vec2 walk = Vec2{};
 			Vec2 dpos = e->body->shape.center - area->player->body->shape.center;
-			real angle = atan2f(dpos.y, dpos.x);
+			real angle = -atan2f(dpos.y, dpos.x);
 			walk.x = cosf(angle) * movespeed;
 			walk.y = sinf(angle) * movespeed;
 
