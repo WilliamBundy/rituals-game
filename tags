@@ -1354,7 +1354,6 @@ damage	src/rituals_game_info.cpp	/^	int32 damage;$/;"	m	struct:Tile_State	file:
 damping	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/;"	m	struct:Sim_Body	file:
 data	src/rituals_game.cpp	/^	uint8* data;$/;"	m	struct:Memory_Arena	file:
 data	src/rituals_game_info.cpp	/^		} data;$/;"	m	struct:Rituals_Entity_Userdata::__anon2	typeref:union:Rituals_Entity_Userdata::__anon2::__anon3	file:
-data	src/rituals_game_info.cpp	/^} data;$/;"	v	typeref:union:Rituals_Entity_Userdata
 data	src/thirdparty/stb_image.h	/^      stbi_uc *data;$/;"	m	struct:__anon6::__anon7
 data_index	src/rituals_renderer.cpp	/^	isize data_index, sprite_count;$/;"	m	struct:OpenGL_Renderer	file:
 dc_pred	src/thirdparty/stb_image.h	/^      int dc_pred;$/;"	m	struct:__anon6::__anon7

@@ -177,6 +177,6 @@ union Rituals_Entity_Userdata
 	struct {
 		void* ptr;
 	} unknown;
-} data;
 };
+
 
