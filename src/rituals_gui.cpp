@@ -336,6 +336,7 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	s.color = background;
 	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
 	s.anchor = Anchor_Top_Left;
+	font->color = v4(1, 1, 1, 1);
 	renderer_push_sprite(&s);
 
 }
