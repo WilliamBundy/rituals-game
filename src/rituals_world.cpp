@@ -401,7 +401,7 @@ void world_area_render(World_Area* area, World* world)
 void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
-	game_calc_mouse_pos(area->offset);
+	game_calc_mouse_pos(area->offset - Game->size * 0.5f);
 	//Simulation timing
 	
 	area->player = world_area_find_entity(area, 0);
