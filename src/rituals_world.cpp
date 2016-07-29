@@ -464,7 +464,7 @@ void world_area_update(World_Area* area, World* world)
 	}
 
 	world_area_render(area, world);
-	/*
+	
 	Renderer->offset = v2(0, 0);
 	renderer_start();
 	real lasty = 16;
@@ -473,7 +473,7 @@ void world_area_update(World_Area* area, World* world)
 		lasty += 16;
 	}
 	renderer_draw();
-	*/
+	
 }
 
 
