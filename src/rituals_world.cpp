@@ -470,7 +470,7 @@ void world_area_update(World_Area* area, World* world)
 	real lasty = 16;
 	for(isize i = 0; i < area->sim.contacts_count; ++i) {
 		render_body_text("contact", v2(16, lasty), true);
-		lasty += 28;
+		lasty += 24;
 	}
 	renderer_draw();
 	
