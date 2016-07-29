@@ -143,10 +143,10 @@ void rituals_assign_entity_kinds(Rituals_Entity_Kinds* kinds)
 
 enum Rituals_Enemy_Kinds
 {
-	EnemyKind_Slime;
-	EnemyKind_Bat;
-	EnemyKind_Snake;
-	EnemyKind_Goblin_Knight;
+	EnemyKind_Slime,
+	EnemyKind_Bat,
+	EnemyKind_Snake,
+	EnemyKind_Goblin_Knight,
 };
 
 struct Rituals_Entity_Userdata

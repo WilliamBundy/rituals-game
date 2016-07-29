@@ -48,10 +48,10 @@ Direction_East	src/rituals_game.cpp	/^	Direction_East,$/;"	e	enum:Direction	file
 Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	file:
 Direction_South	src/rituals_game.cpp	/^	Direction_South,$/;"	e	enum:Direction	file:
 Direction_West	src/rituals_game.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
-EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat;$/;"	e	enum:Rituals_Enemy_Kinds	file:
-EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight;$/;"	e	enum:Rituals_Enemy_Kinds	file:
-EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime;$/;"	e	enum:Rituals_Enemy_Kinds	file:
-EnemyKind_Snake	src/rituals_game_info.cpp	/^	EnemyKind_Snake;$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat,$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight,$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime,$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Snake	src/rituals_game_info.cpp	/^	EnemyKind_Snake,$/;"	e	enum:Rituals_Enemy_Kinds	file:
 Entity	src/rituals_game_info.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
 Entity	src/rituals_simulation.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
 Entity	src/rituals_world_area.cpp	/^struct Entity$/;"	s	file:
