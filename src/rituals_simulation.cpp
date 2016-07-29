@@ -137,7 +137,7 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define SimIter ((real)SimIter_i)
 void sim_update(Simulator* sim, Tilemap* map, real dt)
 {
-	sim->contacts_count = 0;
+	//sim->contacts_count = 0;
 	Sim_Body *a, *b;
 	for(isize times = 0; times < SimIter_i; ++times) {
 		if(sim->sort_axis == 0) {
