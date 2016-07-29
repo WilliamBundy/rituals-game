@@ -24,8 +24,8 @@ AsciiPrintableStart	src/rituals_gui.cpp	15;"	d	file:
 Ascii_Printable_Count	rituals_gui.cpp	8;"	d	file:
 Ascii_Printable_End	rituals_gui.cpp	7;"	d	file:
 Ascii_Printable_Start	rituals_gui.cpp	6;"	d	file:
-Backspace	src/rituals_game.cpp	371;"	d	file:
-BackspaceStr	src/rituals_game.cpp	372;"	d	file:
+Backspace	src/rituals_game.cpp	376;"	d	file:
+BackspaceStr	src/rituals_game.cpp	377;"	d	file:
 Body_Flag_No_Friction	src/rituals_simulation.cpp	/^	Body_Flag_No_Friction = Flag(2)$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_None	src/rituals_simulation.cpp	/^	Body_Flag_None,$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_Static	src/rituals_simulation.cpp	/^	Body_Flag_Static = Flag(1),$/;"	e	enum:Sim_Body_Flags	file:
@@ -48,6 +48,10 @@ Direction_East	src/rituals_game.cpp	/^	Direction_East,$/;"	e	enum:Direction	file
 Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	file:
 Direction_South	src/rituals_game.cpp	/^	Direction_South,$/;"	e	enum:Direction	file:
 Direction_West	src/rituals_game.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
+EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat;$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight;$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime;$/;"	e	enum:Rituals_Enemy_Kinds	file:
+EnemyKind_Snake	src/rituals_game_info.cpp	/^	EnemyKind_Snake;$/;"	e	enum:Rituals_Enemy_Kinds	file:
 Entity	src/rituals_game_info.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
 Entity	src/rituals_simulation.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
 Entity	src/rituals_world_area.cpp	/^struct Entity$/;"	s	file:
@@ -961,7 +965,7 @@ Gui_Window_Handle	src/rituals_gui.cpp	/^struct Gui_Window_Handle$/;"	s	file:
 Half_TS	src/rituals_game_registry.cpp	125;"	d	file:
 Has_Flag	src/rituals_main.cpp	114;"	d	file:
 Input	src/rituals_game.cpp	/^Game_Input* Input;$/;"	v
-InputTextCapacity	src/rituals_game.cpp	292;"	d	file:
+InputTextCapacity	src/rituals_game.cpp	297;"	d	file:
 Inventory	src/rituals_inventory.cpp	/^struct Inventory$/;"	s	file:
 Item_Book	src/rituals_game_info.cpp	/^	Item_Book,$/;"	e	enum:Item_Info_Types	file:
 Item_Hooknife	src/rituals_game_info.cpp	/^	Item_Hooknife,$/;"	e	enum:Item_Info_Types	file:
@@ -1018,6 +1022,7 @@ Rect2_Clip_Info	src/rituals_math.cpp	/^struct Rect2_Clip_Info$/;"	s	file:
 Rect2i	src/rituals_math.cpp	/^struct Rect2i$/;"	s	file:
 Registry	src/rituals_game_registry.cpp	/^Game_Registry* Registry;$/;"	v
 Renderer	src/rituals_game.cpp	/^OpenGL_Renderer* Renderer;$/;"	v
+Rituals_Enemy_Kinds	src/rituals_game_info.cpp	/^enum Rituals_Enemy_Kinds$/;"	g	file:
 Rituals_Entity_Kinds	src/rituals_game_info.cpp	/^enum Rituals_Entity_Kinds$/;"	g	file:
 Rituals_Entity_Userdata	src/rituals_game_info.cpp	/^struct Rituals_Entity_Userdata$/;"	s	file:
 STBIDEF	src/thirdparty/stb_image.h	415;"	d
@@ -1423,6 +1428,7 @@ e	src/rituals_math.cpp	/^	real e[9];$/;"	m	union:Mat3	file:
 east	src/rituals_world_area.cpp	/^	Area_Link east;$/;"	m	struct:World_Area_Stub	file:
 eflags	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 end_temp_arena	src/rituals_game.cpp	/^void end_temp_arena(Memory_Arena* arena)$/;"	f
+enemy	src/rituals_game_info.cpp	/^		} enemy;$/;"	m	union:Rituals_Entity_Userdata::__anon1	typeref:struct:Rituals_Entity_Userdata::__anon1::__anon3	file:
 entities	src/rituals_world_area.cpp	/^	Entity* entities;$/;"	m	struct:World_Area	file:
 entities_capacity	src/rituals_world_area.cpp	/^	isize entities_count, entities_capacity, next_entity_id;$/;"	m	struct:World_Area	file:
 entities_count	src/rituals_world_area.cpp	/^	isize entities_count, entities_capacity, next_entity_id;$/;"	m	struct:World_Area	file:
@@ -1933,6 +1939,7 @@ items_count	src/rituals_game_registry.cpp	/^	isize items_count;$/;"	m	struct:Gam
 items_hash	src/rituals_game_registry.cpp	/^	usize* items_hash;$/;"	m	struct:Game_Registry	file:
 key	helping_gb.cpp	/^	u64 key;$/;"	m	struct:MapEntry	file:
 keycodes	src/rituals_game.cpp	/^	int8* keycodes;$/;"	m	struct:Game_Input	file:
+kind	src/rituals_game_info.cpp	/^			isize kind;$/;"	m	struct:Rituals_Entity_Userdata::__anon1::__anon3	file:
 kind	src/rituals_world_area.cpp	/^	isize kind;$/;"	m	struct:Entity	file:
 last_pos	src/rituals_gui.cpp	/^	Vec2 last_pos;$/;"	m	struct:Gui_Context	file:
 last_sprite_id	src/rituals_renderer.cpp	/^	isize last_sprite_id; $/;"	m	struct:OpenGL_Renderer	file:
@@ -2067,6 +2074,7 @@ r	src/rituals_game.cpp	/^	Random r;$/;"	m	struct:Game_Main	file:
 r	src/rituals_main.cpp	/^real r = 0;$/;"	v
 r	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 rand_range	src/rituals_game.cpp	/^real rand_range(Random* r, real min, real max)$/;"	f
+rand_range_int	src/rituals_game.cpp	/^int32 rand_range_int(Random* r, int32 min, int32 max)$/;"	f
 ratio	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 raw_coeff	src/thirdparty/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon6::__anon7
 raw_data	src/thirdparty/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon6::__anon7
@@ -2171,6 +2179,7 @@ size	src/thirdparty/stb_image.h	/^   stbi_uc  size[257];$/;"	m	struct:__anon5
 size	src/thirdparty/stb_image.h	/^   stbi_uc  size[288];$/;"	m	struct:__anon9
 size	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
 skip	src/thirdparty/stb_image.h	/^   void     (*skip)  (void *user,int n);                 \/\/ skip the next 'n' bytes, or 'unget' the last -n bytes if negative$/;"	m	struct:__anon2
+slime	src/rituals_game_info.cpp	/^				} slime;$/;"	m	union:Rituals_Entity_Userdata::__anon1::__anon3::__anon4	typeref:struct:Rituals_Entity_Userdata::__anon1::__anon3::__anon4::__anon5	file:
 solid	src/rituals_game_info.cpp	/^	bool solid;$/;"	m	struct:Tile_Info	file:
 sort_axis	src/rituals_simulation.cpp	/^	isize sort_axis;$/;"	m	struct:Simulator	file:
 sort_point_offset	src/rituals_renderer.cpp	/^	Vec2 sort_point_offset;$/;"	m	struct:Sprite	file:

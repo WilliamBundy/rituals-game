@@ -141,8 +141,13 @@ void rituals_assign_entity_kinds(Rituals_Entity_Kinds* kinds)
 	kinds->EnemyEntity = get_next_entity_kind();
 }*/
 
-
-
+enum Rituals_Enemy_Kinds
+{
+	EnemyKind_Slime;
+	EnemyKind_Bat;
+	EnemyKind_Snake;
+	EnemyKind_Goblin_Knight;
+};
 
 struct Rituals_Entity_Userdata
 {
@@ -150,6 +155,14 @@ struct Rituals_Entity_Userdata
 		struct {
 			isize held_entity_id;
 		} player;
+		struct {
+			isize kind;
+			union {
+				struct {
+			
+				} slime;
+			}
+		} enemy;
 	} data;
 };
 
