@@ -278,7 +278,7 @@ real rand_range(Random* r, real min, real max)
 	return next_random_double(r) * (max - min) + min;
 }
 
-int32 rand_range_int(Random* r, int32 min, int32 max)
+int32 rand_range_int(Random* r, real min, real max)
 {
 	return (int32)(next_random_double(r) * (max - min) + min);
 }
