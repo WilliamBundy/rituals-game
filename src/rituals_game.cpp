@@ -373,6 +373,11 @@ void game_set_scale(real scale)
 	Game->size = v2(Game->window_size) * (1.0f / Game->scale);
 }
 
+void game_calc_mouse_pos(Vec2 offset)
+{
+	Input->mouse_pos = v2(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale) + offset;
+}
+
 #define Backspace ('\b')
 #define BackspaceStr ("\b")
 
