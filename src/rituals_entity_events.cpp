@@ -71,12 +71,19 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 					break;
 				case EnemyKind_Bat:
 					if(enemy->mode == 0) {
-						dpos = e->body->shape.center - enemy->bat.perch;
-						real angle = atan2f(dpos.y, dpos.x);
-						walk.x = cosf(angle) * -enemy->speed;
-						walk.y = sinf(angle) * -enemy->speed;
 						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
 							enemy->mode = 1;
+						} else {
+							dpos = e->body->shape.center - enemy->bat.perch;
+							mag = v2_dot(dpos, dpos);
+							if(mag > 16) {
+								real angle = atan2f(dpos.y, dpos.x);
+								walk.x = cosf(angle) * -enemy->speed;
+								walk.y = sinf(angle) * -enemy->speed;
+
+							}
+
+
 						}
 					} else if(enemy->mode == 1) {
 						enemy->bat.arc_perc += 0.005;
