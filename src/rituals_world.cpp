@@ -462,17 +462,32 @@ void world_area_update(World_Area* area, World* world)
 		e->body->shape.center = Input->mouse_pos + v2(rand_range(&Game->r, -32, 32) ,rand_range(&Game->r, -32, 32));
 		e->sprite.anchor = Anchor_Bottom;
 		e->body->shape.hext = v2(8, 5);
-		auto enemy = e->userdata.enemy;
-		enemy.mode = 0;
-		switch(enemy.kind) {
+		auto enemy = &e->userdata.enemy;
+		enemy->mode = 0;
+		switch(enemy->kind) {
 			case EnemyKind_Slime:
-
+				enemy->speed = 200;
+				enemy->alert_dist = 256;
+				enemy->follow_dist = 256;
 				break;
 			case EnemyKind_Bat:
+				enemy->speed = 500;
+				enemy->alert_dist = 512;
+				enemy->bat.arc_perc = 0;
+				enemy->bat.perch = e->sprite.position;
 				break;
 			case EnemyKind_Snake:
+				enemy->speed = 200;
+				enemy->alert_dist = 256;
+				enemy->follow_dist = 384;
+				enemy->snake.chase_speed_modifier = 2.0f;
 				break;
 			case EnemyKind_Goblin_Knight:
+				enemy->goblin_knight.patrol_start = e->sprite.position;
+				enemy->goblin_knight.patrol_end = e->sprite.position + v2(512, 0);
+				enemy->alert_dist = 512;
+				enemy->follow_dist = 1024;
+				enemy->speed = 250;
 				break;
 		}
 

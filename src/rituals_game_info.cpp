@@ -162,12 +162,16 @@ union Rituals_Entity_Userdata
 		real speed;
 		real alert_dist;
 		real follow_dist;
+		
 		union {
 			struct {
 				real last_dist_to_player;
-				real perc;
+				real arc_perc;
 				Vec2 perch;
 			} bat;
+			struct {
+				real chase_speed_modifier;
+			} snake;
 			struct {
 				Vec2 patrol_start;
 				Vec2 patrol_end;

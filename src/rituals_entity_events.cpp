@@ -46,7 +46,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 			move_impulse *= player_tile->movement_modifier;
 			e->walk_impulse = move_impulse;
 		} else if(e->kind == EntityKind_Enemy) {
-			real movespeed = -200;
+			auto enemy = &e->userdata.enemy;
 			Vec2 walk = Vec2{};
 			Vec2 dpos = e->body->shape.center - area->player->body->shape.center;
 			real angle = atan2f(dpos.y, dpos.x);
@@ -54,6 +54,19 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 			walk.y = sinf(angle) * movespeed;
 
 			e->walk_impulse = walk;
+			switch(enemy->kind) {
+				case EnemyKind_Slime:
+					break;
+				case EnemyKind_Bat:
+					break;
+				case EnemyKind_Snake:
+					break;
+				case EnemyKind_Goblin_Knight:
+					break;
+			}
+
+
+
 		}
 	}
 }
