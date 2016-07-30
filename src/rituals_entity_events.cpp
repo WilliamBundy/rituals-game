@@ -96,8 +96,8 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 								v2(cosf(angle), sinf(angle)) * enemy->follow_dist;
 						}
 						real angle = atan2f(target.y, target.x);
-						walk.x = cosf(angle) * -enemy->speed;
-						walk.y = sinf(angle) * -enemy->speed;
+						walk.x = cosf(angle) * enemy->speed;
+						walk.y = sinf(angle) * enemy->speed;
 						if(enemy->bat.arc_perc >= 1) {
 							enemy->mode = 0;
 							enemy->bat.arc_perc = 0;
