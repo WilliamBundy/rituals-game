@@ -467,13 +467,13 @@ void world_area_update(World_Area* area, World* world)
 		switch(enemy->kind) {
 			case EnemyKind_Slime:
 				enemy->speed = 200;
-				enemy->alert_dist = 32;
+				enemy->alert_dist = 128;
 				enemy->follow_dist = 128;
 				break;
 			case EnemyKind_Bat:
 				enemy->speed = 500;
-				enemy->alert_dist = 32;
-				enemy->follow_dist = 128;
+				enemy->alert_dist = 128;
+				enemy->follow_dist = 256;
 				enemy->bat.arc_perc = 0;
 				enemy->bat.perch = e->body->shape.center;
 				break;
@@ -486,8 +486,8 @@ void world_area_update(World_Area* area, World* world)
 			case EnemyKind_Goblin_Knight:
 				enemy->goblin_knight.patrol_start = e->sprite.position;
 				enemy->goblin_knight.patrol_end = e->sprite.position + v2(512, 0);
-				enemy->alert_dist = 64;
-				enemy->follow_dist = 256;
+				enemy->alert_dist = 128;
+				enemy->follow_dist = 384;
 				enemy->speed = 250;
 				break;
 		}
