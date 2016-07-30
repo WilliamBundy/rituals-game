@@ -176,7 +176,7 @@ union Rituals_Entity_Userdata
 				Vec2 patrol_start;
 				Vec2 patrol_end;
 			} goblin_knight;
-		} data;
+		};
 	} enemy;
 	struct {
 		void* ptr;
