@@ -482,7 +482,7 @@ void world_area_update(World_Area* area, World* world)
 				enemy->speed = 200;
 				enemy->alert_dist = 128; 
 				enemy->follow_dist = 128;
-				enemy->snake.chase_speed_modifier = 4.0f;
+				enemy->snake.chase_speed_modifier = 3.0f;
 				break;
 			case EnemyKind_Goblin_Knight:
 				enemy->goblin_knight.patrol_start = e->sprite.position;
