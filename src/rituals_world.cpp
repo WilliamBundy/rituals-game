@@ -473,6 +473,7 @@ void world_area_update(World_Area* area, World* world)
 			case EnemyKind_Bat:
 				enemy->speed = 500;
 				enemy->alert_dist = 512;
+				enemy->follow_dist = 512;
 				enemy->bat.arc_perc = 0;
 				enemy->bat.perch = e->sprite.position;
 				break;

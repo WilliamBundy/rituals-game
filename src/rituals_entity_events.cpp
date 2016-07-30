@@ -49,24 +49,68 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 			auto enemy = &e->userdata.enemy;
 			Vec2 walk = Vec2{};
 			Vec2 dpos = e->body->shape.center - area->player->body->shape.center;
-			real angle = atan2f(dpos.y, dpos.x);
-			walk.x = cosf(angle) * movespeed;
-			walk.y = sinf(angle) * movespeed;
+			real mag = v2_dot(dpos, dpos);
 
-			e->walk_impulse = walk;
 			switch(enemy->kind) {
 				case EnemyKind_Slime:
+				case EnemyKind_Goblin_Knight:
+				case EnemyKind_Snake:
+					if(enemy->mode == 0) {
+						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
+							mode = 1;
+						}
+					} else if(enemy->mode == 1) {
+						if(mag < (enemy->follow_dist * enemy->follow_dist)) {
+							real angle = atan2f(dpos.y, dpos.x);
+							walk.x = cosf(angle) * enemy->speed;
+							walk.y = sinf(angle) * enemy->speed;
+						} else {
+							enemy->mode = 0;
+						}
+					}
 					break;
 				case EnemyKind_Bat:
-					break;
-				case EnemyKind_Snake:
-					break;
-				case EnemyKind_Goblin_Knight:
-					break;
+					if(enemy->mode == 0) {
+						dpos = e->body->shape.center - enemy->bat.perch;
+						real angle = atan2f(dpos.y, dpos.x);
+						walk.x = cosf(angle) * enemy->speed;
+						walk.y = sinf(angle) * enemy->speed;
+						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
+							mode = 1;
+						}
+					} else if(enemy->mode == 1) {
+						enemy->bat.arc_perc += 0.01;
+						Vec2 target;
+						if(enemy->bat.arc_perc <= 0.2) {
+							target = enemy->bat.perch + v2(enemy->follow_dist, 0);
+						} else {
+							real angle = Math_Tau * (enemy->bat.arc_perc - 0.2 / 0.8);
+							target = enemy->bat.perch + 
+								v2(cosf(angle), sinf(angle)) * enemy->follow_dist;
+						}
+						real angle = atan2f(target.y, target.x);
+						walk.x = cosf(angle) * enemy->speed;
+						walk.y = sinf(angle) * enemy->speed;
+						if(enemy->bat.arc_perc >= 1) {
+							enemy->mode = 0;
+							enemy->bat.arc_perc = 0;
+						}
+					}
+
 			}
 
-
-
+			switch(enemy->kind) {
+				case EnemyKind_Slime:
+				case EnemyKind_Goblin_Knight:
+				case EnemyKind_Bat:
+					e->walk_impulse = walk;
+					break;
+				case EnemyKind_Snake:
+					e->walk_impulse = enemy->mode == 1 ? 
+						enemy->snake.chase_speed_modifier * walk :
+						walk;
+					break;
+			}
 		}
 	}
 }
