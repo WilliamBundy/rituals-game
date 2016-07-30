@@ -79,7 +79,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 							enemy->mode = 1;
 						}
 					} else if(enemy->mode == 1) {
-						enemy->bat.arc_perc += 0.001;
+						enemy->bat.arc_perc += 0.005;
 						Vec2 target;
 						if(enemy->bat.arc_perc <= 0.2) {
 							target = enemy->bat.perch + v2(enemy->follow_dist, 0);
