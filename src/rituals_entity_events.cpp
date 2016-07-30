@@ -57,7 +57,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 				case EnemyKind_Snake:
 					if(enemy->mode == 0) {
 						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
-							mode = 1;
+							enemy->mode = 1;
 						}
 					} else if(enemy->mode == 1) {
 						if(mag < (enemy->follow_dist * enemy->follow_dist)) {
@@ -76,7 +76,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 						walk.x = cosf(angle) * enemy->speed;
 						walk.y = sinf(angle) * enemy->speed;
 						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
-							mode = 1;
+							enemy->mode = 1;
 						}
 					} else if(enemy->mode == 1) {
 						enemy->bat.arc_perc += 0.01;
