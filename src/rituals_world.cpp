@@ -475,7 +475,7 @@ void world_area_update(World_Area* area, World* world)
 				enemy->alert_dist = 32;
 				enemy->follow_dist = 128;
 				enemy->bat.arc_perc = 0;
-				enemy->bat.perch = e->sprite.position;
+				enemy->bat.perch = e->body->shape.center;
 				break;
 			case EnemyKind_Snake:
 				enemy->speed = 200;
