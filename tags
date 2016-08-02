@@ -1414,6 +1414,7 @@ dequant	src/thirdparty/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__a
 deserialize_area	src/rituals_serialization.cpp	/^void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)$/;"	f
 deserialize_area_link	src/rituals_serialization.cpp	/^void deserialize_area_link(Area_Link* link, World* world, FILE* fp)$/;"	f
 deserialize_entity	src/rituals_serialization.cpp	/^void deserialize_entity(Entity* entity, FILE* file)$/;"	f
+deserialize_rituals_entity_userdata	src/rituals_serialization.cpp	/^void deserialize_rituals_entity_userdata(Entity* e, FILE* file)$/;"	f
 deserialize_sim_body	src/rituals_serialization.cpp	/^void deserialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 deserialize_simulator	src/rituals_serialization.cpp	/^void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)$/;"	f
 deserialize_sprite	src/rituals_serialization.cpp	/^void deserialize_sprite(Sprite* s, FILE* file)$/;"	f
@@ -2176,6 +2177,7 @@ selection_start	src/rituals_gui.cpp	/^	isize cursor, selection_start;$/;"	m	stru
 serialize_area	src/rituals_serialization.cpp	/^void serialize_area(World_Area* area, FILE* area_file)$/;"	f
 serialize_area_link	src/rituals_serialization.cpp	/^void serialize_area_link(Area_Link* link, FILE* fp)$/;"	f
 serialize_entity	src/rituals_serialization.cpp	/^void serialize_entity(Entity* entity, FILE* file)$/;"	f
+serialize_rituals_entity_userdata	src/rituals_serialization.cpp	/^void serialize_rituals_entity_userdata(Entity* e, FILE* file)$/;"	f
 serialize_sim_body	src/rituals_serialization.cpp	/^void serialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 serialize_simulator	src/rituals_serialization.cpp	/^void serialize_simulator(Simulator* sim, FILE* file)$/;"	f
 serialize_sprite	src/rituals_serialization.cpp	/^void serialize_sprite(Sprite* s, FILE* file)$/;"	f
@@ -2195,6 +2197,7 @@ sim_remove_body	src/rituals_simulation.cpp	/^void sim_remove_body(Simulator* sim
 sim_sort_bodies_on_id	src/rituals_simulation.cpp	/^void sim_sort_bodies_on_id(Simulator* sim)$/;"	f
 sim_update	src/rituals_simulation.cpp	/^void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = true)$/;"	f
 size	src/rituals_game.cpp	/^	Vec2 size;$/;"	m	struct:Game_Main	file:
+size	src/rituals_game_info.cpp	/^		isize size;$/;"	m	struct:Rituals_Entity_Userdata::__anon7	file:
 size	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
 size	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon10	file:
 size	src/rituals_renderer.cpp	/^	Vec2 size;$/;"	m	struct:Sprite	file:

@@ -56,7 +56,6 @@ int recursively_delete_folder(char* path, bool append_base_path = false)
 {
 	start_temp_arena(Game->temp_arena);
 	if(append_base_path) {
-
 		_recursive_delete(Game->base_path, Game->base_path_length-1, path); 
 	} else {
 		_recursive_delete(path, strlen(path), "");
@@ -64,7 +63,6 @@ int recursively_delete_folder(char* path, bool append_base_path = false)
 	end_temp_arena(Game->temp_arena);
 	return 1;
 }
-
 
 int check_path(char* path)
 {
@@ -89,8 +87,6 @@ void deserialize_tile_state(Tile_State* state, FILE* file)
 	fread(&state->id, sizeof(isize), 1, file);
 	fread(&state->damage, sizeof(int32), 1, file);
 }
-
-
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
 {
@@ -165,7 +161,6 @@ void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 	}
 }
 
-
 void serialize_sprite(Sprite* s, FILE* file)
 {
 	fwrite(&s->position.e, sizeof(real), 2, file);
@@ -190,6 +185,42 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s->sort_point_offset.e, sizeof(real), 2, file);
 }
 
+void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
+{
+	switch(e->kind) {
+		case EntityKind_Player: {
+			auto plr = &e->userdata.player;
+			fread(&plr->held_entity_id, sizeof(isize), 1, file);
+		} break;
+		case EntityKind_Enemy: {
+			auto enemy = &e->userdata.enemy;
+			fread(&enemy->kind, sizeof(isize), 1, file);
+			fread(&enemy->mode, sizeof(isize), 1, file);
+			fread(&enemy->speed, sizeof(real), 1, file);
+			fread(&enemy->alert_dist, sizeof(real), 1, file);
+			fread(&enemy->follow_dist, sizeof(real), 1, file);
+			switch(enemy->kind) {
+				case EnemyKind_Bat:
+					fread(&enemy->bat.last_dist_to_player, sizeof(real), 1, file);
+					fread(&enemy->bat.arc_perc, sizeof(real), 1, file);
+					fread(&enemy->bat.perch.e, sizeof(real), 2, file);
+					break;
+				case EnemyKind_Snake:
+					fread(&enemy->snake.chase_speed_modifier, sizeof(real), 1, file);
+					break;
+				case EnemyKind_Goblin_Knight:
+					fread(&enemy->goblin_knight.patrol_start.e, sizeof(real), 2, file);
+					fread(&enemy->goblin_knight.patrol_end.e, sizeof(real), 2, file);
+					break;
+				default:
+					break;
+			}
+		} break;
+		default:
+			break;
+	}
+}
+
 void deserialize_entity(Entity* entity, FILE* file)
 {
 	fread(&entity->id, sizeof(isize), 1, file);
@@ -200,6 +231,7 @@ void deserialize_entity(Entity* entity, FILE* file)
 	fread(&entity->direction, sizeof(Direction), 1, file);
 	fread(&entity->kind, sizeof(isize), 1, file);
 	fread(&entity->events, sizeof(uint64), 1, file);
+	deserialize_rituals_entity_userdata(entity, file);
 }
 
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
@@ -217,6 +249,43 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	deserialize_simulator(&area->sim, area_file, arena);
 }
 
+
+void serialize_rituals_entity_userdata(Entity* e, FILE* file)
+{
+	switch(e->kind) {
+		case EntityKind_Player: {
+			auto plr = &e->userdata.player;
+			fwrite(&plr->held_entity_id, sizeof(isize), 1, file);
+		} break;
+		case EntityKind_Enemy: {
+			auto enemy = &e->userdata.enemy;
+			fwrite(&enemy->kind, sizeof(isize), 1, file);
+			fwrite(&enemy->mode, sizeof(isize), 1, file);
+			fwrite(&enemy->speed, sizeof(real), 1, file);
+			fwrite(&enemy->alert_dist, sizeof(real), 1, file);
+			fwrite(&enemy->follow_dist, sizeof(real), 1, file);
+			switch(enemy->kind) {
+				case EnemyKind_Bat:
+					fwrite(&enemy->bat.last_dist_to_player, sizeof(real), 1, file);
+					fwrite(&enemy->bat.arc_perc, sizeof(real), 1, file);
+					fwrite(&enemy->bat.perch.e, sizeof(real), 2, file);
+					break;
+				case EnemyKind_Snake:
+					fwrite(&enemy->snake.chase_speed_modifier, sizeof(real), 1, file);
+					break;
+				case EnemyKind_Goblin_Knight:
+					fwrite(&enemy->goblin_knight.patrol_start.e, sizeof(real), 2, file);
+					fwrite(&enemy->goblin_knight.patrol_end.e, sizeof(real), 2, file);
+					break;
+				default:
+					break;
+			}
+		} break;
+		default:
+			break;
+	}
+}
+
 void serialize_entity(Entity* entity, FILE* file)
 {
 	fwrite(&entity->id, sizeof(isize), 1, file);
@@ -229,6 +298,7 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->kind, sizeof(isize), 1, file);
 	fwrite(&entity->events, sizeof(uint64), 1, file);
 	//TODO(will) serialize userdata
+	serialize_rituals_entity_userdata(entity, file);
 }
 
 void serialize_area(World_Area* area, FILE* area_file)

@@ -69,6 +69,9 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 						}
 					}
 					break;
+					//TODO(will) fix all of this; idea: get close to bat
+					// then the bat moves in a ring around its perch
+					// but.... this code doesn't do that.
 				case EnemyKind_Bat:
 					if(enemy->mode == 0) {
 						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
@@ -108,6 +111,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 
 			switch(enemy->kind) {
 				case EnemyKind_Slime:
+					//TODO(will) make goblin kights patrol 
 				case EnemyKind_Goblin_Knight:
 				case EnemyKind_Bat:
 					e->walk_impulse = walk;

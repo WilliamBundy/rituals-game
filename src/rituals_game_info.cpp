@@ -180,6 +180,7 @@ union Rituals_Entity_Userdata
 	} enemy;
 	struct {
 		void* ptr;
+		isize size;
 	} unknown;
 };
 
