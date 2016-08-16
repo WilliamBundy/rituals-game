@@ -17,13 +17,21 @@ int delete_file(char* path, isize path_length, char* file)
 {
 	char buf[FilePathMaxLength];
 	snprintf(buf, FilePathMaxLength, "%.*s/%s", path_length, path, file);
+#if RITUALS_WINDOWS == 1
 	return DeleteFile(buf);
+#elif RITUALS_LINUX == 1
+	return remove(buf);
+#endif
 }
 
 int delete_folder(char* path, isize path_length)
 {
 	path[path_length] = '\0';
+#if RITUALS_WINDOWS == 1
 	return RemoveDirectory(path);
+#elif RITUALS_LINUX == 1
+	return remove(path);
+#endif
 }
 
 int _recursive_delete(const char* last_path, isize last_path_len, char* path)
@@ -66,14 +74,25 @@ int recursively_delete_folder(char* path, bool append_base_path = false)
 
 int check_path(char* path)
 {
+#if RITUALS_WINDOWS == 1
 	return PathFileExists(path);
+#elif RITUALS_LINUX == 1
+	struct stat s;
+	return (stat(path, &s) == 0);
+#endif
 }
 
 void check_dir(char* dir)
 {
+#if RITUALS_WINDOWS == 1
 	if(!PathFileExists(dir)) {
 		CreateDirectory(dir, NULL);
 	}
+#elif RITUALS_LINUX == 1
+	if(!check_path(dir)) {
+		mkdir(dir, 0700);
+	}
+#endif 
 }
 
 void serialize_tile_state(Tile_State* state, FILE* file)

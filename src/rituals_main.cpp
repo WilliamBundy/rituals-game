@@ -74,8 +74,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 //platform imports
+#if RITUALS_WINDOWS
 #include <windows.h>
 #include <Shlwapi.h>
+#endif
 
 //CRT imports
 #define _CRT_SECURE_NO_WARNINGS 1
@@ -90,8 +92,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <errno.h>
 #include <malloc.h>
 
+#if RITUALS_LINUX == 1
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#endif 
+
 //3rd party imports
+#if RITUALS_WINDOWS == 1
 #include <SDL.h>
+#elif RITUALS_LINUX == 1
+#include <SDL2/SDL.h>
+#endif
 #include "thirdparty.h"
 
 //Some defines
