@@ -21,6 +21,8 @@ uniform vec3 window;
 uniform vec4 screen;
 uniform sampler2D local_texture;
 
+out vec4 final_color;
+
 void main()
 {
 	//vec2 uv = floor(f_texcoords) + 0.5;
@@ -50,7 +52,7 @@ void main()
 	}
 	#endif 
 
-	gl_FragColor = color;
+	final_color = color;
 
 }
 
