@@ -180,149 +180,6 @@ void generate_world(char* name, World* world)
 		}
 	}
 }
-
-#if 0
-void serialize_world(World* world);
-void _player_handle_interactions(World* world, World_Area* area, Entity* player_entity, Sim_Body* player)
-{
-	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-		Entity* ball_entity = world_area_get_next_entity(area);
-		Sim_Body* ball = ball_entity->body;
-		Vec2 dmouse = v2(Input->mouse_x / Game->scale, 
-						Input->mouse_y / Game->scale) + area->offset;
-
-		dmouse -= player->shape.center;
-		real angle = atan2f(dmouse.y, dmouse.x);
-		Vec2 normal = v2(cosf(angle), sinf(angle));
-		//entity_add_event_on_activate(ball_entity, delete_on_activate);
-
-		ball->damping = 0.9999f;
-		ball->shape.hext = v2(8, 16);
-		ball->shape.center = normal * ball->shape.hw * 4 + player->shape.center; 
-		ball->velocity += normal * 2000;
-		ball->shape.hext = v2(8, 6);
-		//ball->flags = Body_Flag_No_Friction;
-		ball_entity->sprite.size = v2(16, 32);
-		ball_entity->sprite.texture  = Get_Texture_Coordinates(8*32, 0, 32, 64);
-		ball_entity->sprite.anchor = Anchor_Bottom;
-		
-	}
-
-
-	/*
-	if(Input->mouse[SDL_BUTTON_RIGHT] == State_Just_Pressed) {
-		Vec2 dmouse = v2(
-			Input->mouse_x / Game->scale, 
-			Input->mouse_y / Game->scale) + area->offset;
-		AABB mbb = aabb(dmouse, 0, 0);
-		world_area_synchronize_entities_and_bodies(area);
-		for(isize i = 0; i < area->entities_count; ++i) {
-			Entity* e = area->entities + i;
-			if(aabb_intersect(e->body->shape, mbb)) {
-				if(e->id != 0) {
-					for(isize j = 0; j < e->event_on_activate_count; ++j) {
-						e->event_on_activate[j](e, area);
-					}
-					break;
-				}
-			}
-		}
-	}
-*/
-	if(Input->scancodes[SDL_SCANCODE_F] == State_Just_Pressed) {
-		//tilemap_set_at(&area->map, player->shape.center, Tile_Dug_Earth);
-		Tile_State* state = tilemap_get_state_at(&area->map, player->shape.center);
-		if(state != NULL) {
-			state->damage++;
-			update_tile_state_at(&area->map, player->shape.center);
-		}
-	}
-
-	if(Input->scancodes[SDL_SCANCODE_ESCAPE] >= State_Just_Pressed) {
-		serialize_world(world);
-		Game->state = Game_State_Menu;
-	}
-
-	Sprite s;
-
-
-#if 0	
-	if(Input->scancodes[SDL_SCANCODE_SPACE] >= State_Pressed) {
-		init_sprite(&s);
-		s.position = player->shape.center;
-		s.size = v2(16, 16);
-		s.texture = Get_Texture_Coordinates(0, Renderer->texture_height - 16, 16, 16);
-		s.color = v4(1, 1, 1, 1);
-		switch(player_entity->direction) {
-			case Direction_North:
-				s.position.y -= s.size.y + player->shape.hh;
-				break;
-			case Direction_South:
-				s.position.y += s.size.y + player->shape.hh;
-				break;
-			case Direction_East:
-				s.position.x += s.size.x + player->shape.hw;
-				break;
-			case Direction_West:
-				s.position.x -= s.size.x + player->shape.hh;
-				break;
-		}
-
-		if(Input->scancodes[SDL_SCANCODE_SPACE] == State_Just_Pressed) {
-			//TODO(will) implement good space queries	
-			Sim_Body* touching = sim_query_aabb(&area->sim, 
-					aabb(s.position, s.size.x / 2, s.size.y / 2));
-			if(touching != NULL) {
-				if(!Has_Flag(touching->flags, Body_Flag_Static)) 
-					player_entity->held_entity_id = touching->entity_id;
-			}
-		}
-	} else {
-		player_entity->held_entity_id = -1;
-	}
-	
-
-	char debug_str[256];
-	if(player_entity->held_entity_id > 0) {
-		Entity* e = world_area_find_entity(area, player_entity->held_entity_id);
-		if(e != NULL) {
-			Sim_Body* b = e->body;
-			Vec2 target = player->shape.center; 
-			Vec2 diff = b->shape.hext + player->shape.hext + v2(8, 8);
-			switch(player_entity->direction) {
-				case Direction_North:
-					target.y -= diff.y;
-					break;
-				case Direction_South:
-					target.y += diff.y;
-					break;
-				case Direction_East:
-					target.x += diff.x;
-					break;
-				case Direction_West:
-					target.x -= diff.x;
-					break;
-			}
-			
-			Vec2 impulse = (target - b->shape.center);
-			if(v2_dot(impulse, impulse) > (4 * Tile_Size * Tile_Size)) {
-				player_entity->held_entity_id = -1;
-			}
-			impulse *= 60;
-			{
-				snprintf(debug_str, 256, "T(%.2f %.2f) j(%.2f %.2f)", target.x, target.y,
-						impulse.x, impulse.y);
-
-			}
-			if(v2_dot(impulse, impulse) < (1000 * 1000)) 
-				b->velocity += impulse;// * b->inv_mass;
-		}
-	}
-#endif
-}
-
-#endif
-
 //TODO(will) Implement packages -- hook up using function pointers
 //For the time being we're just going to use forward declarations
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
@@ -342,8 +199,6 @@ void world_area_interact(World_Area* area, World* world)
 {
 	rituals_interact_entities(area->entities, area->entities_count, area, world);
 }
-
-//TODO(will) Fix camera seasickness
 
 void world_area_render(World_Area* area, World* world)
 {	
@@ -419,15 +274,15 @@ void world_area_update(World_Area* area, World* world)
 	area->player = world_area_find_entity(area, 0);
 
 	world_area_walk_entities(area, world);
+	//TODO(will) use same sorted array as world_area_walk_entities
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		e->body->velocity += e->walk_impulse;
+	}
 
 	isize times = 0;
 	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;
-		//TODO(will) use same sorted array as world_area_walk_entities
-		for(isize i = 0; i < area->entities_count; ++i) {
-			Entity* e = area->entities + i;
-			e->body->velocity += e->walk_impulse;
-		}
 		sim_update(&area->sim, &area->map, TimeStep, times == 0);
 		times++;
 	}
@@ -492,10 +347,6 @@ void world_area_update(World_Area* area, World* world)
 				enemy->speed = 250;
 				break;
 		}
-
-
-
-		//e->sprite.sort_point_offset.y += rand_range(&Game->r, 0, 10);
 	}
 
 	world_area_render(area, world);

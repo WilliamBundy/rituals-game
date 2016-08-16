@@ -177,5 +177,75 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
+		if(e->kind == EntityKind_Player) {
+			Sim_Body* player = e->body;
+			auto ud = &e->userdata.player;
+			if(Input->scancodes[SDL_SCANCODE_SPACE] >= State_Pressed) {
+				Sprite s;
+				init_sprite(&s);
+				s.position = player->shape.center;
+				s.size = v2(16, 16);
+				s.texture = Get_Texture_Coordinates(0, Renderer->texture_height - 16, 16, 16);
+				s.color = v4(1, 1, 1, 1);
+				switch(e->direction) {
+					case Direction_North:
+						s.position.y -= s.size.y + player->shape.hh;
+						break;
+					case Direction_South:
+						s.position.y += s.size.y + player->shape.hh;
+						break;
+					case Direction_East:
+						s.position.x += s.size.x + player->shape.hw;
+						break;
+					case Direction_West:
+						s.position.x -= s.size.x + player->shape.hh;
+						break;
+				}
+
+				if(Input->scancodes[SDL_SCANCODE_SPACE] == State_Just_Pressed) {
+					//TODO(will) implement good space queries	
+					Sim_Body* touching = sim_query_aabb(&area->sim, 
+							aabb(s.position, s.size.x / 2, s.size.y / 2));
+					if(touching != NULL) {
+						if(!Has_Flag(touching->flags, Body_Flag_Static)) 
+							ud->held_entity_id = touching->entity_id;
+					}
+				}
+			} else {
+				ud->held_entity_id = -1;
+			}
+
+			if(ud->held_entity_id > 0) {
+				Entity* s = world_area_find_entity(area, ud->held_entity_id);
+				if(s != NULL) {
+					Sim_Body* b = s->body;
+					Vec2 target = player->shape.center; 
+					Vec2 diff = b->shape.hext + player->shape.hext + v2(8, 8);
+					switch(e->direction) {
+						case Direction_North:
+							target.y -= diff.y;
+							break;
+						case Direction_South:
+							target.y += diff.y;
+							break;
+						case Direction_East:
+							target.x += diff.x;
+							break;
+						case Direction_West:
+							target.x -= diff.x;
+							break;
+					}
+
+					Vec2 impulse = (target - b->shape.center);
+					if(v2_dot(impulse, impulse) > (4 * Tile_Size * Tile_Size)) {
+						ud->held_entity_id = -1;
+					}
+					impulse *= 60;
+					if(v2_dot(impulse, impulse) < (1000 * 1000)) 
+						b->velocity += impulse;// * b->inv_mass;
+				}
+			}
+
+		}
 	}
 }

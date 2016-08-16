@@ -94,7 +94,8 @@ enum Entity_Event_Type
 	EntityEvent_Create = Flag(4),
 	EntityEvent_FrameTick = Flag(5),
 	EntityEvent_SlowTick = Flag(6),
-	EntityEvent_Destroy = Flag(7)
+	EntityEvent_Destroy = Flag(7),
+	EntityEvent_Activate = Flag(8)
 };	
 
 enum Rituals_Entity_Kinds
@@ -104,42 +105,6 @@ enum Rituals_Entity_Kinds
 	EntityKind_Player,
 	EntityKind_Enemy,
 };
-
-
-/*
-typedef void (*ProcessEntitiesFunc)(Entity* entities, isize count, World_Area* area, World* world);
-struct Package
-{
-	ProcessEntitiesFunc sim, walk, interact, animate, 
-						create, frame_tick, slow_tick, 
-						destroy;
-};
-
-//TODO(will) go into game registry
-struct Rituals_Entity_Kinds
-{
-	isize PropEntity,
-		  StaticEntity,
-		  PlayerEntity,
-		  EnemyEntity;
-};
-Rituals_Entity_Kinds RitualsEntityKinds;
-
-//TODO(will) serialize -- translate from old to new on deserialization
-isize _next_entity_kind = 0;
-static inline isize get_next_entity_kind()
-{
-	return _next_entity_kind++;
-}
-	
-
-void rituals_assign_entity_kinds(Rituals_Entity_Kinds* kinds)
-{
-	kinds->PropEntity = get_next_entity_kind();
-	kinds->StaticEntity = get_next_entity_kind();
-	kinds->PlayerEntity = get_next_entity_kind();
-	kinds->EnemyEntity = get_next_entity_kind();
-}*/
 
 enum Rituals_Enemy_Kinds
 {

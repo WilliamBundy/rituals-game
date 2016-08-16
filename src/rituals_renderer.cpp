@@ -104,14 +104,16 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	renderer->offset = v2(0, 0);
 	renderer->last_sprite_id = 0;
 	renderer->sprite_data = arena_push_array(arena, Sprite, Megabytes(32) / sizeof(Sprite)); 
+	//renderer->deferred_sprite_data = arena_push_array(arena, Sprite, Megabytes(8) / sizeof(Sprite)); 
 	glGenVertexArrays(1, &renderer->vao);
 	glBindVertexArray(renderer->vao);
 	glGenBuffers(1, &renderer->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
 
 	usize stride = sizeof(Sprite);
-	//position
 	usize vertex_count = 1;
+
+	//position
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(0));
 	glEnableVertexAttribArray(0);  
 	glVertexAttribDivisor(0, vertex_count);
@@ -262,8 +264,8 @@ void renderer_start()
 	Renderer->clip = {0, 0, 0, 0};
 
 	glUseProgram(Renderer->shader_program);
-	//Renderer->offset.x = roundf(Renderer->offset.x);
-	//Renderer->offset.y = roundf(Renderer->offset.y);
+	Renderer->offset.x = roundf(Renderer->offset.x);
+	Renderer->offset.y = roundf(Renderer->offset.y);
 	glUniform2f(Renderer->texture_size_loc, 
 			Renderer->texture_width,
 			Renderer->texture_height);

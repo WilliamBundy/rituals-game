@@ -27,15 +27,31 @@ void main()
 
 	vec2 pixel = f_pixel;
 	vec2 uv = f_texcoords;
+	// So, it seems like this is kinda broken?
 	#if 0
 	uv.x *= texture_size.x;
 	uv.y *= texture_size.y;
-	//uv = floor(uv) + 0.5;
+	uv = floor(uv) + 0.5;
 	uv += 1.0 - clamp((1.0 - fract(pixel)) * window.z, 0.0, 1.0);
 	uv.x /= texture_size.x;
 	uv.y /= texture_size.y;
 	#endif
-	gl_FragColor = texture(local_texture, uv) * vec4(f_color.rgb, 1) * f_color.aaaa;
+
+	vec4 color = texture(local_texture, uv) * vec4(f_color.rgb, 1) * f_color.aaaa;
+
+	// Nighttime effect
+	// Darkens everything except very light colors.
+	#if 0
+	float avg = (color.r + color.g + color.b) / 3;
+	float f_darken_cutoff = 0.95;
+	float f_darken_amount = 0.25;
+	if(avg < f_darken_cutoff) {
+		color.rgb *= f_darken_amount;
+	}
+	#endif 
+
+	gl_FragColor = color;
+
 }
 
 )shader"

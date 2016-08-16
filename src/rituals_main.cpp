@@ -15,15 +15,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */ 
 
 /* TODO(will) features
+ * 	- Renderer
+ * 		- "Deferred" Sprites
+ * 			- Basically, separate things to be rendered from the renderer.
+ * 			- Have a list of sprites to draw
+ * 			- Have a list of sprites that get drawn directly afterwards
+ * 			- Each "list" has a different state associated with them.
+ * 				- Different offset
+ * 				- Different texture? 
+ * 				- Different clip rectangle?
+ * 				- etc.
+ * 			- Makes drawing UI/adding debug UI elements easier
  *  - Physics
  *  	- Static and dynamic friction
  *  	- Look at dynamic tree broadphase
+ * 	- UI
+ * 		- Scrollable frame
+ * 		- Floating window
+ * 		- Checkbox
+ * 		- Radio button
  *  - Play
- *  	- New/more UI controls 
- *  		- Scrollable frame
- *  		- Floating window
- *  		- Checkbox
- *  		- Radio button
  *  	- Entity/physics inspector?
  *  	- Entity events and serialization?
  *  		- "best" thing to do is to index entities by package
@@ -31,6 +42,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- entities are sorted by package and priority
  *  		- pass each package event function a pointer to its entity array
  *  		- ???
+ *  	- Implement hitbox system for bullets v. monsters
+ *  		- Collision box is small for stability
+ *  		- Hitbox needs to be larger for player to hit it.
+ *  	- GUN SHOOT, SHOOT GUN
+ *  	- A place to stay? 
+ *  		- Why do players need to/want to build stuff?
+ *  		- Day/night cycle
+ *  		- Reasons to sleep?
+ *  			- Visiting dream world?
+ *  			- Where you return after you die?
+ *  			- Walking/floating back to your sleeping body as a ghost
+ *  			- What does the afterlife state do for the game?
+ *  				- Special rituals activated
+ *  				- Special monsters to fight
+ *  				- Time runs backwards or something?
+ *
  *  - Packages
  *  	- Provide code and data for game 
  *  	- Need to create header for everything in game.
@@ -361,14 +388,8 @@ void update_screen()
 int main(int argc, char** argv)
 {
 	//stbi_set_flip_vertically_on_load(1);
+	printf("%d \n", (usize)&(((Sprite*)(NULL))->center));
 	
-	Entity e;
-	e.sprite.position.x = 3;
-	e.sprite.position.y = 8.14;
-	char* p = (char*)&e;
-	p += 8 + 8 + 8 + 4 + 4;
-	printf("%.2f \n", *((float*)p));
-
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 
 		Log_Error(SDL_GetError());

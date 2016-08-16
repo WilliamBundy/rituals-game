@@ -23,7 +23,7 @@ SET LIBS=SDL2.lib ^
 	opengl32.lib ^
 	Shlwapi.lib
 
-rem start python autogit.py
+start python autogit.py
 
 ctime -begin rituals.ctm
 if "%~1"=="" goto DEBUG_BUILD
