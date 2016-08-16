@@ -74,9 +74,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 //platform imports
-#if RITUALS_WINDOWS
+#if RITUALS_WINDOWS == 1
 #include <windows.h>
 #include <Shlwapi.h>
+#include <malloc.h>
 #endif
 
 //CRT imports
@@ -90,13 +91,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <ctype.h>
 #include <stddef.h>
 #include <errno.h>
-#include <malloc.h>
 
 #if RITUALS_LINUX == 1
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 #endif 
 
 //3rd party imports

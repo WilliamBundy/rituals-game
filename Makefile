@@ -1,5 +1,5 @@
 CC=clang
-NAME=Rituals
+NAME=Rituals.bin
 MAIN=src/rituals_main.cpp
 CFLAGS=-xc++ -std=c++11 -DRITUALS_LINUX=1 -Wall
 DISABLED_WARNINGS=-Wno-writable-strings \
@@ -11,12 +11,12 @@ DISABLED_WARNINGS=-Wno-writable-strings \
 				  -Wno-format \
 				  -Wno-parentheses-equality \
 				  -Wno-unused-function
-LFLAGS=-lm -lSDL2 -lGL -o bin/Rituals
+LFLAGS=-lm -lSDL2 -lGL -o bin/$(NAME)
 
 all: build
 
 run: build
-	bin/Rituals
+	bin/$(NAME)
 	
 build: 
 	$(CC) $(CFLAGS) $(DISABLED_WARNINGS) $(MAIN) $(LFLAGS)
