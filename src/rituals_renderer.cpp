@@ -183,10 +183,12 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	glCompileShader(fragment_shader);
 	{
 		GLint success;
-		GLchar infoLog[512];
 		glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+		GLsizei log_size;
+		char shader_log[4096];
+		glGetShaderInfoLog(fragment_shader, 4096, &log_size, shader_log); 
 		if(!success) {
-			printf("Error compiling frag shader %.*s \n", 512, infoLog);
+			printf("Error compiling frag shader \n%s \n", shader_log);
 		} else {
 			printf("Frag shader compiled successfully\n");
 		}
