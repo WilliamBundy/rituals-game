@@ -23,8 +23,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 			- Each "list" has a different state associated with them.
  * 				- Different offset
  * 				- Different texture? 
- * 				- Different clip rectangle?
- * 				- etc.
+ * 				- Different clip rectangle?:.
  * 			- Makes drawing UI/adding debug UI elements easier
  *  - Physics
  *  	- Static and dynamic friction
