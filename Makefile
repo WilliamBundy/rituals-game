@@ -1,7 +1,7 @@
 CC=clang
 NAME=Rituals.bin
 MAIN=src/rituals_main.cpp
-CFLAGS=-xc++ -std=c++11 -DRITUALS_LINUX=1 -Wall
+CFLAGS=-xc++ -std=c++11 -DRITUALS_LINUX=1 -Wall `sdl2-config --cflags`
 DISABLED_WARNINGS=-Wno-writable-strings \
 				  -Wno-missing-braces \
 				  -Wno-null-arithmetic \
@@ -11,7 +11,8 @@ DISABLED_WARNINGS=-Wno-writable-strings \
 				  -Wno-format \
 				  -Wno-parentheses-equality \
 				  -Wno-unused-function
-LFLAGS=-lm -lSDL2 -lGL -o bin/$(NAME)
+LFLAGS=-lm `sdl2-config --libs` -lGL -o bin/$(NAME)
+# on osx, add -framework OpenGL 
 
 all: build
 
