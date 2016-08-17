@@ -46,6 +46,7 @@ cl ^
 	/Fe%OUTPUT% ^
 	/Fd%PDBOUT% ^
 	/D%DEBUG_DEF% ^
+	/DRITUALS_WINDOWS#1 ^
 	/link ^
 	/ignore:4075 ^
 	/LIBPATH:%LIBRARIES% ^
