@@ -30,6 +30,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  	- Static and dynamic friction
  *  	- Look at dynamic tree broadphase
  * 	- UI
+ * 		- Improve responsiveness of things
+ * 			- Newer elemnts need highlights
+ * 			- Option to draw things without border.
+ * 			- Make it easier to accept certain types of data
+ * 				- Numerical typing input box
+ * 				- Sliders for different types (int, uint, etc)
+ * 				- Maybe macroitize some functions for that
  * 		- Scrollable frame
  * 		- Floating window
  * 		- Checkbox
@@ -46,6 +53,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- Collision box is small for stability
  *  		- Hitbox needs to be larger for player to hit it.
  *  	- GUN SHOOT, SHOOT GUN
+ *  		- Player character's main weapon is a shotgun-kinda thing
  *  	- A place to stay? 
  *  		- Why do players need to/want to build stuff?
  *  		- Day/night cycle
@@ -287,10 +295,6 @@ void main_menu_update()
 		tinydir_close(&menu_state->saves);
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 	}
-
-	
-	
-
 
 	renderer_draw();
 }
