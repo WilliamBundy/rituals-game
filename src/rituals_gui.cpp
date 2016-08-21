@@ -381,20 +381,34 @@ bool gui_query_mouse(Rect2 region, Vec2 parent)
 }
 
 
-
-Vec4 Gui_ButtonTint = _color(0.88, 0.89, 1, 1);
-Vec4 Gui_ButtonRestColor = _color(.8, .8, .8, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonDownColor = _color(.5, .5, .5, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonTextColor = _color(0, 0, 0, 1) ;
+Vec4 Color_White = _color(1, 1, 1, 1);
+Vec4 Color_Black = _color(0, 0, 0, 1);
+Vec4 Gui_Tint = _color(0.88, 0.89, 1, 1);
+Vec4 Gui_ButtonRestColor = _color(.8, .8, .8, 1) * Gui_Tint;
+Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_Tint;
+Vec4 Gui_ButtonDownColor = _color(.5, .5, .5, 1) * Gui_Tint;
+Vec4 Gui_ButtonTextColor = _color(0, 0, 0, 1);
 Vec4 Gui_ButtonTextDownColor = Gui_ButtonTextColor;
 
-Vec4 Gui_ButtonOutlineRestColor = _color(.9, .9, .9, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonOutlineActiveColor = _color(1, 1, 1, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonOutlineDownColor = _color(.4, .4, .4, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonOutlineRestColor2 = _color(0.5, 0.5, 0.5, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonOutlineActiveColor2 = _color(0.5, 0.5, 0.5, 1) * Gui_ButtonTint;
-Vec4 Gui_ButtonOutlineDownColor2 = _color(.7, .7, .7, 1) * Gui_ButtonTint;
+Vec4 Gui_ButtonOutlineRestColor = _color(.9, .9, .9, 1) * Gui_Tint;
+Vec4 Gui_ButtonOutlineActiveColor = _color(1, 1, 1, 1) * Gui_Tint;
+Vec4 Gui_ButtonOutlineDownColor = _color(.4, .4, .4, 1) * Gui_Tint;
+Vec4 Gui_ButtonOutlineRestColor2 = _color(0.5, 0.5, 0.5, 1) * Gui_Tint;
+Vec4 Gui_ButtonOutlineActiveColor2 = _color(0.5, 0.5, 0.5, 1) * Gui_Tint;
+Vec4 Gui_ButtonOutlineDownColor2 = _color(.7, .7, .7, 1) * Gui_Tint;
+
+Vec4 Gui_TextInputRestColor = _color(0.3, 0.3, 0.3, 1) * Gui_Tint;
+Vec4 Gui_TextInputHotColor = _color(0.6, 0.6, 0.6, 1) * Gui_Tint;
+Vec4 Gui_TextInputActiveColor = _color(0.5, 0.5, 0.5, 1) * Gui_Tint;
+
+Vec4 Gui_TextInputOutlineRestColor = _color(0.2, 0.2, 0.2, 1) * Gui_Tint;
+Vec4 Gui_TextInputOutlineHotColor = _color(0.5, 0.5, 0.5, 1) * Gui_Tint;
+Vec4 Gui_TextInputOutlineActiveColor = _color(0.4, 0.4, 0.4, 1) * Gui_Tint;
+Vec4 Gui_TextInputOutlineRestColor2 = _color(0.4, 0.4, 0.4, 1) * Gui_Tint;
+Vec4 Gui_TextInputOutlineHotColor2 = _color(0.7, 0.7, 0.7, 1) * Gui_Tint;
+Vec4 Gui_TextInputOutlineActiveColor2 = _color(0.7, 0.7, 0.7, 1) * Gui_Tint;
+
+
 
 bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 {
@@ -515,8 +529,6 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 
 	}
 
-
-
 	real value = 0;
 	real perc = .5; 
 	if(in_value != NULL) {
@@ -527,7 +539,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	end.x -= 8;
 	Vec2 line_offset = v2(0, 8);
 	draw_line(begin + line_offset, end + line_offset, v4(1, 1, 1, 0.9f), 2);
-	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), Gui_ButtonTint);
+	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), Gui_Tint);
 	handle.position.x += perc * (end.x - begin.x);
 	
 	Rect2 r;
@@ -616,33 +628,40 @@ void init_text_input_handle(Gui_Text_Input_Handle* handle, real width, Memory_Ar
 	handle->max_chars_by_width = max_chars_by_width;
 }
 
-void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)
+void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size, char* default_text=NULL)
 {
 	Vec2 dmouse = v2(
 			Input->mouse_x / Game->scale, 
 			Input->mouse_y / Game->scale) + Renderer->offset;
 	Vec2 text_offset = v2(4, (size.y-Body_Font->glyph_height)/2);
 	size.x += 8;
-	Sprite s = get_box_sprite(position + size / 2, size, Gui_ButtonDownColor);
-	renderer_push_sprite(&s);
+	Sprite s = get_box_sprite(position + size / 2, size, Gui_TextInputRestColor);
+	bool mouse_over = aabb_intersect(aabb(position + size / 2, size.x / 2, size.y / 2), aabb(dmouse, 0, 0));
 	
 	if(handle->active) {
+		s.color = Gui_TextInputActiveColor;
 		if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-			if(!aabb_intersect(aabb(position + size / 2, size.x / 2, size.y / 2), aabb(dmouse, 0, 0))) {
+			if(!mouse_over) {
 				handle->active = false;
 			} else {
 				Vec2 localmouse = dmouse - position;
 				localmouse -= text_offset;
 				handle->cursor = roundf(localmouse.x / Body_Font->glyph_width);
 			}
-		}
+		} 
+	//	if(Input->keycodes[SDLK_ESCAPE] == State_Just_Pressed) {
+	//		handle->active = false;
+	//	}
 	} else {
+		if(mouse_over) s.color = Gui_TextInputHotColor;
 		if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-			if(aabb_intersect(aabb(position + size / 2, size.x / 2, size.y / 2), aabb(dmouse, 0, 0))) {
+			if(mouse_over) {
 				handle->active = true;
 			}
 		}
 	}
+
+	renderer_push_sprite(&s);
 
 	if(handle->active) {
 		Input->capture_newlines = handle->accept_newlines;
@@ -686,7 +705,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)
 			} else {
 				handle->cursor++;
 			}
-		}
+		} 
 
 		if(handle->cursor < 0) handle->cursor = 0;
 		else if(handle->cursor >= handle->buffer_length) 
@@ -697,14 +716,36 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size)
 				text_offset + position + v2(handle->cursor * Body_Font->glyph_width + 1, Body_Font->glyph_height), v4(1, 1, 1, 1), 1);
 
 	}
+	
+	if(mouse_over && !handle->active) {
+		Body_Font->color = Color_Black;
+	} else {
+		Body_Font->color = Color_White;
+	}
+	
+	if(!handle->active && default_text != NULL && handle->buffer_length == 0) {
+		Body_Font->color *= 0.8;
+		Body_Font->color.w = 1.0f;
+		spritefont_render_text(Body_Font,
+				default_text, strlen(default_text),
+				position + text_offset); 
+	} else {
+		spritefont_render_text(Body_Font,
+				handle->buffer, handle->buffer_length,
+				position + text_offset); 
+	}
 
-
-	Body_Font->color = v4(1, 1, 1, 1);
-	spritefont_render_text(Body_Font,
-		handle->buffer, handle->buffer_length,
-		position + text_offset); 
-	Vec4 color1 = Gui_ButtonOutlineDownColor;
-	Vec4 color2 = Gui_ButtonOutlineDownColor2;
+	Vec4 color1, color2;// = Gui_TextInputOutlineRestColor;
+	if(!mouse_over && !handle->active) {
+		color1 = Gui_TextInputOutlineRestColor;
+		color2 = Gui_TextInputOutlineRestColor2;
+	} else if(mouse_over && !handle->active) {
+		color1 = Gui_TextInputOutlineHotColor;
+		color2 = Gui_TextInputOutlineHotColor2;
+	} else if(handle->active) {
+		color1 = Gui_TextInputOutlineActiveColor;
+		color2 = Gui_TextInputOutlineActiveColor2;
+	}
 	Vec4 colors[4] = {
 		color1, color1,
 		color2, color2

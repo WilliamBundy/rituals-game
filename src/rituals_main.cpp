@@ -15,6 +15,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */ 
 
 /* TODO(will) features
+ * 	- System/bigger projects
+ * 		- Programmable ini replacement
+ * 		- Memory dumps
+ * 		- Reflection/introspection metaprogramming system
+ * 			- For use with serialization
+ * 			- Can save versioned type layouts, then do its best to load from/to 
  * 	- Renderer
  * 		- "Deferred" Sprites
  * 			- Basically, separate things to be rendered from the renderer.
@@ -36,10 +42,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 				- Numerical typing input box
  * 				- Sliders for different types (int, uint, etc)
  * 				- Maybe macroitize some functions for that
- * 		- Scrollable frame
- * 		- Floating window
- * 		- Checkbox
- * 		- Radio button
+ *		- Add more components
+ * 			- Scrollable frame
+ * 			- Floating window
+ * 			- Checkbox
+ * 			- Radio button
+ * 		- Logging window + write to file
+ * 			- plus, better logging overall
+ * 			- need to be able to log stuff to file to help people
+ * 			  run the game on their computuers.
+ * 			- ties in with programmable ini replacement to have a 
+ * 			  console type thing.
  *  - Play
  *  	- Entity/physics inspector?
  *  	- Entity events and serialization?
@@ -235,7 +248,7 @@ void main_menu_update()
 	render_body_text("Rituals", v2(32, 32), false, 4.0f);
 	lasty += 16;
 	lasty += Body_Font->glyph_height * 4;
-	gui_add_text_input(&menu_state->handle, v2(32, lasty), v2(256, Body_Font->glyph_height + 8));
+	gui_add_text_input(&menu_state->handle, v2(32, lasty), v2(256, Body_Font->glyph_height + 8), "Enter new world name");
 
 	bool saves_dirty = false;
 	if(gui_add_button(v2(256 + 32 + 16 , lasty), "Create", v2(64, 0))) {

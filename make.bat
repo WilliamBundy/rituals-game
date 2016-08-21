@@ -5,8 +5,8 @@ if not defined DevEnvDir call "%msvcdir%vcvarsall.bat" amd64
 SET MAINFILE=src\rituals_main.cpp
 SET OUTPUT=bin\Rituals.exe
 SET PDBOUT=bin\Rituals.pdb
-SET LIBRARIES="c:\mslibs\lib"
-SET INCLUDES=c:\mslibs\include\
+SET LIBRARIES="msvc_libs\lib"
+SET INCLUDES=msvc_libs\include\
 
 SET DEBUG_DEF=DEBUG
 SET RELEASE_DEF=RELEASE
@@ -23,7 +23,7 @@ SET LIBS=SDL2.lib ^
 	opengl32.lib ^
 	Shlwapi.lib
 
-start python autogit.py
+rem start python autogit.py
 
 ctime -begin rituals.ctm
 if "%~1"=="" goto DEBUG_BUILD
