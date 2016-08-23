@@ -259,6 +259,7 @@ void world_area_build_hitboxes(World_Area* area)
 		} else {
 			h->box.hext = e->body->shape.hext;
 			e->hitbox.box.hext = h->box.hext;
+			e->hitbox.box.center -= e->body->shape.hh;
 		}
 	}
 }
