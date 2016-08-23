@@ -107,7 +107,7 @@ struct World_Area
 	isize hitboxes_count, hitboxes_capacity;
 	int32 hitbox_sort_axis;
 	Hitbox_Contact* hitbox_contacts;
-	isize hitbox_contact_count, hitbox_contact_capacity;
+	isize hitbox_contacts_count, hitbox_contacts_capacity;
 
 	
 	Entity* player;
