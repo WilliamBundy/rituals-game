@@ -243,11 +243,9 @@ void deserialize_entity(Entity* entity, FILE* file)
 	fread(&entity->id, sizeof(isize), 1, file);
 	fread(&entity->body_id, sizeof(isize), 1, file);
 	deserialize_sprite(&entity->sprite, file);
-	fread(&entity->attack_hitbox.e, sizeof(real), 4, file);
-	fread(&entity->health_hitbox.e, sizeof(real), 4, file);
-
 	fread(&entity->health, sizeof(int32), 1, file);
 	fread(&entity->attack, sizeof(int32), 1, file);
+	fread(&entity->attack_interval, sizeof(real), 1, file);
 	fread(&entity->counter, sizeof(int32), 1, file);
 	fread(&entity->facing, sizeof(int32), 1, file);
 	fread(&entity->direction, sizeof(Direction), 1, file);
@@ -311,11 +309,10 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->id, sizeof(isize), 1, file);
 	fwrite(&entity->body_id, sizeof(isize), 1, file);
 	serialize_sprite(&entity->sprite, file);
-	fwrite(&entity->attack_hitbox.e, sizeof(real), 4, file);
-	fwrite(&entity->health_hitbox.e, sizeof(real), 4, file);
 
 	fwrite(&entity->health, sizeof(int32), 1, file);
 	fwrite(&entity->attack, sizeof(int32), 1, file);
+	fwrite(&entity->attack_interval, sizeof(real), 1, file);
 
 	fwrite(&entity->counter, sizeof(int32), 1, file);
 	fwrite(&entity->facing, sizeof(int32), 1, file);

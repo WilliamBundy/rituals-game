@@ -13,6 +13,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_world_area.cpp
  */
 
+
+struct Hitbox
+{
+	isize body_id;
+	Vec2 pos;
+	AABB box;
+};
+
 struct Entity
 {
 	isize id;
@@ -20,11 +28,12 @@ struct Entity
 	Sim_Body* body;
 	Vec2 walk_impulse;
 
-	AABB attack_hitbox;
-	AABB health_hitbox;
+	Hitbox hitbox;
 
 	int32 health;
 	int32 attack;
+	real attack_interval;
+	uint64 hitbox_mask;
 
 	Sprite sprite;
 	isize kind;
@@ -58,7 +67,7 @@ enum World_Area_Biome
 
 #define WorldAreaTilemapWidth (64)
 #define WorldAreaTilemapHeight (64)
-#define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight * 16)
+#define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight * 4)
 struct World_Area_Stub
 {
 	isize id;
@@ -81,8 +90,12 @@ struct World_Area
 	Vec2 target;
 
 	Entity* entities;
+	
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
+
+	Hitbox* hitboxes;
+	isize hitboxes_count, hitboxes_capacity;
 	
 	Entity* player;
 
@@ -102,6 +115,9 @@ void init_world_area(World_Area* area, Memory_Arena* arena)
 	area->entities_capacity = WorldAreaEntityCapacity;
 	area->next_entity_id = 0;
 	area->entities_dirty = false;
+	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
+	area->hitboxes_count = 0;
+	area->hitboxes_capacity = WorldAreaEntityCapacity;
 }
 
 void init_entity(Entity* entity)
@@ -131,6 +147,7 @@ Entity* world_area_get_next_entity(World_Area* area)
 	e->health_hitbox = aabb(0, 0, 0, 0);
 	e->health = 100;
 	e->attack = 0;
+	e->attack_interval = 0.5f;
 	return e;
 }
 
@@ -205,3 +222,13 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 	}
 }
 
+
+void world_area_build_hitboxes(World_Area* area)
+{
+	
+}
+
+void world_area_process_hitboxes(World_Area* area)
+{
+
+}

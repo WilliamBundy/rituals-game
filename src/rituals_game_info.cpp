@@ -95,7 +95,10 @@ enum Entity_Event_Type
 	EntityEvent_FrameTick = Flag(5),
 	EntityEvent_SlowTick = Flag(6),
 	EntityEvent_Destroy = Flag(7),
-	EntityEvent_Activate = Flag(8)
+	EntityEvent_Activate = Flag(8),
+	//Entity health_hitbox was hit by a attack_hitbox
+	EntityEvent_Hit = Flag(9),
+	EntityEvent_Contact = Flag(10),
 };	
 
 enum Rituals_Entity_Kinds

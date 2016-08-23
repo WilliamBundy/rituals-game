@@ -185,14 +185,27 @@ void generate_world(char* name, World* world)
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world);
+void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_contact_enemies(Entity* entities, isize count, World_Area* area, World* world)
 
 void world_area_walk_entities(World_Area* area, World* world)
 {
 	rituals_walk_entities(area->entities, area->entities_count, area, world);
 }
+
 void world_area_animate_entities(World_Area* area, World* world)
 {
 	rituals_animate_entities(area->entities, area->entities_count, area, world);
+}
+
+void world_area_hit_entities(World_Area* area, World* world)
+{
+	rituals_hit_entities(area->entities, area->entities_count, area, world);
+}
+
+void world_area_contact_entities(World_Area* area, World* world)
+{
+	rituals_contact_entities(area->entities, area->entities_count, area, world);
 }
 
 void world_area_interact(World_Area* area, World* world)
@@ -304,7 +317,6 @@ void world_area_update(World_Area* area, World* world)
 		world_switch_current_area(play_state->world, area->stub->south, Game->play_arena);
 		play_state->world_xy.y++;
 	}
-	//_player_handle_interactions(world, area, player_entity, player);
 	world_area_interact(area, world);
 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
