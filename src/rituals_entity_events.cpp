@@ -319,6 +319,10 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 						a->body->flags = Body_Flag_Sensor;
 						a->sprite.color.w = 0.5f;
 					}
+					b->kind = EntityKind_Prop;
+					b->attack = 0;
+					b->sprite.color.w = 0;
+
 				}
 				break;
 		}
