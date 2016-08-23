@@ -310,7 +310,7 @@ void world_area_update(World_Area* area, World* world)
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
 		Entity* e = world_area_get_next_entity(area);
 		e->kind = EntityKind_Enemy;
-		e->userdata.enemy.kind = rand_range_int(&Game->r, 0, 4);
+		e->userdata.enemy.kind = EnemyKind_Bat;//rand_range_int(&Game->r, 0, 4);
 		e->sprite.texture = Get_Texture_Coordinates(
 				e->userdata.enemy.kind *32, 10*32, 32, 32);
 		e->sprite.size = v2(32, 32);
