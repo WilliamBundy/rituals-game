@@ -18,8 +18,13 @@ struct Entity
 	isize id;
 	isize body_id;
 	Sim_Body* body;
-	AABB hitbox;
 	Vec2 walk_impulse;
+
+	AABB attack_hitbox;
+	AABB health_hitbox;
+
+	int32 health;
+	int32 attack;
 
 	Sprite sprite;
 	isize kind;
@@ -37,8 +42,6 @@ struct Entity
 #define _entity_get_id(e) (e.id)
 GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
 GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
-
-
 
 typedef struct World_Area_Stub World_Area_Stub;
 struct Area_Link
@@ -124,6 +127,10 @@ Entity* world_area_get_next_entity(World_Area* area)
 	e->id = area->next_entity_id++;
 	e->body->entity = e;
 	e->body->entity_id = e->id;
+	e->attack_hitbox = aabb(0, 0, 0, 0);
+	e->health_hitbox = aabb(0, 0, 0, 0);
+	e->health = 100;
+	e->damage = 0;
 	return e;
 }
 

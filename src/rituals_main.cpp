@@ -9,19 +9,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 /*
- * rituals_win32.cpp
- * main file for windows platform
- *
+ * rituals_main.cpp
  */ 
 
 /* TODO(will) features
  * 	- System/bigger projects
  * 		- Programmable ini replacement
- * 		- Memory dumps
+ * 		- Memory dumps, logging
  * 		- Reflection/introspection metaprogramming system
  * 			- For use with serialization
  * 			- Can save versioned type layouts, then do its best to load from/to 
  * 	- Renderer
+ * 		- Seperate "Renderers"/renderlist
  * 		- "Deferred" Sprites
  * 			- Basically, separate things to be rendered from the renderer.
  * 			- Have a list of sprites to draw
@@ -29,8 +28,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 			- Each "list" has a different state associated with them.
  * 				- Different offset
  * 				- Different texture? 
- * 				- Different clip rectangle?:.
+ * 				- Different clip rectangle?
  * 			- Makes drawing UI/adding debug UI elements easier
+ * 		- Stitching together texture atlases, changing shaders
+ * 		- Small fixes to the way I'm doing some of the math
+ *
  *  - Physics
  *  	- Static and dynamic friction
  *  	- Look at dynamic tree broadphase
