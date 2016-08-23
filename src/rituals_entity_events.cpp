@@ -13,6 +13,57 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
+Entity* rituals_spawn_enemy(World_Area* a, isize enemykind, Vec2 position) 
+{
+	Entity* e = world_area_get_next_entity(area);
+	e->kind = EntityKind_Enemy;
+	e->userdata.enemy.kind = enemykind;
+	e->sprite.texture = Get_Texture_Coordinates(
+			enemykind * 32, 10*32, 32, 32);
+	e->sprite.size = v2(32, 32);
+	e->body->shape.center = position;
+	e->sprite.anchor = Anchor_Bottom;
+	e->body->shape.hext = v2(8, 5);
+	auto enemy = &e->userdata.enemy;
+	enemy->mode = 0;
+	switch(enemy->kind) {
+		case EnemyKind_Slime:
+			enemy->speed = 200;
+			enemy->alert_dist = 128;
+			enemy->follow_dist = 128;
+			break;
+		case EnemyKind_Bat:
+			enemy->speed = 600;
+			enemy->alert_dist = 64;
+			enemy->follow_dist = 128;
+			enemy->bat.perch = e->body->shape.center;
+			e->body->flags = Body_Flag_No_Friction;
+			e->sprite.size *= 0.5f;
+			e->body->shape.hext *= 0.5f;
+			break;
+		case EnemyKind_Snake:
+			enemy->speed = 200;
+			enemy->alert_dist = 128; 
+			enemy->follow_dist = 128;
+			enemy->snake.chase_speed_modifier = 3.0f;
+			e->sprite.size *= 0.5f;
+			e->body->shape.hext *= 0.5f;
+			break;
+		case EnemyKind_Goblin_Knight:
+			enemy->goblin_knight.patrol_start = e->sprite.position;
+			enemy->goblin_knight.patrol_end = e->sprite.position + v2(512, 0);
+			enemy->alert_dist = 128;
+			enemy->follow_dist = 384;
+			enemy->speed = 250;
+			break;
+	}
+	return e;
+}
+
+
+
+
+
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 #define _scancode(s1) ((Input->scancodes[SDL_SCANCODE_##s1]))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)

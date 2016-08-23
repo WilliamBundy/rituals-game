@@ -109,7 +109,7 @@ enum Rituals_Entity_Kinds
 	EntityKind_Enemy,
 };
 
-enum Rituals_Enemy_Kinds
+enum Rituals_Enemy_Kind
 {
 	EnemyKind_Slime,
 	EnemyKind_Bat,
