@@ -349,7 +349,7 @@ void world_area_update(World_Area* area, World* world)
 		e->body->flags = Body_Flag_No_Friction;
 		e->body->damping = 1.0f;
 
-		Vec2 dmouse = e->sprite->position - Input->mouse_pos; 
+		Vec2 dmouse = e->sprite.position - Input->mouse_pos; 
 		real a = v2_to_angle(dmouse);
 		a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
 
