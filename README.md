@@ -21,15 +21,16 @@ Rituals' source is licensed under the MIT license. Feel free to learn as much as
  6. Run make.bat
 
 ## How to build (other OSes)
-Running on Linux shouldn't be too hard; there are very few windows specific things in the source. I make a few calls to VirtualAlloc and include windows.h. You'll have to remove _CRT_SECURE_NO_WARNINGS too. Other than those, all you should need are the SDL2 and OpenGL development libraries.
+ 1. Install clang (or gcc)
+ 2. Install SDL2 development packages for your distro, or the SDL2 framework for OSX
+ 2. Make sure you have sdl2-config
+ 2. On macOS, add -framework opengl
+ 3. Run make.
 
 ## How to play
 The game is currently in something like pre-pre-pre alpha, so don't expect a lot of "game" as such yet.
  - Use the WASD keys to move.
- - Left click to throw small boxes.
- - Right click on an entity to "activate" it; this currently means:
- 	- When you activate a big box, it prints the ID to stdout
- 	- When you activate a thrown box, it deletes it. 
+ - Currently left-click spawns enemies.
  - Press F to whack the ground. If a tile breaks, bare earth is revealed underneath.
  - Press and hold Space to grab an entity in the direction you are facing.
 

@@ -220,8 +220,6 @@ void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
 			fread(&enemy->follow_dist, sizeof(real), 1, file);
 			switch(enemy->kind) {
 				case EnemyKind_Bat:
-					fread(&enemy->bat.last_dist_to_player, sizeof(real), 1, file);
-					fread(&enemy->bat.arc_perc, sizeof(real), 1, file);
 					fread(&enemy->bat.perch.e, sizeof(real), 2, file);
 					break;
 				case EnemyKind_Snake:
@@ -285,8 +283,6 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 			fwrite(&enemy->follow_dist, sizeof(real), 1, file);
 			switch(enemy->kind) {
 				case EnemyKind_Bat:
-					fwrite(&enemy->bat.last_dist_to_player, sizeof(real), 1, file);
-					fwrite(&enemy->bat.arc_perc, sizeof(real), 1, file);
 					fwrite(&enemy->bat.perch.e, sizeof(real), 2, file);
 					break;
 				case EnemyKind_Snake:

@@ -64,6 +64,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  	- Implement hitbox system for bullets v. monsters
  *  		- Collision box is small for stability
  *  		- Hitbox needs to be larger for player to hit it.
+ *  		- It's possible this fundamentally changes how we do collisions
+ *  			since, you can either expand the way we hook together bodies and
+ *  			entities, or bodies and shapes. Bodies and shapes is the clearer
+ *  			answer, because the idea of a "hitbox" is of a second sensor shape
+ *  			attached to a body.
+ *  		- If bodies are able to have multiple shapes, that breaks the way we
+ *  			currently do collision resolution: the space would have to store 
+ *  			a list of shapes separate from bodies, then apply collision to shapes, 
+ *  			and it just sounds like a huge mess.
+ *  		- So, other idea: treat "hitbox space" as a completely different space than
+ *  			simulated space. Hitboxes "collide" with other hitboxes, returning the 
+ *  			information needed to separate them, but leaving it up to the event
+ *  			reciever to do so. The number of hitboxes is much smaller than the number
+ *  			of regular collision areas, so it shouldn't be expensive.
  *  	- GUN SHOOT, SHOOT GUN
  *  		- Player character's main weapon is a shotgun-kinda thing
  *  	- A place to stay? 
@@ -192,7 +206,6 @@ struct Play_State
 };
 Play_State* play_state;
 
-
 #include "rituals_renderer.cpp"
 #include "rituals_gui.cpp"
 
@@ -248,7 +261,10 @@ void main_menu_update()
 	render_body_text("Rituals", v2(32, 32), false, 4.0f);
 	lasty += 16;
 	lasty += Body_Font->glyph_height * 4;
-	gui_add_text_input(&menu_state->handle, v2(32, lasty), v2(256, Body_Font->glyph_height + 8), "Enter new world name");
+	gui_add_text_input(&menu_state->handle, 
+			v2(32, lasty), 
+			v2(256, Body_Font->glyph_height + 8), 
+			"Enter new world name");
 
 	bool saves_dirty = false;
 	if(gui_add_button(v2(256 + 32 + 16 , lasty), "Create", v2(64, 0))) {
@@ -261,20 +277,17 @@ void main_menu_update()
 	if(saves_dirty) {
 		tinydir_close(&menu_state->saves);
 		char buf[FilePathMaxLength];
-	 	snprintf(buf, FilePathMaxLength, "%ssave/%.*s", Game->base_path, menu_state->handle.buffer_length, menu_state->handle.buffer);
+	 	snprintf(buf, FilePathMaxLength, "%ssave/%.*s",
+				Game->base_path, 
+				menu_state->handle.buffer_length, 
+				menu_state->handle.buffer);
 		check_dir(buf);
 		
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 		menu_state->handle.buffer_length = 0;
 		saves_dirty = false;
 	}
-
-	//lasty += 32 + 16;
-	//gui_add_slider(v2(32, lasty), v2(256, 22), "Volume", 0, 100, 1, &r, &b);
-
-
 	lasty += 32 + 16;
-
 
 	for(usize i = 0; i < menu_state->saves.n_files; ++i) {
 		tinydir_file file;

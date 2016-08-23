@@ -83,30 +83,19 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 								real angle = atan2f(dpos.y, dpos.x);
 								walk.x = cosf(angle) * -enemy->speed;
 								walk.y = sinf(angle) * -enemy->speed;
-
 							}
-
-
 						}
 					} else if(enemy->mode == 1) {
-						enemy->bat.arc_perc += 0.01;
-						Vec2 target;
-						if(enemy->bat.arc_perc <= 0.2) {
-							target = enemy->bat.perch + v2(enemy->follow_dist, 0);
+						Vec2 perch_dpos = e->body->shape.center - enemy->bat.perch;
+						real perch_dist2 = v2_dot(perch_dpos, perch_dpos);
+						if(perch_dist2 < (enemy->follow_dist * enemy->follow_dist)) {
+							real angle = atan2f(dpos.y, dpos.x);
+							walk.x = cosf(angle) * -enemy->speed;
+							walk.y = sinf(angle) * -enemy->speed;
 						} else {
-							real angle = Math_Tau * (enemy->bat.arc_perc - 0.2 / 0.8);
-							target = enemy->bat.perch + 
-								v2(cosf(angle), sinf(angle)) * enemy->follow_dist;
-						}
-						real angle = atan2f(target.y, target.x);
-						walk.x = cosf(angle) * enemy->speed;
-						walk.y = sinf(angle) * enemy->speed;
-						if(enemy->bat.arc_perc >= 1) {
 							enemy->mode = 0;
-							enemy->bat.arc_perc = 0;
 						}
 					}
-
 			}
 
 			switch(enemy->kind) {

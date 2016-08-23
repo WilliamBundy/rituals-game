@@ -130,8 +130,6 @@ union Rituals_Entity_Userdata
 		
 		union {
 			struct {
-				real last_dist_to_player;
-				real arc_perc;
 				Vec2 perch;
 			} bat;
 			struct {
