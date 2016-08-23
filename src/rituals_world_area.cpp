@@ -29,7 +29,6 @@ struct Entity
 	Vec2 walk_impulse;
 
 	Hitbox hitbox;
-
 	int32 health;
 	int32 attack;
 	real attack_interval;
@@ -225,7 +224,20 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 
 void world_area_build_hitboxes(World_Area* area)
 {
-	
+	area->hitboxes_count = 0;
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		if(e->body == NULL) continue;
+		Hitbox* h = area->hitboxes + area->hitboxes_count++;
+		AABB box = e->hitbox.box;
+		h->box.center = e->body->shape.center + box.center;
+		if(v2_dot(box.hext, box.hext) > 1) {
+			h->box.hext = e->body->shape.hext;
+		} else {
+			h->box.hext = box.hext;
+		}
+
+	}
 }
 
 void world_area_process_hitboxes(World_Area* area)

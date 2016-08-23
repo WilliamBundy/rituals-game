@@ -1150,9 +1150,9 @@ WIN32_LEAN_AND_MEAN	src/thirdparty/tinydir.h	48;"	d
 World	src/rituals_game_info.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
-WorldAreaEntityCapacity	src/rituals_world_area.cpp	70;"	d	file:
-WorldAreaTilemapHeight	src/rituals_world_area.cpp	69;"	d	file:
-WorldAreaTilemapWidth	src/rituals_world_area.cpp	68;"	d	file:
+WorldAreaEntityCapacity	src/rituals_world_area.cpp	69;"	d	file:
+WorldAreaTilemapHeight	src/rituals_world_area.cpp	68;"	d	file:
+WorldAreaTilemapWidth	src/rituals_world_area.cpp	67;"	d	file:
 World_Area	src/rituals_game_info.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
 World_Area	src/rituals_world_area.cpp	/^struct World_Area$/;"	s	file:
 World_Area_Biome	src/rituals_world_area.cpp	/^enum World_Area_Biome$/;"	g	file:
@@ -1199,7 +1199,7 @@ _collision_slop	src/rituals_simulation.cpp	210;"	d	file:
 _color	src/rituals_gui.cpp	357;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
-_entity_get_id	src/rituals_world_area.cpp	51;"	d	file:
+_entity_get_id	src/rituals_world_area.cpp	50;"	d	file:
 _ep	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_ep;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _f	src/thirdparty/tinydir.h	/^	WIN32_FIND_DATA _f;$/;"	m	struct:tinydir_dir
 _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_dir
@@ -2180,7 +2180,7 @@ restitution	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/
 rgb	src/thirdparty/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon6
 rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
 rituals_animate_entities	src/rituals_entity_events.cpp	/^void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
-rituals_contact_enemies	src/rituals_entity_events.cpp	/^void rituals_contact_enemies(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
+rituals_contact_entities	src/rituals_entity_events.cpp	/^void rituals_contact_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_hit_entities	src/rituals_entity_events.cpp	/^void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_interact_entities	src/rituals_entity_events.cpp	/^void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
