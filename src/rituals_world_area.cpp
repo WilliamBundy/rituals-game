@@ -302,7 +302,7 @@ void world_area_process_hitboxes(World_Area* area)
 			}
 
 			if(aabb_intersect(&a->box, &b->box)) {
-				if(a->ref->kind == EntityKind_Bullet || b->ref->kind == EntityKind_Bullet) {
+				if((a->ref->kind == EntityKind_Bullet) || (b->ref->kind == EntityKind_Bullet)) {
 					printf("%d %d\n", a->ref->kind, b->ref->kind);
 				}
 				if(area->hitbox_contacts_count >= area->hitbox_contacts_capacity) {
