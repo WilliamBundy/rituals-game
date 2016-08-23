@@ -300,6 +300,8 @@ void world_area_update(World_Area* area, World* world)
 		times++;
 	}
 
+	world_area_build_hitboxes(area);
+	world_area_process_hitboxes(area);
 	
 	Vec2 target = area->player->body->shape.center;
 	area->target = target;

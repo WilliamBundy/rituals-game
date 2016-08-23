@@ -13,16 +13,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_world_area.cpp
  */
 
-
+typedef struct Entity Entity;
 struct Hitbox_Contact
 {
 	isize a_id;
 	isize b_id;
+
+	Entity* a;
+	Entity* b;
 };
 
 struct Hitbox
 {
 	isize id;
+	Entity* ref;
 	uint64 mask;
 	AABB box;
 };
@@ -131,6 +135,9 @@ void init_world_area(World_Area* area, Memory_Arena* arena)
 	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
 	area->hitboxes_count = 0;
 	area->hitboxes_capacity = WorldAreaEntityCapacity;
+	area->hitbox_contacts = arena_push_array(arena, Hitbox_Contact, WorldAreaEntityCapacity);
+	area->hitbox_contacts_count = 0;
+	area->hitbox_contacts_capacity = WorldAreaEntityCapacity;
 }
 
 void init_entity(Entity* entity)
@@ -243,6 +250,7 @@ void world_area_build_hitboxes(World_Area* area)
 		if(e->body == NULL) continue;
 		Hitbox* h = area->hitboxes + area->hitboxes_count++;
 		h->id = e->id;
+		h->ref = e;
 		AABB box = e->hitbox.box;
 		h->box.center = e->body->shape.center + box.center;
 		if(v2_dot(box.hext, box.hext) > 1) {
@@ -296,6 +304,8 @@ void world_area_process_hitboxes(World_Area* area)
 					return;
 				}
 				Hitbox_Contact* c = area->hitbox_contacts + area->hitbox_contacts_count++;
+				c->a = a->ref;
+				c->b = b->ref;
 				c->a_id = a->id;
 				c->b_id = b->id;
 			}
