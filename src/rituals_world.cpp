@@ -218,7 +218,7 @@ void world_area_hit_entities(World_Area* area, World* world)
 
 void world_area_contact_entities(World_Area* area, World* world)
 {
-	rituals_contact_entities(area->sim->contacts, area->sim->contacts_count, area, world);
+	rituals_contact_entities(area->sim.contacts, area->sim.contacts_count, area, world);
 }
 
 void world_area_interact(World_Area* area, World* world)
