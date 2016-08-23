@@ -326,9 +326,9 @@ void world_area_update(World_Area* area, World* world)
 				enemy->follow_dist = 128;
 				break;
 			case EnemyKind_Bat:
-				enemy->speed = 1000;
-				enemy->alert_dist = 128;
-				enemy->follow_dist = 256;
+				enemy->speed = 600;
+				enemy->alert_dist = 64;
+				enemy->follow_dist = 128;
 				enemy->bat.perch = e->body->shape.center;
 				e->body->flags = Body_Flag_No_Friction;
 				break;
