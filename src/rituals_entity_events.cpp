@@ -51,6 +51,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			e->sprite.size *= 0.75f;
 			e->body->shape.hext *= 0.75f;
 			e->hitbox.box.hh *= 0.5;
+			e->hitbox.box.center.y += e->sprite.size.y / 2
 			e->hitbox.box.hext *= 0.75f;
 			break;
 		case EnemyKind_Goblin_Knight:

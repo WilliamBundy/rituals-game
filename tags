@@ -1194,7 +1194,7 @@ _body_get_min_x	src/rituals_simulation.cpp	45;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	46;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	50;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
-_check	src/rituals_entity_events.cpp	67;"	d	file:
+_check	src/rituals_entity_events.cpp	68;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	484;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	210;"	d	file:
@@ -1225,7 +1225,7 @@ _recursive_delete	src/rituals_serialization.cpp	/^int _recursive_delete(const ch
 _rotate_left	src/rituals_game.cpp	/^static inline uint64 _rotate_left(const uint64 t, int64 k)$/;"	f	file:
 _s	src/thirdparty/tinydir.h	/^	struct _stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::_stat
 _s	src/thirdparty/tinydir.h	/^	struct stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::stat
-_scancode	src/rituals_entity_events.cpp	68;"	d	file:
+_scancode	src/rituals_entity_events.cpp	69;"	d	file:
 _set_registry_arrays	src/rituals_game_registry.cpp	44;"	d	file:
 _splitmix64	src/rituals_game.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 _th	src/rituals_simulation.cpp	/^isize _tw, _th;$/;"	v
