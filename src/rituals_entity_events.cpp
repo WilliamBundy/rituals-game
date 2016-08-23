@@ -46,8 +46,8 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->alert_dist = 128; 
 			enemy->follow_dist = 128;
 			enemy->snake.chase_speed_modifier = 3.0f;
-			e->sprite.size *= 0.5f;
-			e->body->shape.hext *= 0.5f;
+			e->sprite.size *= 0.75f;
+			e->body->shape.hext *= 0.75f;
 			break;
 		case EnemyKind_Goblin_Knight:
 			enemy->goblin_knight.patrol_start = e->sprite.position;
