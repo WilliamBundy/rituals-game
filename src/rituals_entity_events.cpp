@@ -295,7 +295,7 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
-		Hitbox_Contact c = contacts + i;
+		Hitbox_Contact* c = contacts + i;
 		Entity* a = c->a;
 		Entity* b = c->b;
 		
