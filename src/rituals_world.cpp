@@ -334,51 +334,8 @@ void world_area_update(World_Area* area, World* world)
 		play_state->world_xy.y++;
 	}
 	world_area_interact(area, world);
-
-	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
-		Entity* e = world_area_get_next_entity(area);
-		e->kind = EntityKind_Enemy;
-		e->userdata.enemy.kind = EnemyKind_Bat;//rand_range_int(&Game->r, 0, 4);
-		e->sprite.texture = Get_Texture_Coordinates(
-				e->userdata.enemy.kind *32, 10*32, 32, 32);
-		e->sprite.size = v2(32, 32);
-		e->body->shape.center = Input->mouse_pos + v2(rand_range(&Game->r, -32, 32) ,rand_range(&Game->r, -32, 32));
-		e->sprite.anchor = Anchor_Bottom;
-		e->body->shape.hext = v2(8, 5);
-		auto enemy = &e->userdata.enemy;
-		enemy->mode = 0;
-		switch(enemy->kind) {
-			case EnemyKind_Slime:
-				enemy->speed = 200;
-				enemy->alert_dist = 128;
-				enemy->follow_dist = 128;
-				break;
-			case EnemyKind_Bat:
-				enemy->speed = 600;
-				enemy->alert_dist = 64;
-				enemy->follow_dist = 128;
-				enemy->bat.perch = e->body->shape.center;
-				e->body->flags = Body_Flag_No_Friction;
-				e->sprite.size *= 0.5f;
-				e->body->shape.hext *= 0.5f;
-				break;
-			case EnemyKind_Snake:
-				enemy->speed = 200;
-				enemy->alert_dist = 128; 
-				enemy->follow_dist = 128;
-				enemy->snake.chase_speed_modifier = 3.0f;
-				break;
-			case EnemyKind_Goblin_Knight:
-				enemy->goblin_knight.patrol_start = e->sprite.position;
-				enemy->goblin_knight.patrol_end = e->sprite.position + v2(512, 0);
-				enemy->alert_dist = 128;
-				enemy->follow_dist = 384;
-				enemy->speed = 250;
-				break;
-		}
-	}
-
-	world_area_render(area, world);
+	world_area_render(area,
+			world);
 }
 
 
