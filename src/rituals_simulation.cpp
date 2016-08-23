@@ -311,7 +311,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	for(isize i = 0; i < map_size; ++i) {
 		tiles[i] = Registry->tiles[tilemap->tiles[i]].solid;
 	}
-	_tiles = tiles/
+	_tiles = tiles;
 	isize work = 0;
 
 	Rect2i* rects = arena_push_array(Game->temp_arena, Rect2i, map_size / 2);
