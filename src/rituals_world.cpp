@@ -264,7 +264,7 @@ void world_area_render(World_Area* area, World* world)
 		
 		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
-		draw_box_outline(e->hitbox.box.center, e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
+		draw_box_outline(e->hitbox.box.center + e->sprite.position, e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
 	}
 	renderer_sort(sprite_count_offset);
 
