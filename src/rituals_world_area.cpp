@@ -130,7 +130,7 @@ Entity* world_area_get_next_entity(World_Area* area)
 	e->attack_hitbox = aabb(0, 0, 0, 0);
 	e->health_hitbox = aabb(0, 0, 0, 0);
 	e->health = 100;
-	e->damage = 0;
+	e->attack = 0;
 	return e;
 }
 
