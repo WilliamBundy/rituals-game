@@ -198,8 +198,8 @@ void generate_world(char* name, World* world)
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world);
-void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world);
-void rituals_contact_entities(Entity* entities, isize count, World_Area* area, World* world);
+void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world);
+void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world);
 
 void world_area_walk_entities(World_Area* area, World* world)
 {
@@ -213,12 +213,12 @@ void world_area_animate_entities(World_Area* area, World* world)
 
 void world_area_hit_entities(World_Area* area, World* world)
 {
-	rituals_hit_entities(area->entities, area->entities_count, area, world);
+	rituals_hit_entities(area->hitbox_contacts, area->hitbox_contacts_count, area, world);
 }
 
 void world_area_contact_entities(World_Area* area, World* world)
 {
-	rituals_contact_entities(area->entities, area->entities_count, area, world);
+	rituals_contact_entities(area->sim->contacts, area->sim->contacts_count, area, world);
 }
 
 void world_area_interact(World_Area* area, World* world)
@@ -351,14 +351,13 @@ void world_area_update(World_Area* area, World* world)
 			e->body->shape.hext = v2(1, 1);
 			e->body->flags = Body_Flag_No_Friction | Body_Flag_Sensor;
 			e->body->damping = 1.0f;
+			e->hitbox.mask = Flag(2);
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
 			a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
 
 			e->body->velocity = v2_from_angle(a) * 800;
-
-			
 		}
 	}
 }

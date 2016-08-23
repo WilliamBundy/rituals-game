@@ -22,6 +22,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemykind * 32, 10*32, 32, 32);
 	e->sprite.size = v2(32, 32);
 	e->hitbox.box = aabb(v2(0, e->sprite.size.y * -0.5f), 16, 16);
+	e->hitbox.mask = Flag(2);
 	e->body->shape.center = position;
 	e->sprite.anchor = Anchor_Bottom;
 	e->body->shape.hext = v2(8, 5);
@@ -291,12 +292,12 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 		}
 	}
 }
-void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world)
 {
 
 }
 
-void rituals_contact_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world)
 {
 	
 }
