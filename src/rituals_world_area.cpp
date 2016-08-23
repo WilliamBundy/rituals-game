@@ -292,7 +292,7 @@ void world_area_process_hitboxes(World_Area* area)
 	}
 	for(isize i = 0; i < 2; ++i) {
 		variance.e[i] = center_sum2.e[i] - center_sum1.e[i] * center_sum1.e[i] / 
-			area->hitbox_count;
+			area->hitboxes_count;
 	}
 
 	if(variance.x > variance.y) {
