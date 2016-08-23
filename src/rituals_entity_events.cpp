@@ -21,6 +21,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->sprite.texture = Get_Texture_Coordinates(
 			enemykind * 32, 10*32, 32, 32);
 	e->sprite.size = v2(32, 32);
+	e->hitbox.box = aabb(0, 0, 16, 16);
 	e->body->shape.center = position;
 	e->sprite.anchor = Anchor_Bottom;
 	e->body->shape.hext = v2(8, 5);
@@ -40,6 +41,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			e->body->flags = Body_Flag_No_Friction;
 			e->sprite.size *= 0.5f;
 			e->body->shape.hext *= 0.5f;
+			e->hitbox.box.hext *= 0.5f;
 			break;
 		case EnemyKind_Snake:
 			enemy->speed = 200;
@@ -48,6 +50,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->snake.chase_speed_modifier = 3.0f;
 			e->sprite.size *= 0.75f;
 			e->body->shape.hext *= 0.75f;
+			e->hitbox.box.hext *= 0.75f;
 			break;
 		case EnemyKind_Goblin_Knight:
 			enemy->goblin_knight.patrol_start = e->sprite.position;

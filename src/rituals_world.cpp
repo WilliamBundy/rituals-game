@@ -264,15 +264,16 @@ void world_area_render(World_Area* area, World* world)
 		
 		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
+		draw_box_outline(e->hitbox.box, e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
 	}
 	renderer_sort(sprite_count_offset);
 
-#if 0
+#if 1
 	for(isize i = 0; i < area->sim.bodies_count; ++i) {
 		Sim_Body* b = area->sim.bodies + i;
 
 		if (b == NULL) continue;
-		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(1, 1, 1, 1), 1);
+		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(.6f, 1, .6f, 1), 1);
 	}
 #endif
 	renderer_draw();
