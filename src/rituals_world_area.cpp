@@ -285,9 +285,19 @@ void world_area_process_hitboxes(World_Area* area)
 				}
 			}
 
-
-
+			if(aabb_intersect(&a->box, &b->box)) {
+				//record contact
+			}
 		}
+	}
+	for(isize i = 0; i < 2; ++i) {
+		variance.e[i] = center_sum2.e[i] - center_sum1.e[i] * center_sum1.e[i] / 
+			area->hitbox_count;
+	}
 
+	if(variance.x > variance.y) {
+		area->hitbox_sort_axis = 0;
+	} else {
+		area->hitbox_sort_axis = 1;
 	}
 }

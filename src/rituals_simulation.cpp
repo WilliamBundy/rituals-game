@@ -162,7 +162,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 
 			//if(a->is_static) continue;
 
-			for(isize j = i + 1; j < sim->bodies_count; ++j) {
+			for(isize j = i + 1; j < sim->bodies_count; ++j) {,
 				b = sim->bodies + j;
 
 				uint64 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
