@@ -337,24 +337,27 @@ void world_area_update(World_Area* area, World* world)
 	world_area_render(area, world);
 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-		Entity* e = world_area_get_next_entity(area);
-		e->kind = EntityKind_Prop;
-		e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 1, 1, 1));
-		e->sprite.position += v2(
-				rand_range(&Game->r, -2, 2),
-				rand_range(&Game->r, -2, 2));
-		e->body->shape.center = e->sprite.position;
-		e->sprite.anchor = Anchor_Bottom;
-		e->body->shape.hext = v2(1, 1);
-		e->body->flags = Body_Flag_No_Friction;
-		e->body->damping = 1.0f;
+		for(isize i = 0; i < 8; ++i) {
+			Entity* e = world_area_get_next_entity(area);
+			e->kind = EntityKind_Prop;
+			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 1, 1, 1));
+			e->sprite.position += v2(
+					rand_range(&Game->r, -2, 2),
+					rand_range(&Game->r, -2, 2));
+			e->body->shape.center = e->sprite.position;
+			e->sprite.anchor = Anchor_Bottom;
+			e->body->shape.hext = v2(1, 1);
+			e->body->flags = Body_Flag_No_Friction;
+			e->body->damping = 1.0f;
 
-		Vec2 dmouse = e->sprite.position - Input->mouse_pos; 
-		real a = v2_to_angle(dmouse);
-		a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
+			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
+			real a = v2_to_angle(dmouse);
+			a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
 
-		e->body->velocity = v2_from_angle(a) * 100;
+			e->body->velocity = v2_from_angle(a) * 100;
 
+			
+		}
 	}
 }
 
