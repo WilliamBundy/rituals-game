@@ -360,6 +360,8 @@ void world_area_update(World_Area* area, World* world)
 			e->body->velocity = v2_from_angle(a) * 800;
 		}
 	}
+	world_area_hit_entities(area, world);
+	world_area_contact_entities(area, world);
 }
 
 
