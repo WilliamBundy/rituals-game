@@ -257,7 +257,7 @@ void world_area_process_hitboxes(World_Area* area)
 {
 	if(area->hitboxes_count == 0) return;
 
-	area->hitbox_contact_count = 0;
+	area->hitbox_contacts_count = 0;
 
 	if(area->hitbox_sort_axis == 0) {
 		_hitbox_sort_on_x_axis(area->hitboxes, area->hitboxes_count);
