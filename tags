@@ -1886,6 +1886,9 @@ held_entity_id	src/rituals_game_info.cpp	/^		isize held_entity_id;$/;"	m	struct:
 hext	src/rituals_math.cpp	/^				Vec2 hext;$/;"	m	struct:AABB::__anon5::__anon6::__anon8	file:
 hh	src/rituals_math.cpp	/^				real hw, hh;$/;"	m	struct:AABB::__anon5::__anon6::__anon7	file:
 hitbox	src/rituals_world_area.cpp	/^	Hitbox hitbox;$/;"	m	struct:Entity	file:
+hitbox_contact_capacity	src/rituals_world_area.cpp	/^	isize hitbox_contact_count, hitbox_contact_capacity;$/;"	m	struct:World_Area	file:
+hitbox_contact_count	src/rituals_world_area.cpp	/^	isize hitbox_contact_count, hitbox_contact_capacity;$/;"	m	struct:World_Area	file:
+hitbox_contacts	src/rituals_world_area.cpp	/^	Hitbox_Contact* hitbox_contacts;$/;"	m	struct:World_Area	file:
 hitbox_mask	src/rituals_world_area.cpp	/^	uint64 hitbox_mask;$/;"	m	struct:Entity	file:
 hitbox_sort_axis	src/rituals_world_area.cpp	/^	int32 hitbox_sort_axis;$/;"	m	struct:World_Area	file:
 hitboxes	src/rituals_world_area.cpp	/^	Hitbox* hitboxes;$/;"	m	struct:World_Area	file:

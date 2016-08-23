@@ -106,6 +106,9 @@ struct World_Area
 	Hitbox* hitboxes;
 	isize hitboxes_count, hitboxes_capacity;
 	int32 hitbox_sort_axis;
+	Hitbox_Contact* hitbox_contacts;
+	isize hitbox_contact_count, hitbox_contact_capacity;
+
 	
 	Entity* player;
 
@@ -254,6 +257,8 @@ void world_area_process_hitboxes(World_Area* area)
 {
 	if(area->hitboxes_count == 0) return;
 
+	area->hitbox_contact_count = 0;
+
 	if(area->hitbox_sort_axis == 0) {
 		_hitbox_sort_on_x_axis(area->hitboxes, area->hitboxes_count);
 	} else {
@@ -286,7 +291,13 @@ void world_area_process_hitboxes(World_Area* area)
 			}
 
 			if(aabb_intersect(&a->box, &b->box)) {
-				//record contact
+				if(area->hitbox_contacts_count >= area->hitbox_contacts_capacity) {
+					printf("Ran out of contacts \n");
+					return;
+				}
+				Hitbox_Contact* c = area->hitbox_contacts + area->hitbox_contacts_count++;
+				c->a_id = a->id;
+				c->b_id = b->id;
 			}
 		}
 	}
