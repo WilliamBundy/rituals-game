@@ -357,6 +357,12 @@ static inline AABB aabb(Vec2 c, real hw, real hh)
 	};
 }
 
+static inline AABB aabb(real x, real y, real hw, real hh)
+{
+	return AABB{
+		v2(x, y), hw, hh
+	};
+}
 
 static inline Rect2 rect2(real x, real y, real w, real h)
 {

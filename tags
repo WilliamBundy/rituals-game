@@ -1261,6 +1261,7 @@ a2	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struc
 a3	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 a_id	src/rituals_simulation.cpp	/^	isize a_id;$/;"	m	struct:Sim_Contact	file:
 aabb	src/rituals_math.cpp	/^static inline AABB aabb(Vec2 c, real hw, real hh)$/;"	f	file:
+aabb	src/rituals_math.cpp	/^static inline AABB aabb(real x, real y, real hw, real hh)$/;"	f	file:
 aabb_intersect	src/rituals_math.cpp	/^static inline bool aabb_intersect(AABB a, AABB b)$/;"	f	file:
 aabb_intersect	src/rituals_math.cpp	/^static inline bool aabb_intersect(AABB* a, AABB* b)$/;"	f	file:
 aabb_overlap	src/rituals_math.cpp	/^static inline void aabb_overlap(AABB* a, AABB* b, Vec2* s)$/;"	f	file:
