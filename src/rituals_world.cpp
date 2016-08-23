@@ -268,7 +268,7 @@ void world_area_render(World_Area* area, World* world)
 	}
 	renderer_sort(sprite_count_offset);
 
-#if 1
+#if 0
 	for(isize i = 0; i < area->sim.bodies_count; ++i) {
 		Sim_Body* b = area->sim.bodies + i;
 
