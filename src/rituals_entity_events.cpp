@@ -21,7 +21,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->sprite.texture = Get_Texture_Coordinates(
 			enemykind * 32, 10*32, 32, 32);
 	e->sprite.size = v2(32, 32);
-	e->hitbox.box = aabb(e->sprite.size * -0.5f, 16, 16);
+	e->hitbox.box = aabb(v2(0, e->sprite.size.y * -0.5f), 16, 16);
 	e->body->shape.center = position;
 	e->sprite.anchor = Anchor_Bottom;
 	e->body->shape.hext = v2(8, 5);
