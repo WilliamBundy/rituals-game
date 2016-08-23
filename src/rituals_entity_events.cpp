@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
-Entity* rituals_spawn_enemy(World_Area* a, isize enemykind, Vec2 position) 
+Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position) 
 {
 	Entity* e = world_area_get_next_entity(area);
 	e->kind = EntityKind_Enemy;

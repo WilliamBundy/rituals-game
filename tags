@@ -2196,7 +2196,7 @@ rituals_animate_entities	src/rituals_entity_events.cpp	/^void rituals_animate_en
 rituals_contact_entities	src/rituals_entity_events.cpp	/^void rituals_contact_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_hit_entities	src/rituals_entity_events.cpp	/^void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_interact_entities	src/rituals_entity_events.cpp	/^void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
-rituals_spawn_enemy	src/rituals_entity_events.cpp	/^Entity* rituals_spawn_enemy(World_Area* a, isize enemykind, Vec2 position) $/;"	f
+rituals_spawn_enemy	src/rituals_entity_events.cpp	/^Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position) $/;"	f
 rituals_walk_entities	src/rituals_entity.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity_events.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rp1	src/rituals_math.cpp	/^	Vec2 rp1;$/;"	m	struct:Rect2_Clip_Info	file:
