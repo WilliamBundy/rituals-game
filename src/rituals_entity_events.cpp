@@ -74,16 +74,15 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 					// but.... this code doesn't do that.
 				case EnemyKind_Bat:
 					if(enemy->mode == 0) {
-						if(mag < (enemy->alert_dist * enemy->alert_dist)) {
+						dpos = e->body->shape.center - enemy->bat.perch;
+						real player_dist = mag;
+						mag = v2_dot(dpos, dpos);
+						if(mag > 16) {
+							real angle = atan2f(dpos.y, dpos.x);
+							walk.x = cosf(angle) * -enemy->speed;
+							walk.y = sinf(angle) * -enemy->speed;
+						} else if(player_dist < (enemy->alert_dist * enemy->alert_dist)) {
 							enemy->mode = 1;
-						} else {
-							dpos = e->body->shape.center - enemy->bat.perch;
-							mag = v2_dot(dpos, dpos);
-							if(mag > 16) {
-								real angle = atan2f(dpos.y, dpos.x);
-								walk.x = cosf(angle) * -enemy->speed;
-								walk.y = sinf(angle) * -enemy->speed;
-							}
 						}
 					} else if(enemy->mode == 1) {
 						Vec2 perch_dpos = e->body->shape.center - enemy->bat.perch;
