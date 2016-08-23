@@ -255,7 +255,7 @@ void world_area_build_hitboxes(World_Area* area)
 		h->box.center = e->sprite.position + box.center;
 		if(v2_dot(box.hext, box.hext) > 1) {
 			h->box.hext = e->body->shape.hext;
-			e->hitbox.box.hext = h->box.hext;
+		//	e->hitbox.box.hext = h->box.hext;
 		} else {
 			h->box.hext = box.hext;
 		}
