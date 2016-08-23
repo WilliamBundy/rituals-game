@@ -28,7 +28,7 @@ struct Hitbox
 };
 #define _hitbox_get_x1(h) (AABB_x1(h.box))
 GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
-#define _hitboy_get_y1(h) (AABB_y1(h.boy))
+#define _hitbox_get_y1(h) (AABB_y1(h.boy))
 GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
 
 struct Entity
