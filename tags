@@ -1,8 +1,8 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	241;"	d	file:
-AABB_x2	src/rituals_math.cpp	242;"	d	file:
-AABB_y1	src/rituals_math.cpp	243;"	d	file:
-AABB_y2	src/rituals_math.cpp	244;"	d	file:
+AABB_x1	src/rituals_math.cpp	253;"	d	file:
+AABB_x2	src/rituals_math.cpp	254;"	d	file:
+AABB_y1	src/rituals_math.cpp	255;"	d	file:
+AABB_y2	src/rituals_math.cpp	256;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	172;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
@@ -2600,7 +2600,9 @@ v2	src/rituals_math.cpp	/^static inline Vec2 v2(real x, real y)$/;"	f	file:
 v2_cross	src/rituals_math.cpp	/^inline real v2_cross(Vec2 a, Vec2 b)$/;"	f
 v2_dot	src/rituals_math.cpp	/^inline real v2_dot(Vec2 a, Vec2 b)$/;"	f
 v2_from_angle	src/rituals_math.cpp	/^inline Vec2 v2_from_angle(real normal)$/;"	f
+v2_normalize	src/rituals_math.cpp	/^inline Vec2 v2_normalize(Vec2 v)$/;"	f
 v2_perpendicular	src/rituals_math.cpp	/^inline Vec2 v2_perpendicular(Vec2 v)$/;"	f
+v2_to_angle	src/rituals_math.cpp	/^inline real v2_to_angle(Vec2 v)$/;"	f
 v2i	src/rituals_math.cpp	/^static inline Vec2i v2i(Vec2 v)$/;"	f	file:
 v2i	src/rituals_math.cpp	/^static inline Vec2i v2i(int32 x, int32 y)$/;"	f	file:
 v4	src/rituals_math.cpp	/^Vec4 v4(real x, real y, real z, real w)$/;"	f

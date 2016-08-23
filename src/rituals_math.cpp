@@ -222,6 +222,18 @@ inline Vec2 v2_from_angle(real normal)
 	};
 }
 
+inline real v2_to_angle(Vec2 v)
+{
+	return atan2f(v.y, v.x);
+}
+
+inline Vec2 v2_normalize(Vec2 v)
+{
+	real mag = sqrt(v.x*v.x + v.y * v.y);
+	return v2(v.x / mag, v.y / mag);
+}
+
+
 union AABB
 {
 	struct {
