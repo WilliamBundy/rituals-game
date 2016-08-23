@@ -354,7 +354,7 @@ void world_area_update(World_Area* area, World* world)
 			real a = v2_to_angle(dmouse);
 			a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
 
-			e->body->velocity = v2_from_angle(a) * 100;
+			e->body->velocity = v2_from_angle(a) * 800;
 
 			
 		}
