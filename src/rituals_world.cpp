@@ -185,8 +185,8 @@ void generate_world(char* name, World* world)
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world);
-void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world)
-void rituals_contact_enemies(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_hit_entities(Entity* entities, isize count, World_Area* area, World* world);
+void rituals_contact_enemies(Entity* entities, isize count, World_Area* area, World* world);
 
 void world_area_walk_entities(World_Area* area, World* world)
 {
