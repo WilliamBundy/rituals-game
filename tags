@@ -70,6 +70,7 @@ EntityEvent_Interact	src/rituals_game_info.cpp	/^	EntityEvent_Interact = Flag(2)
 EntityEvent_Sim	src/rituals_game_info.cpp	/^	EntityEvent_Sim = Flag(0),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_SlowTick	src/rituals_game_info.cpp	/^	EntityEvent_SlowTick = Flag(6),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_Walk	src/rituals_game_info.cpp	/^	EntityEvent_Walk = Flag(1),$/;"	e	enum:Entity_Event_Type	file:
+EntityKind_Bullet	src/rituals_game_info.cpp	/^	EntityKind_Bullet,$/;"	e	enum:Rituals_Entity_Kinds	file:
 EntityKind_Enemy	src/rituals_game_info.cpp	/^	EntityKind_Enemy,$/;"	e	enum:Rituals_Entity_Kinds	file:
 EntityKind_Player	src/rituals_game_info.cpp	/^	EntityKind_Player,$/;"	e	enum:Rituals_Entity_Kinds	file:
 EntityKind_Prop	src/rituals_game_info.cpp	/^	EntityKind_Prop,$/;"	e	enum:Rituals_Entity_Kinds	file:

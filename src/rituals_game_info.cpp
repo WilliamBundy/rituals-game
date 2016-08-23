@@ -107,6 +107,7 @@ enum Rituals_Entity_Kinds
 	EntityKind_Static,
 	EntityKind_Player,
 	EntityKind_Enemy,
+	EntityKind_Bullet,
 };
 
 enum Rituals_Enemy_Kind

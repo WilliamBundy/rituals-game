@@ -298,6 +298,31 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 		Hitbox_Contact* c = contacts + i;
 		Entity* a = c->a;
 		Entity* b = c->b;
+
+		//This saves us permutations:
+		//the order of a/b doesn't matter, so we sort by
+		//their kind, from rituals_game_info.cpp
+		if(a->kind > b->kind) {
+			Entity* tmp = b;
+			b = a;
+			a = tmp;
+		}
+
+		switch(a->kind) {
+			case EntityKind_Player:
+				break;
+			case EntityKind_Enemy:
+				if(b->kind == EntityKind_Bullet) {
+					a->health -= b->attack;
+					if(a->health <= 0) {
+						a->kind = EntityKind_Prop;
+						a->body->flags = Body_Flag_Sensor;
+						a->sprite.color.w = 0.5f;
+					}
+				}
+				break;
+		}
+		
 		
 	}
 }
