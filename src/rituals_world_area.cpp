@@ -14,12 +14,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 
+struct Hitbox_Contact
+{
+	isize a_id;
+	isize b_id;
+};
+
 struct Hitbox
 {
-	isize body_id;
-	Vec2 pos;
+	isize id;
+	uint64 mask;
 	AABB box;
 };
+#define _hitbox_get_x1(h) (AABB_x1(h.box))
+GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
+#define _hitboy_get_y1(h) (AABB_y1(h.boy))
+GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
 
 struct Entity
 {
@@ -95,6 +105,7 @@ struct World_Area
 
 	Hitbox* hitboxes;
 	isize hitboxes_count, hitboxes_capacity;
+	int32 hitbox_sort_axis;
 	
 	Entity* player;
 
@@ -221,7 +232,6 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 	}
 }
 
-
 void world_area_build_hitboxes(World_Area* area)
 {
 	area->hitboxes_count = 0;
@@ -229,6 +239,7 @@ void world_area_build_hitboxes(World_Area* area)
 		Entity* e = area->entities + i;
 		if(e->body == NULL) continue;
 		Hitbox* h = area->hitboxes + area->hitboxes_count++;
+		h->id = e->id;
 		AABB box = e->hitbox.box;
 		h->box.center = e->body->shape.center + box.center;
 		if(v2_dot(box.hext, box.hext) > 1) {
@@ -236,11 +247,47 @@ void world_area_build_hitboxes(World_Area* area)
 		} else {
 			h->box.hext = box.hext;
 		}
-
 	}
 }
 
 void world_area_process_hitboxes(World_Area* area)
 {
+	if(area->hitboxes_count == 0) return;
 
+	if(area->hitbox_sort_axis == 0) {
+		_hitbox_sort_on_x_axis(area->hitboxes, area->hitboxes_count);
+	} else {
+		_hitbox_sort_on_y_axis(area->hitboxes, area->hitboxes_count);
+	}
+	Vec2 center_sum1 = v2(0, 0);
+	Vec2 center_sum2 = v2(0, 0);
+	Vec2 variance = v2(0, 0);
+	for(isize i = 0; i < area->hitboxes_count; ++i) {
+		Hitbox* a = area->hitboxes + i;
+		center_sum1 += a->box.center;
+		for(isize q = 0; q < 2; ++q) {
+			center_sum2.e[q] += a->box.center.e[q] * a->box.center.e[q];
+		}
+
+		for(isize j = i + 1; j < area->hitboxes_count; ++j) {
+			Hitbox* b = area->hitboxes + j;
+			if(!(a->mask == 0 && b->mask == 0)) {
+				if(!(a->mask & b->mask)) break;
+			}
+
+			if(area->hitbox_sort_axis == 0) {
+				if(AABB_x1(b->box) > AABB_x2(a->box)) {
+					break;
+				}
+			} else if(area->hitbox_sort_axis == 1) {
+				if(AABB_y1(b->box) > AABB_y2(a->box)) {
+					break;
+				}
+			}
+
+
+
+		}
+
+	}
 }
