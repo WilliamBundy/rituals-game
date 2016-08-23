@@ -60,10 +60,6 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	return e;
 }
 
-
-
-
-
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 #define _scancode(s1) ((Input->scancodes[SDL_SCANCODE_##s1]))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)

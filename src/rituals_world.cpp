@@ -63,6 +63,7 @@ World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 }
 
 //TODO(will) call init_world_area on area before calling
+Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position);
 void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 {
 	area->stub = stub;
@@ -110,6 +111,18 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		}
 		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
 	}
+
+	for(isize i = 0; i < 64; ++i) {
+		Vec2 pos;
+		do {
+			pos = v2(
+					rand_range(r, 0, area->map.w * 32),
+					rand_range(r, 0, area->map.h * 32));
+		}
+		while (Registry->tiles[tilemap_get_at(&area->map, pos)].solid);
+		rituals_spawn_enemy(area, rand_range_int(r, 0, 4), pos);
+	}
+
 	generate_statics_for_tilemap(&area->sim, &area->map);
 	world_area_init_player(area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight /2));
 }
