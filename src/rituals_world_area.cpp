@@ -253,11 +253,12 @@ void world_area_build_hitboxes(World_Area* area)
 		h->ref = e;
 		AABB box = e->hitbox.box;
 		h->box.center = e->sprite.position + box.center;
+		//if the entity's box is set
 		if(v2_dot(box.hext, box.hext) > 1) {
 			h->box.hext = box.hext;
-			e->hitbox.box.hext = box.hext;
 		} else {
 			h->box.hext = e->body->shape.hext;
+			e->hitbox.box.hext = box.hext;
 		}
 	}
 }
