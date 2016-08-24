@@ -349,7 +349,7 @@ void world_area_update(World_Area* area, World* world)
 			e->body->shape.center = e->sprite.position;
 			e->sprite.anchor = Anchor_Bottom;
 			e->body->shape.hext = v2(1, 1);
-			e->body->flags = Body_Flag_No_Friction && Body_Flag_Always_Contact;
+			e->body->flags = Body_Flag_No_Friction | Body_Flag_Always_Contact;
 			e->body->damping = 1.0f;
 			e->body->mask = 1;
 			e->body->group = 1;
