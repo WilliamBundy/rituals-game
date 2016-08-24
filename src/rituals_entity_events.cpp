@@ -316,6 +316,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 				if(b->kind == EntityKind_Bullet) {
 					a->health -= b->attack;
 					a->body->velocity += b->body->velocity * 4;
+					a->userdata.enemy.mode = 1;
 					if(a->health <= 0) {
 						world_area_remove_entity(area, a);
 					}
