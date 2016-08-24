@@ -320,9 +320,9 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 			case EntityKind_Player:
 				if(b->kind == EntityKind_Enemy) {
 					a->health -= b->attack;
-					real a = v2_to_angle(b->walk_impulse);
-					a += rand_range(&Game->r, -10, 10) * Math_Deg2Rad;
-					a->body->velocity += (v2_from_angle(a) * b->knockback);
+					real angle = v2_to_angle(b->walk_impulse);
+					angle += rand_range(&Game->r, -10, 10) * Math_Deg2Rad;
+					a->body->velocity += (v2_from_angle(angle) * b->knockback);
 				}
 				break;
 			case EntityKind_Enemy:
