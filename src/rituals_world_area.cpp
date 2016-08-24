@@ -250,9 +250,6 @@ void world_area_process_removed_entities(World_Area* area)
 		isize e = area->removed_entities[i];
 		world_area_remove_entity_internal(area, e);
 	}
-	if(area->removed_entities_count != 0) {
-		printf("\n\n");
-	}
 	area->removed_entities_count = 0;
 }
 
