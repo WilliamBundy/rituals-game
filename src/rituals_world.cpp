@@ -23,6 +23,10 @@ struct World
 
 	World_Area* current_area;
 	usize seed;
+
+	Entity global_player_entity;
+	Sim_Body global_player_body;
+
 };
 
 void init_world(World* world, isize width, isize height, usize seed, Memory_Arena* arena)
@@ -35,6 +39,18 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	world->areas_height = height;
 	world->next_area_id = 0;
 	world->current_area = NULL;
+
+	Entity* e = &world->global_player_entity;
+	Sim_Body* b = &world->global_player_body;
+	e->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
+	b->shape.hext = v2(5, 5);
+	e->sprite.size = v2(32, 32);
+	b->group = 1;
+	e->sprite.anchor = Anchor_Bottom;
+	b->damping = 0.5f;
+	b->restitution = 0;
+	b->flags = Body_Flag_No_Friction;
+	e->kind = EntityKind_b;
 }
 
 void deserialize_area(World_Area* area, FILE* file, Memory_Arena* arena);
@@ -133,7 +149,7 @@ void serialize_world(World* world);
 void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)
 {
 	if(link.link == NULL) return;
-	//world_area_deinit_player(world->current_area);
+	world_area_deinit_player(world->current_area);
 	//TODO(will) free old current area
 	
 	serialize_world(world);

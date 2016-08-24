@@ -112,7 +112,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  * TODO(will) bugs???
  * 	- Gotta fix entity serialization
- * 	- For some reason, player is barraged by monsters? on level start
  * 	- Maybe store player entity/body raw in world, copy into to entity 0 slot
  * 		on load?
  */
