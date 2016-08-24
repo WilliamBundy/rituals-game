@@ -344,11 +344,11 @@ void world_area_update(World_Area* area, World* world)
 			e->kind = EntityKind_Bullet;
 			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 1, 1, 1));
 			e->sprite.position += v2(
-					rand_range(&Game->r, -2, 2),
-					rand_range(&Game->r, -2, 2));
+					rand_range(&Game->r, -3, 3),
+					rand_range(&Game->r, -3, 3));
 			e->body->shape.center = e->sprite.position;
 			e->sprite.anchor = Anchor_Bottom;
-			e->body->shape.hext = v2(2, 2);
+			e->body->shape.hext = v2(1, 1);
 			e->body->flags = Body_Flag_No_Friction;
 			e->body->damping = 1.0f;
 			e->body->mask = 1;
@@ -356,7 +356,6 @@ void world_area_update(World_Area* area, World* world)
 			e->attack = 5;
 			e->hitbox.mask = Flag(2);
 			e->hitbox.box.hext = e->body->shape.hext;
-			e->body->shape.hext *= 0.5f;
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
