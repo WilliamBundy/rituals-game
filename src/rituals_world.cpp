@@ -271,8 +271,10 @@ void world_area_render(World_Area* area, World* world)
 	renderer_sort(sprite_count_offset);
 
 	char buf[256];
+	Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
+		if(e->kind == EntityKind_Bullet) continue;
 		snprintf(buf, 256, "%d", e->health);
 		render_body_text(buf, e->sprite.position - e->sprite.size - v2(0, 16), true);
 	}
