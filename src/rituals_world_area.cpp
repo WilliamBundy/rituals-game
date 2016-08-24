@@ -251,6 +251,7 @@ void world_area_process_removed_entities(World_Area* area)
 		world_area_remove_entity_internal(area, e);
 	}
 	area->removed_entities_count = 0;
+	printf("\n\n");
 }
 
 //Make a player struct?
