@@ -311,6 +311,7 @@ void world_area_update(World_Area* area, World* world)
 	game_calc_mouse_pos(area->offset - Game->size * 0.5f);
 	//Simulation timing
 	
+	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
 	if(!play_state->running) {
 		world_area_render(area, world);
@@ -322,7 +323,7 @@ void world_area_update(World_Area* area, World* world)
 	dt = clamp(dt, 0, 1.2f);
 	play_state->accumulator += dt;
 	play_state->prev_time = play_state->current_time;
-	sim_sort_bodies_on_id(&area->sim);
+	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
 
 	world_area_walk_entities(area, world);
