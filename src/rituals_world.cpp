@@ -268,7 +268,7 @@ void world_area_render(World_Area* area, World* world)
 				for(isize i = 0; i < 16; ++i) {
 					renderer_push_sprite(&s);
 					s.position -= v / 16;
-					s.color.w = lerp(i/16.0, 1.0f, 0.5f);
+					s.color.w = lerp(1.0f, 0.5f, i/16.0);
 				}
 			}
 			renderer_push_sprite(&e->sprite);
