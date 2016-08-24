@@ -106,7 +106,7 @@ struct World_Area
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
 
-	Entity** removed_entities;
+	isize* removed_entities;
 	isize removed_entities_count, removed_entities_capacity;
 
 
@@ -134,7 +134,7 @@ void init_world_area(World_Area* area, Memory_Arena* arena)
 	area->entities_count = 0;
 	area->entities_capacity = WorldAreaEntityCapacity;
 	area->removed_entities_capacity = 256;
-	area->removed_entities = arena_push_array(arena, Entity*, WorldAreaEntityCapacity);
+	area->removed_entities = arena_push_array(arena, isize*, WorldAreaEntityCapacity);
 	area->removed_entities_count = 0;
 	area->next_entity_id = 0;
 	area->entities_dirty = false;
@@ -194,7 +194,7 @@ void world_area_sort_entities_on_id(World_Area* area)
 void world_area_synchronize_entities_and_bodies(World_Area* area)
 {
 	world_area_sort_entities_on_id(area);
-	sim_sort_bodies_on_id(&area->sim);
+	//sim_sort_bodies_on_id(&area->sim);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		if(e->body_id == -1) continue;
@@ -214,23 +214,23 @@ bool world_area_remove_entity(World_Area* area, Entity* entity)
 		printf("Ran out of room for removing entities\n");
 		return true;
 	}
-	area->removed_entities[area->removed_entities_count++] = entity;
+	area->removed_entities[area->removed_entities_count++] = entity->id;
 	return false;
 }
 
-void world_area_remove_entity_internal(World_Area* area, Entity* entity)
+void world_area_remove_entity_internal(World_Area* area, isize id)
 {
+	isize index = entity_search_for_id(id, area->entities, area->entities_count);
+	Entity* entity = area->entities + index;
 	sim_remove_body(&area->sim, entity->body_id);
-	isize index = entity_search_for_id(entity->id, area->entities, area->entities_count);
 	area->entities[index] = area->entities[--area->entities_count];
-	world_area_sort_entities_on_id(area);
 	world_area_synchronize_entities_and_bodies(area);
 }
 
 void world_area_process_removed_entities(World_Area* area)
 {
 	for(isize i = 0; i < area->removed_entities_count; ++i) {
-		Entity* e = area->removed_entities[i];
+		isize* e = area->removed_entities[i];
 		world_area_remove_entity_internal(area, e);
 	}
 	area->removed_entities_count = 0;
