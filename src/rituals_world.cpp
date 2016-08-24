@@ -279,7 +279,7 @@ void world_area_render(World_Area* area, World* world)
 	Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
-		if(e->kind == EntityKind_Bullet) continue;
+		//if(e->kind == EntityKind_Bullet) continue;
 		snprintf(buf, 256, "%d/%d %d", e->id, e->body_id, e->health);
 		render_body_text(buf, e->sprite.position - v2(0, e->sprite.size.y + 16), true);
 	}
@@ -352,7 +352,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_interact(area, world);
 	world_area_render(area, world);
 
-	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
+	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
 		for(isize i = 0; i < 8; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
@@ -369,7 +369,7 @@ void world_area_update(World_Area* area, World* world)
 			e->body->group = 1;
 			e->attack = 5;
 			e->hitbox.mask = Flag(2);
-			e->hitbox.box.hext = e->body->shape.hext * 1.5f;
+			e->hitbox.box.hext = e->body->shape.hext * 1.5f;;
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);

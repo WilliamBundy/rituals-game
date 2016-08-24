@@ -223,7 +223,7 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
 	if(index == -1) {
-		printf("Trying to remove invalid id %d\n", id);
+		printf("Trying to remove invalid id %d\n" id);
 		return;
 	}
 	Entity* entity = area->entities + index;
