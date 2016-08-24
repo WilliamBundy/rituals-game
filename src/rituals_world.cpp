@@ -262,7 +262,7 @@ void world_area_render(World_Area* area, World* world)
 		if (b != NULL) {
 			e->sprite.position = b->shape.center;
 			e->sprite.position.y += b->shape.hh;
-			/*if(Has_Flag(e->flags, EntityFlag_Tail)) {
+			if(Has_Flag(e->flags, EntityFlag_Tail)) {
 				Vec2 v = b->velocity / 32.0f; 
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
@@ -270,7 +270,7 @@ void world_area_render(World_Area* area, World* world)
 					s.position -= v / 16;
 					s.color.e[3] = lerp(1.0f, 0.0f, i/16.0);
 				}
-			}*/
+			}
 			renderer_push_sprite(&e->sprite);
 		} else {
 			renderer_push_sprite(&e->sprite);

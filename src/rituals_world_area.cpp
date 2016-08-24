@@ -64,7 +64,7 @@ struct Entity
 	Direction direction;
 
 	uint64 events;
-	//uint64 flags;
+	uint64 flags;
 	//void* userdata;
 	Rituals_Entity_Userdata userdata;
 };
@@ -235,7 +235,7 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 		return;
 	}
 	Entity* entity = area->entities + index;
-#if 1
+#if 0
 		Sim_Body* b = entity->body;
 		if(b == NULL) {
 			b = sim_find_body(&area->sim, entity->body_id);
