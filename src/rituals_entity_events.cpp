@@ -319,7 +319,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 			case EntityKind_Player:
 				if(b->kind == EntityKind_Enemy) {
 					a->health -= b->attack;
-					a->body->velocity += b->walk_impulse * 50;
+					a->body->velocity += b->walk_impulse * ,0;
 				}
 				break;
 			case EntityKind_Enemy:
