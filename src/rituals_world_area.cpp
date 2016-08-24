@@ -222,11 +222,14 @@ bool world_area_remove_entity(World_Area* area, Entity* entity)
 void world_area_remove_entity_internal(World_Area* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
+#if 0
 	if(index == -1) {
 		printf("Trying to remove invalid id %d\n", id);
 		return;
 	}
+#endif 
 	Entity* entity = area->entities + index;
+#if 0
 		Sim_Body* b = entity->body;
 		if(b == NULL) {
 			b = sim_find_body(&area->sim, entity->body_id);
@@ -241,6 +244,7 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 					b->shape.center.x,
 					b->shape.center.y);
 		}
+#endif
 	sim_remove_body(&area->sim, entity->body_id);
 	area->entities[index] = area->entities[--area->entities_count];
 	world_area_synchronize_entities_and_bodies(area);
