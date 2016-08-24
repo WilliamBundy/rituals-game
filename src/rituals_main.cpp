@@ -32,7 +32,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 			- Makes drawing UI/adding debug UI elements easier
  * 		- Stitching together texture atlases, changing shaders
  * 		- Small fixes to the way I'm doing some of the math
- *
+ *		- Particle effects
  *  - Physics
  *  	- Static and dynamic friction
  *  	- Look at dynamic tree broadphase
@@ -63,6 +63,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  		- entities are sorted by package and priority
  *  		- pass each package event function a pointer to its entity array
  *  		- ???
+ *  		- Entity render event for entities with procedural/more complicated art than 
+ *  			a simple sprite
  *  	- Implement hitbox system for bullets v. monsters
  *  		- Collision box is small for stability
  *  		- Hitbox needs to be larger for player to hit it.
@@ -107,6 +109,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  	
  * TODO(will) logical fixes
  *  - current/last time/accumulator need to belong to simulation
+ *
+ * TODO(will) bugs???
+ * 	- Monsters sometimes disappear?
  */
 
 //platform imports
