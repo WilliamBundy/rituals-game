@@ -363,7 +363,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_render(area, world);
 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-		for(isize i = 0; i < 4; ++i) {
+		for(isize i = 0; i < 5; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
 			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.6f, 0.5f, 1));
@@ -377,7 +377,7 @@ void world_area_update(World_Area* area, World* world)
 			e->body->damping = 1.0f;
 			e->body->mask = 3;
 			e->body->group = 1;
-			e->attack = 5;
+			e->attack = 6;
 			e->attack += (int32)roundf(rand_range(&Game->r, -0.15, 0.15) * e->attack);
 			e->hitbox.mask = Flag(2);
 			e->hitbox.box.hext = e->body->shape.hext * 1.5f;;
