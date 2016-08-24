@@ -313,6 +313,7 @@ void world_area_update(World_Area* area, World* world)
 	
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
+	area->player->flags = EntityFlag_Tail;
 	if(!play_state->running) {
 		world_area_render(area, world);
 		return;
