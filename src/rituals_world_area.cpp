@@ -106,7 +106,7 @@ struct World_Area
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
 
-	Entity* removed_entities;
+	Entity** removed_entities;
 	isize removed_entities_count, removed_entities_capacity;
 
 

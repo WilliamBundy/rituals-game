@@ -2166,7 +2166,7 @@ register_all_rituals_tile_info	src/rituals_game_registry.cpp	/^void register_all
 register_everything_in_rituals	src/rituals_game_registry.cpp	/^void register_everything_in_rituals()$/;"	f
 registry	src/rituals_game.cpp	/^	Game_Registry* registry;$/;"	m	struct:Game_Main	file:
 registry_arena	src/rituals_game.cpp	/^	Memory_Arena* registry_arena;$/;"	m	struct:Game_Main	file:
-removed_entities	src/rituals_world_area.cpp	/^	Entity** removed_entities;$/;"	m	struct:World_Area	file:
+removed_entities	src/rituals_world_area.cpp	/^	Entity* removed_entities;$/;"	m	struct:World_Area	file:
 removed_entities_capacity	src/rituals_world_area.cpp	/^	isize removed_entities_count, removed_entities_capacity;$/;"	m	struct:World_Area	file:
 removed_entities_count	src/rituals_world_area.cpp	/^	isize removed_entities_count, removed_entities_capacity;$/;"	m	struct:World_Area	file:
 render_body_text	rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position)$/;"	f
