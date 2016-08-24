@@ -363,6 +363,7 @@ void world_area_update(World_Area* area, World* world)
 	}
 	world_area_hit_entities(area, world);
 	world_area_contact_entities(area, world);
+	world_area_process_removed_entites(area);
 }
 
 
