@@ -270,6 +270,13 @@ void world_area_render(World_Area* area, World* world)
 	}
 	renderer_sort(sprite_count_offset);
 
+	char buf[256];
+	for(isize i = 0; i < area->entities_count; ++i) {
+		Entity* e = area->entities + i;
+		snprintf(buf, 256, "%d", e->health);
+		render_body_text(buf, e->sprite.position - e->sprite.size - v2(0, 16), true);
+	}
+
 #if 0
 	for(isize i = 0; i < area->sim.bodies_count; ++i) {
 		Sim_Body* b = area->sim.bodies + i;
