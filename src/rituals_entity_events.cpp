@@ -315,14 +315,9 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 				if(b->kind == EntityKind_Bullet) {
 					a->health -= b->attack;
 					if(a->health <= 0) {
-						a->kind = EntityKind_Prop;
-						a->body->flags = Body_Flag_Sensor;
-						a->sprite.color.w = 0.5f;
+						world_area_remove_entity(a);
 					}
-					b->kind = EntityKind_Prop;
-					b->attack = 0;
-					b->sprite.color.w = 0;
-
+					world_area_remove_entity(b);
 				}
 				break;
 		}
@@ -350,11 +345,8 @@ void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* ar
 
 		if(b->kind == EntityKind_Bullet) {
 			if(a->kind != EntityKind_Bullet) {
-
+				world_area_remove_entity(b);
 			}
 		}
-
-
-		
 	}
 }
