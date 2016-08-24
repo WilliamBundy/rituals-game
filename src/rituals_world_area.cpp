@@ -318,7 +318,7 @@ void world_area_process_hitboxes(World_Area* area)
 		for(isize j = i + 1; j < area->hitboxes_count; ++j) {
 			Hitbox* b = area->hitboxes + j;
 			if(!(a->mask == 0 && b->mask == 0)) {
-				if(!(a->mask & b->mask)) break;
+				//if(!(a->mask & b->mask)) break;
 			}
 
 			if(area->hitbox_sort_axis == 0) {
