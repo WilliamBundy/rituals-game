@@ -29,6 +29,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->body->group = 2;
 	e->attack = 5;
 	e->attack_interval = 0.25f;
+	e->knockback = 500;
 	auto enemy = &e->userdata.enemy;
 	enemy->mode = 0;
 	switch(enemy->kind) {
@@ -319,7 +320,9 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 			case EntityKind_Player:
 				if(b->kind == EntityKind_Enemy) {
 					a->health -= b->attack;
-					a->body->velocity += b->walk_impulse * 20;
+					real a = v2_to_angle(b->walk_impulse);
+					a += rand_range(&Game->r, -10, 10) * Math_Deg2Rad;
+					a->body->velocity += v2_from_angle(a) * b->knockback;
 				}
 				break;
 			case EntityKind_Enemy:

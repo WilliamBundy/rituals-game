@@ -54,6 +54,7 @@ struct Entity
 	int32 attack;
 	real attack_interval;
 	real attack_timer;
+	real knockback;
 	uint64 hitbox_mask;
 
 	Sprite sprite;
