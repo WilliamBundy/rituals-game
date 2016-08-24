@@ -39,7 +39,7 @@ void main()
 	uv.y /= texture_size.y;
 	#endif
 
-	vec4 color = texture(local_texture, uv) * vec4(f_color.rgb, 1) * f_color.aaaa;
+	vec4 color = texture(local_texture, uv) * f_color;// * vec4(f_color.rgb, 1) * f_color.aaaa;
 
 	// Nighttime effect
 	// Darkens everything except very light colors.
