@@ -333,5 +333,28 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 
 void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world)
 {
-	
+	Sim_Area* sim = area->sim;
+	for(isize i = 0; i < count; ++i) {
+		Sim_Contact* c = contacts + i;
+		Sim_Body* body_a = sim_find_body(sim, c->a_id);
+		if(body_a->entity == NULL) continue;
+		Sim_Body* body_b = sim_find_body(sim, c->b_id);
+		if(body_b->entity == NULL) continue;
+		Entity* a = body_a->entity;
+		Entity* b = body_b->entity;
+		if(a->kind > b->kind) {
+			Entity* tmp = b;
+			b = a;
+			a = tmp;
+		}
+
+		if(b->kind == EntityKind_Bullet) {
+			if(a->kind != EntityKind_Bullet) {
+
+			}
+		}
+
+
+		
+	}
 }

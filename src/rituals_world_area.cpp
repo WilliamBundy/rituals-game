@@ -103,9 +103,12 @@ struct World_Area
 	Vec2 target;
 
 	Entity* entities;
-	
 	bool entities_dirty;
 	isize entities_count, entities_capacity, next_entity_id;
+
+	Entity* removed_entities;
+	isize removed_entities_count, removed_entities_capacity;
+
 
 	Hitbox* hitboxes;
 	isize hitboxes_count, hitboxes_capacity;
@@ -130,6 +133,9 @@ void init_world_area(World_Area* area, Memory_Arena* arena)
 	area->entities = arena_push_array(arena, Entity, WorldAreaEntityCapacity);
 	area->entities_count = 0;
 	area->entities_capacity = WorldAreaEntityCapacity;
+	area->removed_entities_capacity = 256;
+	area->removed_entities = arena_push_array(arena, Entity, WorldAreaEntityCapacity);
+	area->removed_entities_count = 0;
 	area->next_entity_id = 0;
 	area->entities_dirty = false;
 	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
@@ -199,13 +205,25 @@ void world_area_synchronize_entities_and_bodies(World_Area* area)
 	}
 }
 
+
+
 void world_area_remove_entity(World_Area* area, Entity* entity)
+{
+	area->removed_entities[area->removed_entities_count++] = entity;
+}
+
+void world_area_remove_entity_internal(World_Area* area, Entity* entity)
 {
 	sim_remove_body(&area->sim, entity->body_id);
 	isize index = entity_search_for_id(entity->id, area->entities, area->entities_count);
 	area->entities[index] = area->entities[--area->entities_count];
 	world_area_sort_entities_on_id(area);
 	world_area_synchronize_entities_and_bodies(area);
+}
+
+void world_area_process_entity_addremove(World_Area* area)
+{
+
 }
 
 //Make a player struct?

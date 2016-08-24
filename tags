@@ -2166,6 +2166,9 @@ register_all_rituals_tile_info	src/rituals_game_registry.cpp	/^void register_all
 register_everything_in_rituals	src/rituals_game_registry.cpp	/^void register_everything_in_rituals()$/;"	f
 registry	src/rituals_game.cpp	/^	Game_Registry* registry;$/;"	m	struct:Game_Main	file:
 registry_arena	src/rituals_game.cpp	/^	Memory_Arena* registry_arena;$/;"	m	struct:Game_Main	file:
+removed_entities	src/rituals_world_area.cpp	/^	Entity* removed_entities;$/;"	m	struct:World_Area	file:
+removed_entities_capacity	src/rituals_world_area.cpp	/^	isize removed_entities_count, removed_entities_capacity;$/;"	m	struct:World_Area	file:
+removed_entities_count	src/rituals_world_area.cpp	/^	isize removed_entities_count, removed_entities_capacity;$/;"	m	struct:World_Area	file:
 render_body_text	rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position)$/;"	f
 render_body_text	src/rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position, bool background=false, real scale = 1.0f)$/;"	f
 render_clip_rect	src/rituals_renderer.cpp	/^void render_clip_rect()$/;"	f
@@ -2640,8 +2643,10 @@ world_area_get_next_entity	src/rituals_world_area.cpp	/^Entity* world_area_get_n
 world_area_hit_entities	src/rituals_world.cpp	/^void world_area_hit_entities(World_Area* area, World* world)$/;"	f
 world_area_init_player	src/rituals_world_area.cpp	/^void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)$/;"	f
 world_area_interact	src/rituals_world.cpp	/^void world_area_interact(World_Area* area, World* world)$/;"	f
+world_area_process_entity_addremove	src/rituals_world_area.cpp	/^void world_area_process_entity_addremove(World_Area* area)$/;"	f
 world_area_process_hitboxes	src/rituals_world_area.cpp	/^void world_area_process_hitboxes(World_Area* area)$/;"	f
 world_area_remove_entity	src/rituals_world_area.cpp	/^void world_area_remove_entity(World_Area* area, Entity* entity)$/;"	f
+world_area_remove_entity_internal	src/rituals_world_area.cpp	/^void world_area_remove_entity_internal(World_Area* area, Entity* entity)$/;"	f
 world_area_render	src/rituals_world.cpp	/^void world_area_render(World_Area* area, World* world)$/;"	f
 world_area_sort_entities_on_id	src/rituals_world_area.cpp	/^void world_area_sort_entities_on_id(World_Area* area)$/;"	f
 world_area_synchronize_entities_and_bodies	src/rituals_world_area.cpp	/^void world_area_synchronize_entities_and_bodies(World_Area* area)$/;"	f

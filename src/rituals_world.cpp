@@ -95,7 +95,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = Get_Texture_Coordinates(0, 5*32, 96, 144);
-		b->shape.hw = 16;
+		e->shape.hw = 16;
 		b->shape.hh = 15;
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
@@ -275,7 +275,7 @@ void world_area_render(World_Area* area, World* world)
 		Sim_Body* b = area->sim.bodies + i;
 
 		if (b == NULL) continue;
-		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(.6f, 1, .6f, 1), 1);
+		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(.6f, 1, .6f, 1), 1);	
 	}
 #endif
 	renderer_draw();
