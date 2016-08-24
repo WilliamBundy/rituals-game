@@ -128,17 +128,17 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 			} else if(height < 0.25f) {
 				//sand
 				tilemap->tiles[index] = Tile_Sand;
-			} else if(height < 0.5f) {
+			} else if(height < 0.4f) {
 				//sparse grass
 				tilemap->tiles[index] = Tile_Grass;
-			} else if(height < 0.65f) {
+			} else if(height < 0.5f) {
 				//dense grass
 				tilemap->tiles[index] = Tile_Dense_Grass;
-			} else if(height < 0.8f) {
+			} else if(height < 0.7f) {
 				// trees
 				tilemap->tiles[index] = Tile_Tree_Wall;
 			} else  {
-				tilemap->tiles[index] = Tile_Slab_Wall;
+				tilemap->tiles[index] = Tile_Tree_Wall;
 			}
 		}
 	}
