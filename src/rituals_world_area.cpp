@@ -207,9 +207,15 @@ void world_area_synchronize_entities_and_bodies(World_Area* area)
 
 
 
-void world_area_remove_entity(World_Area* area, Entity* entity)
+//Returns 1 if failed
+bool world_area_remove_entity(World_Area* area, Entity* entity)
 {
+	if(area->removed_entities_count >= area->removed_entities_capacity) {
+		printf("Ran out of room for removing entities\n");
+		return true;
+	}
 	area->removed_entities[area->removed_entities_count++] = entity;
+	return false;
 }
 
 void world_area_remove_entity_internal(World_Area* area, Entity* entity)
@@ -221,9 +227,13 @@ void world_area_remove_entity_internal(World_Area* area, Entity* entity)
 	world_area_synchronize_entities_and_bodies(area);
 }
 
-void world_area_process_entity_addremove(World_Area* area)
+void world_area_process_removed_entities(World_Area* area)
 {
-
+	for(isize i = 0; i < area->removed_entities_count; ++i) {
+		Entity* e = area->removed_entities[i];
+		world_area_remove_entity_internal(area, entity);
+	}
+	area->removed_entities_count = 0;
 }
 
 //Make a player struct?

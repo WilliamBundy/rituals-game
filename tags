@@ -2643,9 +2643,9 @@ world_area_get_next_entity	src/rituals_world_area.cpp	/^Entity* world_area_get_n
 world_area_hit_entities	src/rituals_world.cpp	/^void world_area_hit_entities(World_Area* area, World* world)$/;"	f
 world_area_init_player	src/rituals_world_area.cpp	/^void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)$/;"	f
 world_area_interact	src/rituals_world.cpp	/^void world_area_interact(World_Area* area, World* world)$/;"	f
-world_area_process_entity_addremove	src/rituals_world_area.cpp	/^void world_area_process_entity_addremove(World_Area* area)$/;"	f
 world_area_process_hitboxes	src/rituals_world_area.cpp	/^void world_area_process_hitboxes(World_Area* area)$/;"	f
-world_area_remove_entity	src/rituals_world_area.cpp	/^void world_area_remove_entity(World_Area* area, Entity* entity)$/;"	f
+world_area_process_removed_entities	src/rituals_world_area.cpp	/^void world_area_process_removed_entities(World_Area* area)$/;"	f
+world_area_remove_entity	src/rituals_world_area.cpp	/^bool world_area_remove_entity(World_Area* area, Entity* entity)$/;"	f
 world_area_remove_entity_internal	src/rituals_world_area.cpp	/^void world_area_remove_entity_internal(World_Area* area, Entity* entity)$/;"	f
 world_area_render	src/rituals_world.cpp	/^void world_area_render(World_Area* area, World* world)$/;"	f
 world_area_sort_entities_on_id	src/rituals_world_area.cpp	/^void world_area_sort_entities_on_id(World_Area* area)$/;"	f
