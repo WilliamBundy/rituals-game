@@ -260,15 +260,25 @@ void world_area_render(World_Area* area, World* world)
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 
 		if (b != NULL) {
-
-		// continue;
-		e->sprite.position = b->shape.center;
-		e->sprite.position.y += b->shape.hh;
-		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
+			e->sprite.position = b->shape.center;
+			e->sprite.position.y += b->shape.hh;
+			if(Has_Flag(e->flags, EntityFlag_Tail)) {
+				Vec2 v = b->velocity; 
+				Vec2 p = e->sprite.position - b->velocity * dt;
+				v /= 16;
+				Sprite s = e->sprite;
+				for(isize i = 0; i < 16; ++i) {
+					renderer_push_sprite(&s);
+					s.position += v;
+				}
+			} else {
+				renderer_push_sprite(&e->sprite);
+			}
+		} else {
+			renderer_push_sprite(&e->sprite);
 		}
 		
 		//TODO(will) align entity sprites by their bottom center
-		renderer_push_sprite(&e->sprite);
 #if 0
 		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
 #endif
@@ -376,7 +386,7 @@ void world_area_update(World_Area* area, World* world)
 			real a = v2_to_angle(dmouse);
 			a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
 
-			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 400));
+			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));
 		}
 	}
 	world_area_hit_entities(area, world);

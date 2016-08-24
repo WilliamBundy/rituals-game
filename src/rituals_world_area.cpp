@@ -35,6 +35,13 @@ GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
 #define _hitbox_get_y1(h) (AABB_y1(h.box))
 GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
 
+enum Entity_Flags
+{
+	EntityFlag_None,
+	EntityFlag_Tail = Flag(1)
+};
+
+
 struct Entity
 {
 	isize id;
@@ -57,6 +64,7 @@ struct Entity
 	Direction direction;
 
 	uint64 events;
+	uint64 flags;
 	//void* userdata;
 	Rituals_Entity_Userdata userdata;
 };
