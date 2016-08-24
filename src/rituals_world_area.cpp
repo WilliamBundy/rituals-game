@@ -252,6 +252,7 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=t
 	player_entity->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
 	player->shape.hext = v2(5, 5);
 	player_entity->sprite.size = v2(32, 32);
+	player->group = 1;
 	//player_entity->sprite.center = v2(0,11);
 	player_entity->sprite.anchor = Anchor_Bottom;
 	player->damping = 0.5f;
