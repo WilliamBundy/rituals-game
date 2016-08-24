@@ -17,7 +17,8 @@ enum Sim_Body_Flags
 	Body_Flag_None,
 	Body_Flag_Static = Flag(1),
 	Body_Flag_No_Friction = Flag(2),
-	Body_Flag_Sensor = Flag(3)
+	Body_Flag_Sensor = Flag(3),
+	Body_Flag_Always_Contact = Flag(4),
 };
 
 
@@ -202,7 +203,10 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 						aabb_intersect(&a->shape, &b->shape);
 					}
 
-					if(capture_contacts	&& (times == 0 || times == 1)) {
+					if(capture_contacts && 
+							((times == 1) || 
+							Has_Flag(a->flags, Body_Flag_Always_Contact) || 
+							Has_Flag(b->flags, Body_Flag_Always_Contact))) {
 						Sim_Contact c;
 						c.a_id = a->id;
 						c.b_id = b->id;

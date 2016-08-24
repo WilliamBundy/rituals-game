@@ -26,9 +26,10 @@ Ascii_Printable_End	rituals_gui.cpp	7;"	d	file:
 Ascii_Printable_Start	rituals_gui.cpp	6;"	d	file:
 Backspace	src/rituals_game.cpp	381;"	d	file:
 BackspaceStr	src/rituals_game.cpp	382;"	d	file:
+Body_Flag_Always_Contact	src/rituals_simulation.cpp	/^	Body_Flag_Always_Contact = Flag(4),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_No_Friction	src/rituals_simulation.cpp	/^	Body_Flag_No_Friction = Flag(2),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_None	src/rituals_simulation.cpp	/^	Body_Flag_None,$/;"	e	enum:Sim_Body_Flags	file:
-Body_Flag_Sensor	src/rituals_simulation.cpp	/^	Body_Flag_Sensor = Flag(3)$/;"	e	enum:Sim_Body_Flags	file:
+Body_Flag_Sensor	src/rituals_simulation.cpp	/^	Body_Flag_Sensor = Flag(3),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_Static	src/rituals_simulation.cpp	/^	Body_Flag_Static = Flag(1),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Font	src/rituals_game.cpp	/^Spritefont* Body_Font;$/;"	v
 Button_State	src/rituals_game.cpp	/^enum Button_State$/;"	g	file:
@@ -1101,8 +1102,8 @@ STBI_grey_alpha	src/thirdparty/stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:
 STBI_rgb	src/thirdparty/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon1
 STBI_rgb_alpha	src/thirdparty/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon1
 STB_IMAGE_IMPLEMENTATION	src/thirdparty.h	19;"	d
-SimIter	src/rituals_simulation.cpp	144;"	d	file:
-SimIter_i	src/rituals_simulation.cpp	143;"	d	file:
+SimIter	src/rituals_simulation.cpp	145;"	d	file:
+SimIter_i	src/rituals_simulation.cpp	144;"	d	file:
 Sim_Body	src/rituals_simulation.cpp	/^struct Sim_Body$/;"	s	file:
 Sim_Body_Flags	src/rituals_simulation.cpp	/^enum Sim_Body_Flags$/;"	g	file:
 Sim_Contact	src/rituals_simulation.cpp	/^struct Sim_Contact$/;"	s	file:
@@ -1138,7 +1139,7 @@ Tile_Tree_Wall	src/rituals_game_registry.cpp	/^isize Tile_Tree_Wall = 0;$/;"	v
 Tile_Void	src/rituals_game_registry.cpp	/^isize Tile_Void = 0;$/;"	v
 Tile_Water	src/rituals_game_registry.cpp	/^isize Tile_Water = 0;$/;"	v
 Tilemap	src/rituals_tilemap.cpp	/^struct Tilemap$/;"	s	file:
-TimeStep	src/rituals_simulation.cpp	142;"	d	file:
+TimeStep	src/rituals_simulation.cpp	143;"	d	file:
 Time_Step	src/rituals_win32.cpp	225;"	d	file:
 Title_Font	src/rituals_game.cpp	/^Spritefont* Title_Font;$/;"	v
 Transform	src/rituals_math.cpp	/^struct Transform$/;"	s	file:
@@ -1190,15 +1191,15 @@ __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
 _add_item	src/rituals_game_registry.cpp	175;"	d	file:
-_body_get_id	src/rituals_simulation.cpp	55;"	d	file:
-_body_get_min_x	src/rituals_simulation.cpp	47;"	d	file:
-_body_get_min_y	src/rituals_simulation.cpp	48;"	d	file:
-_body_get_not_static	src/rituals_simulation.cpp	52;"	d	file:
+_body_get_id	src/rituals_simulation.cpp	56;"	d	file:
+_body_get_min_x	src/rituals_simulation.cpp	48;"	d	file:
+_body_get_min_y	src/rituals_simulation.cpp	49;"	d	file:
+_body_get_not_static	src/rituals_simulation.cpp	53;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	71;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	484;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
-_collision_slop	src/rituals_simulation.cpp	222;"	d	file:
+_collision_slop	src/rituals_simulation.cpp	226;"	d	file:
 _color	src/rituals_gui.cpp	357;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
