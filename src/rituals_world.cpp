@@ -346,8 +346,6 @@ void world_area_update(World_Area* area, World* world)
 		times++;
 //	}
 
-	world_area_build_hitboxes(area);
-	world_area_process_hitboxes(area);
 	
 	Vec2 target = area->player->body->shape.center;
 	area->target = target;
@@ -397,6 +395,9 @@ void world_area_update(World_Area* area, World* world)
 			area->player->body->velocity -= e->body->velocity;
 		}
 	}
+
+	world_area_build_hitboxes(area);
+	world_area_process_hitboxes(area);
 	world_area_hit_entities(area, world);
 	world_area_contact_entities(area, world);
 	world_area_process_removed_entities(area);

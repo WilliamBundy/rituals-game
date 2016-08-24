@@ -111,7 +111,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  - current/last time/accumulator need to belong to simulation
  *
  * TODO(will) bugs???
- * 	- Monsters sometimes disappear?
+ * 	- Gotta fix entity serialization
+ * 	- For some reason, player is barraged by monsters? on level start
+ * 	- Maybe store player entity/body raw in world, copy into to entity 0 slot
+ * 		on load?
  */
 
 //platform imports
