@@ -275,6 +275,7 @@ void world_area_render(World_Area* area, World* world)
 	}
 	renderer_sort(sprite_count_offset);
 
+#if 0
 	char buf[256];
 	Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
 	for(isize i = 0; i < area->entities_count; ++i) {
@@ -283,7 +284,7 @@ void world_area_render(World_Area* area, World* world)
 		snprintf(buf, 256, "%d/%d %d", e->id, e->body_id, e->health);
 		render_body_text(buf, e->sprite.position - v2(0, e->sprite.size.y + 16), true);
 	}
-
+#endif 
 #if 0
 	for(isize i = 0; i < area->sim.bodies_count; ++i) {
 		Sim_Body* b = area->sim.bodies + i;
