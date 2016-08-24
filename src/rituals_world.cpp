@@ -62,7 +62,6 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=t
 	*player_entity = area->world->global_player_entity;
 	*player = area->world->global_player_body;
 
-	player->shape.center = v2(area->map.w * 16, area->map.h * 16);
 	if(move_player) {
 		player->shape.center = v2(tile_pos.x * Tile_Size, tile_pos.y * Tile_Size);
 	}
@@ -168,7 +167,6 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	}
 
 	generate_statics_for_tilemap(&area->sim, &area->map);
-	world_area_init_player(area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight /2));
 }
 
 void serialize_world(World* world);
