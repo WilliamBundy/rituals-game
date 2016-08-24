@@ -40,6 +40,11 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	world->next_area_id = 0;
 	world->current_area = NULL;
 
+	init_entity(&world->global_player_entity);
+	init_body(&world->global_player_body);
+
+
+
 	Entity* e = &world->global_player_entity;
 	Sim_Body* b = &world->global_player_body;
 	e->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
