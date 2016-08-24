@@ -353,7 +353,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_render(area, world);
 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-		for(isize i = 0; i < 8; ++i) {
+		for(isize i = 0; i < 4; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
 			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 1, 1, 1));
