@@ -34,6 +34,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->speed = 200;
 			enemy->alert_dist = 128;
 			enemy->follow_dist = 512;
+			e->health = 100;
 			break;
 		case EnemyKind_Bat:
 			enemy->speed = 600;
@@ -46,6 +47,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			e->sprite.size *= 0.5f;
 			e->body->shape.hext *= 0.5f;
 			e->hitbox.box.hext *= 0.5f;
+			e->health = 50;
 			break;
 		case EnemyKind_Snake:
 			enemy->speed = 200;
@@ -57,6 +59,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			e->sprite.size *= 0.75f;
 			e->body->shape.hext *= 0.75f;
 			e->hitbox.box.hext *= 0.75f;
+			e->health = 50;
 			break;
 		case EnemyKind_Goblin_Knight:
 			enemy->goblin_knight.patrol_start = e->sprite.position;
@@ -64,6 +67,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->alert_dist = 128;
 			enemy->follow_dist = 800;
 			enemy->speed = 250;
+			e->health = 50;
 			break;
 	}
 	return e;
