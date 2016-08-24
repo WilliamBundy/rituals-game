@@ -332,9 +332,9 @@ void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* ar
 	for(isize i = 0; i < count; ++i) {
 		Sim_Contact* c = contacts + i;
 		Sim_Body* body_a = sim_find_body(sim, c->a_id);
-		if(body_a->entity == NULL) continue;
+		if(body_b == NULL || body_a->entity == NULL) continue;
 		Sim_Body* body_b = sim_find_body(sim, c->b_id);
-		if(body_b->entity == NULL) continue;
+		if(body_b == NULL || body_b->entity == NULL) continue;
 		Entity* a = body_a->entity;
 		Entity* b = body_b->entity;
 		if(a->kind > b->kind) {
