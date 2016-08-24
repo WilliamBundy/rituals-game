@@ -334,6 +334,9 @@ void world_area_update(World_Area* area, World* world)
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		e->body->velocity += e->walk_impulse;
+		if(e->attack_timer > 0) {
+			e->attack_timer -= TimeStep;
+		}
 	}
 
 	isize times = 0;
