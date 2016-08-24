@@ -65,8 +65,8 @@ void init_body(Sim_Body* b)
 	b->damping = 0.5f;
 	b->force = v2(0, 0);
 	b->flags = Body_Flag_None;
-	b->mask = UINT64_MAX;
-	b->group = UINT64_MAX;
+	b->mask = 0;
+	b->group = 0;
 }
 
 struct Simulator
@@ -173,7 +173,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				//if(!(a->mask == 0 && b->mask == 0)) {
 					uint64 ma = a->mask & b->group;
 					uint64 mb = a->group & b->mask;
-					if(ma == 0 || mb == 0) {
+					if(ma != 0 || mb != 0) {
 						continue;		
 					}
 				//}
