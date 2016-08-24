@@ -348,15 +348,15 @@ void world_area_update(World_Area* area, World* world)
 					rand_range(&Game->r, -2, 2));
 			e->body->shape.center = e->sprite.position;
 			e->sprite.anchor = Anchor_Bottom;
-			e->body->shape.hext = v2(1, 1);
+			e->body->shape.hext = v2(2, 2);
 			e->body->flags = Body_Flag_No_Friction;
 			e->body->damping = 1.0f;
 			e->body->mask = 1;
 			e->body->group = 1;
 			e->attack = 5;
 			e->hitbox.mask = Flag(2);
-			e->hitbox.box.hext = e->body->shape.hext * 2f;
-			e->hitbox.box.center = v2(-1, -1);
+			e->hitbox.box.hext = e->body->shape.hext;
+			e->body->shape.hext *= 0.5f;
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
