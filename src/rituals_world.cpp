@@ -263,15 +263,15 @@ void world_area_render(World_Area* area, World* world)
 			e->sprite.position = b->shape.center;
 			e->sprite.position.y += b->shape.hh;
 			if(Has_Flag(e->flags, EntityFlag_Tail)) {
-				Vec2 v = b->velocity / 10.0f; 
+				Vec2 v = b->velocity / 30.0f; 
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
 					renderer_push_sprite(&s);
 					s.position -= v / 16;
-					//s.color = Color_White;
+					s.color = Color_White;
 					s.color.w = lerp(1.0f, 0.0f, i/16.0);
 					s.color.w *= s.color.w;
-					s.sort_point_offset.y -= i;
+					s.sort_point_offset.y -= 10;
 				}
 			}
 			renderer_push_sprite(&e->sprite);
