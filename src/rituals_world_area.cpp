@@ -134,7 +134,7 @@ void init_world_area(World_Area* area, Memory_Arena* arena)
 	area->entities_count = 0;
 	area->entities_capacity = WorldAreaEntityCapacity;
 	area->removed_entities_capacity = 256;
-	area->removed_entities = arena_push_array(arena, isize*, WorldAreaEntityCapacity);
+	area->removed_entities = arena_push_array(arena, isize, WorldAreaEntityCapacity);
 	area->removed_entities_count = 0;
 	area->next_entity_id = 0;
 	area->entities_dirty = false;
