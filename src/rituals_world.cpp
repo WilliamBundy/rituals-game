@@ -378,6 +378,7 @@ void world_area_update(World_Area* area, World* world)
 			e->body->mask = 3;
 			e->body->group = 1;
 			e->attack = 5;
+			e->attack += (int32)roundf(rand_range(&Game->r, -0.15, 0.15) * e->attack);
 			e->hitbox.mask = Flag(2);
 			e->hitbox.box.hext = e->body->shape.hext * 1.5f;;
 			e->flags = EntityFlag_Tail;

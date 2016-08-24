@@ -67,7 +67,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->alert_dist = 128;
 			enemy->follow_dist = 800;
 			enemy->speed = 250;
-			e->health = 50;
+			e->health = 200;
 			break;
 	}
 	return e;
