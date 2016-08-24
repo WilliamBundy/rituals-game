@@ -202,9 +202,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 						aabb_intersect(&a->shape, &b->shape);
 					}
 
-					if(capture_contacts) {
-
-					//}&& (times == 0 || times == 1)) {
+					if(capture_contacts	&& (times == 0 || times == 1)) {
 						Sim_Contact c;
 						c.a_id = a->id;
 						c.b_id = b->id;
