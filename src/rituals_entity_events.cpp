@@ -26,6 +26,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->body->shape.center = position;
 	e->sprite.anchor = Anchor_Bottom;
 	e->body->shape.hext = v2(8, 5);
+	e->body->group = 2;
 	auto enemy = &e->userdata.enemy;
 	enemy->mode = 0;
 	switch(enemy->kind) {

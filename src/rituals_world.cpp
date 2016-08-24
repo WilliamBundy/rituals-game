@@ -365,7 +365,7 @@ void world_area_update(World_Area* area, World* world)
 			e->body->shape.hext = v2(1, 1);
 			e->body->flags = Body_Flag_No_Friction | Body_Flag_Always_Contact;
 			e->body->damping = 1.0f;
-			e->body->mask = 1;
+			e->body->mask = 3;
 			e->body->group = 1;
 			e->attack = 5;
 			e->hitbox.mask = Flag(2);
