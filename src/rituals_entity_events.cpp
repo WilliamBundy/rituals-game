@@ -333,7 +333,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 
 void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world)
 {
-	Simulator* sim = area->sim;
+	Simulator* sim = &area->sim;
 	for(isize i = 0; i < count; ++i) {
 		Sim_Contact* c = contacts + i;
 		Sim_Body* body_a = sim_find_body(sim, c->a_id);
