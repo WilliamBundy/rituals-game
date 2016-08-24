@@ -29,6 +29,7 @@ struct Sim_Body
 	Vec2 velocity, force, collision_vel;
 	real inv_mass, restitution, damping;
 	uint64 flags;
+	uint64 mask;
 	isize entity_id;
 	Entity* entity;
 };
