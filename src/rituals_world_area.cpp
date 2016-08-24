@@ -184,6 +184,7 @@ Entity* world_area_get_next_entity(World_Area* area)
 	e->health = 100;
 	e->attack = 0;
 	e->attack_interval = 0.5f;
+	e->attack_timer = 0;
 	return e;
 }
 
