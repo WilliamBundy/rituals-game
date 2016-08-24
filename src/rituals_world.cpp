@@ -269,6 +269,7 @@ void world_area_render(World_Area* area, World* world)
 					renderer_push_sprite(&s);
 					s.position -= v / 16;
 					s.color = Color_White * lerp(1.0f, 0.0f, i/16.0);
+					s.sort_point_offset.y -= i;
 				}
 			}
 			renderer_push_sprite(&e->sprite);
