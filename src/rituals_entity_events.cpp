@@ -326,27 +326,42 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 	}
 }
 
+void rituals_entity_on_contact_terrain(Entity* e, World_Area* area, World* world)
+{
+	if(e->kind == EntityKind_Bullet) {
+		world_area_remove_entity(area, e);
+	}
+}
+
 void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world)
 {
 	Simulator* sim = &area->sim;
 	for(isize i = 0; i < count; ++i) {
 		Sim_Contact* c = contacts + i;
 		Sim_Body* body_a = sim_find_body(sim, c->a_id);
-		if(body_a == NULL || body_a->entity == NULL) continue;
+		if(body_a == NULL) continue;
 		Sim_Body* body_b = sim_find_body(sim, c->b_id);
-		if(body_b == NULL || body_b->entity == NULL) continue;
+		if(body_b == NULLL) continue;
+
 		Entity* a = body_a->entity;
 		Entity* b = body_b->entity;
-		if(a->kind > b->kind) {
-			Entity* tmp = b;
-			b = a;
-			a = tmp;
-		}
+		if(a == NULL && b != NULL) {
+			rituals_entity_on_contact_terrain(b, area, world);
+		} else if(a != NULL && b == NULL) {
+			rituals_entity_on_contact_terrain(a, area, world);
+		} else if(a != NULL && b != NULL) {
+			if(a->kind > b->kind) {
+				Entity* tmp = b;
+				b = a;
+				a = tmp;
+			}
 
-		if(b->kind == EntityKind_Bullet) {
-			if(a->kind != EntityKind_Bullet && a->kind != EntityKind_Player) {
-				world_area_remove_entity(area, b);
+			if(b->kind == EntityKind_Bullet) {
+				if(a->kind != EntityKind_Bullet && a->kind != EntityKind_Player) {
+					world_area_remove_entity(area, b);
+				}
 			}
 		}
+
 	}
 }
