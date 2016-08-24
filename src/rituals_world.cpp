@@ -104,7 +104,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		e->sprite.anchor = Anchor_Bottom;
 		e->sprite.sort_point_offset = v2(0, -60);
 		e->sprite.center = v2(2, -b->shape.hh * 2);
-		e->kind = 1000;
+		//e->kind = 1000;
 		
 		do {
 			b->shape.center = v2(
@@ -280,7 +280,7 @@ void world_area_render(World_Area* area, World* world)
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		if(e->kind == EntityKind_Bullet) continue;
-		snprintf(buf, 256, "%d %d", e->kind, e->health);
+		snprintf(buf, 256, "%d %d", e->id, e->health);
 		render_body_text(buf, e->sprite.position - e->sprite.size - v2(0, 16), true);
 	}
 
