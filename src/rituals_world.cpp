@@ -270,6 +270,7 @@ void world_area_render(World_Area* area, World* world)
 					s.position -= v / 16;
 					s.color = Color_White;
 					s.color.w = lerp(1.0f, 0.0f, i/16.0);
+					s.color.w *= s.color.w;
 					s.sort_point_offset.y -= i;
 				}
 			}
@@ -368,7 +369,7 @@ void world_area_update(World_Area* area, World* world)
 		for(isize i = 0; i < 5; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
-			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.6f, 0.5f, 1));
+			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.5f, 0.15f, 1));
 			e->sprite.position += v2(
 					rand_range(&Game->r, -3, 3),
 					rand_range(&Game->r, -3, 3));
