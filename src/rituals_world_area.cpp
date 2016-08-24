@@ -162,10 +162,10 @@ void init_entity(Entity* entity)
 	entity->body_id = 0;
 	init_sprite(&entity->sprite);
 	entity->counter = 0;
-	e->health = 100;
-	e->attack = 0;
-	e->attack_interval = 0.5f;
-	e->attack_timer = 0;
+	entity->health = 100;
+	entity->attack = 0;
+	entity->attack_interval = 0.5f;
+	entity->attack_timer = 0;
 }
 
 Entity* world_area_get_next_entity(World_Area* area)
