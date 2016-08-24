@@ -27,6 +27,8 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->sprite.anchor = Anchor_Bottom;
 	e->body->shape.hext = v2(8, 5);
 	e->body->group = 2;
+	e->attack = 5;
+	e->attack_interval = 0.25f;
 	auto enemy = &e->userdata.enemy;
 	enemy->mode = 0;
 	switch(enemy->kind) {
@@ -315,6 +317,10 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 
 		switch(a->kind) {
 			case EntityKind_Player:
+				if(b->kind == EntityKind_Enemy) {
+					a->health -= b->attack;
+					a->body->velocity += b->body->velocity * 10;
+				}
 				break;
 			case EntityKind_Enemy:
 				if(b->kind == EntityKind_Bullet) {
