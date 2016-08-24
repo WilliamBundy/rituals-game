@@ -223,6 +223,12 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
 	Entity* entity = area->entities + index;
+	if(entity->kind != EntityKind_Bullet) {
+		printf("Entity removed: kind:%d id:%d x:%.2f y:%.2f \n", 
+				entity->kind, entity->id,
+				entity->body->shape.center.x,
+				entity->body->shape.center.y);
+	}
 	sim_remove_body(&area->sim, entity->body_id);
 	area->entities[index] = area->entities[--area->entities_count];
 	world_area_synchronize_entities_and_bodies(area);
