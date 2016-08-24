@@ -257,10 +257,13 @@ void world_area_render(World_Area* area, World* world)
 		Entity* e = area->entities + i;
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 
-		if (b == NULL) continue;
+		if (b != NULL) {
+
+		// continue;
 		e->sprite.position = b->shape.center;
 		e->sprite.position.y += b->shape.hh;
 		//e->sprite.size = v2(b->shape.hw * 2, b->shape.hh * 2);
+		}
 		
 		//TODO(will) align entity sprites by their bottom center
 		renderer_push_sprite(&e->sprite);
