@@ -352,7 +352,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_interact(area, world);
 	world_area_render(area, world);
 
-	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
 		for(isize i = 0; i < 8; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
@@ -369,7 +369,7 @@ void world_area_update(World_Area* area, World* world)
 			e->body->group = 1;
 			e->attack = 5;
 			e->hitbox.mask = Flag(2);
-			e->hitbox.box.hext = e->body->shape.hext * 1.5f;;
+			e->hitbox.box.hext = e->body->shape.hext * 1.5f;
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
