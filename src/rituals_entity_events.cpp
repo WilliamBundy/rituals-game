@@ -344,7 +344,7 @@ void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* ar
 		}
 
 		if(b->kind == EntityKind_Bullet) {
-			if(a->kind != EntityKind_Bullet) {
+			if(a->kind != EntityKind_Bullet || a->kind != EntityKind_Player) {
 				world_area_remove_entity(area, b);
 			}
 		}
