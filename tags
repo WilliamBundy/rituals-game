@@ -2649,11 +2649,11 @@ world	src/rituals_world_area.cpp	/^	World* world;$/;"	m	struct:World_Area	file:
 world_area_animate_entities	src/rituals_world.cpp	/^void world_area_animate_entities(World_Area* area, World* world)$/;"	f
 world_area_build_hitboxes	src/rituals_world_area.cpp	/^void world_area_build_hitboxes(World_Area* area)$/;"	f
 world_area_contact_entities	src/rituals_world.cpp	/^void world_area_contact_entities(World_Area* area, World* world)$/;"	f
-world_area_deinit_player	src/rituals_world_area.cpp	/^void world_area_deinit_player(World_Area* area, bool move_player=true)$/;"	f
+world_area_deinit_player	src/rituals_world.cpp	/^void world_area_deinit_player(World_Area* area, bool move_player=true)$/;"	f
 world_area_find_entity	src/rituals_world_area.cpp	/^Entity* world_area_find_entity(World_Area* area, isize id)$/;"	f
 world_area_get_next_entity	src/rituals_world_area.cpp	/^Entity* world_area_get_next_entity(World_Area* area)$/;"	f
 world_area_hit_entities	src/rituals_world.cpp	/^void world_area_hit_entities(World_Area* area, World* world)$/;"	f
-world_area_init_player	src/rituals_world_area.cpp	/^void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)$/;"	f
+world_area_init_player	src/rituals_world.cpp	/^void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)$/;"	f
 world_area_interact	src/rituals_world.cpp	/^void world_area_interact(World_Area* area, World* world)$/;"	f
 world_area_process_hitboxes	src/rituals_world_area.cpp	/^void world_area_process_hitboxes(World_Area* area)$/;"	f
 world_area_process_removed_entities	src/rituals_world_area.cpp	/^void world_area_process_removed_entities(World_Area* area)$/;"	f
