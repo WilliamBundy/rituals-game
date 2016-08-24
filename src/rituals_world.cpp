@@ -50,7 +50,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	b->damping = 0.5f;
 	b->restitution = 0;
 	b->flags = Body_Flag_No_Friction;
-	e->kind = EntityKind_b;
+	e->kind = EntityKind_Player;
 }
 
 
