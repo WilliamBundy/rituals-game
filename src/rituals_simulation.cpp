@@ -167,13 +167,13 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 			for(isize j = i + 1; j < sim->bodies_count; ++j) {
 				b = sim->bodies + j;
 
-				if(!(a->mask == 0 && b->mask == 0)) {
+				//if(!(a->mask == 0 && b->mask == 0)) {
 					uint64 ma = a->mask & b->group;
 					uint64 mb = a->group & b->mask;
 					if(ma == 0 || mb == 0) {
 						continue;		
 					}
-				}
+				//}
 				uint64 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
 				uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
 				if(a_is_static && b_is_static) continue;
