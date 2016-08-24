@@ -53,7 +53,7 @@ void play_state_update()
 
 	if(!play_state->running) {
 		Renderer->offset = Vec2{};
-		renderer_start()eee
+		renderer_start();
 		
 		Sprite s = get_box_sprite(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
 		s.anchor = Anchor_Top_Left;

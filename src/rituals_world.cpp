@@ -195,8 +195,10 @@ void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* aren
 		new_area = arena_push_struct(arena, World_Area);
 		init_world_area(new_area, arena);
 		generate_world_area(world, new_area, area);
+		world_area_init_player(area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight /2));
+	} else {
+		world_area_init_player(new_area, v2i(0, 0),  false);
 	}
-	world_area_init_player(new_area, v2i(0, 0),  false);
 	world->current_area = new_area;
 }
 
