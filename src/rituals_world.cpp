@@ -334,11 +334,11 @@ void world_area_update(World_Area* area, World* world)
 	}
 
 	isize times = 0;
-	while(play_state->accumulator >= TimeStep) {
+//	while(play_state->accumulator >= TimeStep) {
 		play_state->accumulator -= TimeStep;
 		sim_update(&area->sim, &area->map, TimeStep, times == 0);
 		times++;
-	}
+//	}
 
 	world_area_build_hitboxes(area);
 	world_area_process_hitboxes(area);
