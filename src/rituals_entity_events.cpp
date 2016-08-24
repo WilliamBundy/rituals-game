@@ -29,7 +29,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->body->group = 2;
 	e->attack = 5;
 	e->attack_interval = 0.25f;
-	e->knockback = 500;
+	e->knockback = 5000;
 	auto enemy = &e->userdata.enemy;
 	enemy->mode = 0;
 	switch(enemy->kind) {
