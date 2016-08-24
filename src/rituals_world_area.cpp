@@ -64,7 +64,7 @@ struct Entity
 	Direction direction;
 
 	uint64 events;
-	uint64 flags;
+	//uint64 flags;
 	//void* userdata;
 	Rituals_Entity_Userdata userdata;
 };
