@@ -265,7 +265,7 @@ void world_area_render(World_Area* area, World* world)
 			if(Has_Flag(e->flags, EntityFlag_Tail)) {
 				Vec2 v = b->velocity; 
 				Vec2 p = e->sprite.position - b->velocity * (1.0f/60.0f);
-				v /= 16;
+				v *= 1.0f / 16.0f;
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
 					renderer_push_sprite(&s);
