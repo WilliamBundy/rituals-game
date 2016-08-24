@@ -387,7 +387,7 @@ void world_area_update(World_Area* area, World* world)
 			a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
 
 			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));
-			area->player->body->velocity -= e->body->velocity;
+			area->player->body->velocity -= e->body->velocity * 100;
 		}
 	}
 	world_area_hit_entities(area, world);
