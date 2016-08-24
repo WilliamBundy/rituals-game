@@ -199,6 +199,7 @@ void world_area_synchronize_entities_and_bodies(World_Area* area)
 		Entity* e = area->entities + i;
 		if(e->body_id == -1) continue;
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+		if(b == NULL) continue;
 		b->entity = e;
 		b->entity_id = e->id;
 		e->body = b;
@@ -224,8 +225,6 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 	Entity* entity = area->entities + index;
 	sim_remove_body(&area->sim, entity->body_id);
 	area->entities[index] = area->entities[--area->entities_count];
-	world_area_sort_entities_on_id(area);
-	sim_sort_bodies_on_id(&area->sim);
 	world_area_synchronize_entities_and_bodies(area);
 }
 
