@@ -366,7 +366,7 @@ void world_area_update(World_Area* area, World* world)
 		for(isize i = 0; i < 4; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
-			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.5f, 0.5f, 1));
+			e->sprite = get_box_sprite(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.8f, 0.5f, 1));
 			e->sprite.position += v2(
 					rand_range(&Game->r, -3, 3),
 					rand_range(&Game->r, -3, 3));
