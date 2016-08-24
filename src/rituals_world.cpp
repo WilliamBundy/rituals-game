@@ -264,16 +264,15 @@ void world_area_render(World_Area* area, World* world)
 			e->sprite.position.y += b->shape.hh;
 			if(Has_Flag(e->flags, EntityFlag_Tail)) {
 				Vec2 v = b->velocity; 
-				Vec2 p = e->sprite.position - b->velocity * dt;
+				Vec2 p = e->sprite.position - b->velocity * (1.0f/60.0f);
 				v /= 16;
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
 					renderer_push_sprite(&s);
 					s.position += v;
 				}
-			} else {
-				renderer_push_sprite(&e->sprite);
 			}
+			renderer_push_sprite(&e->sprite);
 		} else {
 			renderer_push_sprite(&e->sprite);
 		}
