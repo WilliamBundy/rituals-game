@@ -380,7 +380,7 @@ void world_area_update(World_Area* area, World* world)
 			e->attack = 5;
 			e->hitbox.mask = Flag(2);
 			e->hitbox.box.hext = e->body->shape.hext * 1.5f;;
-			//e->flags = EntityFlag_Tail;
+			e->flags = EntityFlag_Tail;
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
