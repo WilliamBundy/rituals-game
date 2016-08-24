@@ -65,6 +65,8 @@ void init_body(Sim_Body* b)
 	b->damping = 0.5f;
 	b->force = v2(0, 0);
 	b->flags = Body_Flag_None;
+	b->mask = UINT64_MAX;
+	b->group = UINT64_MAX;
 }
 
 struct Simulator
@@ -86,6 +88,7 @@ Sim_Body* sim_get_next_body(Simulator* sim)
 
 	Sim_Body* e = sim->bodies + sim->bodies_count++;
 	init_body(e);
+
 	e->id = sim->next_body_id++;
 
 	return e;
