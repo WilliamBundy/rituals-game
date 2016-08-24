@@ -82,6 +82,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		e->sprite.size = v2(32, 48);
 		e->sprite.anchor = Anchor_Bottom;
+		e->kind = 1000;
 		//e->sprite.center = v2(0, 20);
 		do {
 			b->shape.center = v2(
