@@ -281,7 +281,7 @@ void world_area_render(World_Area* area, World* world)
 		Entity* e = area->entities + i;
 		//if(e->kind == EntityKind_Bullet) continue;
 		snprintf(buf, 256, "%d/%d %d", e->id, e->body_id, e->health);
-		render_body_text(buf, e->sprite.position - v2(0, e->sprite.size.y - 16), true);
+		render_body_text(buf, e->sprite.position - v2(0, e->sprite.size.y + 16), true);
 	}
 
 #if 0
