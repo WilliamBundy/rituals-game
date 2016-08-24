@@ -62,12 +62,12 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=t
 	*player_entity = area->world->global_player_entity;
 	*player = area->world->global_player_body;
 
-	///player->shape.center = v2(area->map.w * 16, area->map.h * 16);
+	player->shape.center = v2(area->map.w * 16, area->map.h * 16);
 	if(move_player) {
 		player->shape.center = v2(tile_pos.x * Tile_Size, tile_pos.y * Tile_Size);
 	}
 
-	area->offset = player->shape.center;	
+	area->offset = player->shape.center;
 	area->target = player->shape.center;
 }
 
