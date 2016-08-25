@@ -38,7 +38,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 						auto eud = &e->userdata.pickup;
 						eud->kind = PickupKind_Health;
 						eud->health.amount = p->quality;
-						real size_mag = (a->body->shape.hw + a->body->shape.hh) / 2;
+						real size_mag = (a->body->shape.hw + a->body->shape.hh);
 						e->body->shape.center = pos + v2(
 								rand_range(&Game->r, -1, 1) * size_mag,
 								rand_range(&Game->r, -1, 1) * size_mag

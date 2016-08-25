@@ -136,8 +136,8 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		auto p = &e->userdata.prop;
 		p->contains = EntityKind_Pickup;
 		p->subtype = PickupKind_Health;
-		p->amount = rand_range_int(r, 3, 6);
-		p->quality = 5;
+		p->amount = rand_range_int(r, 1, 2);
+		p->quality = 25;
 
 		do {
 			b->shape.center = v2(
