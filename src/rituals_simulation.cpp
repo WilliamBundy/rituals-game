@@ -382,7 +382,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		}
 		work = 0;
 		for(isize i = 0; i < map_size; ++i) {
-			work += tiles[i];
+			work += (int32)Registry->tiles[tiles[i]].solid;
 		}
 	} while(work);
 	
