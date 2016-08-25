@@ -207,9 +207,22 @@ void deserialize_sprite(Sprite* s, FILE* file)
 void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
 {
 	switch(e->kind) {
+		case EntityKind_Prop: {
+			auto prop = &e->userdata.prop;
+			fread(&prop->contains, sizeof(Ritual_Entity_Kinds), 1, file);
+			fread(&prop->subtype, sizeof(isize), 1, file);
+			fread(&prop->amount, sizeof(isize), 1, file);
+			fread(&prop->quality, sizeof(isize), 1, file);
+
+		} break;
 		case EntityKind_Player: {
 			auto plr = &e->userdata.player;
 			fread(&plr->held_entity_id, sizeof(isize), 1, file);
+			fread(&plr->heal_cooldown, sizeof(real), 1, file);
+			fread(&plr->heal_timer, sizeof(real), 1, file);
+			fread(&plr->heal_rate, sizeof(isize), 1, file);
+			fread(&plr->heal_to_interval, sizeof(isize), 1, file);
+			
 		} break;
 		case EntityKind_Enemy: {
 			auto enemy = &e->userdata.enemy;
@@ -233,24 +246,50 @@ void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
 					break;
 			}
 		} break;
+		case EntityKind_Pickup: {
+			auto p = &e->userdata.pickup;
+			fread(&p->kind, sizeof(isize), 1, file);
+			switch(p->kind) {
+				case PickupKind_Item:
+					fread(&p->id, sizeof(isize), 1, file);
+					fread(&p->count, sizeof(isize), 1, file);
+					break;
+				case PickupKind_Health:
+					fread(&p->amount, sizeof(isize), 1, file);
+					break;
+			}
+		} break;
 		default:
 			break;
 	}
 }
 
+void deserialize_hitbox(Hitbox* hb, FILE* file)
+{
+	fread(&hb->mask, sizeof(uint64), 1, file);
+	fread(&hb->box.e, sizeof(real), 4, file);
+}
 void deserialize_entity(Entity* entity, FILE* file)
 {
 	fread(&entity->id, sizeof(isize), 1, file);
 	fread(&entity->body_id, sizeof(isize), 1, file);
 	deserialize_sprite(&entity->sprite, file);
+
+	deserialize_hitbox(&entity->hitbox, file);
 	fread(&entity->health, sizeof(int32), 1, file);
 	fread(&entity->attack, sizeof(int32), 1, file);
 	fread(&entity->attack_interval, sizeof(real), 1, file);
+	fread(&entity->attack_timer, sizeof(real), 1, file);
+	fread(&entity->knockback, sizeof(real), 1, file);
+
 	fread(&entity->counter, sizeof(int32), 1, file);
 	fread(&entity->facing, sizeof(int32), 1, file);
+	//TODO(will) standardize size of enum?
 	fread(&entity->direction, sizeof(Direction), 1, file);
 	fread(&entity->kind, sizeof(isize), 1, file);
 	fread(&entity->events, sizeof(uint64), 1, file);
+	fread(&entity->flags, sizeof(uint64), 1, file);
+	//TODO(will) serialize userdata
 	deserialize_rituals_entity_userdata(entity, file);
 }
 
@@ -273,13 +312,25 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	deserialize_simulator(&area->sim, area_file, arena);
 }
 
-
 void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 {
 	switch(e->kind) {
+		case EntityKind_Prop: {
+			auto prop = &e->userdata.prop;
+			fwrite(&prop->contains, sizeof(Ritual_Entity_Kinds), 1, file);
+			fwrite(&prop->subtype, sizeof(isize), 1, file);
+			fwrite(&prop->amount, sizeof(isize), 1, file);
+			fwrite(&prop->quality, sizeof(isize), 1, file);
+
+		} break;
 		case EntityKind_Player: {
 			auto plr = &e->userdata.player;
 			fwrite(&plr->held_entity_id, sizeof(isize), 1, file);
+			fwrite(&plr->heal_cooldown, sizeof(real), 1, file);
+			fwrite(&plr->heal_timer, sizeof(real), 1, file);
+			fwrite(&plr->heal_rate, sizeof(isize), 1, file);
+			fwrite(&plr->heal_to_interval, sizeof(isize), 1, file);
+			
 		} break;
 		case EntityKind_Enemy: {
 			auto enemy = &e->userdata.enemy;
@@ -303,10 +354,24 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 					break;
 			}
 		} break;
+		case EntityKind_Pickup: {
+			auto p = &e->userdata.pickup;
+			fwrite(&p->kind, sizeof(isize), 1, file);
+			switch(p->kind) {
+				case PickupKind_Item:
+					fwrite(&p->id, sizeof(isize), 1, file);
+					fwrite(&p->count, sizeof(isize), 1, file);
+					break;
+				case PickupKind_Health:
+					fwrite(&p->amount, sizeof(isize), 1, file);
+					break;
+			}
+		} break;
 		default:
 			break;
 	}
 }
+
 
 void serialize_hitbox(Hitbox* hb, FILE* file)
 {
@@ -326,7 +391,6 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->attack_interval, sizeof(real), 1, file);
 	fwrite(&entity->attack_timer, sizeof(real), 1, file);
 	fwrite(&entity->knockback, sizeof(real), 1, file);
-	
 
 	fwrite(&entity->counter, sizeof(int32), 1, file);
 	fwrite(&entity->facing, sizeof(int32), 1, file);

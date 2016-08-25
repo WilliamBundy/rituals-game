@@ -132,11 +132,8 @@ union Rituals_Entity_Userdata
 	struct {
 		Rituals_Entity_Kinds contains;
 		isize subtype;
-
 		isize amount;
 		isize quality;
-
-		void* data;
 	} prop;
 	struct {
 		isize held_entity_id;

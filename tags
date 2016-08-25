@@ -1395,7 +1395,6 @@ cursor	src/rituals_gui.cpp	/^	isize cursor, selection_start;$/;"	m	struct:Gui_Te
 damage	src/rituals_game_info.cpp	/^	int32 damage;$/;"	m	struct:Tile_State	file:
 damping	src/rituals_simulation.cpp	/^	real inv_mass, restitution, damping;$/;"	m	struct:Sim_Body	file:
 data	src/rituals_game.cpp	/^	uint8* data;$/;"	m	struct:Memory_Arena	file:
-data	src/rituals_game_info.cpp	/^		void* data;$/;"	m	struct:Rituals_Entity_Userdata::__anon1	file:
 data	src/thirdparty/stb_image.h	/^      stbi_uc *data;$/;"	m	struct:__anon6::__anon7
 data_index	src/rituals_renderer.cpp	/^	isize data_index, sprite_count;$/;"	m	struct:OpenGL_Renderer	file:
 dc_pred	src/thirdparty/stb_image.h	/^      int dc_pred;$/;"	m	struct:__anon6::__anon7
@@ -1455,6 +1454,7 @@ dequant	src/thirdparty/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__a
 deserialize_area	src/rituals_serialization.cpp	/^void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)$/;"	f
 deserialize_area_link	src/rituals_serialization.cpp	/^void deserialize_area_link(Area_Link* link, World* world, FILE* fp)$/;"	f
 deserialize_entity	src/rituals_serialization.cpp	/^void deserialize_entity(Entity* entity, FILE* file)$/;"	f
+deserialize_hitbox	src/rituals_serialization.cpp	/^void deserialize_hitbox(Hitbox* hb, FILE* file)$/;"	f
 deserialize_rituals_entity_userdata	src/rituals_serialization.cpp	/^void deserialize_rituals_entity_userdata(Entity* e, FILE* file)$/;"	f
 deserialize_sim_body	src/rituals_serialization.cpp	/^void deserialize_sim_body(Sim_Body* body, FILE* file)$/;"	f
 deserialize_simulator	src/rituals_serialization.cpp	/^void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)$/;"	f
