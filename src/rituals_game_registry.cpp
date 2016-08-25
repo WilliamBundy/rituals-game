@@ -96,6 +96,8 @@ isize Tile_Tree_Wall = 0;
 isize Tile_Shallow_Water = 0;
 isize Tile_Water = 0;
 isize Tile_Stone_Road = 0;
+isize Tile_Cracked_Road = 0;
+isize Tile_Pristine_Road = 0;
 isize Tile_Slab_Wall = 0;
 void finalize_game_registry()
 {
@@ -117,6 +119,8 @@ void finalize_game_registry()
 	Tile_Shallow_Water = lookup_tile("shallow_water")->id;
 	Tile_Water = lookup_tile("water")->id;
 	Tile_Stone_Road = lookup_tile("stone_road")->id;
+	Tile_Cracked_Road = lookup_tile("cracked_road")->id;
+	Tile_Pristine_Road = lookup_tile("pristine_road")->id;
 	Tile_Slab_Wall = lookup_tile("slab_wall")->id;
 }
 
@@ -161,15 +165,21 @@ void register_all_rituals_tile_info()
 	_new_tile(tree_wall, 1, 1, 1, 4, true);
 	tile_tree_wall->has_top_texture = true;
 	tile_tree_wall->top_texture = _tile_texture(1, 3);
+	tile_tree_wall->has_bottom_texture = true;
+	tile_tree_wall->bottom_texture = _tile_texture(2, 4);
 
 
 	_new_tile(water, 1, 1, 1, 2, true);
 	_new_tile(shallow_water, 0.7, 0.99, 0, 2, false);
-	_new_tile(stone_road, 1.2, 0.99, 3, 2, false);
+	_new_tile(stone_road, 1.2, 0.99, 2, 2, false);
+	_new_tile(cracked_road, 1.2, 0.99, 3, 2, false);
+	_new_tile(pristine_road, 1.2, 0.99, 4, 2, false);
 	tile_stone_road->max_damage = 20;
-	_new_tile(slab_wall, 1, 1, 0, 4, true);
-	tile_slab_wall->has_top_texture = true;
-	tile_slab_wall->top_texture = _tile_texture(0, 3);
+	_new_tile(slab_wall, 1, 1, 0, 3, true);
+	//tile_slab_wall->has_top_texture = true;
+	//tile_slab_wall->top_texture = _tile_texture(0, 3);
+	tile_slab_wall->has_bottom_texture = true;
+	tile_slab_wall->bottom_texture = _tile_texture(0, 4);
 }
 
 #define _add_item(name, s, x, y) Item_Info* item_##name = add_item_type(#name, (s), _tile_texture(x, y)) 

@@ -166,6 +166,7 @@ void serialize_simulator(Simulator* sim, FILE* file)
 {
 	fwrite(&sim->bodies_count, sizeof(isize), 1, file);
 	fwrite(&sim->bodies_capacity, sizeof(isize), 1, file);
+	fwrite(&sim->contacts_capacity, sizeof(isize), 1, file);
 	fwrite(&sim->next_body_id, sizeof(isize), 1, file);
 	fwrite(&sim->sort_axis, sizeof(isize), 1, file);
 	for(isize i = 0; i < sim->bodies_count; ++i) {
@@ -176,9 +177,12 @@ void deserialize_simulator(Simulator* sim, FILE* file, Memory_Arena* arena)
 {
 	fread(&sim->bodies_count, sizeof(isize), 1, file);
 	fread(&sim->bodies_capacity, sizeof(isize), 1, file);
+	fread(&sim->contacts_capacity, sizeof(isize), 1, file);
 	fread(&sim->next_body_id, sizeof(isize), 1, file);
 	fread(&sim->sort_axis, sizeof(isize), 1, file);
 	sim->bodies = arena_push_array(arena, Sim_Body, sim->bodies_capacity);
+	sim->contacts = arena_push_array(arena, Sim_Contact, sim->contacts_capacity);
+	sim->contacts_count = 0;
 	for(isize i = 0; i < sim->bodies_count; ++i) {
 		deserialize_sim_body(sim->bodies + i, file);
 	}
@@ -300,6 +304,7 @@ void deserialize_entity(Entity* entity, FILE* file)
 void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 {
 	fread(&area->id, sizeof(isize), 1, area_file);
+	printf("loading %d area\n", area->id);
 	fread(&area->entities_count, sizeof(isize), 1, area_file);
 	fread(&area->entities_capacity, sizeof(isize), 1, area_file);
 	fread(&area->next_entity_id, sizeof(isize), 1, area_file);
@@ -420,6 +425,7 @@ void serialize_entity(Entity* entity, FILE* file)
 void serialize_area(World_Area* area, FILE* area_file)
 {
 	fwrite(&area->id, sizeof(isize), 1, area_file);
+	printf("saving %d area\n", area->id);
 	fwrite(&area->entities_count, sizeof(isize), 1, area_file);
 	fwrite(&area->entities_capacity, sizeof(isize), 1, area_file);
 	fwrite(&area->next_entity_id, sizeof(isize), 1, area_file);
@@ -510,7 +516,7 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 void serialize_world(World* world)
 {
 	world_area_deinit_player(world->current_area);
-	printf("%d current_area_id\n", world->current_area->id);
+	printf("saving %d current_area_id\n", world->current_area->id);
 	if(world->name[0] == '\0') {
 		printf("Could not save world -- name was null\n");
 		return;
@@ -562,11 +568,11 @@ void deserialize_world(World* world, FILE* world_file)
 	fread(&world->next_area_id, sizeof(isize), 1, world_file);
 	isize current_area_id = 0;
 	fread(&current_area_id, sizeof(isize), 1, world_file);
-	world->area_stubs = arena_push_array(Game->world_arena, World_Area_Stub, world->areas_count);
+	world->area_stubs = arena_push_array(Game->world_arena, World_Area_Stub, world->areas_capacity);
 	for(isize i = 0; i < world->areas_count; ++i) {
 		deserialize_world_area_stub(world->area_stubs + i, world, world_file);
 	}
-	printf("%d current_area_id\n", current_area_id);
+	printf("loading %d current_area_id\n", current_area_id);
 	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
 }
 

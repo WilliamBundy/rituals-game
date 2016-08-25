@@ -109,6 +109,12 @@ void generate_tilemap(Tilemap* tilemap, uint64 seed)
 			   (j >= (tilemap->w/2 - 1) && 
 				j <= (tilemap->w/2 + 1))) {
 				tilemap->tiles[index] = Tile_Stone_Road;
+				if(rand_range(r, 0, 1) < 0.25f) {
+					tilemap->tiles[index] = Tile_Cracked_Road;
+				//	if(rand_range(r, 0, 1) < 0.1f) {
+				//		tilemap->tiles[index] = Tile_Pristine_Road;
+				//	}
+				}
 				flag = true;
 			}
 

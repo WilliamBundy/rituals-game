@@ -82,8 +82,10 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 {
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-	*player_entity = area->world->global_player_entity;
-	*player = area->world->global_player_body;
+	//*player_entity = area->world->global_player_entity;
+	//*player = area->world->global_player_body;
+	area->world->global_player_entity = *player_entity;
+	area->world->global_player_body = *player;
 }
 
 void deserialize_area(World_Area* area, FILE* file, Memory_Arena* arena);
@@ -103,7 +105,6 @@ World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)
 			Entity* e = area->entities + i;
 		}
 		world_area_synchronize_entities_and_bodies(area);
-		world_area_init_player(area, v2i(0,0), false);
 
 		fclose(fp);
 	}
@@ -215,6 +216,7 @@ void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* aren
 	} else {
 		world_area_init_player(new_area, v2i(0, 0),  false);
 	}
+	world_area_synchronize_entities_and_bodies(new_area);
 	world->current_area = new_area;
 }
 
@@ -365,11 +367,13 @@ void world_area_render(World_Area* area, World* world)
 #endif
 	renderer_draw();
 
+#if 1
 	Renderer->offset = v2(0, 0);
 	renderer_start();
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
 	renderer_draw();
+#endif
 
 }
 

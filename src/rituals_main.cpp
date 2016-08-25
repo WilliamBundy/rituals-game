@@ -115,6 +115,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  - If the player is pushed right up against a block from the block's bottom,
  *  	bullets are caught within the block and don't shoot.
  *  - Hitbox masking/grouping isn't finished
+ *  - Sometimes delete doesn't work (doesn't delete world.dat file)
  */
 
 //platform imports
