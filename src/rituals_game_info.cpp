@@ -111,6 +111,7 @@ enum Rituals_Entity_Kinds
 	EntityKind_Pickup,
 };
 
+
 enum Rituals_Enemy_Kind
 {
 	EnemyKind_Slime,
@@ -128,6 +129,15 @@ enum Rituals_Pickup_Kind
 
 union Rituals_Entity_Userdata
 {
+	struct {
+		Rituals_Entity_Kinds contains;
+		isize subtype;
+
+		isize amount;
+		isize quality;
+
+		void* data;
+	} prop;
 	struct {
 		isize held_entity_id;
 		real heal_cooldown;

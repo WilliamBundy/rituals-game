@@ -133,6 +133,11 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		e->sprite.size = v2(32, 48);
 		e->sprite.anchor = Anchor_Bottom;
 		e->kind = EntityKind_Prop;
+		auto p = &e->userdata.prop;
+		p->contains = EntityKind_Pickup;
+		p->subtype = PickupKind_Health;
+		p->amount = rand_range_int(r, 3, 6);
+		p->quality = 5;
 
 		do {
 			b->shape.center = v2(

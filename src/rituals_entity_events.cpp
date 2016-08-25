@@ -13,6 +13,43 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
+void rituals_prop_drop_on_break(World_Area* area, Entity* e) 
+{
+	if(e->kind != EntityKind_Prop) {
+		printf("Could not drop on break: recieved entity type %d", e->kind);
+		return;
+	}
+	auto p = &e->userdata.prop;
+	if(p->amount == 0) return;
+	Vec2 pos = e->body->shape.center;
+	switch(p->contains) {
+		case EntityKind_Prop:
+			break;
+		case EntityKind_Enemy:
+			break;
+		case EntityKind_Pickup:
+			switch(p->subtype) {
+				case PickupKind_Item:
+					break;
+				case PickupKind_Health:
+					for(isize i = 0; i < p->amount; ++i) {
+						Entity* e = world_area_get_next_entity(area);
+						e->kind = EntityKind_Pickup;
+						auto eud = &e->userdata.pickup;
+						eud->health = p->quality;
+						e->body->shape.center = pos;
+						e->body->shape->hext = v2(8, 8);
+						e->sprite.anchor = Anchor_Bottom;
+						e->sprite.texture = Get_Texture_Coordinates(
+								9*32, 0, 16, 16);
+					}
+					break;
+			}
+			break;
+	}
+}
+
+
 Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position) 
 {
 	Entity* e = world_area_get_next_entity(area);
@@ -321,6 +358,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 				if(b->kind == EntityKind_Bullet) {
 					a->health -= b->attack / 4;
 					if(a->health <= 0) {
+						rituals_prop_drop_on_break(area, a);
 						world_area_remove_entity(area, a);
 					}
 					world_area_remove_entity(area, b);
