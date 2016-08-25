@@ -141,6 +141,8 @@ void serialize_sim_body(Sim_Body* body, FILE* file)
 	fwrite(&body->restitution, sizeof(real), 1, file);
 	fwrite(&body->damping, sizeof(real), 1, file);
 	fwrite(&body->flags, sizeof(uint64), 1, file);
+	fwrite(&body->group, sizeof(uint64), 1, file);
+	fwrite(&body->mask, sizeof(uint64), 1, file);
 	fwrite(&body->entity_id, sizeof(isize), 1, file);
 }
 
@@ -155,6 +157,8 @@ void deserialize_sim_body(Sim_Body* body, FILE* file)
 	fread(&body->restitution, sizeof(real), 1, file);
 	fread(&body->damping, sizeof(real), 1, file);
 	fread(&body->flags, sizeof(uint64), 1, file);
+	fread(&body->group, sizeof(uint64), 1, file);
+	fread(&body->mask, sizeof(uint64), 1, file);
 	fread(&body->entity_id, sizeof(isize), 1, file);
 }
 
