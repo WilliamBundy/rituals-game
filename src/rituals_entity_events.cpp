@@ -15,7 +15,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 void rituals_prop_drop_on_break(World_Area* area, Entity* a) 
 {
-	if(e->kind != EntityKind_Prop) {
+	if(a->kind != EntityKind_Prop) {
 		printf("Could not drop on break: recieved entity type %d", a->kind);
 		return;
 	}
