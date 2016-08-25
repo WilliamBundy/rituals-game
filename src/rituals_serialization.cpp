@@ -311,7 +311,7 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 void serialize_hitbox(Hitbox* hb, FILE* file)
 {
 	fwrite(&hb->mask, sizeof(uint64), 1, file);
-	fwrite(&hb->aabb.e, sizeof(real), 4, file);
+	fwrite(&hb->ebox.e, sizeof(real), 4, file);
 }
 
 void serialize_entity(Entity* entity, FILE* file)
