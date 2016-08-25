@@ -377,7 +377,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
 					isize index = (local_y + r->y) * tilemap->w + (local_x + r->x);
 					//printf("%d ", index);
-					tiles[index] = false;
+					tiles[index] = 0;
 				}
 			}
 		}
