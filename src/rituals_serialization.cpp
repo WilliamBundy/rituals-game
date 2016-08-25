@@ -510,6 +510,7 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 void serialize_world(World* world)
 {
 	world_area_deinit_player(world->current_area);
+	printf("%d current_area_id\n", world->current_area->id);
 	if(world->name[0] == '\0') {
 		printf("Could not save world -- name was null\n");
 		return;
@@ -565,6 +566,7 @@ void deserialize_world(World* world, FILE* world_file)
 	for(isize i = 0; i < world->areas_count; ++i) {
 		deserialize_world_area_stub(world->area_stubs + i, world, world_file);
 	}
+	printf("%d current_area_id\n", current_area_id);
 	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
 }
 
