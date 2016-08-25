@@ -1206,7 +1206,7 @@ _body_get_min_y	src/rituals_simulation.cpp	49;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	53;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	126;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	494;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	499;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	226;"	d	file:
 _color	src/rituals_gui.cpp	357;"	d	file:
@@ -1219,7 +1219,7 @@ _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_di
 _game_registry__key_macro	src/rituals_game_registry.cpp	56;"	d	file:
 _generate_registry_lookup	src/rituals_game_registry.cpp	57;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
-_get_at	src/rituals_simulation.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
+_get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_sprite_y_base	src/rituals_renderer.cpp	345;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	99;"	d	file:
@@ -1242,7 +1242,7 @@ _splitmix64	src/rituals_game.cpp	/^static inline uint64 _splitmix64(uint64* x)$/
 _th	src/rituals_simulation.cpp	/^isize _tw, _th;$/;"	v
 _th	src/rituals_win32.cpp	/^isize _tw, _th;$/;"	v
 _tile_texture	src/rituals_game_registry.cpp	131;"	d	file:
-_tiles	src/rituals_simulation.cpp	/^uint8* _tiles;$/;"	v
+_tiles	src/rituals_simulation.cpp	/^Tile* _tiles;$/;"	v
 _tiles	src/rituals_win32.cpp	/^uint8* _tiles;$/;"	v
 _tinydir_char_t	src/thirdparty/tinydir.h	68;"	d
 _tinydir_char_t	src/thirdparty/tinydir.h	77;"	d
@@ -1336,7 +1336,9 @@ bodies_capacity	src/rituals_simulation.cpp	/^	isize bodies_count, bodies_capacit
 bodies_count	src/rituals_simulation.cpp	/^	isize bodies_count, bodies_capacity, next_body_id;$/;"	m	struct:Simulator	file:
 body	src/rituals_world_area.cpp	/^	Sim_Body* body;$/;"	m	struct:Entity	file:
 body_font	src/rituals_game.cpp	/^	Spritefont* body_font;$/;"	m	struct:Game_Main	file:
+body_group	src/rituals_game_info.cpp	/^	uint64 body_group;$/;"	m	struct:Tile_Info	file:
 body_id	src/rituals_world_area.cpp	/^	isize body_id;$/;"	m	struct:Entity	file:
+body_mask	src/rituals_game_info.cpp	/^	uint64 body_mask;$/;"	m	struct:Tile_Info	file:
 bottom_texture	src/rituals_game_info.cpp	/^	Rect2 bottom_texture;$/;"	m	struct:Tile_Info	file:
 box	src/rituals_world_area.cpp	/^	AABB box;$/;"	m	struct:Hitbox	file:
 boxes	src/rituals_main.cpp	/^Sprite* boxes;$/;"	v

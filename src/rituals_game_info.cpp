@@ -46,6 +46,9 @@ struct Tile_Info
 
 	//maybe change to flags
 	bool solid;
+	uint64 body_mask;
+	uint64 body_group;
+
 	bool has_top_texture;
 	bool has_bottom_texture;
 };
