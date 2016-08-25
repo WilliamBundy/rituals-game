@@ -336,7 +336,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		for(isize y = 0; y < tilemap->h; ++y) {
 			for(isize x = 0; x < tilemap->w; ++x) {
 				if(_get_at(x, y)->solid) {
-					if(!_get_at(x, y - 1)) {
+					if(!_get_at(x, y - 1)->solid) {
 						Rect2i* r = rects + rects_count++;
 						r->x = x;
 						r->y = y;
