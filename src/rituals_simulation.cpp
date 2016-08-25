@@ -313,7 +313,7 @@ Tile_Info* _get_at(isize x, isize y)
 	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return Registry->tiles;
 	isize index = y * _tw + x;
 	if((index < 0) || (index >= _tw * _th)) return Registry->tiles;
-	return Registry->tiles_tiles[index]];
+	return Registry->tiles + _tiles[index];
 
 }
 
