@@ -42,6 +42,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* e)
 						e->sprite.anchor = Anchor_Bottom;
 						e->sprite.texture = Get_Texture_Coordinates(
 								9*32, 0, 16, 16);
+						e->sprite.size = v2(16, 16);
 					}
 					break;
 			}
