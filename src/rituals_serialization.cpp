@@ -304,10 +304,19 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	for(isize i = 0; i < area->entities_count; ++i) {
 		deserialize_entity(area->entities + i, area_file);
 	}
+
+	area->entities_capacity = WorldAreaEntityCapacity;
+
 	area->hitboxes_count = 0;
+	area->hitboxes_capacity = WorldAreaEntityCapacity;
 	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
+
 	area->hitbox_contacts_count = 0;
+	area->hitbox_contacts_capacity = WorldAreaEntityCapacity;
 	area->hitbox_contacts = arena_push_array(arena, Hitbox_Contact, WorldAreaEntityCapacity);
+
+	area->removed_entities_count = 0;
+	area->removed_entities_capacity = 256;
 	area->removed_entities = arena_push_array(arena, isize, 256);
 	deserialize_tilemap(&area->map, area_file, arena);
 	deserialize_simulator(&area->sim, area_file, arena);
