@@ -112,8 +112,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  * TODO(will) bugs???
  * 	- Gotta fix entity serialization
- * 	- Maybe store player entity/body raw in world, copy into to entity 0 slot
- * 		on load?
+ *  - If the player is pushed right up against a block from the block's bottom,
+ *  	bullets are caught within the block and don't shoot.
  */
 
 //platform imports
@@ -316,6 +316,7 @@ void main_menu_update()
 					menu_state->delete_index = -1;
 				}
 				if(gui_add_button(v2(32 + 144 + 32 + 64 + 32, lasty), "Confirm", v2(64, 0))) {
+					printf("[%s] was deleted \n", file.path);
 					recursively_delete_folder(file.path);
 					menu_state->delete_index = -1;
 					saves_dirty = true;

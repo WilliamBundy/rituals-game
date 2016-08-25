@@ -407,6 +407,14 @@ void world_area_update(World_Area* area, World* world)
 				area->player->health = new_health;
 			}
 		}
+
+
+		if(area->player->health <= 0) {
+			play_state_init();
+			Game->state = Game_State_Menu;
+			//recursively_delete_folder()
+
+		}
 	}
 
 
