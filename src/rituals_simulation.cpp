@@ -313,7 +313,7 @@ Tile_Info* _get_at(isize x, isize y)
 	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return Registry->tiles;
 	isize index = y * _tw + x;
 	if((index < 0) || (index >= _tw * _th)) return Registry->tiles;
-	return Registry->tiles + _tiles[index];
+	return Registry->tiles_tiles[index]];
 
 }
 
@@ -323,8 +323,9 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	_tw = tilemap->w;
 	_th = tilemap->h;
 	isize map_size = tilemap->w * tilemap->h;
-	_tiles = tilemap->tiles;
-	Tile* tiles = tilemap->tiles;
+	Tile* tiles = arena_push_array(Game->temp_arena, uint8, map_size + 1);
+	memcpy(tiles, tilemap->tiles, sizeof(Tile) * map_size);
+	_tiles = tiles;
 	isize work = 0;
 
 	Rect2i* rects = arena_push_array(Game->temp_arena, Rect2i, map_size / 2);
@@ -334,7 +335,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		last_rects = rects_count;
 		for(isize y = 0; y < tilemap->h; ++y) {
 			for(isize x = 0; x < tilemap->w; ++x) {
-				if(_get_at(x, y)->solid) {
+				if(_get_at(x, y)) {
 					if(!_get_at(x, y - 1)) {
 						Rect2i* r = rects + rects_count++;
 						r->x = x;
@@ -344,7 +345,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 						do {
 							x++;
 						}
-						while(_get_at(x, y)->solid && !_get_at(x, y - 1)->solid && (x < tilemap->w));
+						while(_get_at(x, y) && !_get_at(x, y - 1) && (x < tilemap->w));
 
 						if(x != r->x) {
 							r->w = x - r->x;
@@ -360,7 +361,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 			isize y = r->y;
 			while(solid && (y < tilemap->h)) {
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					solid = solid && _get_at(r->x + local_x, y + 1)->solid;
+					solid = solid && _get_at(r->x + local_x, y + 1);
 					if(!solid) break;
 				}
 				if(solid) {
@@ -382,7 +383,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		}
 		work = 0;
 		for(isize i = 0; i < map_size; ++i) {
-			work += (int32)Registry->tiles[tiles[i]].solid;
+			work += tiles[i];
 		}
 	} while(work);
 	
