@@ -361,7 +361,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 			isize y = r->y;
 			while(solid && (y < tilemap->h)) {
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					solid = solid && _get_at(r->x + local_x, y + 1);
+					solid = solid && _get_at(r->x + local_x, y + 1)->solid;
 					if(!solid) break;
 				}
 				if(solid) {
