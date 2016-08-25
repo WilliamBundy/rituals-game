@@ -317,6 +317,15 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 		}
 
 		switch(a->kind) {
+			case EntityKind_Prop:
+				if(b->kind == EntityKind_Bullet) {
+					a->health -= b->attack;
+					if(a->health <= 0) {
+						world_area_remove_entity(area, a);
+					}
+					world_area_remove_entity(area, b);
+				}
+				break;
 			case EntityKind_Player:
 				if(b->kind == EntityKind_Enemy) {
 					if(b->attack_timer <= 0.0f) {

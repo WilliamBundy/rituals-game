@@ -122,6 +122,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	init_random(r, stub->seed);
 	generate_tilemap(&area->map, stub->seed);
 	area->id = stub->id;
+	//Spawn boxes
 	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
@@ -131,8 +132,8 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		e->sprite.size = v2(32, 48);
 		e->sprite.anchor = Anchor_Bottom;
-		//e->kind = 1000;
-		//e->sprite.center = v2(0, 20);
+		e->kind = EntityKind_Prop;
+
 		do {
 			b->shape.center = v2(
 					rand_range(r, 0, area->map.w * 32),
@@ -141,6 +142,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
 	}
 
+	//Spawn trees
 	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
@@ -153,6 +155,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		e->sprite.anchor = Anchor_Bottom;
 		e->sprite.sort_point_offset = v2(0, -60);
 		e->sprite.center = v2(2, -b->shape.hh * 2);
+		e->kind = EntityKind_Static;
 		//e->kind = 1000;
 		
 		do {
