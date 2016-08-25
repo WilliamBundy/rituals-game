@@ -36,6 +36,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 						Entity* e = world_area_get_next_entity(area);
 						e->kind = EntityKind_Pickup;
 						auto eud = &e->userdata.pickup;
+						eud->kind = PickupKind_Health;
 						eud->health.amount = p->quality;
 						real size_mag = (a->body->shape.hw + a->body->shape.hh) / 2;
 						e->body->shape.center = pos + v2(
@@ -384,6 +385,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 				} else if(b->kind == EntityKind_Pickup) {
 					if(b->userdata.pickup.kind == PickupKind_Health) {
 						a->health += b->userdata.pickup.health.amount;
+						world_area_remove_entity(area, b);
 					}
 				}
 				break;
