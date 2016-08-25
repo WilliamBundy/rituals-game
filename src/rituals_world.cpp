@@ -365,6 +365,12 @@ void world_area_render(World_Area* area, World* world)
 #endif
 	renderer_draw();
 
+	Renderer->offset = v2(0, 0);
+	renderer_start();
+	snprintf(buf, 256, "Area %d", area->id);
+	render_body_text(buf, v2(16, 16), true);
+	renderer_draw();
+
 }
 
 void world_area_update(World_Area* area, World* world)
