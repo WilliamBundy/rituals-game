@@ -541,6 +541,8 @@ void deserialize_world(World* world, FILE* world_file)
 	fread(&world->areas_capacity, sizeof(isize), 1, world_file);
 	fread(&world->areas_width, sizeof(isize), 1, world_file);
 	fread(&world->areas_height, sizeof(isize), 1, world_file);
+	deserialize_entity(&world->global_player_entity, world_file);
+	deserialize_sim_body(&world->global_player_body, world_file);
 	fread(&world->next_area_id, sizeof(isize), 1, world_file);
 	isize current_area_id = 0;
 	fread(&current_area_id, sizeof(isize), 1, world_file);
