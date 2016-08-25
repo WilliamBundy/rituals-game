@@ -209,7 +209,7 @@ void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
 	switch(e->kind) {
 		case EntityKind_Prop: {
 			auto prop = &e->userdata.prop;
-			fread(&prop->contains, sizeof(Ritual_Entity_Kinds), 1, file);
+			fread(&prop->contains, sizeof(Rituals_Entity_Kinds), 1, file);
 			fread(&prop->subtype, sizeof(isize), 1, file);
 			fread(&prop->amount, sizeof(isize), 1, file);
 			fread(&prop->quality, sizeof(isize), 1, file);
