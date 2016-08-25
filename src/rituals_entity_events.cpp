@@ -13,15 +13,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */ 
 
-void rituals_prop_drop_on_break(World_Area* area, Entity* e) 
+void rituals_prop_drop_on_break(World_Area* area, Entity* a) 
 {
 	if(e->kind != EntityKind_Prop) {
 		printf("Could not drop on break: recieved entity type %d", e->kind);
 		return;
 	}
-	auto p = &e->userdata.prop;
+	auto p = &a->userdata.prop;
 	if(p->amount == 0) return;
-	Vec2 pos = e->body->shape.center;
+	Vec2 pos = a->body->shape.center;
 	switch(p->contains) {
 		case EntityKind_Prop:
 			break;
@@ -37,9 +37,10 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* e)
 						e->kind = EntityKind_Pickup;
 						auto eud = &e->userdata.pickup;
 						eud->health.amount = p->quality;
+						real size_mag = 
 						e->body->shape.center = pos + v2(
-								rand_range(&Game->r, -5, 5),
-								rand_range(&Game->r, -5, 5)
+								rand_range(&Game->r, -1, 1),
+								rand_range(&Game->r, -1, 1)
 								);
 						e->body->shape.hext = v2(4,4);
 						e->sprite.anchor = Anchor_Bottom;
