@@ -324,6 +324,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	_th = tilemap->h;
 	isize map_size = tilemap->w * tilemap->h;
 	_tiles = tilemap->tiles;
+	Tile* tiles = tilemap->tiles;
 	isize work = 0;
 
 	Rect2i* rects = arena_push_array(Game->temp_arena, Rect2i, map_size / 2);
