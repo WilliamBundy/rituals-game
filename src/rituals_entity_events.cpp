@@ -54,6 +54,8 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 					break;
 			}
 			break;
+		default: 
+			break;
 	}
 }
 
