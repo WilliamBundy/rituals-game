@@ -509,7 +509,7 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 
 void serialize_world(World* world)
 {
-	world_area_deinit_player(word->current_area);
+	world_area_deinit_player(world->current_area);
 	if(world->name[0] == '\0') {
 		printf("Could not save world -- name was null\n");
 		return;
