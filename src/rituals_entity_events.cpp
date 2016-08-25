@@ -37,7 +37,10 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* e)
 						e->kind = EntityKind_Pickup;
 						auto eud = &e->userdata.pickup;
 						eud->health.amount = p->quality;
-						e->body->shape.center = pos;
+						e->body->shape.center = pos + v2(
+								rand_range(&Game->r, -5, 5),
+								rand_range(&Game->r, -5, 5)
+								);
 						e->body->shape.hext = v2(8, 8);
 						e->sprite.anchor = Anchor_Bottom;
 						e->sprite.texture = Get_Texture_Coordinates(
