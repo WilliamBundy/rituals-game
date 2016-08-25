@@ -28,6 +28,7 @@ struct Hitbox
 	isize id;
 	Entity* ref;
 	uint64 mask;
+	uint64 group;
 	AABB box;
 };
 #define _hitbox_get_x1(h) (AABB_x1(h.box))
@@ -306,8 +307,13 @@ void world_area_process_hitboxes(World_Area* area)
 
 		for(isize j = i + 1; j < area->hitboxes_count; ++j) {
 			Hitbox* b = area->hitboxes + j;
-			if(!(a->mask == 0 && b->mask == 0)) {
+			//if(!(a->mask == 0 && b->mask == 0)) {
 				//if(!(a->mask & b->mask)) break;
+			//}
+			uint64 ma = a->mask & b->group;
+			uint64 mb = a->group & b->mask;
+			if(ma != 0 || mb != 0) {
+				continue;		
 			}
 
 			if(area->hitbox_sort_axis == 0) {

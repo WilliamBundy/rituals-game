@@ -1163,9 +1163,9 @@ WIN32_LEAN_AND_MEAN	src/thirdparty/tinydir.h	48;"	d
 World	src/rituals_game_info.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
-WorldAreaEntityCapacity	src/rituals_world_area.cpp	92;"	d	file:
-WorldAreaTilemapHeight	src/rituals_world_area.cpp	91;"	d	file:
-WorldAreaTilemapWidth	src/rituals_world_area.cpp	90;"	d	file:
+WorldAreaEntityCapacity	src/rituals_world_area.cpp	93;"	d	file:
+WorldAreaTilemapHeight	src/rituals_world_area.cpp	92;"	d	file:
+WorldAreaTilemapWidth	src/rituals_world_area.cpp	91;"	d	file:
 World_Area	src/rituals_game_info.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
 World_Area	src/rituals_world_area.cpp	/^struct World_Area$/;"	s	file:
 World_Area_Biome	src/rituals_world_area.cpp	/^enum World_Area_Biome$/;"	g	file:
@@ -1212,7 +1212,7 @@ _collision_slop	src/rituals_simulation.cpp	226;"	d	file:
 _color	src/rituals_gui.cpp	357;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
-_entity_get_id	src/rituals_world_area.cpp	73;"	d	file:
+_entity_get_id	src/rituals_world_area.cpp	74;"	d	file:
 _ep	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_ep;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _f	src/thirdparty/tinydir.h	/^	WIN32_FIND_DATA _f;$/;"	m	struct:tinydir_dir
 _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_dir
@@ -1225,8 +1225,8 @@ _get_sprite_y_base	src/rituals_renderer.cpp	345;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	99;"	d	file:
 _glerror	src/rituals_renderer.cpp	101;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
-_hitbox_get_x1	src/rituals_world_area.cpp	33;"	d	file:
-_hitbox_get_y1	src/rituals_world_area.cpp	35;"	d	file:
+_hitbox_get_x1	src/rituals_world_area.cpp	34;"	d	file:
+_hitbox_get_y1	src/rituals_world_area.cpp	36;"	d	file:
 _isnt_spritefont_separator	rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _isnt_spritefont_separator	src/rituals_gui.cpp	/^static inline bool _isnt_spritefont_separator(char c)$/;"	f	file:
 _naive_generate_statics_for_tilemap	src/rituals_win32.cpp	/^void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
@@ -1880,6 +1880,7 @@ glyphs	rituals_gui.cpp	/^	Rect* glyphs;$/;"	m	struct:Spritefont	file:
 glyphs	src/rituals_gui.cpp	/^	Rect2* glyphs;$/;"	m	struct:Spritefont	file:
 goblin_knight	src/rituals_game_info.cpp	/^			} goblin_knight;$/;"	m	union:Rituals_Entity_Userdata::__anon3::__anon4	typeref:struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon7	file:
 group	src/rituals_simulation.cpp	/^	uint64 group;$/;"	m	struct:Sim_Body	file:
+group	src/rituals_world_area.cpp	/^	uint64 group;$/;"	m	struct:Hitbox	file:
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text)$/;"	f
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)$/;"	f
 gui_add_checkbox	src/rituals_gui.cpp	/^bool gui_add_checkbox(Vec2 position, char* text, bool* value)$/;"	f
