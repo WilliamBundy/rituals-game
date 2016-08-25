@@ -265,6 +265,10 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	for(isize i = 0; i < area->entities_count; ++i) {
 		deserialize_entity(area->entities + i, area_file);
 	}
+	area->hitboxes_count = 0;
+	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
+	area->hitbox_contacts_count = 0;
+	area->hitbox_contacts = arena_push_array(arena, Hitbox_Contact, WorldAreaEntityCapacity);
 	deserialize_tilemap(&area->map, area_file, arena);
 	deserialize_simulator(&area->sim, area_file, arena);
 }
@@ -304,15 +308,25 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 	}
 }
 
+void serialize_hitbox(Hitbox* hb, FILE* file)
+{
+	fwrite(&hb->mask, sizeof(uint64), 1, file);
+	fwrite(&hb->aabb.e, sizeof(real), 4, file);
+}
+
 void serialize_entity(Entity* entity, FILE* file)
 {
 	fwrite(&entity->id, sizeof(isize), 1, file);
 	fwrite(&entity->body_id, sizeof(isize), 1, file);
 	serialize_sprite(&entity->sprite, file);
 
+	serialize_hitbox(Hitbox* hb, file);
 	fwrite(&entity->health, sizeof(int32), 1, file);
 	fwrite(&entity->attack, sizeof(int32), 1, file);
 	fwrite(&entity->attack_interval, sizeof(real), 1, file);
+	fwrite(&entity->attack_timer, sizeof(real), 1, file);
+	fwrite(&entity->knockback, sizeof(real), 1, file);
+	
 
 	fwrite(&entity->counter, sizeof(int32), 1, file);
 	fwrite(&entity->facing, sizeof(int32), 1, file);
@@ -320,6 +334,7 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->direction, sizeof(Direction), 1, file);
 	fwrite(&entity->kind, sizeof(isize), 1, file);
 	fwrite(&entity->events, sizeof(uint64), 1, file);
+	fwrite(&entity->flags, sizeof(uint64), 1, file);
 	//TODO(will) serialize userdata
 	serialize_rituals_entity_userdata(entity, file);
 }
@@ -429,6 +444,10 @@ void serialize_world(World* world)
 		fwrite(&world->areas_capacity, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_width, sizeof(isize), 1, world_file);
 		fwrite(&world->areas_height, sizeof(isize), 1, world_file);
+
+		serialize_entity(&world->global_player_entity, world_file);
+		serialize_sim_body(&world->global_player_body, world_file);
+
 		fwrite(&world->next_area_id, sizeof(isize), 1, world_file);
 		fwrite(&world->current_area->id, sizeof(isize), 1, world_file);
 		for(isize i = 0; i < world->areas_count; ++i) {

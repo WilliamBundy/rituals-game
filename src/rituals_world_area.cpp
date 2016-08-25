@@ -55,7 +55,6 @@ struct Entity
 	real attack_interval;
 	real attack_timer;
 	real knockback;
-	uint64 hitbox_mask;
 
 	Sprite sprite;
 	isize kind;
@@ -126,9 +125,7 @@ struct World_Area
 	Hitbox_Contact* hitbox_contacts;
 	isize hitbox_contacts_count, hitbox_contacts_capacity;
 
-	
 	Entity* player;
-
 };
 
 void init_world_area(World_Area* area, Memory_Arena* arena)
