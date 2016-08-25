@@ -41,7 +41,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* e)
 								rand_range(&Game->r, -5, 5),
 								rand_range(&Game->r, -5, 5)
 								);
-						e->body->shape.hext = v2(8, 8);
+						e->body->shape.hext = v2(4,4);
 						e->sprite.anchor = Anchor_Bottom;
 						e->sprite.texture = Get_Texture_Coordinates(
 								9*32, 0, 16, 16);
