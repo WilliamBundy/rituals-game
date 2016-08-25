@@ -124,6 +124,11 @@ union Rituals_Entity_Userdata
 {
 	struct {
 		isize held_entity_id;
+		real heal_cooldown;
+		real heal_timer;
+		int32 heal_rate;
+		int32 heal_to_interval;
+		
 	} player;
 	struct {
 		isize kind;

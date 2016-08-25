@@ -43,8 +43,6 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	init_entity(&world->global_player_entity);
 	init_body(&world->global_player_body);
 
-
-
 	Entity* e = &world->global_player_entity;
 	Sim_Body* b = &world->global_player_body;
 	e->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
@@ -56,6 +54,11 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	b->restitution = 0;
 	b->flags = Body_Flag_No_Friction;
 	e->kind = EntityKind_Player;
+	auto p = &e->userdata.player;
+	p->heal_cooldown = 5.0f;
+	p->heal_rate = 1;
+	p->heal_to_interval = 25;
+	p->heal_timer = 0;
 }
 
 
@@ -375,6 +378,28 @@ void world_area_update(World_Area* area, World* world)
 	play_state->prev_time = play_state->current_time;
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
+
+	{
+		auto p = &area->player->userdata.player;
+		if(p->heal_timer > 0) {
+			p->heal_timer -= TimeStep;
+		}
+
+		int32 last_health = area->player->health;
+		int32 ivl = p->heal_to_interval;
+		if(last_health % ivl != 0)  {
+			if(p->heal_timer <= 0) {
+				int32 new_health = area->player->health + p->heal_rate;
+				if(((new_health % ivl) < (last_health % ivl))) {
+					while(new_health % ivl != 0) {
+						new_health--;
+					}
+				}
+				area->player->health = new_health;
+			}
+		}
+	}
+
 
 	world_area_walk_entities(area, world);
 	//TODO(will) use same sorted array as world_area_walk_entities

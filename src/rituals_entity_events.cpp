@@ -325,6 +325,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 						real angle = v2_to_angle(b->walk_impulse);
 						angle += rand_range(&Game->r, -10, 10) * Math_Deg2Rad;
 						a->body->velocity += (v2_from_angle(angle) * b->knockback);
+						a->userdata.player.heal_timer = a->userdata.player.heal_cooldown;
 					}
 				}
 				break;
