@@ -308,6 +308,7 @@ void deserialize_area(World_Area* area, FILE* area_file, Memory_Arena* arena)
 	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
 	area->hitbox_contacts_count = 0;
 	area->hitbox_contacts = arena_push_array(arena, Hitbox_Contact, WorldAreaEntityCapacity);
+	area->removed_entities = arena_push_array(arena, isize, 256);
 	deserialize_tilemap(&area->map, area_file, arena);
 	deserialize_simulator(&area->sim, area_file, arena);
 }
