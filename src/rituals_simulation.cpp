@@ -335,7 +335,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		last_rects = rects_count;
 		for(isize y = 0; y < tilemap->h; ++y) {
 			for(isize x = 0; x < tilemap->w; ++x) {
-				if(_get_at(x, y)) {
+				if(_get_at(x, y)->solid) {
 					if(!_get_at(x, y - 1)) {
 						Rect2i* r = rects + rects_count++;
 						r->x = x;
@@ -345,7 +345,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 						do {
 							x++;
 						}
-						while(_get_at(x, y) && !_get_at(x, y - 1) && (x < tilemap->w));
+						while(_get_at(x, y)->solid && !_get_at(x, y - 1)->solid && (x < tilemap->w));
 
 						if(x != r->x) {
 							r->w = x - r->x;
@@ -383,7 +383,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		}
 		work = 0;
 		for(isize i = 0; i < map_size; ++i) {
-			work += tiles[i];
+			work += (int32)(Registry->tiles[tiles[i]].solid);
 		}
 	} while(work);
 	
