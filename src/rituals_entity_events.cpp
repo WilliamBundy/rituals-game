@@ -36,7 +36,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* e)
 						Entity* e = world_area_get_next_entity(area);
 						e->kind = EntityKind_Pickup;
 						auto eud = &e->userdata.pickup;
-						eud->health = p->quality;
+						eud->health.amount = p->quality;
 						e->body->shape.center = pos;
 						e->body->shape.hext = v2(8, 8);
 						e->sprite.anchor = Anchor_Bottom;
