@@ -363,7 +363,7 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 					fwrite(&p->item.count, sizeof(isize), 1, file);
 					break;
 				case PickupKind_Health:
-					fwrite(&p->item.amount, sizeof(isize), 1, file);
+					fwrite(&p->health.amount, sizeof(isize), 1, file);
 					break;
 			}
 		} break;
