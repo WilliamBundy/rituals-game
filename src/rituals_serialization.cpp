@@ -251,11 +251,11 @@ void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
 			fread(&p->kind, sizeof(isize), 1, file);
 			switch(p->kind) {
 				case PickupKind_Item:
-					fread(&p->id, sizeof(isize), 1, file);
-					fread(&p->count, sizeof(isize), 1, file);
+					fread(&p->item.id, sizeof(isize), 1, file);
+					fread(&p->item.count, sizeof(isize), 1, file);
 					break;
 				case PickupKind_Health:
-					fread(&p->amount, sizeof(isize), 1, file);
+					fread(&p->health.amount, sizeof(isize), 1, file);
 					break;
 			}
 		} break;
@@ -317,7 +317,7 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 	switch(e->kind) {
 		case EntityKind_Prop: {
 			auto prop = &e->userdata.prop;
-			fwrite(&prop->contains, sizeof(Ritual_Entity_Kinds), 1, file);
+			fwrite(&prop->contains, sizeof(Rituals_Entity_Kinds), 1, file);
 			fwrite(&prop->subtype, sizeof(isize), 1, file);
 			fwrite(&prop->amount, sizeof(isize), 1, file);
 			fwrite(&prop->quality, sizeof(isize), 1, file);
@@ -359,11 +359,11 @@ void serialize_rituals_entity_userdata(Entity* e, FILE* file)
 			fwrite(&p->kind, sizeof(isize), 1, file);
 			switch(p->kind) {
 				case PickupKind_Item:
-					fwrite(&p->id, sizeof(isize), 1, file);
-					fwrite(&p->count, sizeof(isize), 1, file);
+					fwrite(&p->item.id, sizeof(isize), 1, file);
+					fwrite(&p->item.count, sizeof(isize), 1, file);
 					break;
 				case PickupKind_Health:
-					fwrite(&p->amount, sizeof(isize), 1, file);
+					fwrite(&p->item.amount, sizeof(isize), 1, file);
 					break;
 			}
 		} break;
