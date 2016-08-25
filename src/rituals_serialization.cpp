@@ -320,7 +320,7 @@ void serialize_entity(Entity* entity, FILE* file)
 	fwrite(&entity->body_id, sizeof(isize), 1, file);
 	serialize_sprite(&entity->sprite, file);
 
-	serialize_hitbox(Hitbox* hb, file);
+	serialize_hitbox(&entity->hitbox, file);
 	fwrite(&entity->health, sizeof(int32), 1, file);
 	fwrite(&entity->attack, sizeof(int32), 1, file);
 	fwrite(&entity->attack_interval, sizeof(real), 1, file);
