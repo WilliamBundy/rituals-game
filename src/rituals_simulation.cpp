@@ -323,11 +323,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	_tw = tilemap->w;
 	_th = tilemap->h;
 	isize map_size = tilemap->w * tilemap->h;
-	uint8* tiles = arena_push_array(Game->temp_arena, uint8, map_size + 1);
-	for(isize i = 0; i < map_size; ++i) {
-		tiles[i] = Registry->tiles[tilemap->tiles[i]].solid;
-	}
-	_tiles = tiles;
+	_tiles = tilemap->tiles;
 	isize work = 0;
 
 	Rect2i* rects = arena_push_array(Game->temp_arena, Rect2i, map_size / 2);
@@ -363,7 +359,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 			isize y = r->y;
 			while(solid && (y < tilemap->h)) {
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					solid = solid && _get_at(r->x + local_x, y + 1)->solid->solid;
+					solid = solid && _get_at(r->x + local_x, y + 1)->solid;
 					if(!solid) break;
 				}
 				if(solid) {
