@@ -108,6 +108,7 @@ enum Rituals_Entity_Kinds
 	EntityKind_Player,
 	EntityKind_Enemy,
 	EntityKind_Bullet,
+	EntityKind_Pickup,
 };
 
 enum Rituals_Enemy_Kind
@@ -118,6 +119,11 @@ enum Rituals_Enemy_Kind
 	EnemyKind_Goblin_Knight,
 };
 
+enum Rituals_Pickup_Kind
+{
+	PickupKind_Item,
+	PickupKind_Health
+};
  
 
 union Rituals_Entity_Userdata
@@ -150,6 +156,17 @@ union Rituals_Entity_Userdata
 			} goblin_knight;
 		};
 	} enemy;
+	struct {
+		isize kind;
+		union {
+			struct {
+				isize id, count;
+			} item;
+			struct {
+				isize amount;
+			} health;
+		};
+	} pickup;
 	struct {
 		void* ptr;
 		isize size;
