@@ -48,6 +48,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 								9*32, 0, 16, 16);
 						e->sprite.size = v2(8, 8);
 						e->body->group = 1;
+						e->body->flags = Body_Flag_Sensor;
 					}
 					break;
 			}
