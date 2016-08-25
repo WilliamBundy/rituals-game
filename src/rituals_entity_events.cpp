@@ -381,6 +381,10 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 						a->body->velocity += (v2_from_angle(angle) * b->knockback);
 						a->userdata.player.heal_timer = a->userdata.player.heal_cooldown;
 					}
+				} else if(b->kind == EntityKind_Pickup) {
+					if(b->userdata.pickup.kind == PickupKind_Health) {
+						a->health += b->userdata.pickup.health.amount;
+					}
 				}
 				break;
 			case EntityKind_Enemy:
