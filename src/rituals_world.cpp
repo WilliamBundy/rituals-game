@@ -344,7 +344,7 @@ void world_area_render(World_Area* area, World* world)
 	}
 	renderer_sort(sprite_count_offset);
 
-#if 1
+#if 0
 	char buf[256];
 	Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
 	for(isize i = 0; i < area->entities_count; ++i) {
