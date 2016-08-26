@@ -525,7 +525,7 @@ int main(int argc, char** argv)
 		Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
 		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
 		Game->play_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
-		Game->renderer_arena = new_memory_arena(Megabytes(1024), Game->meta_arena);
+		Game->renderer_arena = new_memory_arena(Megabytes(256), Game->meta_arena);
 		Game->world_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 		Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 
@@ -549,7 +549,14 @@ int main(int argc, char** argv)
 		Game->scale = 1.0f;
 
 		Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
-		init_renderer(Game->renderer, Game->renderer_arena);
+
+		const char* vert_src = 
+#include "vert.glsl"
+			;
+		const char* frag_src = 
+#include "frag.glsl"
+			;
+		init_renderer(Game->renderer, 2, Megabytes(32), vert_src, frag_src, Game->renderer_arena);
 		
 		Game->registry = arena_push_struct(Game->game_arena, Game_Registry);
 
