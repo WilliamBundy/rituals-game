@@ -25,7 +25,7 @@ out vec2 f_pixel;
 out vec2 f_texcoords;
 out vec4 f_color;
 
-uniform mat4 ortho;
+uniform mat4 u_orthomat;
 
 void main()
 {
@@ -81,7 +81,7 @@ void main()
 	coords *= rotmat;
 	coords += v_translate;
 	coords -= v_center;
-	gl_Position = vec4(coords, 0, 1) * ortho; 
+	gl_Position = vec4(coords, 0, 1) * u_orthomat;
 	f_pixel = gl_Position.xy;
 	f_color = v_color;
 

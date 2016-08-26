@@ -14,14 +14,14 @@ in vec2 f_pixel;
 in vec2 f_texcoords;
 in vec4 f_color;
 
-uniform vec2 texture_size;
-uniform sampler2D local_texture;
+uniform vec2 u_texturesize;
+uniform sampler2D u_texture0;
 
 out vec4 final_color;
 
 void main()
 {
-	vec4 color = texture(local_texture, f_texcoords) * f_color;
+	vec4 color = texture(u_texture0, f_texcoords) * f_color;
 
 	// Nighttime effect
 	// Darkens everything except very light colors.

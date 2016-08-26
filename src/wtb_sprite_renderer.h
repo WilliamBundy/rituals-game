@@ -77,7 +77,7 @@ struct Draw_List
 struct Renderer
 {
 	GLuint shader_program, vbo, vao, texture;
-	isize u_screen, u_texturesize, u_window, u_orthomat;
+	isize u_texturesize, u_orthomat;
 	
 	Draw_List* draw_lists;
 	isize draw_lists_count;
@@ -191,6 +191,8 @@ void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_
 	glUseProgram(r->shader_program);
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
+	r->u_texturesize = glGetUnformLocation(r->shader_program, "u_texturesize");
+	r->u_orthomat = glGetUniformLocation(r->shader_program, "u_orthomat");
 
 }
 

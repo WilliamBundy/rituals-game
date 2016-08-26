@@ -215,10 +215,8 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
-	renderer->screen_loc = glGetUniformLocation(renderer->shader_program, "screen");
-	renderer->window_loc = glGetUniformLocation(renderer->shader_program, "window");
-	renderer->texture_size_loc = glGetUniformLocation(renderer->shader_program, "texture_size");
-	renderer->ortho_loc  = glGetUniformLocation(renderer->shader_program, "ortho");
+	renderer->texture_size_loc = glGetUniformLocation(renderer->shader_program, "u_texturesize");
+	renderer->ortho_loc  = glGetUniformLocation(renderer->shader_program, "u_orthomat");
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
