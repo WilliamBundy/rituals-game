@@ -49,7 +49,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	b->shape.hext = v2(5, 5);
 	e->sprite.size = v2(32, 32);
 	b->group = 1;
-	e->sprite.anchor = Anchor_Bottom;
+	e->sprite.flags = Anchor_Bottom;
 	b->damping = 0.5f;
 	b->restitution = 0;
 	b->flags = Body_Flag_No_Friction;
@@ -132,7 +132,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->shape.hh = 11;
 		b->inv_mass = 1.0f;
 		e->sprite.size = v2(32, 48);
-		e->sprite.anchor = Anchor_Bottom;
+		e->sprite.flags = Anchor_Bottom;
 		e->kind = EntityKind_Prop;
 		auto p = &e->userdata.prop;
 		p->contains = EntityKind_Pickup;
@@ -158,7 +158,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		b->flags = Body_Flag_Static;
 		e->sprite.size = v2(96, 144) * 2;
-		e->sprite.anchor = Anchor_Bottom;
+		e->sprite.flags = Anchor_Bottom;
 		e->sprite.sort_point_offset = v2(0, -60);
 		e->sprite.center = v2(2, -b->shape.hh * 2);
 		e->kind = EntityKind_Static;
@@ -481,7 +481,7 @@ void world_area_update(World_Area* area, World* world)
 					rand_range(&Game->r, -3, 3),
 					rand_range(&Game->r, -3, 3));
 			e->body->shape.center = e->sprite.position;
-			e->sprite.anchor = Anchor_Bottom;
+			e->sprite.flags = Anchor_Bottom;
 			e->body->shape.hext = v2(1, 1);
 			e->body->flags = Body_Flag_No_Friction | Body_Flag_Always_Contact;
 			e->body->damping = 1.0f;
