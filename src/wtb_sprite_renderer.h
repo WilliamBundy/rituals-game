@@ -245,6 +245,16 @@ static inline bool render_draw_list_has_clip_rect(Draw_List* list)
 	return 0 != (list->clip.w * list->clip.h);
 }
 
+static inline bool render_has_clip_rect(OpenGL_Renderer* r, isize list_index = 0)
+{
+	return render_draw_list_has_clip_rect(r->draw_lists + list_index);
+}
+
+static inline bool render_has_clip_rect(isize list_index = 0)
+{
+	return render_draw_list_has_clip_rect(Renderer->draw_lists + list_index);
+}
+
 static inline void render_draw_list_set_clip_rect(Draw_List* list, real x, real y, real w, real h)
 {
 	list->clip = Rect2 {

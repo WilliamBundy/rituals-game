@@ -2271,6 +2271,8 @@ render_draw_list_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool re
 render_draw_list_set_clip_rect	src/wtb_sprite_renderer.h	/^static inline void render_draw_list_set_clip_rect(Draw_List* list, real x, real y, real w, real h)$/;"	f
 render_draw_list_sort	src/wtb_sprite_renderer.h	/^void render_draw_list_sort(Draw_List* list, isize offset)$/;"	f
 render_draw_list_start	src/wtb_sprite_renderer.h	/^void render_draw_list_start(OpenGL_Renderer* r, Draw_List* list)$/;"	f
+render_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_has_clip_rect(OpenGL_Renderer* r, isize list_index = 0)$/;"	f
+render_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_has_clip_rect(isize list_index = 0)$/;"	f
 render_inventory	src/rituals_inventory.cpp	/^void render_inventory(Inventory* inventory, Vec2 position)$/;"	f
 render_line_primitive	src/wtb_sprite_renderer.h	/^void render_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness, isize list_index = 0)$/;"	f
 render_set_clip_rect	src/wtb_sprite_renderer.h	/^void render_set_clip_rect(OpenGL_Renderer* r, isize list_index, real x, real y, real w, real h)$/;"	f
