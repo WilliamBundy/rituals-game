@@ -298,7 +298,7 @@ void spritefont_render_text_ex(Spritefont* font,
 					s.size = size * scale;
 					s.color = font->color;
 					s.angle = 0;
-					s.anchor = anchor;
+					s.flags = anchor;
 					render_add(&s);
 					position.x += size.x + font->character_padding;
 				}
