@@ -380,6 +380,7 @@ void world_area_render(World_Area* area, World* world)
 }
 
 void init_play_state();
+int recursively_delete_folder(char* path, bool append_base_path = false);
 void world_area_update(World_Area* area, World* world)
 {
 	game_set_scale(2.0);
