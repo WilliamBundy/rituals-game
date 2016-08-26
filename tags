@@ -2261,7 +2261,7 @@ render_body_text	src/rituals_gui.cpp	/^void render_body_text(char* text, Vec2 po
 render_box_outline_primitive	src/wtb_sprite_renderer.h	/^Sprite4 render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize list_index = 0)$/;"	f
 render_box_outline_primitive	src/wtb_sprite_renderer.h	/^void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness, isize list_index = 0)$/;"	f
 render_box_primitive	src/wtb_sprite_renderer.h	/^void render_box_primitive(Vec2 pos, Vec2 size, Vec4 color, isize list_index = 0)$/;"	f
-render_calculate_ortho_matrix	src/wtb_sprite_renderer.h	/^void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real near, real far)$/;"	f
+render_calculate_ortho_matrix	src/wtb_sprite_renderer.h	/^void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, real farplane)$/;"	f
 render_clip_rect	src/rituals_renderer.cpp	/^void render_clip_rect()$/;"	f
 render_draw	src/wtb_sprite_renderer.h	/^void render_draw(OpenGL_Renderer* r, isize list_index)$/;"	f
 render_draw	src/wtb_sprite_renderer.h	/^void render_draw(isize list_index = 0)$/;"	f

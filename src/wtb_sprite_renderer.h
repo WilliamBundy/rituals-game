@@ -355,7 +355,7 @@ void render_add(Sprite4* s4, isize list_index = 0)
 	render_draw_list_add(list, s4->e + 3);
 }
 
-void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real near, real far)
+void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, real farplane)
 {
 	ortho[0] = 2.0f / (screen.z - screen.x);
 	ortho[1] = 0;
@@ -369,8 +369,8 @@ void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real near, real far
 
 	ortho[8] = 0;
 	ortho[9] = 0;
-	ortho[10] = -2.0f / (far - near);
-	ortho[11] = (-1.0f * (far + near) / (far - near));
+	ortho[10] = (-2.0f / (farplane - nearplane));
+	ortho[11] = ((-1.0f * (farplane + nearplane) / (farplane - nearplane)));
 
 	ortho[12] = 0;
 	ortho[13] = 0;
