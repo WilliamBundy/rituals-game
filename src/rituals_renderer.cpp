@@ -298,7 +298,6 @@ void renderer_calculate_ortho(Vec4 screen)
 
 void renderer_start()
 {
-	Renderer->data_index = 0;
 	Renderer->sprite_count = 0;
 	Renderer->clip = {0, 0, 0, 0};
 

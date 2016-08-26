@@ -1243,7 +1243,7 @@ _get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_member_address	src/rituals_renderer.cpp	109;"	d	file:
 _get_member_address	src/wtb_sprite_renderer.h	95;"	d
-_get_sprite_y_base	src/rituals_renderer.cpp	367;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	366;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	110;"	d	file:
 _gl_offset	src/wtb_sprite_renderer.h	96;"	d
 _glerror	src/rituals_renderer.cpp	113;"	d	file:

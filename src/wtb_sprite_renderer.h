@@ -202,7 +202,7 @@ void render_draw_list_start(Renderer* r, Draw_List* list)
 
 void render_start(Renderer* r, isize list_index)
 {
-
+	render_draw_list_start(r, r->draw_lists + list_index);
 }
 
 void render_add(Renderer* r, Sprite* sprite, isize list_index)
