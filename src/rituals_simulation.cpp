@@ -400,6 +400,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		}
 	} while(work);
 	
+	_tiles = tilemap->tiles;
 	for(isize i = 0; i < rects_count; ++i) {
 		Rect2i* r = rects + i;
 		Tile_Info* first = _get_at(r->x, r->y);
