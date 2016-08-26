@@ -370,7 +370,7 @@ void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, rea
 	ortho[8] = 0;
 	ortho[9] = 0;
 	ortho[10] = (-2.0f / (farplane - nearplane));
-	ortho[11] = ((-1.0f * (farplane + nearplane) / (farplane - nearplane)));
+	ortho[11] = (-1.0f * (farplane + nearplane) / (farplane - nearplane));
 
 	ortho[12] = 0;
 	ortho[13] = 0;
