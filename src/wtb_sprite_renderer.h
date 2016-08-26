@@ -168,7 +168,7 @@ void init_renderer(OpenGL_Renderer* r, isize list_count, isize list_size, char* 
 	glVertexAttribDivisor(5, vertex_count);
 
 	//anchor
-	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(anchor));
+	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(flags));
 	glEnableVertexAttribArray(6);
 	glVertexAttribDivisor(6, vertex_count);
 
