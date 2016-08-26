@@ -370,7 +370,7 @@ void world_area_render(World_Area* area, World* world)
 	render_draw();
 
 #if 1
-	Renderer->offset = v2(0, 0);
+	Renderer->draw_lists[0].offset = v2(0, 0);
 	render_start();
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
