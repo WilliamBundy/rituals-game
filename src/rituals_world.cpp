@@ -507,6 +507,9 @@ void world_area_update(World_Area* area, World* world)
 	world_area_hit_entities(area, world);
 	world_area_contact_entities(area, world);
 	world_area_process_removed_entities(area);
+	
+	render_box_primitive(v2(100, 100), v2(64, 32), v2(1, 1, 1, 1));
+
 	render_draw(1);
 }
 
