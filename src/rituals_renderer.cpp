@@ -411,7 +411,6 @@ void renderer_draw()
 	glBindVertexArray(0);
 }
 
-
 Sprite get_box_sprite(Vec2 pos, Vec2 size, Vec4 color)
 {
 	Sprite s;

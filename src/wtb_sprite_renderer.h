@@ -79,6 +79,8 @@ void init_sprite(Sprite* s)
 
 struct Draw_List
 {
+	GLuint texture;
+	Vec2i texture_size;
 	Vec2 offset;
 	Rect2 clip;
 	real ortho[16];
@@ -92,7 +94,7 @@ struct Draw_List
 
 struct OpenGL_Renderer
 {
-	GLuint shader_program, vbo, vao, texture;
+	GLuint shader_program, vbo, vao;
 	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;
 	
 	Draw_List* draw_lists;
@@ -308,6 +310,11 @@ void render_draw_list_add(Draw_List* list, Sprite* sprite)
 		sp.anchor = Anchor_Top_Left;
 		sp.angle = 0;
 	}
+	
+	sp.texture.x /= list->texture_size.x;
+	sp.texture.w /= list->texture_size.x;
+	sp.teyture.y /= list->texture_size.y;
+	sp.teyture.h /= list->texture_size.y;
 
 	list->sprites[list->sprites_count++] = sp;
 }
@@ -355,8 +362,8 @@ void render_draw_list(OpenGL_Renderer* r, Draw_List* list, Vec2 size, real scale
 	list->offset.y = roundf(list->offset.y);
 
 	glUniform2f(r->u_texturesize,
-		r->texture_width,
-		r->texture_height);
+		list->texture_size.x,
+		list->texture_size.y);
 
 	glUniform1f(r->u_night_amount, 1.0f - list->night_amount);
 	glUniform1f(r->u_night_cutoff, list->night_cutoff);
@@ -372,7 +379,7 @@ void render_draw_list(OpenGL_Renderer* r, Draw_List* list, Vec2 size, real scale
 		list->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, r->texture);
+	glBindTexture(GL_TEXTURE_2D, list->texture);
 	glBindVertexArray(r->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
 	glBufferData(GL_ARRAY_BUFFER, list->sprites_count * sizeof(Sprite), list->sprites, GL_STREAM_DRAW);
@@ -413,8 +420,19 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return texture;
 }
-	
 
+	
+Sprite create_box_primitve(Vec2 pos, Vec2 size, Vec4 color)
+{
+	Sprite s;
+	init_sprite(&s);
+	s.position = pos;
+	s.texture = rect2(64, 0, 32, 32);
+	s.size = size;
+	s.color = color;
+	return s;
+
+}
 
 
 
