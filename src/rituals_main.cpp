@@ -175,6 +175,10 @@ typedef size_t usize;
 //local imports
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
+
+#include "rituals_renderer.cpp"
+#include "rituals_gui.cpp"
+
 typedef struct World World;
 struct Play_State
 {
@@ -188,8 +192,15 @@ struct Play_State
 };
 Play_State* play_state;
 
-#include "rituals_renderer.cpp"
-#include "rituals_gui.cpp"
+struct Menu_State
+{
+	char save_dir[FilePathMaxLength];
+	isize save_dir_len;
+	tinydir_dir saves;
+	Gui_Text_Input_Handle handle;
+	isize delete_index;
+};
+Menu_State* menu_state;
 
 #include "rituals_game_info.cpp"
 #include "rituals_game_registry.cpp"
@@ -208,15 +219,6 @@ Play_State* play_state;
 
 #include "rituals_serialization.cpp"
 
-struct Menu_State
-{
-	char save_dir[FilePathMaxLength];
-	isize save_dir_len;
-	tinydir_dir saves;
-	Gui_Text_Input_Handle handle;
-	isize delete_index;
-};
-Menu_State* menu_state;
 
 void init_menu_state()
 {	
