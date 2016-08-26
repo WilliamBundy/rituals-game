@@ -655,8 +655,8 @@ int main(int argc, char** argv)
 				init_sprite(&s);
 				s.position = v2(i % 120, i / 120);
 				s.position *= 32;
-				s.position.x = s.position.x % 1920.0f;
-				s.position.y = s.position.y % 1080.0f;
+				s.position.x = fmod(s.position.x,, 1920.0f);
+				s.position.y = fmod(s.position.y, 1080.0f);
 				s.angle = (float)(i * Math_Deg2Rad) + tt;
 				s.texture = Get_Texture_Coordinates(0, 32, 32, 32);
 				s.size = v2(32, 32);
