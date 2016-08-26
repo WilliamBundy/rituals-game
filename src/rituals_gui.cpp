@@ -423,7 +423,7 @@ bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 			state = 2;
 		}
 	}
-	Sprite s = get_box_sprite(position, txs + v2(16, 8), Gui_ButtonRestColor);
+	Sprite s = create_box_primitive(position, txs + v2(16, 8), Gui_ButtonRestColor);
 	s.anchor = Anchor_Top_Left;
 	Vec4 color1 = Gui_ButtonOutlineRestColor;
 	Vec4 color2 = Gui_ButtonOutlineRestColor;
