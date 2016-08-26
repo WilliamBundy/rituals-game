@@ -386,6 +386,7 @@ void world_area_update(World_Area* area, World* world)
 	game_set_scale(2.0);
 	game_calc_mouse_pos(area->offset - Game->size * 0.5f);
 	//Simulation timing
+	render_start(1);
 	
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
@@ -421,7 +422,6 @@ void world_area_update(World_Area* area, World* world)
 				area->player->health = new_health;
 			}
 		}
-
 
 		if(area->player->health <= 0) {
 			Game->state = Game_State_Menu;
@@ -507,6 +507,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_hit_entities(area, world);
 	world_area_contact_entities(area, world);
 	world_area_process_removed_entities(area);
+	render_draw(1);
 }
 
 
