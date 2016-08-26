@@ -103,9 +103,6 @@ void init_sprite(Sprite* s)
 	s->sort_point_offset = v2(0, 0);
 }
 
-
-//#define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
-
 #define _get_member_address(s, m) ((void*)&(((s*)(NULL))->m))
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
 
@@ -232,17 +229,15 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-#if 0
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-#else 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-#endif
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	//TODO(will) do error checking?
-	printf("Adding texture: %d \n", glGetError());
+	uint32 error = glGetError();
+	if(error != 0) {
+		printf("There was an error adding a texture: %d \n", error));
+	}
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);

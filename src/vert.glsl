@@ -25,7 +25,6 @@ out vec2 f_pixel;
 out vec2 f_texcoords;
 out vec4 f_color;
 
-uniform vec4 screen;
 uniform mat4 ortho;
 
 void main()

@@ -169,7 +169,6 @@ void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_
 		}
 	}	
 
-
 	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment_shader, 1, &frag_source, NULL);
 	glCompileShader(fragment_shader);
@@ -254,23 +253,47 @@ void render_add(Renderer* r, Sprite* sprite, isize list_index)
 	render_draw_list_add(list, sprite);
 }
 
+void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real near, real far)
+{
+	ortho[0] = 2.0f / (screen.z - screen.x);
+	ortho[1] = 0;
+	ortho[2] = 0;
+	ortho[3] = -1.0f * (screen.x + screen.z) / (screen.z - screen.x);
+
+	ortho[4] = 0;
+	ortho[5] = 2.0f / (screen.y - screen.w);
+	ortho[6] = 0;
+	ortho[7] = -1 * (screen.y + screen.w) / (screen.y - screen.w);
+
+	ortho[8] = 0;
+	ortho[9] = 0;
+	ortho[10] = -2.0f / (far - near);
+	ortho[11] = (-1.0f * (far + near) / (far - near));
+
+	ortho[12] = 0;
+	ortho[13] = 0;
+	ortho[14] = 0;
+	ortho[15] = 1.0f;
+}
+
+
 void render_draw_list(Renderer* r, Draw_List* list, Vec2 size, real scale)
 {
 	glUseProgram(r->shader_program);
 	list->offset.x = roundf(list->offset.x);
 	list->offset.y = roundf(list->offset.y);
 	glUniform2f(r->u_texture_size
-			r->texture_width,
-			r->texture_height);
+		r->texture_width,
+		r->texture_height);
 	Vec4 screen = v4(
 		list->offset.x, list->offset.y, 
 		size.x + list->offset.x,
 		size.y + list->offset.y);
-	renderer_calculate_ortho(screen);
+	render_calculate_ortho_matrix(list->ortho, screen, 1, -1);
 	glUniformMatrix4fv(Renderer->u_orthomat, 
-			1, 
-			GL_FALSE,
-			list->ortho);
+		1, 
+		GL_FALSE,
+		list->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
@@ -286,6 +309,31 @@ void render_draw(Renderer* r, isize list_index)
 	Draw_List* list = r->draw_lists + list_index;
 	render_draw_list(r, list);
 }
+
+GLuint ogl_add_texture(uint8* data, isize w, isize h) 
+{
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	uint32 error = glGetError();
+	if(error != 0) {
+		printf("There was an error adding a texture: %d \n", error));
+	}
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return texture;
+}
+	
+
 
 
 
