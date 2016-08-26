@@ -342,7 +342,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 						r->y = y;
 						r->w = 1;
 						r->h = 1;
-						Tile_Info* first, here, up;
+						Tile_Info *first, *here, *up;
 						first = _get_at(x, y);
 						do {
 							x++;
