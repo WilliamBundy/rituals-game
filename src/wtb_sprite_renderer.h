@@ -68,6 +68,7 @@ struct Draw_List
 {
 	Vec2 offset;
 	Rect2 clip;
+	float[16] ortho;
 
 	Sprite* sprites;
 	isize sprites_count, sprites_capacity;
@@ -205,21 +206,85 @@ void render_start(Renderer* r, isize list_index)
 	render_draw_list_start(r, r->draw_lists + list_index);
 }
 
+static inline bool render_draw_list_has_clip_rect(Draw_List* list)
+{
+	return 0 != (list->clip.w * list->clip.h);
+}
+
+void render_draw_list_add(Draw_List* list, Sprite* sprite)
+{
+	Sprite sp = *sprite;
+
+	if(render_draw_list_has_clip_rect(list)) {
+		Rect2 c = list->clip;
+		Rect2 r;
+		r.position = sp.position;
+		r.size = sp.size;
+		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
+		r.y -= r.h * (0.5f + SpriteAnchorY[sp.anchor]);
+
+		if(r.x > (c.x + c.w)) return;
+		if((r.x + r.w) < c.x) return;
+		if(r.y > (c.y + c.h)) return;
+		if((r.y + r.h) < c.y) return;
+
+		Rect2_Clip_Info clip = rect2_clip(r, c);
+
+		Vec2 tex_scale = v2(sp.texture.w / sp.size.x, sp.texture.h / sp.size.y);
+		Vec2 tdp1 = clip.diff1 * tex_scale;
+		Vec2 tdp2 = clip.diff2 * tex_scale;
+		Vec2 tp1 = v2(sp.texture.x, sp.texture.y);
+		Vec2 tp2 = tp1 + v2(sp.texture.w, sp.texture.h);
+		tp1 += tdp1;
+		tp2 -= tdp2;
+		sp.texture.position = tp1;
+		sp.texture.size = tp2 - tp1;
+		sp.position = clip.rp1;
+		sp.size = clip.rp2 - clip.rp1;
+		sp.anchor = Anchor_Top_Left;
+		sp.angle = 0;
+	}
+
+	list->sprites[list->sprites_count++] = sp;
+}
+
 void render_add(Renderer* r, Sprite* sprite, isize list_index)
 {
 	Draw_List* list = r->draw_lists + list_index;
-	list->sprites[list->sprites_count++] = *sprite;
+	render_draw_list_add(list, sprite);
+}
+
+void render_draw_list(Renderer* r, Draw_List* list, Vec2 size, real scale)
+{
+	glUseProgram(r->shader_program);
+	list->offset.x = roundf(list->offset.x);
+	list->offset.y = roundf(list->offset.y);
+	glUniform2f(r->u_texture_size
+			r->texture_width,
+			r->texture_height);
+	Vec4 screen = v4(
+		list->offset.x, list->offset.y, 
+		size.x + list->offset.x,
+		size.y + list->offset.y);
+	renderer_calculate_ortho(screen);
+	glUniformMatrix4fv(Renderer->u_orthomat, 
+			1, 
+			GL_FALSE,
+			list->ortho);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
+	glBindVertexArray(r->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
+	glBufferData(GL_ARRAY_BUFFER, list->sprites_count * sizeof(Sprite), list->sprites, GL_STREAM_DRAW);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, list->sprites_count);
+	glBindVertexArray(0);
 }
 
 void render_draw(Renderer* r, isize list_index)
 {
 	Draw_List* list = r->draw_lists + list_index;
-	glBindVertexArray(r->vao);
-	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
-	glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STREAM_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, list->sprites_count * sizeof(Sprite), list->sprites, GL_STREAM_DRAW);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, list->sprites_count);
-	glBindVertexArray(0);
+	render_draw_list(r, list);
 }
 
 

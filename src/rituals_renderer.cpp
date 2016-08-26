@@ -300,7 +300,6 @@ void renderer_start()
 {
 	Renderer->sprite_count = 0;
 	Renderer->clip = {0, 0, 0, 0};
-
 }
 
 static inline bool renderer_has_clip_rect()
