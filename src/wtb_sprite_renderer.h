@@ -538,7 +538,7 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int3
 	return s;
 }
 
-Sprite4 render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize list_index = 0)
+void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize list_index = 0)
 {
 	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
 	render_add(&s, list_index);
