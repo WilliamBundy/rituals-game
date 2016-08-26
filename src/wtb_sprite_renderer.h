@@ -313,7 +313,7 @@ void render_draw_list_add(Draw_List* list, Sprite* sprite)
 		sp.texture.size = tp2 - tp1;
 		sp.position = clip.rp1;
 		sp.size = clip.rp2 - clip.rp1;
-		sp.anchor = Anchor_Top_Left;
+		sp.flags = (~Sprite_Anchor_Mask & sp.flags) | Anchor_Top_Left;
 		sp.angle = 0;
 	}
 	
