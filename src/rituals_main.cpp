@@ -669,7 +669,7 @@ int main(int argc, char** argv)
 		Input->mouse_x = mx;
 		Input->mouse_y = my;
 		Input->screen_mouse_pos = v2i(mx, my);
-		game_calc_mouse_pos(Renderer->offset);
+		game_calc_mouse_pos(Renderer->draw_lists[0].offset);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
