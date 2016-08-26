@@ -356,7 +356,7 @@ bool gui_query_mouse(Rect2 region, Vec2 parent)
 {
 	region.position -= parent;
 	Rect2 r = region;
-	game_calc_mouse_pos(render->draw_lists[0].offset);
+	game_calc_mouse_pos(Renderer->draw_lists[0].offset);
 	Vec2 p = Input->mouse_pos;
 	Vec2 rp1, rp2;
 	if(render_has_clip_rect()) {
