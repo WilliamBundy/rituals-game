@@ -649,6 +649,7 @@ int main(int argc, char** argv)
 		{
 			for(isize i = 0; i < 1000; ++i) {
 				Sprite s;
+				init_sprite(&s);
 				s.position = v2(i % 120, i / 120);
 				s.texture = rect2(3*32/512, 0, 32/512, 32/512);
 				s.size = v2(32, 32);
