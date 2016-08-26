@@ -23,7 +23,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 			- requires a lot of sorting per package id.
  * 	- Graphics
  *  	- Multiple renderers, supporting multiple display lists
- *  	- renderer_draw_sprite(Renderer0, &sprite);
+ *  	- render_draw_sprite(Renderer0, &sprite);
  *			- specializaitons: r0_draw_sprite(...)
  *		- Improved primitive generation functions
  *			- Mostly name/argument/return standardization
@@ -228,7 +228,7 @@ void main_menu_update()
 {
 	game_set_scale(2.0f);
 	Renderer->draw_list[0].offset = v2(0, 0);
-	renderer_start();
+	render_start();
 	
 	real lasty = 32;
 	Body_Font->color = v4(1, 1, 1, 1);
@@ -295,7 +295,7 @@ void main_menu_update()
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 	}
 
-	renderer_draw();
+	render_draw();
 }
 
 
@@ -321,12 +321,12 @@ void test_init()
 void test_update()
 {
 	game_set_scale(2.0);
-	renderer_start();
-	renderer_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
+	render_start();
+	render_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
 	for(isize i = 0; i < 100; ++i) {
-		renderer_push_sprite(boxes + i);
+		render_add(boxes + i);
 	}	
-	renderer_draw();
+	render_draw();
 }
 
 void update()
@@ -506,7 +506,7 @@ int main(int argc, char** argv)
 		Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
 		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
 		Game->play_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
-		Game->renderer_arena = new_memory_arena(Megabytes(1024), Game->meta_arena);
+		Game->render_arena = new_memory_arena(Megabytes(1024), Game->meta_arena);
 		Game->world_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 		Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 
@@ -530,7 +530,7 @@ int main(int argc, char** argv)
 		Game->scale = 1.0f;
 
 		Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
-		renderer_init(Game->renderer, Game->renderer_arena);
+		render_init(Game->renderer, Game->render_arena);
 		
 		Game->registry = arena_push_struct(Game->game_arena, Game_Registry);
 
