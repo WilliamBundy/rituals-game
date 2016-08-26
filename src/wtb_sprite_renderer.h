@@ -502,10 +502,10 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 t
 	Vec2 tl = center - size;
 	Vec2 br = center + size;
 	Sprite s[4];
-	s[0] = create_line_primitive(tl, v2(br.x, tl.y), color, thickness);
-	s[1] = create_line_primitive(v2(br.x, tl.y), br, color, thickness);
-	s[2] = create_line_primitive(br, v2(tl.x, br.y), color, thickness);
-	s[3] = create_line_primitive(v2(tl.x, br.y), tl, color, thickness);
+	s.e[0] = create_line_primitive(tl, v2(br.x, tl.y), color, thickness);
+	s.e[1] = create_line_primitive(v2(br.x, tl.y), br, color, thickness);
+	s.e[2] = create_line_primitive(br, v2(tl.x, br.y), color, thickness);
+	s.e[3] = create_line_primitive(v2(tl.x, br.y), tl, color, thickness);
 	Sprite4 s4;
 	s4.e = s;
 	return s4;
@@ -522,14 +522,12 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int3
 	size *= 0.5f;	
 	Vec2 tl = center - size;
 	Vec2 br = center + size;
-	Sprite s[4];
-	s[0] = create_line_primitive(tl, v2(br.x, tl.y), color[0], thickness);
-	s[1] = create_line_primitive(v2(br.x, tl.y), br, color[1], thickness);
-	s[2] = create_line_primitive(br, v2(tl.x, br.y), color[2], thickness);
-	s[3] = create_line_primitive(v2(tl.x, br.y), tl, color[3], thickness);
-	Sprite4 s4;
-	s4.e = s;
-	return s4;
+	Sprite4 s;
+	s.e[0] = create_line_primitive(tl, v2(br.x, tl.y), color[0], thickness);
+	s.e[1] = create_line_primitive(v2(br.x, tl.y), br, color[1], thickness);
+	s.e[2] = create_line_primitive(br, v2(tl.x, br.y), color[2], thickness);
+	s.e[3] = create_line_primitive(v2(tl.x, br.y), tl, color[3], thickness);
+	return s;
 }
 
 Sprite4 render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize list_index = 0)
