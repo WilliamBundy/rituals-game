@@ -501,7 +501,7 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 t
 	size *= 0.5f;	
 	Vec2 tl = center - size;
 	Vec2 br = center + size;
-	Sprite s[4];
+	Sprite4 s;
 	s.e[0] = create_line_primitive(tl, v2(br.x, tl.y), color, thickness);
 	s.e[1] = create_line_primitive(v2(br.x, tl.y), br, color, thickness);
 	s.e[2] = create_line_primitive(br, v2(tl.x, br.y), color, thickness);
