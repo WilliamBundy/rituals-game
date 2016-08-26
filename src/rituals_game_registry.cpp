@@ -128,7 +128,7 @@ void finalize_game_registry()
 #define Tile_Size (32)
 #define Half_TS (16)
 
-#define _tile_texture(x, y) Get_Texture_Coordinates(Tile_Size * (x), Tile_Size * (y), Tile_Size, Tile_Size)
+#define _tile_texture(x, y) rect2(Tile_Size * (x), Tile_Size * (y), Tile_Size, Tile_Size)
 #define _new_tile(name, mvt, frc, x, y, solid) Tile_Info* tile_##name = add_tile_info(#name, (real)(mvt), (real)frc, _tile_texture(x, y), solid, "dug_earth")
 
 Tile_Info* add_tile_info(const char* name, real movement_modifier, real friction, Rect2 texture, bool solid, char* break_to_name)
