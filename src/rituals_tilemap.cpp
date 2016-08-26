@@ -293,7 +293,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 						s.size = v2(Tile_Size, Tile_Size);
 						s.texture = bottom->top_texture;
 						s.flags = Anchor_Bottom;
-						s.sort_point_offset = v2(0, Tile_Size);
+						s.sort_offset = Tile_Size;
 						render_add(&s);
 					}
 				}
