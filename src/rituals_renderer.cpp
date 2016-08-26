@@ -55,15 +55,23 @@ real SpriteAnchorY[] = {
 
 struct Sprite
 {
-	uint32 anchor;
 	Vec2 position;
 	Vec2 center;
 	real angle;
 	Vec2 size;
 	Rect2 texture;
 	Vec4 color;
+	uint32 anchor;
 	Vec2 sort_point_offset;
 };
+
+struct Draw_List
+{
+	Vec2 offset;
+
+	Sprite* sprites;
+	isize sprites_count;
+}
 
 struct OpenGL_Renderer
 {
