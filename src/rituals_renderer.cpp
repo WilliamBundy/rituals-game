@@ -311,7 +311,7 @@ void renderer_start()
 	glUniformMatrix4fv(Renderer->ortho_loc, 
 			1, 
 			GL_FALSE,
-			(GL_FLOAT*)Renderer->ortho);
+			Renderer->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
