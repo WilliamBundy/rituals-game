@@ -342,10 +342,18 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 						r->y = y;
 						r->w = 1;
 						r->h = 1;
+						Tile_Info* first, here, up;
+						first = _get_at(x, y);
 						do {
 							x++;
+							here = _get_at(x, y);
+							up = _get_at(x, y-1)
 						}
-						while(_get_at(x, y)->solid && !_get_at(x, y - 1)->solid && (x < tilemap->w));
+						while(  here->solid && !up->solid &&
+								(here->body_mask == first->body_mask) &&
+								(here->body_group == first->body_group &&)
+								(x < tilemap->w));
+
 
 						if(x != r->x) {
 							r->w = x - r->x;
