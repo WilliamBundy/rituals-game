@@ -238,7 +238,7 @@ void render_tilemap(Tilemap* tilemap, Vec2 pos)
 			s.position = v2(j*32, i*32) + pos;
 			s.size = v2(32, 32);
 			s.texture = t->texture;
-			renderer_push_sprite(&s);
+			render_add(&s);
 		}
 	}
 }
@@ -266,9 +266,9 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 				s.texture = t->bottom_texture;
 			} else {
 				s.texture = t->texture;
-				renderer_push_sprite(&s);
+				render_add(&s);
 			}
-			renderer_push_sprite(&s);
+			render_add(&s);
 
 			Tile_State* state = tilemap->states + (i * tilemap->w + j);
 			if(state->damage > 0) {
@@ -276,7 +276,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 				dmgp *= 3;
 				int32 frame = (int32)dmgp;
 				s.texture = _tile_texture((5 + frame), 0);
-				renderer_push_sprite(&s);
+				render_add(&s);
 			}
 		}
 	}
@@ -294,7 +294,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 						s.texture = bottom->top_texture;
 						s.anchor = Anchor_Bottom;
 						s.sort_point_offset = v2(0, Tile_Size);
-						renderer_push_sprite(&s);
+						render_add(&s);
 					}
 				}
 
