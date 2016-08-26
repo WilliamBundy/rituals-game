@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_play_state.cpp
  */
 
-void play_state_init()
+void init_play_state()
 {
 	clear_arena(Game->play_arena);
 	clear_arena(Game->world_arena);
