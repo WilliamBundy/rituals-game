@@ -280,7 +280,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 			}
 		}
 	}
-	isize unsorted_index = Renderer->draw_list[0].sprite_count;
+	isize unsorted_index = Renderer->draw_lists[0].sprite_count;
 	for(isize i = starty; i < endy; ++i) {
 		for(isize j = startx; j < endx; ++j) {
 				Tile tile = tilemap->tiles[i * tilemap->w + j];
