@@ -196,8 +196,8 @@ void serialize_sprite(Sprite* s, FILE* file)
 	fwrite(&s->size.e, sizeof(real), 2, file);
 	fwrite(&s->texture.e, sizeof(real), 4, file);
 	fwrite(&s->color.e, sizeof(real), 4, file);
-	fwrite(&s->anchor, sizeof(uint32), 1, file);
-	fwrite(&s->sort_point_offset.e, sizeof(real), 2, file);
+	fwrite(&s->flags, sizeof(uint32), 1, file);
+	fwrite(&s->sort_offset, sizeof(real), 1, file);
 }
 
 void deserialize_sprite(Sprite* s, FILE* file)
@@ -208,8 +208,8 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s->size.e, sizeof(real), 2, file);
 	fread(&s->texture.e, sizeof(real), 4, file);
 	fread(&s->color.e, sizeof(real), 4, file);
-	fread(&s->anchor, sizeof(uint32), 1, file);
-	fread(&s->sort_point_offset.e, sizeof(real), 2, file);
+	fread(&s->flags, sizeof(uint32), 1, file);
+	fread(&s->sort_offset, sizeof(real), 1, file);
 }
 
 void deserialize_rituals_entity_userdata(Entity* e, FILE* file)
