@@ -650,7 +650,7 @@ int main(int argc, char** argv)
 		{
 			tt += .05f;
 			renderer_start();
-			for(isize i = 0; i < 1000; ++i) {
+			for(isize i = 0; i < 10000; ++i) {
 				Sprite s;
 				init_sprite(&s);
 				s.position = v2(i % 120, i / 120);
