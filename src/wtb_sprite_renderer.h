@@ -419,7 +419,7 @@ void render_draw(OpenGL_Renderer* r, isize list_index)
 
 void render_draw(isize list_index = 0)
 {
-	render_draw_list(Renderer, Renderer->draw_lists + list_index);
+	render_draw_list(Renderer, Renderer->draw_lists + list_index, Game->size, Game->scale);
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
