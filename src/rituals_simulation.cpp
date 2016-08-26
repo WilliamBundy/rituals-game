@@ -412,8 +412,6 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		e->restitution = 0.3f;
 		e->inv_mass = 0.0f;
 		e->flags = Body_Flag_Static;
-		printf("%s %d \n", first->name, first->body_group);
-
 		e->group = first->body_group;
 		e->mask = first->body_mask;
 	}
