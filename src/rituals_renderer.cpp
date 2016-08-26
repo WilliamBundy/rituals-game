@@ -300,9 +300,9 @@ void renderer_start()
 {
 	Renderer->data_index = 0;
 	Renderer->sprite_count = 0;
-	Renderer->screen.center = Renderer->offset;
-	Renderer->screen.hext = Game->size * 0.5;
-	Renderer->screen.center += v2(Renderer->screen.hw, Renderer->screen.hh);
+	//Renderer->screen.center = Renderer->offset;
+	//Renderer->screen.hext = Game->size * 0.5;
+	//Renderer->screen.center += v2(Renderer->screen.hw, Renderer->screen.hh);
 	Renderer->clip = {0, 0, 0, 0};
 
 	glUseProgram(Renderer->shader_program);
@@ -417,7 +417,6 @@ void renderer_draw()
 {
 	glBindVertexArray(Renderer->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, Renderer->vbo);
-//	glBufferData(GL_ARRAY_BUFFER, Megabytes(32), NULL, GL_STREAM_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, Renderer->sprite_count * sizeof(Sprite),
 			Renderer->sprite_data, GL_STREAM_DRAW);
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, Renderer->sprite_count);

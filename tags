@@ -1242,8 +1242,10 @@ _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
 _get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_member_address	src/rituals_renderer.cpp	109;"	d	file:
+_get_member_address	src/wtb_sprite_renderer.h	95;"	d
 _get_sprite_y_base	src/rituals_renderer.cpp	394;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	110;"	d	file:
+_gl_offset	src/wtb_sprite_renderer.h	96;"	d
 _glerror	src/rituals_renderer.cpp	113;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
 _hitbox_get_x1	src/rituals_world_area.cpp	34;"	d	file:
@@ -1989,6 +1991,7 @@ img_y	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__
 immune_to_damage	src/rituals_game_info.cpp	/^	bool immune_to_damage;$/;"	m	struct:Tile_Info	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
 init_body	src/rituals_simulation.cpp	/^void init_body(Sim_Body* b)$/;"	f
+init_draw_list	src/wtb_sprite_renderer.h	/^void init_draw_list(Draw_List* list, isize sprites_capacity, Memory_Arena* arena)$/;"	f
 init_entity	src/rituals_world_area.cpp	/^void init_entity(Entity* entity)$/;"	f
 init_game_registry	src/rituals_game_registry.cpp	/^void init_game_registry(Game_Registry* registry, Memory_Arena* arena)$/;"	f
 init_inventory	src/rituals_inventory.cpp	/^void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)$/;"	f
@@ -1997,6 +2000,7 @@ init_memory_arena	src/rituals_game.cpp	/^void init_memory_arena(Memory_Arena* ar
 init_menu_state	src/rituals_main.cpp	/^void init_menu_state()$/;"	f
 init_play_state	src/rituals_play_state.cpp	/^void init_play_state()$/;"	f
 init_random	src/rituals_game.cpp	/^void init_random(Random* r, uint64 seed) $/;"	f
+init_renderer	src/wtb_sprite_renderer.h	/^void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_source, char* frag_source, Memory_Arena* arena)$/;"	f
 init_simulator	src/rituals_simulation.cpp	/^void init_simulator(Simulator* sim, isize cap, Memory_Arena* arena)$/;"	f
 init_sprite	src/rituals_renderer.cpp	/^void init_sprite(Sprite* s)$/;"	f
 init_spritefont	rituals_gui.cpp	/^void init_spritefont(Spritefont* font)$/;"	f
@@ -2352,8 +2356,9 @@ spritefont_size_text	src/rituals_gui.cpp	/^Vec2 spritefont_size_text(Spritefont*
 spritefont_size_text	src/rituals_gui.cpp	/^Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)$/;"	f
 sprites	src/rituals_renderer.cpp	/^	Sprite* sprites;$/;"	m	struct:Draw_List	file:
 sprites	src/wtb_sprite_renderer.h	/^	Sprite* sprites;$/;"	m	struct:Draw_List
+sprites_capacity	src/wtb_sprite_renderer.h	/^	isize sprites_count, sprites_capacity;$/;"	m	struct:Draw_List
 sprites_count	src/rituals_renderer.cpp	/^	isize sprites_count;$/;"	m	struct:Draw_List	file:
-sprites_count	src/wtb_sprite_renderer.h	/^	isize sprites_count;$/;"	m	struct:Draw_List
+sprites_count	src/wtb_sprite_renderer.h	/^	isize sprites_count, sprites_capacity;$/;"	m	struct:Draw_List
 start_play_state	src/rituals_play_state.cpp	/^void start_play_state(char* world_name_in)$/;"	f
 start_temp_arena	src/rituals_game.cpp	/^void start_temp_arena(Memory_Arena* arena)$/;"	f
 start_x	src/thirdparty/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon17
