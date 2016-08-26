@@ -5,7 +5,6 @@
  * Under the MIT and WTFPL licences.
  */ 
 
-
 enum Sprite_Anchor
 {
 	Anchor_Center = 0,
@@ -63,12 +62,26 @@ struct Sprite
 	uint32 flags;
 	real sort_offset;
 };
+#define _get_sprite_y_base(s) (s.position.y - s.center.y + s.sort_offset)
+GenerateIntrosortForType(sort_sprites_on_y_base, Sprite, 12, _get_sprite_y_base)
+
+void init_sprite(Sprite* s)
+{
+	s->position = v2(0, 0);
+	s->center = v2(0, 0);
+	s->angle = 0;
+	s->size = v2(32, 32);
+	s->texture = rect2(0, 0, 1, 1);
+	s->color = v4(1, 1, 1, 1);
+	s->flags = Anchor_Center;
+	s->sort_offset = 0;
+}
 
 struct Draw_List
 {
 	Vec2 offset;
 	Rect2 clip;
-	float[16] ortho;
+	real ortho[16];
 
 	real night_amount;
 	real night_cutoff;
@@ -77,7 +90,7 @@ struct Draw_List
 	isize sprites_count, sprites_capacity;
 };
 
-struct Renderer
+struct OpenGL_Renderer
 {
 	GLuint shader_program, vbo, vao, texture;
 	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;
@@ -85,6 +98,7 @@ struct Renderer
 	Draw_List* draw_lists;
 	isize draw_lists_count;
 };
+extern OpenGL_Renderer* Renderer;
 
 void init_draw_list(Draw_List* list, isize sprites_capacity, Memory_Arena* arena)
 {
@@ -100,7 +114,7 @@ void init_draw_list(Draw_List* list, isize sprites_capacity, Memory_Arena* arena
 
 #define _get_member_address(s, m) ((void*)&(((s*)(NULL))->m))
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
-void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
+void init_renderer(OpenGL_Renderer* r, isize list_count, isize list_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
 {
 	r->draw_lists = arena_push_array(arena, Draw_List, list_count);
 	r->draw_lists_count = list_count;
@@ -196,28 +210,70 @@ void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_
 	glUseProgram(r->shader_program);
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
+
 	r->u_texturesize = glGetUnformLocation(r->shader_program, "u_texturesize");
 	r->u_orthomat = glGetUniformLocation(r->shader_program, "u_orthomat");
 	r->u_night_amount = glGetUniformLocation(r->shader_program, "u_night_amount");
 	r->u_night_cutoff = glGetUniformLocation(r->shader_program, "u_night_cutoff");
-
 }
 
-void render_draw_list_start(Renderer* r, Draw_List* list)
+void render_draw_list_start(OpenGL_Renderer* r, Draw_List* list)
 {
 	list->sprites_count = 0;
 	list->clip = {0, 0, 0, 0};
 }
 
-void render_start(Renderer* r, isize list_index)
+void render_start(OpenGL_Renderer* r, isize list_index)
 {
 	render_draw_list_start(r, r->draw_lists + list_index);
+}
+
+void render_start(isize list_index = 0)
+{
+	render_draw_list(Renderer, Renderer->draw_lists + list_index);
 }
 
 static inline bool render_draw_list_has_clip_rect(Draw_List* list)
 {
 	return 0 != (list->clip.w * list->clip.h);
 }
+
+static inline void render_draw_list_set_clip_rect(Draw_List* list, real x, real y, real w, real h)
+{
+	list->clip = Rect2 {
+		x, y, w, h
+	};
+}
+
+void render_set_clip_rect(Renderer* r, isize list_index, real x, real y, real w, real h)
+{
+	r->draw_lists[list_index].clip = Rect2{
+		x, y, w, h
+	};
+}
+
+void render_set_clip_rect(real x, real y, real w, real h, isize list_index = 0)
+{
+	Renderer->draw_lists[list_index].clip = Rect2{
+		x, y, w, h
+	};
+}
+
+void render_draw_list_sort(Draw_List* list, isize offset)
+{
+	sort_sprites_on_y_base(list->sprites + offset, list->sprites_count - offset);
+}
+
+void render_sort(Renderer* r, isize list_index, isize offset)
+{
+	sort_sprites_on_y_base(r->draw_lists[list_index].sprites + offset, list->sprites_count - offset);
+}
+
+void render_sort(isize offset, isize list_index = 0)
+{
+	sort_sprites_on_y_base(Renderer->draw_lists[list_index].sprites + offset, list->sprites_count - offset);
+}
+
 
 void render_draw_list_add(Draw_List* list, Sprite* sprite)
 {
@@ -256,9 +312,15 @@ void render_draw_list_add(Draw_List* list, Sprite* sprite)
 	list->sprites[list->sprites_count++] = sp;
 }
 
-void render_add(Renderer* r, Sprite* sprite, isize list_index)
+void render_add(OpenGL_Renderer* r, Sprite* sprite, isize list_index)
 {
 	Draw_List* list = r->draw_lists + list_index;
+	render_draw_list_add(list, sprite);
+}
+
+void render_add(Sprite* sprite, isize list_index = 0)
+{
+	Draw_List* list = Renderer->draw_lists + list_index;
 	render_draw_list_add(list, sprite);
 }
 
@@ -286,7 +348,7 @@ void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real near, real far
 }
 
 
-void render_draw_list(Renderer* r, Draw_List* list, Vec2 size, real scale)
+void render_draw_list(OpenGL_Renderer* r, Draw_List* list, Vec2 size, real scale)
 {
 	glUseProgram(r->shader_program);
 	list->offset.x = roundf(list->offset.x);
@@ -304,13 +366,13 @@ void render_draw_list(Renderer* r, Draw_List* list, Vec2 size, real scale)
 		size.x + list->offset.x,
 		size.y + list->offset.y);
 	render_calculate_ortho_matrix(list->ortho, screen, 1, -1);
-	glUniformMatrix4fv(Renderer->u_orthomat, 
+	glUniformMatrix4fv(r->u_orthomat, 
 		1, 
 		GL_FALSE,
 		list->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
+	glBindTexture(GL_TEXTURE_2D, r->texture);
 	glBindVertexArray(r->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
 	glBufferData(GL_ARRAY_BUFFER, list->sprites_count * sizeof(Sprite), list->sprites, GL_STREAM_DRAW);
@@ -318,10 +380,15 @@ void render_draw_list(Renderer* r, Draw_List* list, Vec2 size, real scale)
 	glBindVertexArray(0);
 }
 
-void render_draw(Renderer* r, isize list_index)
+void render_draw(OpenGL_Renderer* r, isize list_index)
 {
 	Draw_List* list = r->draw_lists + list_index;
 	render_draw_list(r, list);
+}
+
+void render_draw(isize list_index = 0)
+{
+	render_draw_list(Renderer, Renderer->draw_lists + list_index);
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
