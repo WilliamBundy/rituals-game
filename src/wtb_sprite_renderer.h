@@ -19,6 +19,14 @@ enum Sprite_Anchor
 	Anchor_Left = 8
 };
 
+uint32 Sprite_Anchor_Mask = 0xF;
+
+enum Sprite_Flags
+{
+	SpriteFlag_FlipHoriz = Flag(4),
+	SpriteFlag_FlipVert = Flag(5)
+};
+
 real SpriteAnchorX[] = {
 	0.0f,
 	-0.5f,
@@ -52,13 +60,14 @@ struct Sprite
 	Vec2 size;
 	Rect2 texture;
 	Vec4 color;
-	uint32 anchor;
-	Vec2 sort_point_offset;
+	uint32 flags;
+	real sort_offset;
 };
 
 struct Draw_List
 {
-	Vec2 origin;
+	Vec2 offset;
+	Rect2 clip;
 
 	Sprite* sprites;
 	isize sprites_count;

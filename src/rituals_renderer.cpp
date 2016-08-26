@@ -417,9 +417,9 @@ void renderer_draw()
 {
 	glBindVertexArray(Renderer->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, Renderer->vbo);
-	glBufferData(GL_ARRAY_BUFFER, Megabytes(32), NULL, GL_STREAM_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, Renderer->sprite_count * sizeof(Sprite),
-			Renderer->sprite_data);
+//	glBufferData(GL_ARRAY_BUFFER, Megabytes(32), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, Renderer->sprite_count * sizeof(Sprite),
+			Renderer->sprite_data, GL_STREAM_DRAW);
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, Renderer->sprite_count);
 	glBindVertexArray(0);
 }
