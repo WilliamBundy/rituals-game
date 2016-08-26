@@ -312,6 +312,7 @@ void renderer_start()
 			1, 
 			GL_FALSE,
 			Renderer->ortho);
+	printf("%d \n", glGetError());
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
