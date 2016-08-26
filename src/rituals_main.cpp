@@ -647,26 +647,7 @@ int main(int argc, char** argv)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		update();
-#if 0
-		{
-			tt += .05f;
-			renderer_start();
-			for(isize i = 0; i < 100000; ++i) {
-				Sprite s;
-				init_sprite(&s);
-				s.position = v2(i % 120, i / 120);
-				s.position *= 32;
-				s.position.x = fmod(s.position.x, 1920.0f);
-				s.position.y = fmod(s.position.y, 1080.0f);
-				s.angle = (float)(i * Math_Deg2Rad) + tt;
-				s.texture = Get_Texture_Coordinates(0, 32, 32, 32);
-				s.size = v2(32, 32);
-				s.color = v4(1, 1, 1, 1);
-				renderer_push_sprite(&s);
-			}
-			renderer_draw();
-		}
-#endif 
+
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
 		if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
