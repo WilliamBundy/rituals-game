@@ -652,6 +652,7 @@ int main(int argc, char** argv)
 				Sprite s;
 				init_sprite(&s);
 				s.position = v2(i % 120, i / 120);
+				s.position *= 32;
 				s.texture = Get_Texture_Coordinates(0, 32, 32, 32);
 				s.size = v2(32, 32);
 				s.color = v4(1, 1, 1, 1);
