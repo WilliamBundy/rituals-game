@@ -192,11 +192,13 @@ struct Play_State
 };
 Play_State* play_state;
 
+//TODO(will) add world creation/deletion functions to menu_state area
 struct Menu_State
 {
 	char save_dir[FilePathMaxLength];
 	isize save_dir_len;
 	tinydir_dir saves;
+	bool saves_dirty;
 	Gui_Text_Input_Handle handle;
 	isize delete_index;
 };
@@ -250,15 +252,14 @@ void main_menu_update()
 			v2(256, Body_Font->glyph_height + 8), 
 			"Enter new world name");
 
-	bool saves_dirty = false;
 	if(gui_add_button(v2(256 + 32 + 16 , lasty), "Create", v2(64, 0))) {
-		saves_dirty = true;
+		menu_state->saves_dirty = true;
 	}
 	if(Input->scancodes[SDL_SCANCODE_RETURN] == State_Just_Pressed) {
-		saves_dirty = true;
+		menu_state->saves_dirty = true;
 	}
 
-	if(saves_dirty) {
+	if(menu_state->saves_dirty) {
 		tinydir_close(&menu_state->saves);
 		char buf[FilePathMaxLength];
 	 	snprintf(buf, FilePathMaxLength, "%ssave/%.*s",
@@ -269,7 +270,7 @@ void main_menu_update()
 		
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 		menu_state->handle.buffer_length = 0;
-		saves_dirty = false;
+		menu_state->saves_dirty = false;
 	}
 	lasty += 32 + 16;
 
@@ -294,14 +295,14 @@ void main_menu_update()
 					printf("[%s] was deleted \n", file.path);
 					recursively_delete_folder(file.path);
 					menu_state->delete_index = -1;
-					saves_dirty = true;
+					menu_state->saves_dirty = true;
 				}
 			}
 			lasty += 32;
 		}
 	}
 
-	if(saves_dirty) {
+	if(menu_state->saves_dirty) {
 		tinydir_close(&menu_state->saves);
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 	}
