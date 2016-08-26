@@ -283,7 +283,7 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 				init_sprite(&s);
 				s.position = player->shape.center;
 				s.size = v2(16, 16);
-				s.texture = rect2(0, Renderer->texture_height - 16, 16, 16);
+				s.texture = rect2(64, 0, 16, 16);
 				s.color = v4(1, 1, 1, 1);
 				switch(e->direction) {
 					case Direction_North:
