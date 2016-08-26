@@ -218,7 +218,7 @@ void init_renderer(OpenGL_Renderer* r, isize list_count, isize list_size, char* 
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
-	r->u_texturesize = glGetUnformLocation(r->shader_program, "u_texturesize");
+	r->u_texturesize = glGetUniformLocation(r->shader_program, "u_texturesize");
 	r->u_orthomat = glGetUniformLocation(r->shader_program, "u_orthomat");
 	r->u_night_amount = glGetUniformLocation(r->shader_program, "u_night_amount");
 	r->u_night_cutoff = glGetUniformLocation(r->shader_program, "u_night_cutoff");
