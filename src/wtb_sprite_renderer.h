@@ -196,7 +196,8 @@ void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_
 
 void render_draw_list_start(Renderer* r, Draw_List* list)
 {
-
+	list->sprites_count = 0;
+	list->clip = {0, 0, 0, 0};
 }
 
 void render_start(Renderer* r, isize list_index)
