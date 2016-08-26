@@ -402,6 +402,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	
 	for(isize i = 0; i < rects_count; ++i) {
 		Rect2i* r = rects + i;
+		Tile_Info* first = _get_at(r->x, r->y);
 		Sim_Body* e = sim_get_next_body(sim);
 		e->shape.center.x = (r->x + r->w / 2.0f) * Tile_Size;//+ Half_TS;
 		e->shape.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
@@ -410,8 +411,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		e->restitution = 0.3f;
 		e->inv_mass = 0.0f;
 		e->flags = Body_Flag_Static;
-		Tile_Info* first = _get_at(r->x, r->y);
-		printf("%s %d", first->name, first->body_group);
+		printf("%s %d \n", first->name, first->body_group);
 
 		e->group = first->body_group;
 		e->mask = first->body_mask;
