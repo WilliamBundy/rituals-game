@@ -458,7 +458,7 @@ bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 		color1, color1,
 		color2, color2
 	};
-	draw_box_outline(s.position + s.size/2, s.size, colors, 2);
+	render_box_outline_primitive(s.position + s.size/2, s.size, colors, 2);
 
 	return (state > 0) && (Input->mouse[SDL_BUTTON_LEFT] == State_Just_Released);
 }
@@ -484,7 +484,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		color2, color2,
 		color1, color1
 	};
-	draw_box_outline(position + size/2, size, colors, 2);
+	render_box_outline_primitive(position + size/2, size, colors, 2);
 
 	position += v2(4, size.y / 2 - Body_Font->glyph_height / 2);
 	size -= v2(8, 2);
@@ -534,7 +534,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	begin.x += 8;
 	end.x -= 8;
 	Vec2 line_offset = v2(0, 8);
-	draw_line(begin + line_offset, end + line_offset, v4(1, 1, 1, 0.9f), 2);
+	render_line_primitive(begin + line_offset, end + line_offset, v4(1, 1, 1, 0.9f), 2);
 	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), Gui_Tint);
 	handle.position.x += perc * (end.x - begin.x);
 	
@@ -628,7 +628,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 {
 	Vec2 dmouse = v2(
 			Input->mouse_x / Game->scale, 
-			Input->mouse_y / Game->scale) + Renderer->offset;
+			Input->mouse_y / Game->scale) + Renderer->draw_lists[0].offset;
 	Vec2 text_offset = v2(4, (size.y-Body_Font->glyph_height)/2);
 	size.x += 8;
 	Sprite s = get_box_sprite(position + size / 2, size, Gui_TextInputRestColor);
@@ -708,7 +708,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 			handle->cursor = handle->buffer_length;
 
 		//TODO(will) cursor blinking
-		draw_line(text_offset + position + v2(handle->cursor * Body_Font->glyph_width + 1, 0),
+		render_line_primitive(text_offset + position + v2(handle->cursor * Body_Font->glyph_width + 1, 0),
 				text_offset + position + v2(handle->cursor * Body_Font->glyph_width + 1, Body_Font->glyph_height), v4(1, 1, 1, 1), 1);
 
 	}
@@ -746,7 +746,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 		color1, color1,
 		color2, color2
 	};
-	draw_box_outline(s.position, s.size, colors, 2);
+	render_box_outline_primitive(s.position, s.size, colors, 2);
 }
 
 struct Gui_Context
