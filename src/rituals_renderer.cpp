@@ -272,8 +272,8 @@ void renderer_calculate_ortho(Vec4 screen)
 
 	ortho[8] = 0;
 	ortho[9] = 0;
-	ortho[10] = -2.0f / (-1 - 1);
-	ortho[11] = (-1 * (-1 + 1) / (-1 - 1));
+	ortho[10] = -2.0f / (-1.0f - 1.0f);
+	ortho[11] = (-1.0f * (-1.0f + 1.0f) / (-1.0f - 1.0f));
 
 	ortho[12] = 0;
 	ortho[13] = 0;
@@ -310,9 +310,8 @@ void renderer_start()
 	renderer_calculate_ortho(screen);
 	glUniformMatrix4fv(Renderer->ortho_loc, 
 			1, 
-			GL_FALSE,
+			GL_TRUE,
 			Renderer->ortho);
-	printf("%d \n", glGetError());
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
