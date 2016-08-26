@@ -648,7 +648,7 @@ int main(int argc, char** argv)
 
 		//update();
 		{
-			t += 1;
+			t += .05f;
 			renderer_start();
 			for(isize i = 0; i < 100; ++i) {
 				Sprite s;
