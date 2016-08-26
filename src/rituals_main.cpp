@@ -549,7 +549,7 @@ int main(int argc, char** argv)
 		Game->scale = 1.0f;
 
 		Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
-		renderer_init(Game->renderer, Game->renderer_arena);
+		init_renderer(Game->renderer, Game->renderer_arena);
 		
 		Game->registry = arena_push_struct(Game->game_arena, Game_Registry);
 
