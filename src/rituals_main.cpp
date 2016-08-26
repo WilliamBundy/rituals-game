@@ -647,6 +647,7 @@ int main(int argc, char** argv)
 
 		//update();
 		{
+			renderer_start();
 			for(isize i = 0; i < 1000; ++i) {
 				Sprite s;
 				init_sprite(&s);
@@ -656,6 +657,7 @@ int main(int argc, char** argv)
 				s.color = v4(1, 1, 1, 1);
 				renderer_push_sprite(&s);
 			}
+			renderer_draw();
 		}
 
 		SDL_GL_SwapWindow(window);
