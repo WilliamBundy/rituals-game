@@ -73,8 +73,8 @@ struct OpenGL_Renderer
 	Vec2 offset;
 	Rect2 clip;
 
-	isize screen_loc, texture_size_loc, window_loc;
-	Vec4 ortho;
+	isize screen_loc, texture_size_loc, window_loc, ortho_loc;
+	real ortho[16];
 
 	Sprite* sprite_data;
 	isize data_index, sprite_count;
@@ -207,6 +207,7 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	renderer->screen_loc = glGetUniformLocation(renderer->shader_program, "screen");
 	renderer->window_loc = glGetUniformLocation(renderer->shader_program, "window");
 	renderer->texture_size_loc = glGetUniformLocation(renderer->shader_program, "texture_size");
+	renderer->ortho_loc  = glGetUniformLocation(renderer->shader_program, "ortho");
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
@@ -256,6 +257,31 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 
 #define Get_Texture_Coordinates(x, y, w, h) rect2((x) / Renderer->texture_width, (y) / Renderer->texture_height, (w) / Renderer->texture_width, (h) / Renderer->texture_height)
 
+void renderer_calculate_ortho(Vec4 screen)
+{
+	real* ortho = Renderer->ortho;
+	ortho[0] = 2.0f / (screen.z - screen.x);
+	ortho[1] = 0;
+	ortho[2] = 0;
+	ortho[3] = -1.0f * (screen.x + screen.z) / (screen.z - screen.x);
+
+	ortho[4] = 0;
+	ortho[5] = 2.0f / (screen.y - screen.w);
+	ortho[6] = 0;
+	ortho[7] = -1 * (screen.y + screen.w) / (screen.y - screen.w);
+
+	ortho[8] = 0;
+	ortho[9] = 0;
+	ortho[10] = -2.0f / (-1 - 1);
+	ortho[11] = 0; // (-1 * (-1 + 1) / (-1 - 1));
+
+	ortho[12] = 0;
+	ortho[13] = 0;
+	ortho[14] = 0;
+	ortho[15] = 1.0f;
+}
+
+
 void renderer_start()
 {
 	Renderer->data_index = 0;
@@ -275,10 +301,17 @@ void renderer_start()
 			Game->window_size.x, 
 			Game->window_size.y,
 			Game->scale);
+	Vec4 screen = v4(
+		Renderer->offset.x, Renderer->offset.y, 
+		Game->size.x + Renderer->offset.x,
+		Game->size.y + Renderer->offset.y);
 	glUniform4f(Renderer->screen_loc, 
-			Renderer->offset.x, Renderer->offset.y, 
-			Game->size.x + Renderer->offset.x,
-			Game->size.y + Renderer->offset.y);
+			screen.x, screen.y, screen.z, screen.w);
+	renderer_calculate_ortho(screen);
+	glUniformMatrix4fv(Renderer->ortho_loc, 
+			1, 
+			GL_FALSE,
+			Renderer->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
