@@ -1199,7 +1199,7 @@ __gl_h_	src/thirdparty/gl_core_3_3.h	22;"	d
 __glew_h__	src/thirdparty/gl_core_3_3.h	20;"	d
 __glext_h_	src/thirdparty/gl_core_3_3.h	24;"	d
 __gltypes_h_	src/thirdparty/gl_core_3_3.h	26;"	d
-_add_item	src/rituals_game_registry.cpp	185;"	d	file:
+_add_item	src/rituals_game_registry.cpp	186;"	d	file:
 _body_get_id	src/rituals_simulation.cpp	56;"	d	file:
 _body_get_min_x	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	49;"	d	file:

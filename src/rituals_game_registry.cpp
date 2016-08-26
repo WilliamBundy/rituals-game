@@ -170,6 +170,7 @@ void register_all_rituals_tile_info()
 
 
 	_new_tile(water, 1, 1, 1, 2, true);
+	tile_water->body_group = 1;
 	_new_tile(shallow_water, 0.7, 0.99, 0, 2, false);
 	_new_tile(stone_road, 1.2, 0.99, 2, 2, false);
 	_new_tile(cracked_road, 1.2, 0.99, 3, 2, false);
