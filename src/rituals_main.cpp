@@ -19,6 +19,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 		- Reflection/introspection metaprogramming system
  * 			- For use with serialization
  * 			- Can save versioned type layouts, then do its best to load from/to 
+ * 		- Modding with packages
+ * 			- requires a lot of sorting per package id.
  * 	- Graphics
  *  	- Multiple renderers, supporting multiple display lists
  *  	- renderer_draw_sprite(Renderer0, &sprite);
@@ -31,7 +33,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *		- Release as lightweight spriting library
  *  - Physics
  *  	- Static and dynamic friction
- *  	- Look at dynamic tree broadphase
+ *  	- Multithreading/SIMD body processing
+ *  	- Look at dynamic tree broadphase/fancier broadphase schemes
  * 	- UI
  * 		- Improve responsiveness of things
  * 			- Newer elemnts need highlights
@@ -54,25 +57,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  - Play
  *  	- Entity/physics inspector?
  *
- *  - Packages
- *  	- Provide code and data for game 
- *  	- Need to create header for everything in game.
- *  		- Ties in with possible metaprogramming plans.
- *  	- Improved texture atlasing
- *  		- Packages need to be able to supply textures that
- *  		  get compiled into the game's texture atlas
- *  		- Switch from using logical texture coordinates to pixels in code
- *  		- Divide by texture size in shader.
- *  	- Add a bunch of function pointer calls in game.
- *  	
- * TODO(will) logical fixes
- *  - current/last time/accumulator need to belong to simulation
- *
  * TODO(will) bugs???
  *  - If the player is pushed right up against a block from the block's bottom,
  *  	bullets are caught within the block and don't shoot.
- *  - Hitbox masking/grouping isn't finished
- *  - Sometimes delete doesn't work (doesn't delete world.dat file)
  *
  * TODO(will) Game design musings
  * 	- A place to stay? 
