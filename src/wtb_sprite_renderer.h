@@ -506,9 +506,7 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 t
 	s.e[1] = create_line_primitive(v2(br.x, tl.y), br, color, thickness);
 	s.e[2] = create_line_primitive(br, v2(tl.x, br.y), color, thickness);
 	s.e[3] = create_line_primitive(v2(tl.x, br.y), tl, color, thickness);
-	Sprite4 s4;
-	s4.e = s;
-	return s4;
+	return s;
 }
 
 void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness, isize list_index = 0)
