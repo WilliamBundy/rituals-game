@@ -645,7 +645,16 @@ int main(int argc, char** argv)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		update();
+		//update();
+		{
+			for(isize i = 0; i < 1000000; ++i) {
+				Sprite s;
+				s.position = v2(i % 120, i / 120);
+				s.texture = rect2(3*32/512, 0, 32/512, 32/512);
+				s.size = v2(32, 32);
+				renderer_push_sprite(&s);
+			}
+		}
 
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
