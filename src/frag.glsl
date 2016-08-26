@@ -15,6 +15,8 @@ in vec2 f_texcoords;
 in vec4 f_color;
 
 uniform vec2 u_texturesize;
+uniform float u_night_amount;
+uniform float u_night_cutoff;
 uniform sampler2D u_texture0;
 
 out vec4 final_color;
@@ -25,14 +27,10 @@ void main()
 
 	// Nighttime effect
 	// Darkens everything except very light colors.
-	#if 0
 	float avg = (color.r + color.g + color.b) / 3;
-	float f_darken_cutoff = 0.95;
-	float f_darken_amount = 0.25;
-	if(avg < f_darken_cutoff) {
-		color.rgb *= f_darken_amount;
+	if(avg < u_night_cutoff) {
+		color.rgb *= u_night_amount;
 	}
-	#endif 
 
 	final_color = color;
 

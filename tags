@@ -1242,10 +1242,10 @@ _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	120;"	d	file:
 _get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_member_address	src/rituals_renderer.cpp	106;"	d	file:
-_get_member_address	src/wtb_sprite_renderer.h	96;"	d
+_get_member_address	src/wtb_sprite_renderer.h	101;"	d
 _get_sprite_y_base	src/rituals_renderer.cpp	358;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	107;"	d	file:
-_gl_offset	src/wtb_sprite_renderer.h	97;"	d
+_gl_offset	src/wtb_sprite_renderer.h	102;"	d
 _glerror	src/rituals_renderer.cpp	110;"	d	file:
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
 _hitbox_get_x1	src/rituals_world_area.cpp	34;"	d	file:
@@ -2135,6 +2135,8 @@ next_random	src/rituals_game.cpp	/^real next_random(Random* r) $/;"	f
 next_random_double	src/rituals_game.cpp	/^real64 next_random_double(Random* r)$/;"	f
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_game.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
+night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Draw_List
+night_cutoff	src/wtb_sprite_renderer.h	/^	real night_cutoff;$/;"	m	struct:Draw_List
 nomore	src/thirdparty/stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon6
 normal	src/rituals_simulation.cpp	/^	Vec2 normal;$/;"	m	struct:Sim_Contact	file:
 north	src/rituals_world_area.cpp	/^	Area_Link north;$/;"	m	struct:World_Area_Stub	file:
@@ -2669,8 +2671,10 @@ transparent	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transpare
 tt	src/rituals_main.cpp	/^float tt = 0;$/;"	v
 type	src/thirdparty/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon11
 type	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
-u_orthomat	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat;$/;"	m	struct:Renderer
-u_texturesize	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat;$/;"	m	struct:Renderer
+u_night_amount	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:Renderer
+u_night_cutoff	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:Renderer
+u_orthomat	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:Renderer
+u_texturesize	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:Renderer
 uint16	src/rituals_game.cpp	/^_generate_sort_and_search_for_numeric_type(uint16);$/;"	v
 uint16	src/rituals_main.cpp	/^typedef uint16_t uint16;$/;"	t	file:
 uint16	src/rituals_win32.cpp	/^typedef uint16_t uint16;$/;"	t	file:

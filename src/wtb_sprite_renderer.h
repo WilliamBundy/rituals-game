@@ -70,6 +70,9 @@ struct Draw_List
 	Rect2 clip;
 	float[16] ortho;
 
+	real night_amount;
+	real night_cutoff;
+
 	Sprite* sprites;
 	isize sprites_count, sprites_capacity;
 };
@@ -77,7 +80,7 @@ struct Draw_List
 struct Renderer
 {
 	GLuint shader_program, vbo, vao, texture;
-	isize u_texturesize, u_orthomat;
+	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;
 	
 	Draw_List* draw_lists;
 	isize draw_lists_count;
@@ -87,6 +90,8 @@ void init_draw_list(Draw_List* list, isize sprites_capacity, Memory_Arena* arena
 {
 	list->offset = v2(0, 0);
 	list->clip = rect2(0, 0, 0, 0);
+	list->night_amount = 0;
+	list->night_cutoff = 0;
 
 	list->sprites_capacity = sprites_capacity;
 	list->sprites_count = 0;
@@ -193,6 +198,8 @@ void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_
 	glDeleteShader(fragment_shader);
 	r->u_texturesize = glGetUnformLocation(r->shader_program, "u_texturesize");
 	r->u_orthomat = glGetUniformLocation(r->shader_program, "u_orthomat");
+	r->u_night_amount = glGetUniformLocation(r->shader_program, "u_night_amount");
+	r->u_night_cutoff = glGetUniformLocation(r->shader_program, "u_night_cutoff");
 
 }
 
@@ -284,9 +291,14 @@ void render_draw_list(Renderer* r, Draw_List* list, Vec2 size, real scale)
 	glUseProgram(r->shader_program);
 	list->offset.x = roundf(list->offset.x);
 	list->offset.y = roundf(list->offset.y);
-	glUniform2f(r->u_texture_size
+
+	glUniform2f(r->u_texturesize,
 		r->texture_width,
 		r->texture_height);
+
+	glUniform1f(r->u_night_amount, 1.0f - list->night_amount);
+	glUniform1f(r->u_night_cutoff, list->night_cutoff);
+
 	Vec4 screen = v4(
 		list->offset.x, list->offset.y, 
 		size.x + list->offset.x,
