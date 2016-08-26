@@ -45,7 +45,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 								);
 						e->body->shape.hext = v2(4,4);
 						e->sprite.anchor = Anchor_Bottom;
-						e->sprite.texture = Get_Texture_Coordinates(
+						e->sprite.texture = rect2(
 								9*32, 0, 16, 16);
 						e->sprite.size = v2(8, 8);
 						e->body->group = 1;
@@ -65,7 +65,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	Entity* e = world_area_get_next_entity(area);
 	e->kind = EntityKind_Enemy;
 	e->userdata.enemy.kind = enemykind;
-	e->sprite.texture = Get_Texture_Coordinates(
+	e->sprite.texture = rect2(
 			enemykind * 32, 10*32, 32, 32);
 	e->sprite.size = v2(32, 32);
 	e->hitbox.box = aabb(v2(0, e->sprite.size.y * -0.5f), 16, 16);
@@ -264,9 +264,9 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 
 			Sprite* s = &e->sprite;
 			if(e->facing == -1) {
-				s->texture = Get_Texture_Coordinates(32 + frame * 32, 0, -32, 32);
+				s->texture = rect2(32 + frame * 32, 0, -32, 32);
 			} else if(e->facing == 1) {
-				s->texture = Get_Texture_Coordinates(0  + frame * 32, 0, 32, 32);
+				s->texture = rect2(0  + frame * 32, 0, 32, 32);
 			}
 		}
 	}
@@ -283,7 +283,7 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 				init_sprite(&s);
 				s.position = player->shape.center;
 				s.size = v2(16, 16);
-				s.texture = Get_Texture_Coordinates(0, Renderer->texture_height - 16, 16, 16);
+				s.texture = rect2(0, Renderer->texture_height - 16, 16, 16);
 				s.color = v4(1, 1, 1, 1);
 				switch(e->direction) {
 					case Direction_North:
