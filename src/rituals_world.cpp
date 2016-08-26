@@ -357,12 +357,14 @@ void world_area_render(World_Area* area, World* world)
 		render_body_text(buf, e->sprite.position - v2(Body_Font->glyph_width * len / 2, e->sprite.size.y + 16), true);
 	}
 #endif 
-#if 0
+#if 1
 	for(isize i = 0; i < area->sim.bodies_count; ++i) {
 		Sim_Body* b = area->sim.bodies + i;
 
 		if (b == NULL) continue;
 		draw_box_outline(b->shape.center, b->shape.hext * 2, v4(.6f, 1, .6f, 1), 1);	
+		isize len = snprintf(buf, 256, "%d", b->group);
+		render_body_text(buf, b->shape.center - v2(Body_Font->glyph_width * len / 2, 0), true);
 	}
 #endif
 	renderer_draw();
