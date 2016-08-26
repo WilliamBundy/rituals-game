@@ -475,7 +475,7 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 
 void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool show_bounds = false)
 {
-	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
+	Sprite bg = create_box_primitive(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
 	render_add(&bg);
 	Vec4 color1 = Gui_ButtonOutlineDownColor;
@@ -535,7 +535,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 	end.x -= 8;
 	Vec2 line_offset = v2(0, 8);
 	render_line_primitive(begin + line_offset, end + line_offset, v4(1, 1, 1, 0.9f), 2);
-	Sprite handle = get_box_sprite(begin + line_offset, v2(8, 12), Gui_Tint);
+	Sprite handle = create_box_primitive(begin + line_offset, v2(8, 12), Gui_Tint);
 	handle.position.x += perc * (end.x - begin.x);
 	
 	Rect2 r;
@@ -631,7 +631,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 			Input->mouse_y / Game->scale) + Renderer->draw_lists[0].offset;
 	Vec2 text_offset = v2(4, (size.y-Body_Font->glyph_height)/2);
 	size.x += 8;
-	Sprite s = get_box_sprite(position + size / 2, size, Gui_TextInputRestColor);
+	Sprite s = create_box_primitive(position + size / 2, size, Gui_TextInputRestColor);
 	bool mouse_over = aabb_intersect(aabb(position + size / 2, size.x / 2, size.y / 2), aabb(dmouse, 0, 0));
 	
 	if(handle->active) {
