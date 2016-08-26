@@ -397,7 +397,7 @@ void load_assets()
 	finalize_game_registry();
 
 	Game->state = Game_State_Menu;
-	play_state_init();
+	init_play_state();
 	init_menu_state();
 //	Game->state = Game_State_None;
 //test_init();
