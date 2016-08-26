@@ -331,7 +331,7 @@ void world_area_render(World_Area* area, World* world)
 					s.color = Color_White;
 					s.color.w = lerp(1.0f, 0.0f, i/16.0);
 					s.color.w *= s.color.w;
-					s.sort_point_offset.y -= 10;
+					s.sort_offset -= 10;
 				}
 			}
 			render_add(&e->sprite);
