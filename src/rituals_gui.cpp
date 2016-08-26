@@ -70,14 +70,12 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
 		len = i - start;
 		r->x = dec_str_to_int(glyphs_file + start, len) + offsetx;
-		r->x /= Renderer->texture_width;
 		i++;
 
 		start = i;
 		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
 		len = i - start;
 		r->y = dec_str_to_int(glyphs_file + start, len) + offsety - 1;
-		r->y /= Renderer->texture_height;
 		i++;
 
 		start = i;
@@ -85,7 +83,6 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		len = i - start;
 		r->w = dec_str_to_int(glyphs_file + start, len);
 		*w = r->w;
-		r->w /= Renderer->texture_width;
 		i++;
 		start = i;
 
@@ -93,7 +90,6 @@ Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32
 		len = i - start;
 		r->h = dec_str_to_int(glyphs_file + start, len) + 2;
 		*h = r->h;
-		r->h /= Renderer->texture_height;
 		i++;
 	}
 	return glyphs;
@@ -206,7 +202,7 @@ void spritefont_render_text(Spritefont* font,
 		s.size = size * scale;
 		s.color = font->color;
 		s.angle = 0;
-		s.anchor = anchor;
+		s.flags = anchor;
 		
 		if((max_width > 0) && (s.position.x + s.size.x > (max_width + initial_pos.x))) {
 			position.y += font->glyph_height + font->line_padding;
