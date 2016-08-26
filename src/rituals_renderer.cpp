@@ -273,7 +273,7 @@ void renderer_calculate_ortho(Vec4 screen)
 	ortho[8] = 0;
 	ortho[9] = 0;
 	ortho[10] = -2.0f / (-1 - 1);
-	ortho[11] = 0; // (-1 * (-1 + 1) / (-1 - 1));
+	ortho[11] = (-1 * (-1 + 1) / (-1 - 1));
 
 	ortho[12] = 0;
 	ortho[13] = 0;
