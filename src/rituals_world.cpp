@@ -303,7 +303,7 @@ void world_area_render(World_Area* area, World* world)
 	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - Game->size.y;
 
-	Renderer->offset = area->offset;
+	Renderer->draw_lists[0].offset = area->offset;
 	area->offset += Game->size * 0.5f;
 
 	renderer_start();
