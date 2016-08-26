@@ -509,7 +509,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_process_removed_entities(area);
 	
 	Sprite s = create_box_primitive(v2(100, 100), v2(64, 32), v4(1, 1, 1, 1));
-	s.texture.x = 0
+	s.texture.x = 0;
 	render_add(&s, 1);
 
 	render_draw(1);
