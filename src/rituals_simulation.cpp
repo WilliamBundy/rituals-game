@@ -367,9 +367,14 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 			Rect2i* r = rects + i;
 			bool solid = true;
 			isize y = r->y;
+			Tile_Info *first, *here;
+			first = _get_at(r->x, r->y);
 			while(solid && (y < tilemap->h)) {
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					solid = solid && _get_at(r->x + local_x, y + 1)->solid;
+					here = _get_at(r->x + local_x, y + 1);
+					solid = solid && here->solid &&
+						(here->body_mask == first->body_mask) &&
+						(here->body_group == first->body_group);
 					if(!solid) break;
 				}
 				if(solid) {
