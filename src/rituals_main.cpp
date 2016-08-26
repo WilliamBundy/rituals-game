@@ -648,14 +648,14 @@ int main(int argc, char** argv)
 
 		//update();
 		{
-			t += .5f;
+			tt += .5f;
 			renderer_start();
 			for(isize i = 0; i < 100; ++i) {
 				Sprite s;
 				init_sprite(&s);
 				s.position = v2(i % 120, i / 120);
 				s.position *= 32;
-				s.angle = i * Math_Deg2Rad + t;
+				s.angle = (float)(i * Math_Deg2Rad) + tt;
 				s.texture = Get_Texture_Coordinates(0, 32, 32, 32);
 				s.size = v2(32, 32);
 				s.color = v4(1, 1, 1, 1);
