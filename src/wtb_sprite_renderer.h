@@ -292,8 +292,8 @@ void render_draw_list_add(Draw_List* list, Sprite* sprite)
 		Rect2 r;
 		r.position = sp.position;
 		r.size = sp.size;
-		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
-		r.y -= r.h * (0.5f + SpriteAnchorY[sp.anchor]);
+		r.x -= r.w * (0.5f + SpriteAnchorX[sp.flags & Sprite_Anchor_Mask]);
+		r.y -= r.h * (0.5f + SpriteAnchorY[sp.flags & Sprite_Anchor_Mask]);
 
 		if(r.x > (c.x + c.w)) return;
 		if((r.x + r.w) < c.x) return;
