@@ -410,6 +410,9 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		e->restitution = 0.3f;
 		e->inv_mass = 0.0f;
 		e->flags = Body_Flag_Static;
+		Tile_Info* first = _get_at(r->x, r->y);
+		e->group = first->body_group;
+		e->mask = first->body_mask;
 	}
 	end_temp_arena(Game->temp_arena);
 }
