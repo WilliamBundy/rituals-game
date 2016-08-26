@@ -646,7 +646,8 @@ int main(int argc, char** argv)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//update();
+		update();
+#if 0
 		{
 			tt += .05f;
 			renderer_start();
@@ -665,7 +666,7 @@ int main(int argc, char** argv)
 			}
 			renderer_draw();
 		}
-
+#endif 
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
 		if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
