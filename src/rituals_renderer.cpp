@@ -96,9 +96,10 @@ void init_sprite(Sprite* s)
 }
 
 
-#define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
+//#define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
 
-
+#define _get_member_address(s, m) ((void*)&(((Sprite*)(NULL))->position))
+#define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
 
 int32 t = 0;
 #define _glerror printf("OpenGL Error at #%d: %0x\n", t++, glGetError());
@@ -117,35 +118,37 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	usize vertex_count = 1;
 
 	//position
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, (void*)&(((Sprite*)(NULL))->position));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_get_ptr(position));
 	glEnableVertexAttribArray(0);  
 	glVertexAttribDivisor(0, vertex_count);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(2));
+	//center
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, _gl_get_ptr(center));
 	glEnableVertexAttribArray(1);
 	glVertexAttribDivisor(1, vertex_count);
 
 	//angle
-	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, stride, _gl_offset(4));
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, stride, _gl_offset(angle));
 	glEnableVertexAttribArray(2);
 	glVertexAttribDivisor(2, vertex_count);
 
 	//size
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(5));
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(size));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, vertex_count);
 
 	//texcoords
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(7));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(texture));
 	glEnableVertexAttribArray(4);
 	glVertexAttribDivisor(4, vertex_count);
 
 	//color
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(11));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, _gl_offset(color));
 	glEnableVertexAttribArray(5);
 	glVertexAttribDivisor(5, vertex_count);
 
-	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(15));
+	//anchor
+	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(anchor));
 	glEnableVertexAttribArray(6);
 	glVertexAttribDivisor(6, vertex_count);
 
