@@ -13,26 +13,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */ 
 
 /* TODO(will) features
- * 	- System/bigger projects
+ * 	- Big Projects
  * 		- Programmable ini replacement
  * 		- Memory dumps, logging
  * 		- Reflection/introspection metaprogramming system
  * 			- For use with serialization
  * 			- Can save versioned type layouts, then do its best to load from/to 
- * 	- Renderer
- * 		- Seperate "Renderers"/renderlist
- * 		- "Deferred" Sprites
- * 			- Basically, separate things to be rendered from the renderer.
- * 			- Have a list of sprites to draw
- * 			- Have a list of sprites that get drawn directly afterwards
- * 			- Each "list" has a different state associated with them.
- * 				- Different offset
- * 				- Different texture? 
- * 				- Different clip rectangle?
- * 			- Makes drawing UI/adding debug UI elements easier
- * 		- Stitching together texture atlases, changing shaders
- * 		- Small fixes to the way I'm doing some of the math
- *		- Particle effects
+ * 	- Graphics
+ *  	- Multiple renderers, supporting multiple display lists
+ *  	- renderer_draw_sprite(Renderer0, &sprite);
+ *			- specializaitons: r0_draw_sprite(...)
+ *		- Improved primitive generation functions
+ *			- Mostly name/argument/return standardization
+ *		- Particle emitters
+ *		- Texture atlas stitching
+ *			- able to combine pow2 squares into one big atlas
+ *		- Release as lightweight spriting library
  *  - Physics
  *  	- Static and dynamic friction
  *  	- Look at dynamic tree broadphase
@@ -57,44 +53,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 			  console type thing.
  *  - Play
  *  	- Entity/physics inspector?
- *  	- Entity events and serialization?
- *  		- "best" thing to do is to index entities by package
- *  		- each package registers any number of function pointers
- *  		- entities are sorted by package and priority
- *  		- pass each package event function a pointer to its entity array
- *  		- ???
- *  		- Entity render event for entities with procedural/more complicated art than 
- *  			a simple sprite
- *  	- Implement hitbox system for bullets v. monsters
- *  		- Collision box is small for stability
- *  		- Hitbox needs to be larger for player to hit it.
- *  		- It's possible this fundamentally changes how we do collisions
- *  			since, you can either expand the way we hook together bodies and
- *  			entities, or bodies and shapes. Bodies and shapes is the clearer
- *  			answer, because the idea of a "hitbox" is of a second sensor shape
- *  			attached to a body.
- *  		- If bodies are able to have multiple shapes, that breaks the way we
- *  			currently do collision resolution: the space would have to store 
- *  			a list of shapes separate from bodies, then apply collision to shapes, 
- *  			and it just sounds like a huge mess.
- *  		- So, other idea: treat "hitbox space" as a completely different space than
- *  			simulated space. Hitboxes "collide" with other hitboxes, returning the 
- *  			information needed to separate them, but leaving it up to the event
- *  			reciever to do so. The number of hitboxes is much smaller than the number
- *  			of regular collision areas, so it shouldn't be expensive.
- *  	- GUN SHOOT, SHOOT GUN
- *  		- Player character's main weapon is a shotgun-kinda thing
- *  	- A place to stay? 
- *  		- Why do players need to/want to build stuff?
- *  		- Day/night cycle
- *  		- Reasons to sleep?
- *  			- Visiting dream world?
- *  			- Where you return after you die?
- *  			- Walking/floating back to your sleeping body as a ghost
- *  			- What does the afterlife state do for the game?
- *  				- Special rituals activated
- *  				- Special monsters to fight
- *  				- Time runs backwards or something?
  *
  *  - Packages
  *  	- Provide code and data for game 
@@ -115,6 +73,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  	bullets are caught within the block and don't shoot.
  *  - Hitbox masking/grouping isn't finished
  *  - Sometimes delete doesn't work (doesn't delete world.dat file)
+ *
+ * TODO(will) Game design musings
+ * 	- A place to stay? 
+ * 		- Why do players need to/want to build stuff?
+ * 		- Day/night cycle
+ * 		- Reasons to sleep?
+ * 			- Visiting dream world?
+ * 			- Where you return after you die?
+ * 			- Walking/floating back to your sleeping body as a ghost
+ * 			- What does the afterlife state do for the game?
+ * 				- Special rituals activated
+ * 				- Special monsters to fight
+ * 				- Time runs backwards or something?
+ *
  */
 
 //platform imports
