@@ -94,14 +94,14 @@ void main()
 	coords *= rotmat;
 	coords += v_translate;
 	coords -= v_center;
-	///*
+	/*
  	mat4 ortho = mat4(
 		2 / (screen.z - screen.x), 0, 0, -1 * (screen.x + screen.z) / (screen.z - screen.x),
 		0, 2 / (screen.y - screen.w), 0, -1 * (screen.y + screen.w) / (screen.y - screen.w),
 		0, 0,          -2 / (-1 - 1), -1 * (-1 + 1) / (-1 - 1),
 		0, 0, 0, 1
 	);
-	//*/
+	*/
 	gl_Position = vec4(coords, 0, 1) * ortho; 
 	f_pixel = gl_Position.xy;
 	f_color = v_color;
