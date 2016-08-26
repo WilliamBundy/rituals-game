@@ -97,6 +97,9 @@ void init_sprite(Sprite* s)
 
 
 #define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
+
+
+
 int32 t = 0;
 #define _glerror printf("OpenGL Error at #%d: %0x\n", t++, glGetError());
 void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
@@ -114,7 +117,7 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	usize vertex_count = 1;
 
 	//position
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(0));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, (void*)&((Sprite*)(NULL)->position));
 	glEnableVertexAttribArray(0);  
 	glVertexAttribDivisor(0, vertex_count);
 
