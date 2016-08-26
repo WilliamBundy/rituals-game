@@ -62,6 +62,11 @@ struct Sprite
 	uint32 flags;
 	real sort_offset;
 };
+
+struct Sprite4
+{
+	Sprite e[4];
+};
 #define _get_sprite_y_base(s) (s.position.y - s.center.y + s.sort_offset)
 GenerateIntrosortForType(sort_sprites_on_y_base, Sprite, 12, _get_sprite_y_base)
 
@@ -276,7 +281,6 @@ void render_sort(isize offset, isize list_index = 0)
 	sort_sprites_on_y_base(Renderer->draw_lists[list_index].sprites + offset, list->sprites_count - offset);
 }
 
-
 void render_draw_list_add(Draw_List* list, Sprite* sprite)
 {
 	Sprite sp = *sprite;
@@ -313,8 +317,8 @@ void render_draw_list_add(Draw_List* list, Sprite* sprite)
 	
 	sp.texture.x /= list->texture_size.x;
 	sp.texture.w /= list->texture_size.x;
-	sp.teyture.y /= list->texture_size.y;
-	sp.teyture.h /= list->texture_size.y;
+	sp.texture.y /= list->texture_size.y;
+	sp.texture.h /= list->texture_size.y;
 
 	list->sprites[list->sprites_count++] = sp;
 }
@@ -325,10 +329,28 @@ void render_add(OpenGL_Renderer* r, Sprite* sprite, isize list_index)
 	render_draw_list_add(list, sprite);
 }
 
+void render_add(OpenGL_Renderer* r, Sprite4* s4, isize list_index = 0) 
+{
+	Draw_List* list = r->draw_lists + list_index;
+	render_draw_list_add(list, s4->e + 0);
+	render_draw_list_add(list, s4->e + 1);
+	render_draw_list_add(list, s4->e + 2);
+	render_draw_list_add(list, s4->e + 3);
+}
+
 void render_add(Sprite* sprite, isize list_index = 0)
 {
 	Draw_List* list = Renderer->draw_lists + list_index;
 	render_draw_list_add(list, sprite);
+}
+
+void render_add(Sprite4* s4, isize list_index = 0) 
+{
+	Draw_List* list = Renderer->draw_lists + list_index;
+	render_draw_list_add(list, s4->e + 0);
+	render_draw_list_add(list, s4->e + 1);
+	render_draw_list_add(list, s4->e + 2);
+	render_draw_list_add(list, s4->e + 3);
 }
 
 void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real near, real far)
@@ -422,7 +444,7 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 }
 
 	
-Sprite create_box_primitve(Vec2 pos, Vec2 size, Vec4 color)
+Sprite create_box_primitive(Vec2 pos, Vec2 size, Vec4 color)
 {
 	Sprite s;
 	init_sprite(&s);
@@ -431,8 +453,87 @@ Sprite create_box_primitve(Vec2 pos, Vec2 size, Vec4 color)
 	s.size = size;
 	s.color = color;
 	return s;
-
 }
 
+void render_box_primitive(Vec2 pos, Vec2 size, Vec4 color, isize list_index = 0)
+{
+	Sprite s = create_box_primitive(pos, size, color);
+	render_add(&s, list_index);
+}
+
+Sprite create_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
+{
+	Vec2 dline = end - start;
+	Sprite s;
+	if(dline.y == 0) {
+		if(dline.x < 0) {
+			dline.x *= -1;
+			Vec2 temp = end;
+			end = start;
+			start = temp;
+		}
+		s = get_box_sprite(start + v2(dline.x / 2, 0), v2(dline.x, thickness), color);
+	} else if(dline.x == 0) {
+		if(dline.y < 0) {
+			dline.y *= -1;
+			Vec2 temp = end;
+			end = start;
+			start = temp;
+		}
+		s = get_box_sprite(start + v2(0, dline.y / 2), v2(thickness, dline.y), color);
+	} else {
+		s = get_box_sprite(start + dline/2, v2(sqrtf(v2_dot(dline, dline)), thickness), color);
+		real angle = atan2f(dline.y, dline.x);
+		s.angle = -angle;
+	}
+	return s;
+}
+void render_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness, isize list_index = 0)
+{
+	Sprite s = create_line_primitive(start, end, color, thickness);
+	render_add(&s, list_index);
+}
+
+Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
+{
+	size *= 0.5f;	
+	Vec2 tl = center - size;
+	Vec2 br = center + size;
+	Sprite s[4];
+	s[0] = create_line_primitive(tl, v2(br.x, tl.y), color, thickness);
+	s[1] = create_line_primitive(v2(br.x, tl.y), br, color, thickness);
+	s[2] = create_line_primitive(br, v2(tl.x, br.y), color, thickness);
+	s[3] = create_line_primitive(v2(tl.x, br.y), tl, color, thickness);
+	Sprite4 s4;
+	s4.e = s;
+	return s4;
+}
+
+void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness, isize list_index = 0)
+{
+	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
+	render_add(&s, list_index);
+}
+
+Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness)
+{
+	size *= 0.5f;	
+	Vec2 tl = center - size;
+	Vec2 br = center + size;
+	Sprite s[4];
+	s[0] = create_line_primitive(tl, v2(br.x, tl.y), color[0], thickness);
+	s[1] = create_line_primitive(v2(br.x, tl.y), br, color[1], thickness);
+	s[2] = create_line_primitive(br, v2(tl.x, br.y), color[2], thickness);
+	s[3] = create_line_primitive(v2(tl.x, br.y), tl, color[3], thickness);
+	Sprite4 s4;
+	s4.e = s;
+	return s4;
+}
+
+Sprite4 render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize list_index = 0)
+{
+	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
+	render_add(&s, list_index);
+}
 
 
