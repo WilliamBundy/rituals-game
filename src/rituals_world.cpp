@@ -45,7 +45,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 
 	Entity* e = &world->global_player_entity;
 	Sim_Body* b = &world->global_player_body;
-	e->sprite.texture = Get_Texture_Coordinates(0, 0, 32, 32);
+	e->sprite.texture = rect2(0, 0, 32, 32);
 	b->shape.hext = v2(5, 5);
 	e->sprite.size = v2(32, 32);
 	b->group = 1;
@@ -127,7 +127,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		e->sprite.texture = Get_Texture_Coordinates(8*32, 16, 32, 48);
+		e->sprite.texture = rect2(8*32, 16, 32, 48);
 		b->shape.hw = 15;
 		b->shape.hh = 11;
 		b->inv_mass = 1.0f;
@@ -152,7 +152,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
-		e->sprite.texture = Get_Texture_Coordinates(0, 5*32, 96, 144);
+		e->sprite.texture = rect2(0, 5*32, 96, 144);
 		b->shape.hw = 16;
 		b->shape.hh = 15;
 		b->inv_mass = 1.0f;
