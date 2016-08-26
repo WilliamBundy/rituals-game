@@ -236,7 +236,7 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 	//TODO(will) do error checking?
 	uint32 error = glGetError();
 	if(error != 0) {
-		printf("There was an error adding a texture: %d \n", error));
+		printf("There was an error adding a texture: %d \n", error);
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);
 
