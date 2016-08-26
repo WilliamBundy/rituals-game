@@ -414,7 +414,7 @@ void render_draw_list(OpenGL_Renderer* r, Draw_List* list, Vec2 size, real scale
 void render_draw(OpenGL_Renderer* r, isize list_index)
 {
 	Draw_List* list = r->draw_lists + list_index;
-	render_draw_list(r, list);
+	render_draw_list(r, list, Game->size, Game->scale);
 }
 
 void render_draw(isize list_index = 0)
