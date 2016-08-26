@@ -71,7 +71,7 @@ struct Draw_List
 
 	Sprite* sprites;
 	isize sprites_count;
-}
+};
 
 struct OpenGL_Renderer
 {
