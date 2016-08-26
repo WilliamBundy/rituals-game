@@ -98,7 +98,7 @@ void init_sprite(Sprite* s)
 
 //#define _gl_offset(a) ((GLvoid*)(a*sizeof(real)))
 
-#define _get_member_address(s, m) ((void*)&(((Sprite*)(NULL))->position))
+#define _get_member_address(s, m) ((void*)&(((s*)(NULL))->m))
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
 
 int32 t = 0;
