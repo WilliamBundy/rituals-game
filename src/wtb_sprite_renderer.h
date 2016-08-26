@@ -474,7 +474,7 @@ Sprite create_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 			end = start;
 			start = temp;
 		}
-		s = get_box_sprite(start + v2(dline.x / 2, 0), v2(dline.x, thickness), color);
+		s = create_box_primitive(start + v2(dline.x / 2, 0), v2(dline.x, thickness), color);
 	} else if(dline.x == 0) {
 		if(dline.y < 0) {
 			dline.y *= -1;
@@ -482,9 +482,9 @@ Sprite create_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 			end = start;
 			start = temp;
 		}
-		s = get_box_sprite(start + v2(0, dline.y / 2), v2(thickness, dline.y), color);
+		s = create_box_primitive(start + v2(0, dline.y / 2), v2(thickness, dline.y), color);
 	} else {
-		s = get_box_sprite(start + dline/2, v2(sqrtf(v2_dot(dline, dline)), thickness), color);
+		s = create_box_primitive(start + dline/2, v2(sqrtf(v2_dot(dline, dline)), thickness), color);
 		real angle = atan2f(dline.y, dline.x);
 		s.angle = -angle;
 	}
