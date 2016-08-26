@@ -237,7 +237,7 @@ void render_start(OpenGL_Renderer* r, isize list_index)
 
 void render_start(isize list_index = 0)
 {
-	render_draw_list(Renderer, Renderer->draw_lists + list_index);
+	render_draw_list_start(Renderer, Renderer->draw_lists + list_index);
 }
 
 static inline bool render_draw_list_has_clip_rect(Draw_List* list)
