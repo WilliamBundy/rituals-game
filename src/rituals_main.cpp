@@ -558,7 +558,7 @@ int main(int argc, char** argv)
 		 char* frag_src = 
 #include "frag.glsl"
 			;
-		init_renderer(Game->renderer, 2, Megabytes(32), vert_src, frag_src, Game->renderer_arena);
+		init_renderer(Game->renderer, 4, Megabytes(32), vert_src, frag_src, Game->renderer_arena);
 		
 		Game->registry = arena_push_struct(Game->game_arena, Game_Registry);
 
