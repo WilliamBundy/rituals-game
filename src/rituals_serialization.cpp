@@ -574,6 +574,7 @@ void deserialize_world(World* world, FILE* world_file)
 	}
 	printf("loading %d current_area_id\n", current_area_id);
 	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
+	fclose(world_file);
 }
 
 
