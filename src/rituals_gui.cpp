@@ -356,11 +356,11 @@ bool gui_query_mouse(Rect2 region, Vec2 parent)
 {
 	region.position -= parent;
 	Rect2 r = region;
-	game_calc_mouse_pos(Renderer->draw_lists[0].offset);
+	game_calc_mouse_pos(render->draw_lists[0].offset);
 	Vec2 p = Input->mouse_pos;
 	Vec2 rp1, rp2;
-	if(renderer_has_clip_rect()) {
-		Rect2 c = Renderer->clip; 
+	if(render_has_clip_rect()) {
+		Rect2 c = render->clip; 
 		if(r.x > (c.x + c.w)) return false;
 		if((r.x + r.w) < c.x) return false;
 		if(r.y > (c.y + c.h)) return false;
@@ -628,7 +628,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 {
 	Vec2 dmouse = v2(
 			Input->mouse_x / Game->scale, 
-			Input->mouse_y / Game->scale) + Renderer->offset;
+			Input->mouse_y / Game->scale) + render->offset;
 	Vec2 text_offset = v2(4, (size.y-Body_Font->glyph_height)/2);
 	size.x += 8;
 	Sprite s = get_box_sprite(position + size / 2, size, Gui_TextInputRestColor);
