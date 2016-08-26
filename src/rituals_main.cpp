@@ -366,7 +366,7 @@ void stop()
 void load_assets()
 {
 	isize w, h;
-	Renderer->texture = ogl_load_texture("data/graphics.png", &w, &h);
+	Renderer->draw_lists[0].texture = ogl_load_texture("data/graphics.png", &w, &h);
 	Renderer->texture_width = w;
 	Renderer->texture_height = h;
 
