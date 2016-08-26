@@ -159,7 +159,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->flags = Body_Flag_Static;
 		e->sprite.size = v2(96, 144) * 2;
 		e->sprite.flags = Anchor_Bottom;
-		e->sprite.sort_point_offset = v2(0, -60);
+		e->sprite.sort_offset = -60;
 		e->sprite.center = v2(2, -b->shape.hh * 2);
 		e->kind = EntityKind_Static;
 		//e->kind = 1000;
