@@ -115,7 +115,7 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 {
 	renderer->offset = v2(0, 0);
 	renderer->last_sprite_id = 0;
-	renderer->sprite_data = arena_push_array(arena, Sprite, 2000001 * sizeof(Sprite)); 
+	renderer->sprite_data = arena_push_array(arena, Sprite, Megabytes(512) / sizeof(Sprite)); 
 	//renderer->deferred_sprite_data = arena_push_array(arena, Sprite, Megabytes(8) / sizeof(Sprite)); 
 	glGenVertexArrays(1, &renderer->vao);
 	glBindVertexArray(renderer->vao);
