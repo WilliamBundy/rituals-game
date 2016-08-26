@@ -271,7 +271,7 @@ void render_draw_list_sort(Draw_List* list, isize offset)
 	sort_sprites_on_y_base(list->sprites + offset, list->sprites_count - offset);
 }
 
-void render_sort(Renderer* r, isize list_index, isize offset)
+void render_sort(OpenGL_Renderer* r, isize list_index, isize offset)
 {
 	sort_sprites_on_y_base(r->draw_lists[list_index].sprites + offset, list->sprites_count - offset);
 }
