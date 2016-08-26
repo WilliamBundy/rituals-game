@@ -163,7 +163,8 @@ typedef size_t usize;
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
 
-#include "rituals_renderer.cpp"
+//#include "rituals_renderer.cpp"
+#include "wtb_sprite_renderer.h"
 #include "rituals_gui.cpp"
 
 typedef struct World World;
