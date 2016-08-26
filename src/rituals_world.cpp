@@ -429,6 +429,7 @@ void world_area_update(World_Area* area, World* world)
 			isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", menu_state->save_dir, world->name);
 			recursively_delete_folder(world_path, false);
 			init_play_state();
+			return;
 		}
 	}
 
