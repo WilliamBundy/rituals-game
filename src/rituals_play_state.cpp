@@ -55,7 +55,7 @@ void play_state_update()
 		Renderer->draw_lists[0].offset = Vec2{};
 		render_start();
 		
-		Sprite s = get_box_sprite(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
+		Sprite s = create_box_primitive(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
 		s.anchor = Anchor_Top_Left;
 		render_add(&s);
 
