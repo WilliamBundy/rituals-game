@@ -300,35 +300,8 @@ void renderer_start()
 {
 	Renderer->data_index = 0;
 	Renderer->sprite_count = 0;
-	//Renderer->screen.center = Renderer->offset;
-	//Renderer->screen.hext = Game->size * 0.5;
-	//Renderer->screen.center += v2(Renderer->screen.hw, Renderer->screen.hh);
 	Renderer->clip = {0, 0, 0, 0};
 
-	glUseProgram(Renderer->shader_program);
-	Renderer->offset.x = roundf(Renderer->offset.x);
-	Renderer->offset.y = roundf(Renderer->offset.y);
-	glUniform2f(Renderer->texture_size_loc, 
-			Renderer->texture_width,
-			Renderer->texture_height);
-	glUniform3f(Renderer->window_loc,
-			Game->window_size.x, 
-			Game->window_size.y,
-			Game->scale);
-	Vec4 screen = v4(
-		Renderer->offset.x, Renderer->offset.y, 
-		Game->size.x + Renderer->offset.x,
-		Game->size.y + Renderer->offset.y);
-	glUniform4f(Renderer->screen_loc, 
-			screen.x, screen.y, screen.z, screen.w);
-	renderer_calculate_ortho(screen);
-	glUniformMatrix4fv(Renderer->ortho_loc, 
-			1, 
-			GL_FALSE,
-			Renderer->ortho);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
 }
 
 static inline bool renderer_has_clip_rect()
@@ -415,6 +388,30 @@ void renderer_sort(isize offset)
 }
 void renderer_draw()
 {
+	glUseProgram(Renderer->shader_program);
+	Renderer->offset.x = roundf(Renderer->offset.x);
+	Renderer->offset.y = roundf(Renderer->offset.y);
+	glUniform2f(Renderer->texture_size_loc, 
+			Renderer->texture_width,
+			Renderer->texture_height);
+	glUniform3f(Renderer->window_loc,
+			Game->window_size.x, 
+			Game->window_size.y,
+			Game->scale);
+	Vec4 screen = v4(
+		Renderer->offset.x, Renderer->offset.y, 
+		Game->size.x + Renderer->offset.x,
+		Game->size.y + Renderer->offset.y);
+	glUniform4f(Renderer->screen_loc, 
+			screen.x, screen.y, screen.z, screen.w);
+	renderer_calculate_ortho(screen);
+	glUniformMatrix4fv(Renderer->ortho_loc, 
+			1, 
+			GL_FALSE,
+			Renderer->ortho);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
 	glBindVertexArray(Renderer->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, Renderer->vbo);
 	glBufferData(GL_ARRAY_BUFFER, Renderer->sprite_count * sizeof(Sprite),

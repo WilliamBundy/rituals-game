@@ -1243,7 +1243,7 @@ _get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_member_address	src/rituals_renderer.cpp	109;"	d	file:
 _get_member_address	src/wtb_sprite_renderer.h	95;"	d
-_get_sprite_y_base	src/rituals_renderer.cpp	394;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	367;"	d	file:
 _gl_offset	src/rituals_renderer.cpp	110;"	d	file:
 _gl_offset	src/wtb_sprite_renderer.h	96;"	d
 _glerror	src/rituals_renderer.cpp	113;"	d	file:
@@ -2245,6 +2245,7 @@ render_body_text	rituals_gui.cpp	/^void render_body_text(char* text, Vec2 positi
 render_body_text	src/rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position, bool background=false, real scale = 1.0f)$/;"	f
 render_clip_rect	src/rituals_renderer.cpp	/^void render_clip_rect()$/;"	f
 render_draw	src/wtb_sprite_renderer.h	/^void render_draw(Renderer* r, isize list_index)$/;"	f
+render_draw_list_start	src/wtb_sprite_renderer.h	/^void render_draw_list_start(Renderer* r, Draw_List* list)$/;"	f
 render_inventory	src/rituals_inventory.cpp	/^void render_inventory(Inventory* inventory, Vec2 position)$/;"	f
 render_start	src/wtb_sprite_renderer.h	/^void render_start(Renderer* r, isize list_index)$/;"	f
 render_tilemap	src/rituals_tilemap.cpp	/^isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)$/;"	f

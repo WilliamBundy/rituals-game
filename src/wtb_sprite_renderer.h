@@ -194,6 +194,11 @@ void init_renderer(Renderer* r, isize list_count, isize list_size, char* vertex_
 
 }
 
+void render_draw_list_start(Renderer* r, Draw_List* list)
+{
+
+}
+
 void render_start(Renderer* r, isize list_index)
 {
 
