@@ -227,7 +227,7 @@ real r = 0;
 void main_menu_update()
 {
 	game_set_scale(2.0f);
-	Renderer->offset = v2(0, 0);
+	Renderer->draw_list[0].offset = v2(0, 0);
 	renderer_start();
 	
 	real lasty = 32;
