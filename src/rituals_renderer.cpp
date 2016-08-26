@@ -117,7 +117,7 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	usize vertex_count = 1;
 
 	//position
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, (void*)&((Sprite*)(NULL)->position));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, (void*)&(((Sprite*)(NULL))->position));
 	glEnableVertexAttribArray(0);  
 	glVertexAttribDivisor(0, vertex_count);
 
