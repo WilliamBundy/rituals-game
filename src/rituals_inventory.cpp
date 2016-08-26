@@ -81,14 +81,11 @@ void render_inventory(Inventory* inventory, Vec2 position)
 	for(isize i = 0; i < inventory->h; ++i) {
 		for(isize j = 0; j < inventory->w; ++j) {
 			init_sprite(&s);
+			//TODO(will) rewrite most of this
 			s.position = position + v2(Tile_Size * j, Tile_Size * i);
-			s.anchor = Anchor_Top_Left;
+			s.flags = Anchor_Top_Left;
 			s.size = v2(32, 32);
 
-			s.texture = Get_Texture_Coordinates(
-					Renderer->texture_width - 7 * 16, 
-					6 * 16, 
-					32, 32);
 					
 			renderer_push_sprite(&s);
 
