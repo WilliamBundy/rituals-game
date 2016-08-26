@@ -252,7 +252,7 @@ static inline void render_draw_list_set_clip_rect(Draw_List* list, real x, real 
 	};
 }
 
-void render_set_clip_rect(Renderer* r, isize list_index, real x, real y, real w, real h)
+void render_set_clip_rect(OpenGL_Renderer* r, isize list_index, real x, real y, real w, real h)
 {
 	r->draw_lists[list_index].clip = Rect2{
 		x, y, w, h
