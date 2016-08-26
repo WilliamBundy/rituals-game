@@ -210,7 +210,7 @@ void spritefont_render_text(Spritefont* font,
 			wrapped ++;
 		}
 			
-		renderer_push_sprite(&s);
+		render_add(&s);
 		position.x += size.x + font->character_padding;
 	}
 	if(region != NULL) {
@@ -299,7 +299,7 @@ void spritefont_render_text_ex(Spritefont* font,
 					s.color = font->color;
 					s.angle = 0;
 					s.anchor = anchor;
-					renderer_push_sprite(&s);
+					render_add(&s);
 					position.x += size.x + font->character_padding;
 				}
 				wordstart = -1;
@@ -333,7 +333,7 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
 	s.anchor = Anchor_Top_Left;
 	font->color = v4(1, 1, 1, 1);
-	renderer_push_sprite(&s);
+	render_add(&s);
 
 }
 Vec4 Gui_TextBackgroundColor = Vec4{0, 0, 0, 0.8f};
@@ -450,7 +450,7 @@ bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 			break;
 	}
 	//s.position -= v2(8, 4);
-	renderer_push_sprite(&s);
+	render_add(&s);
 	render_body_text(text, v2(8, 4) + v2(
 				position.x,
 				position.y + (s.size.y - txs.y) / 2 - 4));
@@ -477,7 +477,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 {
 	Sprite bg = get_box_sprite(position, size, Gui_ButtonDownColor);
 	bg.anchor = Anchor_Top_Left;
-	renderer_push_sprite(&bg);
+	render_add(&bg);
 	Vec4 color1 = Gui_ButtonOutlineDownColor;
 	Vec4 color2 = Gui_ButtonOutlineDownColor2;
 	Vec4 colors[4] = {
@@ -577,7 +577,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 		}
 	}
 
-	renderer_push_sprite(&handle);
+	render_add(&handle);
 	
 	return; 
 }
@@ -657,7 +657,7 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 		}
 	}
 
-	renderer_push_sprite(&s);
+	render_add(&s);
 
 	if(handle->active) {
 		Input->capture_newlines = handle->accept_newlines;
