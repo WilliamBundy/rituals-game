@@ -550,10 +550,10 @@ int main(int argc, char** argv)
 
 		Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
 
-		const char* vert_src = 
+		char* vert_src = 
 #include "vert.glsl"
 			;
-		const char* frag_src = 
+		 char* frag_src = 
 #include "frag.glsl"
 			;
 		init_renderer(Game->renderer, 2, Megabytes(32), vert_src, frag_src, Game->renderer_arena);
