@@ -363,12 +363,31 @@ void stop()
 	}
 }
 
+GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
+{
+	int w, h, n;
+	char file[FilePathMaxLength];
+	const char* base_path = SDL_GetBasePath();
+	isize len = snprintf(file, FilePathMaxLength, "%s%s", base_path, filename);
+	uint8* data = (uint8*)stbi_load(file, &w, &h, &n, STBI_rgb_alpha);
+	//TODO(will) do error checking
+	GLuint texture = ogl_add_texture(data, w, h);
+	if(texture == NULL) {
+		printf("There was an error loading %s \n", filename);
+	}
+	if(w_o != NULL) *w_o = w;
+	if(h_o != NULL) *h_o = h;
+
+	STBI_FREE(data);
+	return texture;
+}
+
 void load_assets()
 {
 	isize w, h;
 	Renderer->draw_lists[0].texture = ogl_load_texture("data/graphics.png", &w, &h);
-	Renderer->draw_lists[0].texture_width = w;
-	Renderer->draw_lists[0].texture_height = h;
+	Renderer->draw_lists[0].texture_size.x = w;
+	Renderer->draw_lists[0].texture_size.y = h;
 
 	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
 	init_spritefont(Game->body_font);
