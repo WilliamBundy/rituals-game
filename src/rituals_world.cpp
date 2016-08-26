@@ -306,7 +306,7 @@ void world_area_render(World_Area* area, World* world)
 	Renderer->draw_lists[0].offset = area->offset;
 	area->offset += Game->size * 0.5f;
 
-	renderer_start();
+	render_start();
 
 	Rect2 screen = rect2(
 			area->offset.x - Game->size.x / 2,
@@ -326,7 +326,7 @@ void world_area_render(World_Area* area, World* world)
 				Vec2 v = b->velocity / 30.0f; 
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
-					renderer_push_sprite(&s);
+					render_add(&s);
 					s.position -= v / 16;
 					s.color = Color_White;
 					s.color.w = lerp(1.0f, 0.0f, i/16.0);
@@ -334,9 +334,9 @@ void world_area_render(World_Area* area, World* world)
 					s.sort_point_offset.y -= 10;
 				}
 			}
-			renderer_push_sprite(&e->sprite);
+			render_add(&e->sprite);
 		} else {
-			renderer_push_sprite(&e->sprite);
+			render_add(&e->sprite);
 		}
 		
 		//TODO(will) align entity sprites by their bottom center
@@ -344,7 +344,7 @@ void world_area_render(World_Area* area, World* world)
 		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
 #endif
 	}
-	renderer_sort(sprite_count_offset);
+	render_sort(sprite_count_offset);
 
 #if 1
 	char buf[256];
@@ -367,14 +367,14 @@ void world_area_render(World_Area* area, World* world)
 		render_body_text(buf, b->shape.center - v2(Body_Font->glyph_width * len / 2, 0), true);
 	}
 #endif
-	renderer_draw();
+	render_draw();
 
 #if 1
 	Renderer->offset = v2(0, 0);
-	renderer_start();
+	render_start();
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
-	renderer_draw();
+	render_draw();
 #endif
 
 }
