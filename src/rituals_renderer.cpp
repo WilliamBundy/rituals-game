@@ -118,12 +118,12 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	usize vertex_count = 1;
 
 	//position
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_get_ptr(position));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(position));
 	glEnableVertexAttribArray(0);  
 	glVertexAttribDivisor(0, vertex_count);
 
 	//center
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, _gl_get_ptr(center));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, _gl_offset(center));
 	glEnableVertexAttribArray(1);
 	glVertexAttribDivisor(1, vertex_count);
 
