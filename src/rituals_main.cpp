@@ -388,6 +388,8 @@ void load_assets()
 	Renderer->draw_lists[0].texture = ogl_load_texture("data/graphics.png", &w, &h);
 	Renderer->draw_lists[0].texture_size.x = w;
 	Renderer->draw_lists[0].texture_size.y = h;
+	Renderer->draw_lists[1].texture = Renderer->draw_lists[0].texture;
+	Renderer->draw_lists[0].texture_size = Renderer->draw_lists[0].texture_size;
 
 	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
 	init_spritefont(Game->body_font);
