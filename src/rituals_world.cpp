@@ -424,12 +424,11 @@ void world_area_update(World_Area* area, World* world)
 
 
 		if(area->player->health <= 0) {
-			init_play_state();
 			Game->state = Game_State_Menu;
 			char world_path[FilePathMaxLength];
 			isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", menu_state->save_dir, world->name);
 			recursively_delete_folder(world_path, false);
-
+			init_play_state();
 		}
 	}
 
