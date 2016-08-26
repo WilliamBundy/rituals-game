@@ -310,8 +310,8 @@ void renderer_start()
 	renderer_calculate_ortho(screen);
 	glUniformMatrix4fv(Renderer->ortho_loc, 
 			1, 
-			GL_TRUE,
-			Renderer->ortho);
+			GL_FALSE,
+			(GL_FLOAT*)Renderer->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
