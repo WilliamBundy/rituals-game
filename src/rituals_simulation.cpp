@@ -351,7 +351,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 						}
 						while(  here->solid && !up->solid &&
 								(here->body_mask == first->body_mask) &&
-								(here->body_group == first->body_group &&)
+								(here->body_group == first->body_group) &&
 								(x < tilemap->w));
 
 
