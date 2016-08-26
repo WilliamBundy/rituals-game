@@ -44,7 +44,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 								rand_range(&Game->r, -1, 1) * size_mag
 								);
 						e->body->shape.hext = v2(4,4);
-						e->sprite.anchor = Anchor_Bottom;
+						e->sprite.flags = Anchor_Bottom;
 						e->sprite.texture = rect2(
 								9*32, 0, 16, 16);
 						e->sprite.size = v2(8, 8);
@@ -71,7 +71,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	e->hitbox.box = aabb(v2(0, e->sprite.size.y * -0.5f), 16, 16);
 	e->hitbox.mask = Flag(2);
 	e->body->shape.center = position;
-	e->sprite.anchor = Anchor_Bottom;
+	e->sprite.flags = Anchor_Bottom;
 	e->body->shape.hext = v2(8, 5);
 	e->body->group = 2;
 	e->attack = 5;
