@@ -2290,8 +2290,8 @@ render_set_clip_rect	src/wtb_sprite_renderer.h	/^void render_set_clip_rect(OpenG
 render_set_clip_rect	src/wtb_sprite_renderer.h	/^void render_set_clip_rect(real x, real y, real w, real h, isize group_index = 0)$/;"	f
 render_sort	src/wtb_sprite_renderer.h	/^void render_sort(OpenGL_Renderer* r, isize group_index, isize offset)$/;"	f
 render_sort	src/wtb_sprite_renderer.h	/^void render_sort(isize offset, isize group_index = 0)$/;"	f
-render_start	src/wtb_sprite_renderer.h	/^void render_start()$/;"	f
 render_start	src/wtb_sprite_renderer.h	/^void render_start(OpenGL_Renderer* r, isize group_index)$/;"	f
+render_start	src/wtb_sprite_renderer.h	/^void render_start(isize group_index)$/;"	f
 render_tilemap	src/rituals_tilemap.cpp	/^isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)$/;"	f
 render_tilemap	src/rituals_tilemap.cpp	/^void render_tilemap(Tilemap* tilemap, Vec2 pos)$/;"	f
 render_title_text	rituals_gui.cpp	/^void render_title_text(char* text, Vec2 position)$/;"	f

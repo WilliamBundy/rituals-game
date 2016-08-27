@@ -272,8 +272,9 @@ void render_start(OpenGL_Renderer* r, isize group_index)
 	render_draw_group_start(r, r->groups + group_index);
 }
 
-void render_start()
+void render_start(isize group_index)
 {
+	render_push_group(group_index);
 	render_draw_group_start(Renderer, CurrentGroup);
 }
 
