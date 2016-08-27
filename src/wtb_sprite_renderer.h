@@ -82,7 +82,7 @@ void init_sprite(Sprite* s)
 	s->sort_offset = 0;
 }
 
-struct Draw_List
+struct Renderer_Group
 {
 	GLuint texture;
 	Vec2i texture_size;
@@ -102,31 +102,32 @@ struct OpenGL_Renderer
 	GLuint shader_program, vbo, vao;
 	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;
 	
-	Draw_List* draw_lists;
-	isize draw_lists_count;
+	Renderer_Group* draw_groups;
+	isize draw_groups_count;
 };
 extern OpenGL_Renderer* Renderer;
+extern Renderer_Group* Default_Group; 
 
-void init_draw_list(Draw_List* list, isize sprites_capacity, Memory_Arena* arena)
+void init_draw_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena* arena)
 {
-	list->offset = v2(0, 0);
-	list->clip = rect2(0, 0, 0, 0);
-	list->night_amount = 0;
-	list->night_cutoff = 0;
+	group->offset = v2(0, 0);
+	group->clip = rect2(0, 0, 0, 0);
+	group->night_amount = 0;
+	group->night_cutoff = 0;
 
-	list->sprites_capacity = sprites_capacity;
-	list->sprites_count = 0;
-	list->sprites = arena_push_array(arena, Sprite, sprites_capacity);
+	group->sprites_capacity = sprites_capacity;
+	group->sprites_count = 0;
+	group->sprites = arena_push_array(arena, Sprite, sprites_capacity);
 }
 
 #define _get_member_address(s, m) ((void*)&(((s*)(NULL))->m))
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
-void init_renderer(OpenGL_Renderer* r, isize list_count, isize list_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
+void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
 {
-	r->draw_lists = arena_push_array(arena, Draw_List, list_count);
-	r->draw_lists_count = list_count;
-	for(isize i = 0; i < list_count; ++i) {
-		init_draw_list(r->draw_lists + i, list_size / sizeof(Sprite), arena);
+	r->draw_groups = arena_push_array(arena, Renderer_Group, group_count);
+	r->draw_groups_count = group_count;
+	for(isize i = 0; i < group_count; ++i) {
+		init_draw_group(r->draw_groups + i, group_size / sizeof(Sprite), arena);
 	}
 
 	glGenVertexArrays(1, &r->vao);
@@ -224,81 +225,81 @@ void init_renderer(OpenGL_Renderer* r, isize list_count, isize list_size, char* 
 	r->u_night_cutoff = glGetUniformLocation(r->shader_program, "u_night_cutoff");
 }
 
-void render_draw_list_start(OpenGL_Renderer* r, Draw_List* list)
+void render_draw_group_start(OpenGL_Renderer* r, Renderer_Group* group)
 {
-	list->sprites_count = 0;
-	list->clip = {0, 0, 0, 0};
+	group->sprites_count = 0;
+	group->clip = {0, 0, 0, 0};
 }
 
-void render_start(OpenGL_Renderer* r, isize list_index)
+void render_start(OpenGL_Renderer* r, isize group_index)
 {
-	render_draw_list_start(r, r->draw_lists + list_index);
+	render_draw_group_start(r, r->draw_groups + group_index);
 }
 
-void render_start(isize list_index = 0)
+void render_start(isize group_index = 0)
 {
-	render_draw_list_start(Renderer, Renderer->draw_lists + list_index);
+	render_draw_group_start(Renderer, Renderer->draw_groups + group_index);
 }
 
-static inline bool render_draw_list_has_clip_rect(Draw_List* list)
+static inline bool render_draw_group_has_clip_rect(Renderer_Group* group)
 {
-	return 0 != (list->clip.w * list->clip.h);
+	return 0 != (group->clip.w * group->clip.h);
 }
 
-static inline bool render_has_clip_rect(OpenGL_Renderer* r, isize list_index = 0)
+static inline bool render_has_clip_rect(OpenGL_Renderer* r, isize group_index = 0)
 {
-	return render_draw_list_has_clip_rect(r->draw_lists + list_index);
+	return render_draw_group_has_clip_rect(r->draw_groups + group_index);
 }
 
-static inline bool render_has_clip_rect(isize list_index = 0)
+static inline bool render_has_clip_rect(isize group_index = 0)
 {
-	return render_draw_list_has_clip_rect(Renderer->draw_lists + list_index);
+	return render_draw_group_has_clip_rect(Renderer->draw_groups + group_index);
 }
 
-static inline void render_draw_list_set_clip_rect(Draw_List* list, real x, real y, real w, real h)
+static inline void render_draw_group_set_clip_rect(Renderer_Group* group, real x, real y, real w, real h)
 {
-	list->clip = Rect2 {
+	group->clip = Rect2 {
 		x, y, w, h
 	};
 }
 
-void render_set_clip_rect(OpenGL_Renderer* r, isize list_index, real x, real y, real w, real h)
+void render_set_clip_rect(OpenGL_Renderer* r, isize group_index, real x, real y, real w, real h)
 {
-	r->draw_lists[list_index].clip = Rect2{
+	r->draw_groups[group_index].clip = Rect2{
 		x, y, w, h
 	};
 }
 
-void render_set_clip_rect(real x, real y, real w, real h, isize list_index = 0)
+void render_set_clip_rect(real x, real y, real w, real h, isize group_index = 0)
 {
-	Renderer->draw_lists[list_index].clip = Rect2{
+	Renderer->draw_groups[group_index].clip = Rect2{
 		x, y, w, h
 	};
 }
 
-void render_draw_list_sort(Draw_List* list, isize offset)
+void render_draw_group_sort(Renderer_Group* group, isize offset)
 {
-	sort_sprites_on_y_base(list->sprites + offset, list->sprites_count - offset);
+	sort_sprites_on_y_base(group->sprites + offset, group->sprites_count - offset);
 }
 
-void render_sort(OpenGL_Renderer* r, isize list_index, isize offset)
+void render_sort(OpenGL_Renderer* r, isize group_index, isize offset)
 {
-	Draw_List* list = r->draw_lists + list_index;
-	sort_sprites_on_y_base(list->sprites + offset, list->sprites_count - offset);
+	Renderer_Group* group = r->draw_groups + group_index;
+	sort_sprites_on_y_base(group->sprites + offset, group->sprites_count - offset);
 }
 
-void render_sort(isize offset, isize list_index = 0)
+void render_sort(isize offset, isize group_index = 0)
 {
-	Draw_List* list = Renderer->draw_lists + list_index;
-	sort_sprites_on_y_base(list->sprites + offset, list->sprites_count - offset);
+	Renderer_Group* group = Renderer->draw_groups + group_index;
+	sort_sprites_on_y_base(group->sprites + offset, group->sprites_count - offset);
 }
 
-void render_draw_list_add(Draw_List* list, Sprite* sprite)
+void render_draw_group_add(Renderer_Group* group, Sprite* sprite)
 {
 	Sprite sp = *sprite;
 
-	if(render_draw_list_has_clip_rect(list)) {
-		Rect2 c = list->clip;
+	if(render_draw_group_has_clip_rect(group)) {
+		Rect2 c = group->clip;
 		Rect2 r;
 		r.position = sp.position;
 		r.size = sp.size;
@@ -327,42 +328,42 @@ void render_draw_list_add(Draw_List* list, Sprite* sprite)
 		sp.angle = 0;
 	}
 	
-	sp.texture.x /= list->texture_size.x;
-	sp.texture.w /= list->texture_size.x;
-	sp.texture.y /= list->texture_size.y;
-	sp.texture.h /= list->texture_size.y;
+	sp.texture.x /= group->texture_size.x;
+	sp.texture.w /= group->texture_size.x;
+	sp.texture.y /= group->texture_size.y;
+	sp.texture.h /= group->texture_size.y;
 
-	list->sprites[list->sprites_count++] = sp;
+	group->sprites[group->sprites_count++] = sp;
 }
 
-void render_add(OpenGL_Renderer* r, Sprite* sprite, isize list_index)
+void render_add(OpenGL_Renderer* r, Sprite* sprite, isize group_index)
 {
-	Draw_List* list = r->draw_lists + list_index;
-	render_draw_list_add(list, sprite);
+	Renderer_Group* group = r->draw_groups + group_index;
+	render_draw_group_add(group, sprite);
 }
 
-void render_add(OpenGL_Renderer* r, Sprite4* s4, isize list_index = 0) 
+void render_add(OpenGL_Renderer* r, Sprite4* s4, isize group_index = 0) 
 {
-	Draw_List* list = r->draw_lists + list_index;
-	render_draw_list_add(list, s4->e + 0);
-	render_draw_list_add(list, s4->e + 1);
-	render_draw_list_add(list, s4->e + 2);
-	render_draw_list_add(list, s4->e + 3);
+	Renderer_Group* group = r->draw_groups + group_index;
+	render_draw_group_add(group, s4->e + 0);
+	render_draw_group_add(group, s4->e + 1);
+	render_draw_group_add(group, s4->e + 2);
+	render_draw_group_add(group, s4->e + 3);
 }
 
-void render_add(Sprite* sprite, isize list_index = 0)
+void render_add(Sprite* sprite, isize group_index = 0)
 {
-	Draw_List* list = Renderer->draw_lists + list_index;
-	render_draw_list_add(list, sprite);
+	Renderer_Group* group = Renderer->draw_groups + group_index;
+	render_draw_group_add(group, sprite);
 }
 
-void render_add(Sprite4* s4, isize list_index = 0) 
+void render_add(Sprite4* s4, isize group_index = 0) 
 {
-	Draw_List* list = Renderer->draw_lists + list_index;
-	render_draw_list_add(list, s4->e + 0);
-	render_draw_list_add(list, s4->e + 1);
-	render_draw_list_add(list, s4->e + 2);
-	render_draw_list_add(list, s4->e + 3);
+	Renderer_Group* group = Renderer->draw_groups + group_index;
+	render_draw_group_add(group, s4->e + 0);
+	render_draw_group_add(group, s4->e + 1);
+	render_draw_group_add(group, s4->e + 2);
+	render_draw_group_add(group, s4->e + 3);
 }
 
 void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, real farplane)
@@ -389,47 +390,47 @@ void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, rea
 }
 
 
-void render_draw_list(OpenGL_Renderer* r, Draw_List* list, Vec2 size, real scale)
+void render_draw_group(OpenGL_Renderer* r, Renderer_Group* group, Vec2 size, real scale)
 {
 	glUseProgram(r->shader_program);
-	list->offset.x = roundf(list->offset.x);
-	list->offset.y = roundf(list->offset.y);
+	group->offset.x = roundf(group->offset.x);
+	group->offset.y = roundf(group->offset.y);
 
 	glUniform2f(r->u_texturesize,
-		list->texture_size.x,
-		list->texture_size.y);
+		group->texture_size.x,
+		group->texture_size.y);
 
-	glUniform1f(r->u_night_amount, 1.0f - list->night_amount);
-	glUniform1f(r->u_night_cutoff, list->night_cutoff);
+	glUniform1f(r->u_night_amount, 1.0f - group->night_amount);
+	glUniform1f(r->u_night_cutoff, group->night_cutoff);
 
 	Vec4 screen = v4(
-		list->offset.x, list->offset.y, 
-		size.x + list->offset.x,
-		size.y + list->offset.y);
-	render_calculate_ortho_matrix(list->ortho, screen, 1, -1);
+		group->offset.x, group->offset.y, 
+		size.x + group->offset.x,
+		size.y + group->offset.y);
+	render_calculate_ortho_matrix(group->ortho, screen, 1, -1);
 	glUniformMatrix4fv(r->u_orthomat, 
 		1, 
 		GL_FALSE,
-		list->ortho);
+		group->ortho);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, list->texture);
+	glBindTexture(GL_TEXTURE_2D, group->texture);
 	glBindVertexArray(r->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
-	glBufferData(GL_ARRAY_BUFFER, list->sprites_count * sizeof(Sprite), list->sprites, GL_STREAM_DRAW);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, list->sprites_count);
+	glBufferData(GL_ARRAY_BUFFER, group->sprites_count * sizeof(Sprite), group->sprites, GL_STREAM_DRAW);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, group->sprites_count);
 	glBindVertexArray(0);
 }
 
-void render_draw(OpenGL_Renderer* r, isize list_index)
+void render_draw(OpenGL_Renderer* r, isize group_index)
 {
-	Draw_List* list = r->draw_lists + list_index;
-	render_draw_list(r, list, Game->size, Game->scale);
+	Renderer_Group* group = r->draw_groups + group_index;
+	render_draw_group(r, group, Game->size, Game->scale);
 }
 
-void render_draw(isize list_index = 0)
+void render_draw(isize group_index = 0)
 {
-	render_draw_list(Renderer, Renderer->draw_lists + list_index, Game->size, Game->scale);
+	render_draw_group(Renderer, Renderer->draw_groups + group_index, Game->size, Game->scale);
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
@@ -467,10 +468,10 @@ Sprite create_box_primitive(Vec2 pos, Vec2 size, Vec4 color)
 	return s;
 }
 
-void render_box_primitive(Vec2 pos, Vec2 size, Vec4 color, isize list_index = 0)
+void render_box_primitive(Vec2 pos, Vec2 size, Vec4 color, isize group_index = 0)
 {
 	Sprite s = create_box_primitive(pos, size, color);
-	render_add(&s, list_index);
+	render_add(&s, group_index);
 }
 
 Sprite create_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
@@ -500,10 +501,10 @@ Sprite create_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 	}
 	return s;
 }
-void render_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness, isize list_index = 0)
+void render_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness, isize group_index = 0)
 {
 	Sprite s = create_line_primitive(start, end, color, thickness);
-	render_add(&s, list_index);
+	render_add(&s, group_index);
 }
 
 Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
@@ -519,10 +520,10 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 t
 	return s;
 }
 
-void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness, isize list_index = 0)
+void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness, isize group_index = 0)
 {
 	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
-	render_add(&s, list_index);
+	render_add(&s, group_index);
 }
 
 Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness)
@@ -538,10 +539,10 @@ Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int3
 	return s;
 }
 
-void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize list_index = 0)
+void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness, isize group_index = 0)
 {
 	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
-	render_add(&s, list_index);
+	render_add(&s, group_index);
 }
 
 
