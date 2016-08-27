@@ -333,9 +333,6 @@ void world_area_render(World_Area* area, World* world)
 					s.color.w *= s.color.w;
 					s.sort_offset -= 10;
 				}
-				render_push_group(1);
-				render_body_text(buf, v2(16, 16), true);
-				render_pop_group();
 			}
 			render_add(&e->sprite);
 		} else {
