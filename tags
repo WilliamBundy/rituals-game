@@ -2282,6 +2282,7 @@ render_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_has_c
 render_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_has_clip_rect(isize group_index = 0)$/;"	f
 render_inventory	src/rituals_inventory.cpp	/^void render_inventory(Inventory* inventory, Vec2 position)$/;"	f
 render_line_primitive	src/wtb_sprite_renderer.h	/^void render_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness, isize group_index = 0)$/;"	f
+render_pop_group	src/wtb_sprite_renderer.h	/^void render_pop_group()$/;"	f
 render_pop_group	src/wtb_sprite_renderer.h	/^void render_pop_group(OpenGL_Renderer* r)$/;"	f
 render_push_group	src/wtb_sprite_renderer.h	/^void render_push_group(OpenGL_Renderer* r, isize index)$/;"	f
 render_push_group	src/wtb_sprite_renderer.h	/^void render_push_group(isize index)$/;"	f
