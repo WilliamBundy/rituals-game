@@ -103,7 +103,7 @@ struct OpenGL_Renderer
 	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;
 	
 	Renderer_Group* groups;
-	isize droups_count;
+	isize groups_count;
 };
 extern OpenGL_Renderer* Renderer;
 extern Renderer_Group* Default_Group; 
