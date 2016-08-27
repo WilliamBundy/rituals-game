@@ -242,7 +242,7 @@ void render_push_group(OpenGL_Renderer* r, isize index)
 {
 	if(r->group_stack_count >= r->group_stack_size) {
 		return;
-	} else {
+	} 
 	r->group_stack[r->group_stack_count++] = index;
 	r->current_group = r->groups + r->group_stack[r->group_stack_count - 1];
 }
