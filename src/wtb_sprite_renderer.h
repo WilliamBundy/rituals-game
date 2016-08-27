@@ -267,6 +267,16 @@ void render_pop_group()
 	CurrentGroup = Renderer->current_group;
 }
 
+isize render_group_index(OpenGL_Renderer* r)
+{
+	return r->group_stack[r->group_stack_count - 1];
+}
+
+isize render_group_index()
+{
+	return render_group_index(Renderer);
+}
+
 void render_start(OpenGL_Renderer* r, isize group_index)
 {
 	render_draw_group_start(r, r->groups + group_index);
@@ -275,6 +285,11 @@ void render_start(OpenGL_Renderer* r, isize group_index)
 void render_start(isize group_index)
 {
 	render_push_group(group_index);
+	render_draw_group_start(Renderer, CurrentGroup);
+}
+
+void render_start()
+{
 	render_draw_group_start(Renderer, CurrentGroup);
 }
 
