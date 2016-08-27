@@ -315,7 +315,6 @@ void world_area_render(World_Area* area, World* world)
 
 	isize sprite_count_offset = render_tilemap(&area->map, v2(0,0), screen);
 
-	render_group(0);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
