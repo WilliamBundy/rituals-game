@@ -564,7 +564,7 @@ int main(int argc, char** argv)
 
 		Registry = Game->registry;
 		Renderer = Game->renderer;
-		Default_Group = Renderer->groups;
+		CurrentGroup = Renderer->groups;
 	}
 
 	load_assets();
