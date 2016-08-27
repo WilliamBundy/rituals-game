@@ -227,7 +227,7 @@ real r = 0;
 void main_menu_update()
 {
 	game_set_scale(2.0f);
-	Renderer->draw_lists[0].offset = v2(0, 0);
+	Renderer->groups[0].offset = v2(0, 0);
 	render_start();
 	
 	real lasty = 32;
@@ -385,11 +385,11 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 void load_assets()
 {
 	isize w, h;
-	Renderer->draw_lists[0].texture = ogl_load_texture("data/graphics.png", &w, &h);
-	Renderer->draw_lists[0].texture_size.x = w;
-	Renderer->draw_lists[0].texture_size.y = h;
-	Renderer->draw_lists[1].texture = Renderer->draw_lists[0].texture;
-	Renderer->draw_lists[1].texture_size = Renderer->draw_lists[0].texture_size;
+	Renderer->groups[0].texture = ogl_load_texture("data/graphics.png", &w, &h);
+	Renderer->groups[0].texture_size.x = w;
+	Renderer->groups[0].texture_size.y = h;
+	Renderer->groups[1].texture = Renderer->groups[0].texture;
+	Renderer->groups[1].texture_size = Renderer->groups[0].texture_size;
 
 	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
 	init_spritefont(Game->body_font);
@@ -671,7 +671,7 @@ int main(int argc, char** argv)
 		Input->mouse_x = mx;
 		Input->mouse_y = my;
 		Input->screen_mouse_pos = v2i(mx, my);
-		game_calc_mouse_pos(Renderer->draw_lists[0].offset);
+		game_calc_mouse_pos(Renderer->groups[0].offset);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
