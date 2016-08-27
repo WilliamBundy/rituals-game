@@ -56,7 +56,7 @@ COMBO	src/thirdparty/stb_image.h	1359;"	d
 Color	src/rituals_math.cpp	/^union Color$/;"	u	file:
 Color_Black	src/rituals_gui.cpp	/^Vec4 Color_Black = _color(0, 0, 0, 1);$/;"	v
 Color_White	src/rituals_gui.cpp	/^Vec4 Color_White = _color(1, 1, 1, 1);$/;"	v
-Default_Group	src/rituals_game.cpp	/^Renderer_Group* Default_Group;$/;"	v
+CurrentGroup	src/rituals_game.cpp	/^Renderer_Group* CurrentGroup;$/;"	v
 Direction	src/rituals_game.cpp	/^enum Direction $/;"	g	file:
 Direction_East	src/rituals_game.cpp	/^	Direction_East,$/;"	e	enum:Direction	file:
 Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	file:

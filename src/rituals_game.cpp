@@ -379,7 +379,7 @@ struct Game_Main
 
 Game_Main* Game;
 OpenGL_Renderer* Renderer;
-Renderer_Group* Default_Group;
+Renderer_Group* CurrentGroup;
 Game_Input* Input;
 Spritefont* Body_Font;
 Spritefont* Title_Font;
