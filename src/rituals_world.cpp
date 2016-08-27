@@ -303,7 +303,7 @@ void world_area_render(World_Area* area, World* world)
 	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - Game->size.y;
 
-	Renderer->draw_lists[0].offset = area->offset;
+	Renderer->groups[0].offset = area->offset;
 	area->offset += Game->size * 0.5f;
 
 	render_start();
@@ -370,7 +370,7 @@ void world_area_render(World_Area* area, World* world)
 	render_draw();
 
 #if 1
-	Renderer->draw_lists[0].offset = v2(0, 0);
+	Renderer->groups[0].offset = v2(0, 0);
 	render_start();
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);

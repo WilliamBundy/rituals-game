@@ -1506,9 +1506,8 @@ direction	src/rituals_world_area.cpp	/^	Direction direction;$/;"	m	struct:Entity
 draw_box_outline	src/rituals_renderer.cpp	/^void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness)$/;"	f
 draw_box_outline	src/rituals_renderer.cpp	/^void draw_box_outline(Vec2 center, Vec2 size, Vec4 colors[4], int32 thickness)$/;"	f
 draw_box_outline	src/rituals_renderer.cpp	/^void draw_box_outline(Vec2 center, Vec2 size, real angle, Vec4 color, int32 thickness)$/;"	f
-draw_groups	src/wtb_sprite_renderer.h	/^	Renderer_Group* draw_groups;$/;"	m	struct:OpenGL_Renderer
-draw_groups_count	src/wtb_sprite_renderer.h	/^	isize draw_groups_count;$/;"	m	struct:OpenGL_Renderer
 draw_line	src/rituals_renderer.cpp	/^void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)$/;"	f
+droups_count	src/wtb_sprite_renderer.h	/^	isize droups_count;$/;"	m	struct:OpenGL_Renderer
 e	src/rituals_math.cpp	/^	int32 e[2];$/;"	m	union:Vec2i	file:
 e	src/rituals_math.cpp	/^	real e[2];$/;"	m	union:Vec2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:AABB	file:
@@ -1920,6 +1919,7 @@ glyphs	src/rituals_gui.cpp	/^	Rect2* glyphs;$/;"	m	struct:Spritefont	file:
 goblin_knight	src/rituals_game_info.cpp	/^			} goblin_knight;$/;"	m	union:Rituals_Entity_Userdata::__anon3::__anon4	typeref:struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon7	file:
 group	src/rituals_simulation.cpp	/^	uint64 group;$/;"	m	struct:Sim_Body	file:
 group	src/rituals_world_area.cpp	/^	uint64 group;$/;"	m	struct:Hitbox	file:
+groups	src/wtb_sprite_renderer.h	/^	Renderer_Group* groups;$/;"	m	struct:OpenGL_Renderer
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text)$/;"	f
 gui_add_button	src/rituals_gui.cpp	/^bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)$/;"	f
 gui_add_checkbox	src/rituals_gui.cpp	/^bool gui_add_checkbox(Vec2 position, char* text, bool* value)$/;"	f
