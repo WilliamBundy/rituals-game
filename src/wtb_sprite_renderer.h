@@ -257,13 +257,13 @@ void render_pop_group(OpenGL_Renderer* r)
 
 void render_push_group(isize index)
 {
-	render_group(Renderer, index);
+	render_push_group(Renderer, index);
 	CurrentGroup = Renderer->current_group;
 }
 
 void render_pop_group(Renderer* r)
 {
-	render_pop(Renderer);
+	render_pop_group(Renderer);
 	CurrentGroup = Renderer->current_group;
 }
 
