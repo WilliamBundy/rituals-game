@@ -238,7 +238,7 @@ void render_draw_group_start(OpenGL_Renderer* r, Renderer_Group* group)
 	group->clip = {0, 0, 0, 0};
 }
 
-void render_group(Renderer* r, isize index)
+void render_push_group(OpenGL_Renderer* r, isize index)
 {
 	if(r->group_stack_count >= r->group_stack_size) {
 		return;
@@ -247,7 +247,7 @@ void render_group(Renderer* r, isize index)
 	r->current_group = r->groups + r->group_stack[r->group_stack_count - 1];
 }
 
-void render_pop(Renderer* r)
+void render_pop_group(OpenGL_Renderer* r)
 {
 	if(r->group_stack_count > 0) {
 		r->group_stack_count--;
@@ -255,13 +255,13 @@ void render_pop(Renderer* r)
 	r->current_group = r->groups + r->group_stack[r->group_stack_count];
 }
 
-void render_group(isize index)
+void render_push_group(isize index)
 {
 	render_group(Renderer, index);
 	CurrentGroup = Renderer->current_group;
 }
 
-void render_pop(Renderer* r)
+void render_pop_group(Renderer* r)
 {
 	render_pop(Renderer);
 	CurrentGroup = Renderer->current_group;

@@ -2258,8 +2258,8 @@ render_body_text	rituals_gui.cpp	/^void render_body_text(char* text, Vec2 positi
 render_body_text	src/rituals_gui.cpp	/^void render_body_text(char* text, Vec2 position, bool background=false, real scale = 1.0f)$/;"	f
 render_clip_rect	src/rituals_renderer.cpp	/^void render_clip_rect()$/;"	f
 render_draw_group_start	src/wtb_sprite_renderer.h	/^void render_draw_group_start(OpenGL_Renderer* r, Renderer_Group* group)$/;"	f
-render_group	src/wtb_sprite_renderer.h	/^void render_group(Renderer* r, isize index)$/;"	f
 render_inventory	src/rituals_inventory.cpp	/^void render_inventory(Inventory* inventory, Vec2 position)$/;"	f
+render_push_group	src/wtb_sprite_renderer.h	/^void render_push_group(OpenGL_Renderer* r, isize index)$/;"	f
 render_tilemap	src/rituals_tilemap.cpp	/^isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)$/;"	f
 render_tilemap	src/rituals_tilemap.cpp	/^void render_tilemap(Tilemap* tilemap, Vec2 pos)$/;"	f
 render_title_text	rituals_gui.cpp	/^void render_title_text(char* text, Vec2 position)$/;"	f
