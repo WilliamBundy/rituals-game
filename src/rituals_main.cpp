@@ -679,7 +679,7 @@ int main(int argc, char** argv)
 
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-		if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
+		//if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
 	}
 
 	SDL_Quit();
