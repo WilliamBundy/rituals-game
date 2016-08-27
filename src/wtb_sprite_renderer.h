@@ -104,9 +104,13 @@ struct OpenGL_Renderer
 	
 	Renderer_Group* groups;
 	isize groups_count;
+
+	Renderer_Group* current_group;
+	isize* group_stack;
+	isize group_stack_size, group_stack_count;
 };
 extern OpenGL_Renderer* Renderer;
-extern Renderer_Group* Default_Group; 
+extern Renderer_Group* CurrentGroup; 
 
 void init_draw_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena* arena)
 {
@@ -124,6 +128,9 @@ void init_draw_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
 void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
 {
+	r->group_stack_size = 256;
+	r->group_stack_count = 0;
+	r->group_stack = arena_push_array(arena, isize, r->group_stack_size);
 	r->groups = arena_push_array(arena, Renderer_Group, group_count);
 	r->groups_count = group_count;
 	for(isize i = 0; i < group_count; ++i) {
@@ -231,14 +238,43 @@ void render_draw_group_start(OpenGL_Renderer* r, Renderer_Group* group)
 	group->clip = {0, 0, 0, 0};
 }
 
+void render_group(Renderer* r, isize index)
+{
+	if(r->group_stack_count >= r->group_stack_size) {
+		return;
+	} else {
+	r->group_stack[r->group_stack_count++] = index;
+	r->current_group = r->groups + r->group_stack[r->group_stack_count - 1];
+}
+
+void render_pop(Renderer* r)
+{
+	if(r->group_stack_count > 0) {
+		r->group_stack_count--;
+	}
+	r->current_group = r->groups + r->group_stack[r->group_stack_count];
+}
+
+void render_group(isize index)
+{
+	render_group(Renderer, index);
+	CurrentGroup = Renderer->current_group;
+}
+
+void render_pop(Renderer* r)
+{
+	render_pop(Renderer);
+	CurrentGroup = Renderer->current_group;
+}
+
 void render_start(OpenGL_Renderer* r, isize group_index)
 {
 	render_draw_group_start(r, r->groups + group_index);
 }
 
-void render_start(isize group_index = 0)
+void render_start()
 {
-	render_draw_group_start(Renderer, Renderer->groups + group_index);
+	render_draw_group_start(Renderer, CurrentGroup);
 }
 
 static inline bool render_draw_group_has_clip_rect(Renderer_Group* group)

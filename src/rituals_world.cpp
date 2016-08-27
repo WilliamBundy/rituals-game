@@ -303,7 +303,7 @@ void world_area_render(World_Area* area, World* world)
 	else if((area->offset.y + Game->size.y) > area->map.h * Tile_Size)
 		area->offset.y = area->map.h * Tile_Size - Game->size.y;
 
-	Renderer->groups[0].offset = area->offset;
+	CurrentGroup->offset = area->offset;
 	area->offset += Game->size * 0.5f;
 
 	render_start();
@@ -315,6 +315,7 @@ void world_area_render(World_Area* area, World* world)
 
 	isize sprite_count_offset = render_tilemap(&area->map, v2(0,0), screen);
 
+	render_group(0);
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
@@ -333,6 +334,9 @@ void world_area_render(World_Area* area, World* world)
 					s.color.w *= s.color.w;
 					s.sort_offset -= 10;
 				}
+				render_push_group(1);
+				render_body_text(buf, v2(16, 16), true);
+				render_pop_group();
 			}
 			render_add(&e->sprite);
 		} else {
@@ -370,11 +374,10 @@ void world_area_render(World_Area* area, World* world)
 	render_draw();
 
 #if 1
-	Renderer->groups[0].offset = v2(0, 0);
-	render_start();
+	render_start(1);
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
-	render_draw();
+	render_draw(1);
 #endif
 
 }

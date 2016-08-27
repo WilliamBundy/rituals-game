@@ -340,6 +340,7 @@ enum Game_State
 //typedef struct Debug_Log Debug_Log;
 typedef struct Spritefont Spritefont;
 typedef struct OpenGL_Renderer OpenGL_Renderer;
+typedef struct Renderer_Group Renderer_Group;
 typedef struct Game_Registry Game_Registry;
 struct Game_Main
 {
@@ -378,6 +379,7 @@ struct Game_Main
 
 Game_Main* Game;
 OpenGL_Renderer* Renderer;
+Renderer_Group* Default_Group;
 Game_Input* Input;
 Spritefont* Body_Font;
 Spritefont* Title_Font;
