@@ -2004,9 +2004,9 @@ img_y	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__
 immune_to_damage	src/rituals_game_info.cpp	/^	bool immune_to_damage;$/;"	m	struct:Tile_Info	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
 init_body	src/rituals_simulation.cpp	/^void init_body(Sim_Body* b)$/;"	f
-init_draw_group	src/wtb_sprite_renderer.h	/^void init_draw_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena* arena)$/;"	f
 init_entity	src/rituals_world_area.cpp	/^void init_entity(Entity* entity)$/;"	f
 init_game_registry	src/rituals_game_registry.cpp	/^void init_game_registry(Game_Registry* registry, Memory_Arena* arena)$/;"	f
+init_group	src/wtb_sprite_renderer.h	/^void init_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena* arena)$/;"	f
 init_inventory	src/rituals_inventory.cpp	/^void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)$/;"	f
 init_item_stack	src/rituals_inventory.cpp	/^void init_item_stack(Item_Stack* stack, Item_Info* info)$/;"	f
 init_memory_arena	src/rituals_game.cpp	/^void init_memory_arena(Memory_Arena* arena, usize size)$/;"	f
@@ -2272,14 +2272,14 @@ render_calculate_ortho_matrix	src/wtb_sprite_renderer.h	/^void render_calculate_
 render_clip_rect	src/rituals_renderer.cpp	/^void render_clip_rect()$/;"	f
 render_draw	src/wtb_sprite_renderer.h	/^void render_draw(OpenGL_Renderer* r, isize group_index)$/;"	f
 render_draw	src/wtb_sprite_renderer.h	/^void render_draw(isize group_index = 0)$/;"	f
-render_draw_group	src/wtb_sprite_renderer.h	/^void render_draw_group(OpenGL_Renderer* r, Renderer_Group* group, Vec2 size, real scale)$/;"	f
-render_draw_group_add	src/wtb_sprite_renderer.h	/^void render_draw_group_add(Renderer_Group* group, Sprite* sprite)$/;"	f
-render_draw_group_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_draw_group_has_clip_rect(Renderer_Group* group)$/;"	f
-render_draw_group_set_clip_rect	src/wtb_sprite_renderer.h	/^static inline void render_draw_group_set_clip_rect(Renderer_Group* group, real x, real y, real w, real h)$/;"	f
-render_draw_group_sort	src/wtb_sprite_renderer.h	/^void render_draw_group_sort(Renderer_Group* group, isize offset)$/;"	f
-render_draw_group_start	src/wtb_sprite_renderer.h	/^void render_draw_group_start(OpenGL_Renderer* r, Renderer_Group* group)$/;"	f
+render_group	src/wtb_sprite_renderer.h	/^void render_group(OpenGL_Renderer* r, Renderer_Group* group, Vec2 size, real scale)$/;"	f
+render_group_add	src/wtb_sprite_renderer.h	/^void render_group_add(Renderer_Group* group, Sprite* sprite)$/;"	f
+render_group_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_group_has_clip_rect(Renderer_Group* group)$/;"	f
 render_group_index	src/wtb_sprite_renderer.h	/^isize render_group_index()$/;"	f
 render_group_index	src/wtb_sprite_renderer.h	/^isize render_group_index(OpenGL_Renderer* r)$/;"	f
+render_group_set_clip_rect	src/wtb_sprite_renderer.h	/^static inline void render_group_set_clip_rect(Renderer_Group* group, real x, real y, real w, real h)$/;"	f
+render_group_sort	src/wtb_sprite_renderer.h	/^void render_group_sort(Renderer_Group* group, isize offset)$/;"	f
+render_group_start	src/wtb_sprite_renderer.h	/^void render_group_start(OpenGL_Renderer* r, Renderer_Group* group)$/;"	f
 render_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_has_clip_rect(OpenGL_Renderer* r, isize group_index = 0)$/;"	f
 render_has_clip_rect	src/wtb_sprite_renderer.h	/^static inline bool render_has_clip_rect(isize group_index = 0)$/;"	f
 render_inventory	src/rituals_inventory.cpp	/^void render_inventory(Inventory* inventory, Vec2 position)$/;"	f

@@ -112,7 +112,7 @@ struct OpenGL_Renderer
 extern OpenGL_Renderer* Renderer;
 extern Renderer_Group* CurrentGroup; 
 
-void init_draw_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena* arena)
+void init_group(Renderer_Group* group, isize sprites_capacity, Memory_Arena* arena)
 {
 	group->offset = v2(0, 0);
 	group->clip = rect2(0, 0, 0, 0);
@@ -134,7 +134,7 @@ void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char
 	r->groups = arena_push_array(arena, Renderer_Group, group_count);
 	r->groups_count = group_count;
 	for(isize i = 0; i < group_count; ++i) {
-		init_draw_group(r->groups + i, group_size / sizeof(Sprite), arena);
+		init_group(r->groups + i, group_size / sizeof(Sprite), arena);
 	}
 
 	glGenVertexArrays(1, &r->vao);
@@ -232,7 +232,7 @@ void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char
 	r->u_night_cutoff = glGetUniformLocation(r->shader_program, "u_night_cutoff");
 }
 
-void render_draw_group_start(OpenGL_Renderer* r, Renderer_Group* group)
+void render_group_start(OpenGL_Renderer* r, Renderer_Group* group)
 {
 	group->sprites_count = 0;
 	group->clip = {0, 0, 0, 0};
@@ -279,36 +279,36 @@ isize render_group_index()
 
 void render_start(OpenGL_Renderer* r, isize group_index)
 {
-	render_draw_group_start(r, r->groups + group_index);
+	render_group_start(r, r->groups + group_index);
 }
 
 void render_start(isize group_index)
 {
 	render_push_group(group_index);
-	render_draw_group_start(Renderer, CurrentGroup);
+	render_group_start(Renderer, CurrentGroup);
 }
 
 void render_start()
 {
-	render_draw_group_start(Renderer, CurrentGroup);
+	render_group_start(Renderer, CurrentGroup);
 }
 
-static inline bool render_draw_group_has_clip_rect(Renderer_Group* group)
+static inline bool render_group_has_clip_rect(Renderer_Group* group)
 {
 	return 0 != (group->clip.w * group->clip.h);
 }
 
 static inline bool render_has_clip_rect(OpenGL_Renderer* r, isize group_index = 0)
 {
-	return render_draw_group_has_clip_rect(r->groups + group_index);
+	return render_group_has_clip_rect(r->groups + group_index);
 }
 
 static inline bool render_has_clip_rect(isize group_index = 0)
 {
-	return render_draw_group_has_clip_rect(Renderer->groups + group_index);
+	return render_group_has_clip_rect(Renderer->groups + group_index);
 }
 
-static inline void render_draw_group_set_clip_rect(Renderer_Group* group, real x, real y, real w, real h)
+static inline void render_group_set_clip_rect(Renderer_Group* group, real x, real y, real w, real h)
 {
 	group->clip = Rect2 {
 		x, y, w, h
@@ -329,7 +329,7 @@ void render_set_clip_rect(real x, real y, real w, real h, isize group_index = 0)
 	};
 }
 
-void render_draw_group_sort(Renderer_Group* group, isize offset)
+void render_group_sort(Renderer_Group* group, isize offset)
 {
 	sort_sprites_on_y_base(group->sprites + offset, group->sprites_count - offset);
 }
@@ -346,11 +346,11 @@ void render_sort(isize offset, isize group_index = 0)
 	sort_sprites_on_y_base(group->sprites + offset, group->sprites_count - offset);
 }
 
-void render_draw_group_add(Renderer_Group* group, Sprite* sprite)
+void render_group_add(Renderer_Group* group, Sprite* sprite)
 {
 	Sprite sp = *sprite;
 
-	if(render_draw_group_has_clip_rect(group)) {
+	if(render_group_has_clip_rect(group)) {
 		Rect2 c = group->clip;
 		Rect2 r;
 		r.position = sp.position;
@@ -391,31 +391,31 @@ void render_draw_group_add(Renderer_Group* group, Sprite* sprite)
 void render_add(OpenGL_Renderer* r, Sprite* sprite, isize group_index)
 {
 	Renderer_Group* group = r->groups + group_index;
-	render_draw_group_add(group, sprite);
+	render_group_add(group, sprite);
 }
 
 void render_add(OpenGL_Renderer* r, Sprite4* s4, isize group_index = 0) 
 {
 	Renderer_Group* group = r->groups + group_index;
-	render_draw_group_add(group, s4->e + 0);
-	render_draw_group_add(group, s4->e + 1);
-	render_draw_group_add(group, s4->e + 2);
-	render_draw_group_add(group, s4->e + 3);
+	render_group_add(group, s4->e + 0);
+	render_group_add(group, s4->e + 1);
+	render_group_add(group, s4->e + 2);
+	render_group_add(group, s4->e + 3);
 }
 
 void render_add(Sprite* sprite, isize group_index = 0)
 {
 	Renderer_Group* group = Renderer->groups + group_index;
-	render_draw_group_add(group, sprite);
+	render_group_add(group, sprite);
 }
 
 void render_add(Sprite4* s4, isize group_index = 0) 
 {
 	Renderer_Group* group = Renderer->groups + group_index;
-	render_draw_group_add(group, s4->e + 0);
-	render_draw_group_add(group, s4->e + 1);
-	render_draw_group_add(group, s4->e + 2);
-	render_draw_group_add(group, s4->e + 3);
+	render_group_add(group, s4->e + 0);
+	render_group_add(group, s4->e + 1);
+	render_group_add(group, s4->e + 2);
+	render_group_add(group, s4->e + 3);
 }
 
 void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, real farplane)
@@ -442,7 +442,7 @@ void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, rea
 }
 
 
-void render_draw_group(OpenGL_Renderer* r, Renderer_Group* group, Vec2 size, real scale)
+void render_group(OpenGL_Renderer* r, Renderer_Group* group, Vec2 size, real scale)
 {
 	glUseProgram(r->shader_program);
 	group->offset.x = roundf(group->offset.x);
@@ -477,12 +477,12 @@ void render_draw_group(OpenGL_Renderer* r, Renderer_Group* group, Vec2 size, rea
 void render_draw(OpenGL_Renderer* r, isize group_index)
 {
 	Renderer_Group* group = r->groups + group_index;
-	render_draw_group(r, group, Game->size, Game->scale);
+	render_group(r, group, Game->size, Game->scale);
 }
 
 void render_draw(isize group_index = 0)
 {
-	render_draw_group(Renderer, Renderer->groups + group_index, Game->size, Game->scale);
+	render_group(Renderer, Renderer->groups + group_index, Game->size, Game->scale);
 }
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
