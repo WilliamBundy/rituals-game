@@ -306,7 +306,7 @@ void world_area_render(World_Area* area, World* world)
 	CurrentGroup->offset = area->offset;
 	area->offset += Game->size * 0.5f;
 
-	render_start();
+	render_start(CurrentGroup);
 
 	Rect2 screen = rect2(
 			area->offset.x - Game->size.x / 2,
@@ -367,13 +367,13 @@ void world_area_render(World_Area* area, World* world)
 		render_body_text(buf, b->shape.center - v2(Body_Font->glyph_width * len / 2, 0), true);
 	}
 #endif
-	render_draw();
+	render_draw(Game->size, Game->scale);
 
 #if 1
-	render_start(1);
+	render_start(CurrentGroup);
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
-	render_draw(1);
+	render_draw(Game->size, Game->scale);
 #endif
 
 }
@@ -493,7 +493,7 @@ void world_area_update(World_Area* area, World* world)
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
-			a += rand_range(&Game->r, -5, 5) * Math_Deg2Rad;
+			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
 
 			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));
 			area->player->body->velocity -= e->body->velocity;

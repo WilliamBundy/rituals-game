@@ -53,7 +53,7 @@ void play_state_update()
 
 	if(!play_state->running) {
 		Renderer->groups[0].offset = Vec2{};
-		render_start();
+		render_start(CurrentGroup);
 		
 		Sprite s = create_box_primitive(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
 		s.flags = Anchor_Top_Left;
@@ -66,7 +66,7 @@ void play_state_update()
 			init_play_state();
 			Game->state = Game_State_Menu;
 		}
-		render_draw();
+		render_draw(Game->size, Game->scale);
 	}
 }
 

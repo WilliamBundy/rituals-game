@@ -380,7 +380,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 						b->attack_timer = b->attack_interval;
 						a->health -= b->attack;
 						real angle = v2_to_angle(b->walk_impulse);
-						angle += rand_range(&Game->r, -10, 10) * Math_Deg2Rad;
+						angle += rand_range(&Game->r, -10, 10) * Math_DegToRad;
 						a->body->velocity += (v2_from_angle(angle) * b->knockback);
 						a->userdata.player.heal_timer = a->userdata.player.heal_cooldown;
 					}

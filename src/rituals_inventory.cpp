@@ -87,7 +87,7 @@ void render_inventory(Inventory* inventory, Vec2 position)
 			s.size = v2(32, 32);
 
 					
-			render_add(&s);
+			render_add(CurrentGroup, &s);
 
 			Item_Stack* at = inventory->contents[i * inventory->w + j];
 			if(at == NULL || at->info == NULL || at->info->id == Item_None) {
@@ -95,7 +95,7 @@ void render_inventory(Inventory* inventory, Vec2 position)
 			}
 
 			s.texture = at->info->texture;
-			render_add(&s);
+			render_add(CurrentGroup, &s);
 		}
 	}
 }

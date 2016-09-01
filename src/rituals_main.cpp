@@ -33,7 +33,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *		- Release as lightweight spriting library
  *  - Physics
  *  	- Static and dynamic friction
- *  	- Multithreading/SIMD body processing
+ *  	- Multithreading/SIMD body processing?
  *  	- Look at dynamic tree broadphase/fancier broadphase schemes
  * 	- UI
  * 		- Improve responsiveness of things
@@ -129,12 +129,12 @@ typedef real32 real;
 typedef ptrdiff_t isize;
 typedef size_t usize;
 
-#define Math_Sqrt2    1.414213f
+#define Math_Sqrt2 1.414213f
 #define Math_InvSqrt2 0.7071067f
-#define Math_Pi       3.141592f
-#define Math_Tau      6.283185f
-#define Math_Rad2Deg  57.29577f
-#define Math_Deg2Rad  0.01745329f
+#define Math_Pi 3.141592f
+#define Math_Tau 6.283185f
+#define Math_RadToDeg 57.29577f
+#define Math_DegToRad 0.01745329f
 
 #define Allocate(type, count) ((type*)calloc(sizeof(type), count))
 #define StackAlloc(type, count) ((type*)_alloca(sizeof(type) * count))
@@ -163,8 +163,8 @@ typedef size_t usize;
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
 
-//#include "rituals_renderer.cpp"
-#include "wtb_sprite_renderer.h"
+#include "rituals_renderer.cpp"
+//#include "wtb_sprite_renderer.h"
 #include "rituals_gui.cpp"
 
 typedef struct World World;
@@ -295,7 +295,7 @@ void main_menu_update()
 		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
 	}
 
-	render_draw();
+	render_draw(Game->size, Game->scale);
 }
 
 
@@ -326,7 +326,7 @@ void test_update()
 	for(isize i = 0; i < 100; ++i) {
 		render_add(boxes + i);
 	}	
-	render_draw();
+	render_draw(Game->size, Game->scale);
 }
 
 void update()
@@ -362,26 +362,6 @@ void stop()
 			break;
 	}
 }
-
-GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
-{
-	int w, h, n;
-	char file[FilePathMaxLength];
-	const char* base_path = SDL_GetBasePath();
-	isize len = snprintf(file, FilePathMaxLength, "%s%s", base_path, filename);
-	uint8* data = (uint8*)stbi_load(file, &w, &h, &n, STBI_rgb_alpha);
-	//TODO(will) do error checking
-	GLuint texture = ogl_add_texture(data, w, h);
-	if(texture == NULL) {
-		printf("There was an error loading %s \n", filename);
-	}
-	if(w_o != NULL) *w_o = w;
-	if(h_o != NULL) *h_o = h;
-
-	STBI_FREE(data);
-	return texture;
-}
-
 void load_assets()
 {
 	isize w, h;

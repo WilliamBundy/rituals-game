@@ -1,3 +1,4 @@
+
 /* 
 Copyright (c) 2016 William Bundy
 
@@ -11,9 +12,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /*
  * rituals_renderer.cpp
  *
- * This file is dedicated to D7Samurai, for without his help,
+ * This file is dedicated to the d7samurai, for without his help,
  * none of this would work.
  */
+
 
 enum Sprite_Anchor
 {
@@ -26,6 +28,14 @@ enum Sprite_Anchor
 	Anchor_Bottom = 6 ,
 	Anchor_Bottom_Left = 7,
 	Anchor_Left = 8
+};
+
+uint32 Sprite_Anchor_Mask = 0xF;
+
+enum Sprite_Flags
+{
+	SpriteFlag_FlipHoriz = Flag(4),
+	SpriteFlag_FlipVert = Flag(5)
 };
 
 real SpriteAnchorX[] = {
@@ -52,7 +62,6 @@ real SpriteAnchorY[] = {
 	0.0f
 };
 
-
 struct Sprite
 {
 	Vec2 position;
@@ -61,63 +70,79 @@ struct Sprite
 	Vec2 size;
 	Rect2 texture;
 	Vec4 color;
-	uint32 anchor;
-	Vec2 sort_point_offset;
+	uint32 flags;
+	real sort_offset;
 };
 
-struct Draw_List
+struct Sprite4
 {
-	Vec2 offset;
-
-	Sprite* sprites;
-	isize sprites_count;
+	Sprite e[4];
 };
-
-struct OpenGL_Renderer
-{
-	GLuint shader_program, vbo, vao, texture;
-	AABB screen;
-	real texture_width, texture_height;
-	Vec2 offset;
-	Rect2 clip;
-
-	isize screen_loc, texture_size_loc, window_loc, ortho_loc;
-	real ortho[16];
-
-	Sprite* sprite_data;
-	isize data_index, sprite_count;
-
-	isize last_sprite_id; 
-};
-
+#define _get_sprite_y_base(s) (s.position.y - s.center.y + s.sort_offset)
+GenerateIntrosortForType(sort_sprites_on_y_base, Sprite, 12, _get_sprite_y_base)
 
 void init_sprite(Sprite* s)
 {
 	s->position = v2(0, 0);
 	s->center = v2(0, 0);
 	s->angle = 0;
-	s->size = v2(100, 100);
+	s->size = v2(32, 32);
 	s->texture = rect2(0, 0, 1, 1);
 	s->color = v4(1, 1, 1, 1);
-	s->anchor = Anchor_Center;
-	s->sort_point_offset = v2(0, 0);
+	s->flags = Anchor_Center;
+	s->sort_offset = 0;
+}
+
+struct Render_Group
+{
+	GLuint texture;
+	Vec2i texture_size;
+	Vec2 offset;
+	Rect2 clip;
+	real ortho[16];
+
+	real night_amount;
+	real night_cutoff;
+
+	Sprite* sprites;
+	isize sprites_count, sprites_capacity;
+};
+
+struct OpenGL_Renderer
+{
+	GLuint shader_program, vbo, vao;
+	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;
+	
+	Render_Group* groups;
+	isize groups_count;
+};
+
+void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)
+{
+	group->offset = v2(0, 0);
+	group->clip = rect2(0, 0, 0, 0);
+	group->night_amount = 0;
+	group->night_cutoff = 0;
+
+	group->sprites_capacity = sprites_capacity;
+	group->sprites_count = 0;
+	group->sprites = arena_push_array(arena, Sprite, sprites_capacity);
 }
 
 #define _get_member_address(s, m) ((void*)&(((s*)(NULL))->m))
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
-
-int32 t = 0;
-#define _glerror printf("OpenGL Error at #%d: %0x\n", t++, glGetError());
-void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
+void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
 {
-	renderer->offset = v2(0, 0);
-	renderer->last_sprite_id = 0;
-	renderer->sprite_data = arena_push_array(arena, Sprite, Megabytes(32) / sizeof(Sprite)); 
-	//renderer->deferred_sprite_data = arena_push_array(arena, Sprite, Megabytes(8) / sizeof(Sprite)); 
-	glGenVertexArrays(1, &renderer->vao);
-	glBindVertexArray(renderer->vao);
-	glGenBuffers(1, &renderer->vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
+	r->groups = arena_push_array(arena, Render_Group, group_count);
+	r->groups_count = group_count;
+	for(isize i = 0; i < group_count; ++i) {
+		init_group(r->groups + i, group_size / sizeof(Sprite), arena);
+	}
+
+	glGenVertexArrays(1, &r->vao);
+	glBindVertexArray(r->vao);
+	glGenBuffers(1, &r->vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
 
 	usize stride = sizeof(Sprite);
 	usize vertex_count = 1;
@@ -153,7 +178,7 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 	glVertexAttribDivisor(5, vertex_count);
 
 	//anchor
-	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(anchor));
+	glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, stride, _gl_offset(flags));
 	glEnableVertexAttribArray(6);
 	glVertexAttribDivisor(6, vertex_count);
 
@@ -161,22 +186,18 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//TODO(will) consider adding depth information? 
 
 
 	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vertex_shader_src = 
-#include "vert.glsl"
-		;
-	glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
+	glShaderSource(vertex_shader, 1, &vertex_source, NULL);
 	glCompileShader(vertex_shader);
-
 	{
 		GLint success;
 		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
 		GLsizei log_size;
 		char shader_log[4096];
 		glGetShaderInfoLog(vertex_shader, 4096, &log_size, shader_log); 
-
 		if(!success) {
 			printf("Error compiling vertex shader \n%s \n", shader_log);
 		} else {
@@ -184,13 +205,8 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 		}
 	}	
 
-
 	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	const char* fragment_shader_src = 
-#include "frag.glsl"
-		;
-	glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
+	glShaderSource(fragment_shader, 1, &frag_source, NULL);
 	glCompileShader(fragment_shader);
 	{
 		GLint success;
@@ -204,20 +220,217 @@ void renderer_init(OpenGL_Renderer* renderer, Memory_Arena* arena)
 			printf("Frag shader compiled successfully\n");
 		}
 	}	
-
-	renderer->shader_program = glCreateProgram();
-	glAttachShader(renderer->shader_program, vertex_shader);
-	glAttachShader(renderer->shader_program, fragment_shader);
-	glLinkProgram(renderer->shader_program);
-
-	glUseProgram(renderer->shader_program);
-
+	r->shader_program = glCreateProgram();
+	glAttachShader(r->shader_program, vertex_shader);
+	glAttachShader(r->shader_program, fragment_shader);
+	glLinkProgram(r->shader_program);
+	glUseProgram(r->shader_program);
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
-	renderer->texture_size_loc = glGetUniformLocation(renderer->shader_program, "u_texturesize");
-	renderer->ortho_loc  = glGetUniformLocation(renderer->shader_program, "u_orthomat");
+	r->u_texturesize = glGetUniformLocation(r->shader_program, "u_texturesize");
+	r->u_orthomat = glGetUniformLocation(r->shader_program, "u_orthomat");
+	r->u_night_amount = glGetUniformLocation(r->shader_program, "u_night_amount");
+	r->u_night_cutoff = glGetUniformLocation(r->shader_program, "u_night_cutoff");
 }
+
+Render_Group* render_group(OpenGL_Renderer* r, isize index)
+{
+	return r->groups + index;
+}
+
+/* Explicit state functions */
+
+void render_start(Render_Group* group)
+{
+	group->sprites_count = 0;
+	group->clip = {0, 0, 0, 0};
+}
+
+bool render_has_clip_rect(Render_Group* group)
+{
+	return 0 != (group->clip.w * group->clip.h);
+}
+
+void render_set_clip_rect(Render_Group* group, real x, real y, real w, real h)
+{
+	group->clip = Rect2 {
+		x, y, w, h
+	};
+}
+
+void render_sort(Render_Group* group, isize offset)
+{
+	sort_sprites_on_y_base(group->sprites + offset, group->sprites_count - offset);
+}
+
+void render_add(Render_Group* group, Sprite* sprite)
+{
+	Sprite sp = *sprite;
+
+	if(render_has_clip_rect(group)) {
+		Rect2 c = group->clip;
+		Rect2 r;
+		r.position = sp.position;
+		r.size = sp.size;
+		r.x -= r.w * (0.5f + SpriteAnchorX[sp.flags & Sprite_Anchor_Mask]);
+		r.y -= r.h * (0.5f + SpriteAnchorY[sp.flags & Sprite_Anchor_Mask]);
+
+		if(r.x > (c.x + c.w)) return;
+		if((r.x + r.w) < c.x) return;
+		if(r.y > (c.y + c.h)) return;
+		if((r.y + r.h) < c.y) return;
+
+		Rect2_Clip_Info clip = rect2_clip(r, c);
+
+		Vec2 tex_scale = v2(sp.texture.w / sp.size.x, sp.texture.h / sp.size.y);
+		Vec2 tdp1 = clip.diff1 * tex_scale;
+		Vec2 tdp2 = clip.diff2 * tex_scale;
+		Vec2 tp1 = v2(sp.texture.x, sp.texture.y);
+		Vec2 tp2 = tp1 + v2(sp.texture.w, sp.texture.h);
+		tp1 += tdp1;
+		tp2 -= tdp2;
+		sp.texture.position = tp1;
+		sp.texture.size = tp2 - tp1;
+		sp.position = clip.rp1;
+		sp.size = clip.rp2 - clip.rp1;
+		sp.flags = (~Sprite_Anchor_Mask & sp.flags) | Anchor_Top_Left;
+		sp.angle = 0;
+	}
+	
+	sp.texture.x /= group->texture_size.x;
+	sp.texture.w /= group->texture_size.x;
+	sp.texture.y /= group->texture_size.y;
+	sp.texture.h /= group->texture_size.y;
+
+	group->sprites[group->sprites_count++] = sp;
+
+}
+
+void render_add_unclipped(Render_Group* group, Sprite* sprite)
+{
+	Sprite sp = *sprite;
+
+	sp.texture.x /= group->texture_size.x;
+	sp.texture.w /= group->texture_size.x;
+	sp.texture.y /= group->texture_size.y;
+	sp.texture.h /= group->texture_size.y;
+
+	group->sprites[group->sprites_count++] = sp;
+}
+
+void render_add(Render_Group* group, Sprite4* s4)
+{
+	render_add(group, s4->e + 0);
+	render_add(group, s4->e + 1);
+	render_add(group, s4->e + 2);
+	render_add(group, s4->e + 3);
+}
+
+void render_calculate_ortho_matrix(real* ortho, Vec4 screen, real nearplane, real farplane)
+{
+	ortho[0] = 2.0f / (screen.z - screen.x);
+	ortho[1] = 0;
+	ortho[2] = 0;
+	ortho[3] = -1.0f * (screen.x + screen.z) / (screen.z - screen.x);
+
+	ortho[4] = 0;
+	ortho[5] = 2.0f / (screen.y - screen.w);
+	ortho[6] = 0;
+	ortho[7] = -1 * (screen.y + screen.w) / (screen.y - screen.w);
+
+	ortho[8] = 0;
+	ortho[9] = 0;
+	ortho[10] = (-2.0f / (farplane - nearplane));
+	ortho[11] = (-1.0f * (farplane + nearplane) / (farplane - nearplane));
+
+	ortho[12] = 0;
+	ortho[13] = 0;
+	ortho[14] = 0;
+	ortho[15] = 1.0f;
+}
+
+void render_draw(OpenGL_Renderer* r, Render_Group* group, Vec2 size, real scale)
+{
+	glUseProgram(r->shader_program);
+	group->offset.x = roundf(group->offset.x);
+	group->offset.y = roundf(group->offset.y);
+
+	glUniform2f(r->u_texturesize,
+		group->texture_size.x,
+		group->texture_size.y);
+
+	glUniform1f(r->u_night_amount, 1.0f - group->night_amount);
+	glUniform1f(r->u_night_cutoff, group->night_cutoff);
+
+	Vec4 screen = v4(
+		group->offset.x, group->offset.y, 
+		size.x + group->offset.x,
+		size.y + group->offset.y);
+	render_calculate_ortho_matrix(group->ortho, screen, 1, -1);
+	glUniformMatrix4fv(r->u_orthomat, 
+		1, 
+		GL_FALSE,
+		group->ortho);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, group->texture);
+	glBindVertexArray(r->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
+	glBufferData(GL_ARRAY_BUFFER, 
+			group->sprites_count * sizeof(Sprite), 
+			group->sprites, 
+			GL_STREAM_DRAW);
+
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, group->sprites_count);
+
+	glBindVertexArray(0);
+}
+
+/* Implicit state functions */
+
+void render_start()
+{
+	render_start(CurrentGroup);
+}
+
+bool render_has_clip_rect()
+{
+	return render_has_clip_rect(CurrentGroup);
+}
+
+void render_set_clip_rect(real x, real y, real w, real h)
+{
+	render_set_clip_rect(CurrentGroup, x, y, w, h);
+}
+
+void render_sort(isize offset)
+{
+	render_sort(CurrentGroup, offset);
+}
+
+void render_add(Sprite* sprite)
+{
+	render_add(CurrentGroup, sprite);
+}
+
+void render_add_unclipped(Sprite* sprite)
+{
+	render_add_unclipped(CurrentGroup, sprite);
+}
+
+void render_add(Sprite4* s4)
+{
+	render_add(CurrentGroup, s4);
+}
+
+void render_draw(Vec2 size, real scale)
+{
+	render_draw(Renderer, CurrentGroup, size, scale);
+}
+
+
+/* Texture loading from file and uploading */
 
 GLuint ogl_add_texture(uint8* data, isize w, isize h) 
 {
@@ -231,7 +444,7 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	//TODO(will) do error checking?
+
 	uint32 error = glGetError();
 	if(error != 0) {
 		printf("There was an error adding a texture: %d \n", error);
@@ -241,7 +454,6 @@ GLuint ogl_add_texture(uint8* data, isize w, isize h)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return texture;
 }
-	
 
 GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 {
@@ -261,168 +473,27 @@ GLuint ogl_load_texture(char* filename, isize* w_o, isize* h_o)
 	STBI_FREE(data);
 	return texture;
 }
+	
+/* Primitive generation/rendering functions */
 
-#define Get_Texture_Coordinates(x, y, w, h) rect2((x) / Renderer->texture_width, (y) / Renderer->texture_height, (w) / Renderer->texture_width, (h) / Renderer->texture_height)
-
-void renderer_calculate_ortho(Vec4 screen)
-{
-	real* ortho = Renderer->ortho;
-	ortho[0] = 2.0f / (screen.z - screen.x);
-	ortho[1] = 0;
-	ortho[2] = 0;
-	ortho[3] = -1.0f * (screen.x + screen.z) / (screen.z - screen.x);
-
-	ortho[4] = 0;
-	ortho[5] = 2.0f / (screen.y - screen.w);
-	ortho[6] = 0;
-	ortho[7] = -1 * (screen.y + screen.w) / (screen.y - screen.w);
-
-	ortho[8] = 0;
-	ortho[9] = 0;
-	ortho[10] = -2.0f / (-1.0f - 1.0f);
-	ortho[11] = (-1.0f * (-1.0f + 1.0f) / (-1.0f - 1.0f));
-
-	ortho[12] = 0;
-	ortho[13] = 0;
-	ortho[14] = 0;
-	ortho[15] = 1.0f;
-}
-
-
-void renderer_start()
-{
-	Renderer->sprite_count = 0;
-	Renderer->clip = {0, 0, 0, 0};
-}
-
-static inline bool renderer_has_clip_rect()
-{
-	return 0 != (Renderer->clip.w * Renderer->clip.h);
-}
-
-static inline void renderer_set_clip_rect(real x, real y, real w, real h)
-{
-	Renderer->clip = Rect2 {
-		x, y, w, h
-	};
-}
-
-void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness);
-void render_clip_rect()
-{
-	Rect2 r = Renderer->clip;
-	Renderer->clip = Rect2{};
-
-	Vec2 rw = v2(r.w, r.h);
-	draw_box_outline(v2(r.x, r.y) + rw / 2, rw, v4(0.5f, 1, 0.5f, 1), 1);
-	Renderer->clip = r;
-}
-
-void renderer_push_sprite(Sprite* s)
-{
-	Sprite sp = *s;
-	if(renderer_has_clip_rect()) {
-		Rect2 c = Renderer->clip;
-
-		Rect2 r;
-		r.position = sp.position;
-		r.size = sp.size;
-		r.x -= r.w * (0.5f + SpriteAnchorX[sp.anchor]);
-		r.y -= r.h * (0.5f + SpriteAnchorY[sp.anchor]);
-
-		if(r.x > (c.x + c.w)) return;
-		if((r.x + r.w) < c.x) return;
-		if(r.y > (c.y + c.h)) return;
-		if((r.y + r.h) < c.y) return;
-
-		Rect2_Clip_Info clip = rect2_clip(r, Renderer->clip);
-
-		Vec2 tex_scale = v2(sp.texture.w / sp.size.x, sp.texture.h / sp.size.y);
-		Vec2 tdp1 = clip.diff1 * tex_scale;
-		Vec2 tdp2 = clip.diff2 * tex_scale;
-		Vec2 tp1 = v2(sp.texture.x, sp.texture.y);
-		Vec2 tp2 = tp1 + v2(sp.texture.w, sp.texture.h);
-		tp1 += tdp1;
-		tp2 -= tdp2;
-		sp.texture.position = tp1;
-		sp.texture.size = tp2 - tp1;
-		sp.position = clip.rp1;
-		sp.size = clip.rp2 - clip.rp1;
-		sp.anchor = Anchor_Top_Left;
-		sp.angle = 0;
-	}
-
-	Renderer->sprite_data[Renderer->sprite_count++] = sp;
-}
-
-#define _get_sprite_y_base(s) (s.position.y - s.center.y + s.sort_point_offset.y)
-GenerateIntrosortForType(sort_sprites_on_y_base, Sprite, 12, _get_sprite_y_base)
-
-void renderer_sort(isize offset)
-{
-	sort_sprites_on_y_base(Renderer->sprite_data + offset,
-			Renderer->sprite_count - offset);
-#if 0 // Debug draw sprite base
-	isize initial_count = Renderer->sprite_count;
-	for(isize i = offset; i < initial_count; ++i) {
-		Sprite s; 
-		init_sprite(&s);
-		Sprite spr = Renderer->sprite_data[i];
-		s.position = v2(
-				spr.position.x,
-				_get_sprite_y_base(spr));
-		s.size = v2(4,4);
-		s.texture = Get_Texture_Coordinates(32 * 2, 0, 32, 32);
-		renderer_push_sprite(&s);
-	}
-#endif
-}
-void renderer_draw()
-{
-	glUseProgram(Renderer->shader_program);
-	Renderer->offset.x = roundf(Renderer->offset.x);
-	Renderer->offset.y = roundf(Renderer->offset.y);
-	glUniform2f(Renderer->texture_size_loc, 
-			Renderer->texture_width,
-			Renderer->texture_height);
-	glUniform3f(Renderer->window_loc,
-			Game->window_size.x, 
-			Game->window_size.y,
-			Game->scale);
-	Vec4 screen = v4(
-		Renderer->offset.x, Renderer->offset.y, 
-		Game->size.x + Renderer->offset.x,
-		Game->size.y + Renderer->offset.y);
-	glUniform4f(Renderer->screen_loc, 
-			screen.x, screen.y, screen.z, screen.w);
-	renderer_calculate_ortho(screen);
-	glUniformMatrix4fv(Renderer->ortho_loc, 
-			1, 
-			GL_FALSE,
-			Renderer->ortho);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Renderer->texture);
-	glBindVertexArray(Renderer->vao);
-	glBindBuffer(GL_ARRAY_BUFFER, Renderer->vbo);
-	glBufferData(GL_ARRAY_BUFFER, Renderer->sprite_count * sizeof(Sprite),
-			Renderer->sprite_data, GL_STREAM_DRAW);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, Renderer->sprite_count);
-	glBindVertexArray(0);
-}
-
-Sprite get_box_sprite(Vec2 pos, Vec2 size, Vec4 color)
+Sprite create_box_primitive(Vec2 pos, Vec2 size, Vec4 color)
 {
 	Sprite s;
 	init_sprite(&s);
 	s.position = pos;
-	s.texture = Get_Texture_Coordinates(64, 0, 32, 32);
+	s.texture = rect2(64, 0, 32, 32);
 	s.size = size;
 	s.color = color;
 	return s;
 }
 
-void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
+void render_box_primitive(Render_Group* group, Vec2 pos, Vec2 size, Vec4 color)
+{
+	Sprite s = create_box_primitive(pos, size, color);
+	render_add(group, &s);
+}
+
+Sprite create_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 {
 	Vec2 dline = end - start;
 	Sprite s;
@@ -433,7 +504,7 @@ void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 			end = start;
 			start = temp;
 		}
-		s = get_box_sprite(start + v2(dline.x / 2, 0), v2(dline.x, thickness), color);
+		s = create_box_primitive(start + v2(dline.x / 2, 0), v2(dline.x, thickness), color);
 	} else if(dline.x == 0) {
 		if(dline.y < 0) {
 			dline.y *= -1;
@@ -441,63 +512,74 @@ void draw_line(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
 			end = start;
 			start = temp;
 		}
-		s = get_box_sprite(start + v2(0, dline.y / 2), v2(thickness, dline.y), color);
+		s = create_box_primitive(start + v2(0, dline.y / 2), v2(thickness, dline.y), color);
 	} else {
-		s = get_box_sprite(start + dline/2, v2(sqrtf(v2_dot(dline, dline)), thickness), color);
+		s = create_box_primitive(start + dline/2, v2(sqrtf(v2_dot(dline, dline)), thickness), color);
 		real angle = atan2f(dline.y, dline.x);
 		s.angle = -angle;
 	}
-	renderer_push_sprite(&s);
+	return s;
+}
+void render_line_primitive(Render_Group* group, Vec2 start, Vec2 end, Vec4 color, int32 thickness)
+{
+	Sprite s = create_line_primitive(start, end, color, thickness);
+	render_add(group, &s);
 }
 
-void draw_box_outline(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
+Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
 {
 	size *= 0.5f;	
 	Vec2 tl = center - size;
 	Vec2 br = center + size;
-	draw_line(tl, v2(br.x, tl.y), color, thickness);
-	draw_line(v2(br.x, tl.y), br, color, thickness);
-	draw_line(br, v2(tl.x, br.y), color, thickness);
-	draw_line(v2(tl.x, br.y), tl, color, thickness);
+	Sprite4 s;
+	s.e[0] = create_line_primitive(tl, v2(br.x, tl.y), color, thickness);
+	s.e[1] = create_line_primitive(v2(br.x, tl.y), br, color, thickness);
+	s.e[2] = create_line_primitive(br, v2(tl.x, br.y), color, thickness);
+	s.e[3] = create_line_primitive(v2(tl.x, br.y), tl, color, thickness);
+	return s;
 }
-void draw_box_outline(Vec2 center, Vec2 size, Vec4 colors[4], int32 thickness)
+
+void render_box_outline_primitive(Render_Group* group, Vec2 center, Vec2 size, Vec4 color, int32 thickness)
 {
-	size *= 0.5f;
+	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
+	render_add(group, &s);
+}
+
+Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness)
+{
+	size *= 0.5f;	
 	Vec2 tl = center - size;
 	Vec2 br = center + size;
-	draw_line(tl, v2(br.x, tl.y), colors[0], thickness);
-	draw_line(v2(br.x, tl.y), br, colors[1], thickness);
-	draw_line(br, v2(tl.x, br.y), colors[2], thickness);
-	draw_line(v2(tl.x, br.y), tl, colors[3], thickness);
+	Sprite4 s;
+	s.e[0] = create_line_primitive(tl, v2(br.x, tl.y), color[0], thickness);
+	s.e[1] = create_line_primitive(v2(br.x, tl.y), br, color[1], thickness);
+	s.e[2] = create_line_primitive(br, v2(tl.x, br.y), color[2], thickness);
+	s.e[3] = create_line_primitive(v2(tl.x, br.y), tl, color[3], thickness);
+	return s;
 }
-void draw_box_outline(Vec2 center, Vec2 size, real angle, Vec4 color, int32 thickness)
+
+void render_box_outline_primitive(Render_Group* group, Vec2 center, Vec2 size, Vec4 color[4], int32 thickness)
 {
-	size *= 0.5f;
-	Vec2 tl = -size;
-	Vec2 br = size;
-	Vec2 tr = v2(br.x, tl.y);
-	Vec2 bl = v2(tl.x, br.y);
-	Vec2 rot = v2(cosf(angle), sinf(angle));
-	Mat2 rotmat = {
-		rot.x, rot.y, 
-		-rot.y, rot.x
-	};
-	tl = v2(rot.x * tl.x + rot.y * tl.y, -rot.y * tl.x + rot.x * tl.y);	
-	br = v2(rot.x * br.x + rot.y * br.y, -rot.y * br.x + rot.x * br.y);	
-	bl = v2(rot.x * bl.x + rot.y * bl.y, -rot.y * bl.x + rot.x * bl.y);	
-	tr = v2(rot.x * tr.x + rot.y * tr.y, -rot.y * tr.x + rot.x * tr.y);	
-	tl += center;
-	br += center;
-	bl += center;
-	tr += center;
-	draw_line(tl, tr, color, thickness);
-	draw_line(tr, br, color, thickness);
-	draw_line(br, bl, color, thickness);
-	draw_line(bl, tl, color, thickness);
+	Sprite4 s = create_box_outline_primitive(center, size, color, thickness);
+	render_add(group, &s);
 }
 
+void render_box_primitive(Vec2 pos, Vec2 size, Vec4 color)
+{
+	render_box_primitive(CurrentGroup, pos, size, color);
+}
 
+void render_line_primitive(Vec2 start, Vec2 end, Vec4 color, int32 thickness)
+{
+	render_line_primitive(CurrentGroup, start, end, color, thickness);
+}
 
+void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness)
+{
+	render_box_outline_primitive(CurrentGroup, center, size, color, thickness);
+}
 
-
-
+void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 thickness)
+{
+	render_box_outline_primitive(CurrentGroup, center, size, color, thickness);
+}
