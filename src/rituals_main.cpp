@@ -56,6 +56,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 			  console type thing.
  *  - Play
  *  	- Entity/physics inspector?
+ *  	- All the entity events need to be hooked up, then you need to refactor 
+ *  		all the hacky code written to get around them 
+ *  	- More art for particles
  *
  * TODO(will) bugs???
  *  - If the player is pushed right up against a block from the block's bottom,
@@ -357,6 +360,7 @@ void stop()
 			break;
 		case Game_State_Play:
 			//TODO(will) write stop function
+			play_state_stop();
 			break;
 		default:
 			break;

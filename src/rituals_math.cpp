@@ -46,100 +46,6 @@ union Vec2
 	real e[2];
 };
 
-union Vec2i
-{
-	struct {
-		int32 x, y;
-	};
-	int32 e[2];
-};
-
-
-struct Vec3
-{
-	real x, y, z;
-};
-
-union Vec4
-{
-	struct {
-		real x, y, z, w;
-	};
-	real e[4];
-	
-};
-static inline Vec4 operator*(Vec4 a, Vec4 b)
-{
-	return Vec4{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
-}
-
-static inline Vec4 operator*(Vec4 a, real b)
-{
-	return Vec4{a.x * b, a.y * b, a.z * b, a.w * b};
-}
-static inline Vec4 operator*(real b, Vec4 a) 
-{
-	return a * b;
-}
-static inline Vec4 operator/(Vec4 a, real b)
-{
-	return a * (1.0f/b);
-}
-static inline Vec4 operator*=(Vec4& a, real b)
-{
-	a = a * b;
-	return a;
-}
-
-Vec4 v4(real x, real y, real z, real w)
-{
-	return Vec4{
-		x, y, z, w
-	};
-}
-
-
-
-Vec4 color_to_v4(Color* c)
-{
-	Vec4 v;
-	v.x = clamp_01(c->r / 255.0f);
-	v.y = clamp_01(c->g / 255.0f);
-	v.z = clamp_01(c->b / 255.0f);
-	v.w = clamp_01(c->a / 255.0f);
-	return v;
-}
-
-Color v4_to_color(Vec4* v)
-{
-	Color c = {0};
-	c.r = (uint8)(clamp_01(v->x) * 255);	
-	c.g = (uint8)(clamp_01(v->y) * 255);	
-	c.b = (uint8)(clamp_01(v->z) * 255);	
-	c.a = (uint8)(clamp_01(v->w) * 255);	
-	return c;
-}
-
-static inline Vec2 v2(real x, real y)
-{
-	return Vec2{x, y};
-}
-static inline Vec2 v2(Vec2i vi)
-{
-	return v2(vi.x, vi.y);
-}
-
-static inline Vec2i v2i(int32 x, int32 y)
-{
-	return Vec2i {
-		x, y
-	};
-}
-
-static inline Vec2i v2i(Vec2 v)
-{
-	return v2i((int32)v.x, (int32)v.y);
-}
 
 static inline Vec2 operator-(Vec2 a)
 {
@@ -198,6 +104,175 @@ static inline Vec2& operator*=(Vec2& a, real b)
 	return a;
 }
 
+union Vec2i
+{
+	struct {
+		int32 x, y;
+	};
+	int32 e[2];
+};
+
+
+union Vec3
+{
+	struct {
+		real x, y, z;
+	};
+	real e[3];
+};
+
+static inline Vec3 v3(real x, real y, real z)
+{
+	return Vec3{
+		x, y, z
+	};
+}
+
+static inline Vec3 v3(Vec2 a, real z)
+{
+	return v3(a.x, a.y, z);
+}
+
+static inline Vec3 v3(Vec2 a)
+{
+	return v3(a.x, a.y, 0);
+}
+
+static inline Vec3 operator-(Vec3 a)
+{
+	return Vec3{-a.x, -a.y, -a.z};
+}
+
+static inline Vec3 operator-(Vec3 a, Vec3 b)
+{
+	return Vec3{a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+static inline Vec3 operator+(Vec3 a, Vec3 b)
+{
+	return Vec3{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+static inline Vec3 operator*(Vec3 a, real s)
+{
+	return Vec3{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3 operator/(real s, Vec3 a)
+{
+	return a * (1.0f / s);
+}
+static inline Vec3 operator/(Vec3 a, real s)
+{
+	return a * (1.0f / s);
+}
+
+static inline Vec3 operator*(real s, Vec3 a)
+{
+	return Vec3{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3 operator*(Vec3 a, Vec3 b)
+{
+	return Vec3{a.x * b.x, a.y * b.y, a.z * b.z};
+}
+
+static inline Vec3& operator+=(Vec3& a, Vec3 b)
+{
+	a = a + b;
+	return a;
+}
+
+static inline Vec3& operator-=(Vec3& a, Vec3 b)
+{
+	a = a - b;
+	return a;
+}
+
+static inline Vec3& operator*=(Vec3& a, real b)
+{
+	a = a * b;
+	return a;
+}
+
+
+union Vec4
+{
+	struct {
+		real x, y, z, w;
+	};
+	real e[4];
+	
+};
+
+
+static inline Vec4 operator*(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+static inline Vec4 operator*(Vec4 a, real b)
+{
+	return Vec4{a.x * b, a.y * b, a.z * b, a.w * b};
+}
+static inline Vec4 operator*(real b, Vec4 a) 
+{
+	return a * b;
+}
+static inline Vec4 operator/(Vec4 a, real b)
+{
+	return a * (1.0f/b);
+}
+static inline Vec4 operator*=(Vec4& a, real b)
+{
+	a = a * b;
+	return a;
+}
+
+static inline Vec4 v4(real x, real y, real z, real w)
+{
+	return Vec4{
+		x, y, z, w
+	};
+}
+
+
+
+Vec4 color_to_v4(Color* c)
+{
+	Vec4 v;
+	v.x = clamp_01(c->r / 255.0f);
+	v.y = clamp_01(c->g / 255.0f);
+	v.z = clamp_01(c->b / 255.0f);
+	v.w = clamp_01(c->a / 255.0f);
+	return v;
+}
+
+Color v4_to_color(Vec4* v)
+{
+	Color c = {0};
+	c.r = (uint8)(clamp_01(v->x) * 255);	
+	c.g = (uint8)(clamp_01(v->y) * 255);	
+	c.b = (uint8)(clamp_01(v->z) * 255);	
+	c.a = (uint8)(clamp_01(v->w) * 255);	
+	return c;
+}
+
+static inline Vec2 v2(real x, real y)
+{
+	return Vec2{x, y};
+}
+static inline Vec2 v2(Vec2i vi)
+{
+	return v2(vi.x, vi.y);
+}
+
+static inline Vec2i v2i(int32 x, int32 y)
+{
+	return Vec2i {
+		x, y
+	};
+}
 inline Vec2 v2_perpendicular(Vec2 v)
 {
 	return Vec2 {
@@ -433,79 +508,6 @@ static inline Rect2i aabb_to_intrect(AABB* b)
 	Rect2 r = aabb_to_rect(b);
 	return rect_to_intrect(&r);
 }
-
-struct Transform
-{
-	Vec2 position;
-	Vec2 center;
-	real angle;
-	real scale_x;
-	real scale_y;
-};
-
-union Mat2
-{
-	struct {
-		real a1, b1, a2, b2;
-	};
-	real e[4];
-};
-
-union Mat3
-{
-	struct {
-		real a1, b1, c1, a2, b2, c2, a3, b3, c3;
-	};
-	real e[9];
-};
-
-Vec2 mul_mat3_vec2_affline(Mat3* m, Vec2* v)
-{
-	real rx = m->a1 * v->x + m->a2 * v->y + m->a3;
-	real ry = m->b1 * v->x + m->b2 * v->y + m->b3;
-	return v2(rx, ry);
-}
-
-//TODO(will) apply scale from transform
-Vec2 apply_transform_vec2(Transform* tr, Vec2* v)
-{
-	real x = v->x - tr->center.x;
-	real y = v->y - tr->center.y;
-	real lcos = cosf(tr->angle);
-	real lsin = sinf(tr->angle);
-	real rx =  lcos * x + lsin * y + tr->position.x;
-	real ry = -lsin * x + lcos * y + tr->position.y;
-	rx += tr->center.x;
-	ry += tr->center.y;
-	return v2(rx, ry);
-}
-
-Vec2 undo_transform_vec2(Transform* tr, Vec2* v)
-{
-	real x = v->x - tr->center.x;
-	real y = v->y - tr->center.y;
-	real lcos = cosf(-tr->angle);
-	real lsin = sinf(-tr->angle);
-	real rx =  lcos * x + lsin * y - tr->position.x;
-	real ry = -lsin * x + lcos * y - tr->position.y;
-	rx += tr->center.x;
-	ry += tr->center.y;
-	return v2(rx, ry);
-}
-	
-
-Mat3 transform_to_mat3(Transform* tr)
-{
-	Mat3 m = {0};
-	m.a1 = cosf(tr->angle);
-	m.a2 = sinf(tr->angle);
-	m.a3 = tr->position.x;
-	m.b1 = -m.a2;
-	m.b2 = m.a1;
-	m.b3 = tr->position.y;
-	return m;
-}
-
 static inline isize modulus(isize a, isize b)
 {
 	if(b == 0) return -1;

@@ -27,6 +27,10 @@ struct World
 	Entity global_player_entity;
 	Sim_Body global_player_body;
 
+	usize slowtick_timer;
+	usize slowtick_timer_interval;
+
+	Emitter emitter;
 };
 
 void init_world(World* world, isize width, isize height, usize seed, Memory_Arena* arena)
@@ -39,6 +43,8 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	world->areas_height = height;
 	world->next_area_id = 0;
 	world->current_area = NULL;
+	world->slowtick_timer = 0;
+	world->slowtick_timer_interval = 60;
 
 	init_entity(&world->global_player_entity);
 	init_body(&world->global_player_body);
@@ -59,6 +65,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	p->heal_rate = 1;
 	p->heal_to_interval = 25;
 	p->heal_timer = 0;
+	init_emitter(&world->emitter, 8192, rect2(64, 0, 32, 32), v4(1, .9f, 0.0f, 1), v2(4, 4), 10, 60, arena);
 }
 
 
@@ -220,6 +227,15 @@ void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* aren
 	world->current_area = new_area;
 }
 
+void world_delete_self(World* world)
+{
+	char world_path[FilePathMaxLength];
+	isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", menu_state->save_dir, world->name);
+	recursively_delete_folder(world_path, false);
+	menu_state->saves_dirty = true;
+}
+
+
 void generate_world(char* name, World* world)
 {
 	world->name = name;
@@ -255,13 +271,21 @@ void generate_world(char* name, World* world)
 		}
 	}
 }
+
 //TODO(will) Implement packages -- hook up using function pointers
 //For the time being we're just going to use forward declarations
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world);
+
 void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world);
 void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world);
+
+void rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world);
+void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world);
+
+void rituals_on_destroy_entity(Entity* entity, World_Area* area, World* world);
+void rituals_on_activate_entity(Entity* entity, World_Area* area, World* world);
 
 void world_area_walk_entities(World_Area* area, World* world)
 {
@@ -271,6 +295,26 @@ void world_area_walk_entities(World_Area* area, World* world)
 void world_area_animate_entities(World_Area* area, World* world)
 {
 	rituals_animate_entities(area->entities, area->entities_count, area, world);
+}
+
+void world_area_frametick_entities(World_Area* area, World* world)
+{
+	rituals_frametick_entities(area->entities, area->entities_count, area, world);
+}
+
+void world_area_slowtick_entities(World_Area* area, World* world)
+{
+	rituals_frametick_entities(area->entities, area->entities_count, area, world);
+}
+
+void world_area_on_destroy_entity(Entity* e, World_Area* area, World* world)
+{
+	rituals_on_destroy_entity(e, area, world);	
+}
+
+void world_area_on_activate_entity(Entity* e, World_Area* area, World* world)
+{
+	rituals_on_activate_entity(e, area, world);
 }
 
 void world_area_hit_entities(World_Area* area, World* world)
@@ -315,40 +359,15 @@ void world_area_render(World_Area* area, World* world)
 
 	isize sprite_count_offset = render_tilemap(&area->map, v2(0,0), screen);
 
-	for(isize i = 0; i < area->entities_count; ++i) {
-		Entity* e = area->entities + i;
-		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
+	world_area_animate_entities(area, world);
 
-		if (b != NULL) {
-			e->sprite.position = b->shape.center;
-			e->sprite.position.y += b->shape.hh;
-			if(Has_Flag(e->flags, EntityFlag_Tail)) {
-				Vec2 v = b->velocity / 30.0f; 
-				Sprite s = e->sprite;
-				for(isize i = 0; i < 16; ++i) {
-					render_add(&s);
-					s.position -= v / 16;
-					s.color = Color_White;
-					s.color.w = lerp(1.0f, 0.0f, i/16.0);
-					s.color.w *= s.color.w;
-					s.sort_offset -= 10;
-				}
-			}
-			render_add(&e->sprite);
-		} else {
-			render_add(&e->sprite);
-		}
-		
-		//TODO(will) align entity sprites by their bottom center
-#if 0
-		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
-#endif
-	}
+	emitter_render(&world->emitter, TimeStep);
+
 	render_sort(sprite_count_offset);
-
-#if 1
 	char buf[256];
 	Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
+
+#if 0
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		if(e->kind != EntityKind_Enemy && e->kind != EntityKind_Player) continue;
@@ -401,37 +420,8 @@ void world_area_update(World_Area* area, World* world)
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
 
-	{
-		auto p = &area->player->userdata.player;
-		if(p->heal_timer > 0) {
-			p->heal_timer -= TimeStep;
-		}
-
-		int32 last_health = area->player->health;
-		int32 ivl = p->heal_to_interval;
-		if(last_health % ivl != 0)  {
-			if(p->heal_timer <= 0) {
-				int32 new_health = area->player->health + p->heal_rate;
-				if(((new_health % ivl) < (last_health % ivl))) {
-					while(new_health % ivl != 0) {
-						new_health--;
-					}
-				}
-				area->player->health = new_health;
-			}
-		}
-
-		if(area->player->health <= 0) {
-			Game->state = Game_State_Menu;
-			char world_path[FilePathMaxLength];
-			isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", menu_state->save_dir, world->name);
-			recursively_delete_folder(world_path, false);
-			menu_state->saves_dirty = true;
-			init_play_state();
-			return;
-		}
-	}
-
+	world_area_frametick_entities(area, world);
+	world_area_slowtick_entities(area, world);
 
 	world_area_walk_entities(area, world);
 	//TODO(will) use same sorted array as world_area_walk_entities
@@ -443,17 +433,10 @@ void world_area_update(World_Area* area, World* world)
 		}
 	}
 
-	isize times = 0;
-//	while(play_state->accumulator >= TimeStep) {
-		play_state->accumulator -= TimeStep;
-		sim_update(&area->sim, &area->map, TimeStep, times == 0);
-		times++;
-//	}
-
+	sim_update(&area->sim, &area->map, TimeStep, true);
 	
 	Vec2 target = area->player->body->shape.center;
 	area->target = target;
-	world_area_animate_entities(area, world);
 	if(target.x < 0) {
 		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);
 		play_state->world_xy.x--;
@@ -493,11 +476,16 @@ void world_area_update(World_Area* area, World* world)
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
+			emitter_spawn(&world->emitter, area->player->sprite.position, 16, 4, v2(200, 400), v2(0.5f, 1.5f), v2(a-0.2f, a+0.2f));
 			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
 
 			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));
 			area->player->body->velocity -= e->body->velocity;
 		}
+	}
+
+	if(Input->mouse[SDL_BUTTON_RIGHT] == State_Pressed) {
+		emitter_spawn(&world->emitter, Input->mouse_pos, 16, 32, v2(0, 100), v2(1, 2), v2(-25, 25));
 	}
 
 	world_area_build_hitboxes(area);

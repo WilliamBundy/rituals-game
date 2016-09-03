@@ -28,6 +28,7 @@ void main()
 	// Nighttime effect
 	// Darkens everything except very light colors.
 	float avg = (color.r + color.g + color.b) / 3;
+	//avg *= avg;
 	if(avg < u_night_cutoff) {
 		color.rgb *= u_night_amount;
 	}

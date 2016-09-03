@@ -119,7 +119,6 @@ struct World_Area
 	isize* removed_entities;
 	isize removed_entities_count, removed_entities_capacity;
 
-
 	Hitbox* hitboxes;
 	isize hitboxes_count, hitboxes_capacity;
 	int32 hitbox_sort_axis;
@@ -225,6 +224,7 @@ bool world_area_remove_entity(World_Area* area, Entity* entity)
 	return false;
 }
 
+void world_area_on_destroy_entity(Entity* e, World_Area* area, World* world);
 void world_area_remove_entity_internal(World_Area* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
@@ -233,6 +233,8 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 		return;
 	}
 	Entity* entity = area->entities + index;
+	world_area_on_destroy_entity(entity, area, area->world);
+	
 #if 0
 		Sim_Body* b = entity->body;
 		if(b == NULL) {

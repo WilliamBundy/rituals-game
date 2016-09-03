@@ -1,10 +1,10 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	253;"	d	file:
-AABB_x2	src/rituals_math.cpp	254;"	d	file:
-AABB_y1	src/rituals_math.cpp	255;"	d	file:
-AABB_y2	src/rituals_math.cpp	256;"	d	file:
+AABB_x1	src/rituals_math.cpp	328;"	d	file:
+AABB_x2	src/rituals_math.cpp	329;"	d	file:
+AABB_y1	src/rituals_math.cpp	330;"	d	file:
+AABB_y2	src/rituals_math.cpp	331;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
-Allocate	src/rituals_main.cpp	139;"	d	file:
+Allocate	src/rituals_main.cpp	142;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
 Anchor_Bottom	src/rituals_renderer.cpp	/^	Anchor_Bottom = 6 ,$/;"	e	enum:Sprite_Anchor	file:
 Anchor_Bottom	src/wtb_sprite_renderer.h	/^	Anchor_Bottom = 6 ,$/;"	e	enum:Sprite_Anchor
@@ -62,6 +62,7 @@ Direction_East	src/rituals_game.cpp	/^	Direction_East,$/;"	e	enum:Direction	file
 Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	file:
 Direction_South	src/rituals_game.cpp	/^	Direction_South,$/;"	e	enum:Direction	file:
 Direction_West	src/rituals_game.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
+Emitter	src/rituals_renderer.cpp	/^struct Emitter$/;"	s	file:
 EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime,$/;"	e	enum:Rituals_Enemy_Kind	file:
@@ -70,16 +71,15 @@ Entity	src/rituals_game_info.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:s
 Entity	src/rituals_simulation.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
 Entity	src/rituals_world_area.cpp	/^struct Entity$/;"	s	file:
 Entity	src/rituals_world_area.cpp	/^typedef struct Entity Entity;$/;"	t	typeref:struct:Entity	file:
-EntityEvent_Activate	src/rituals_game_info.cpp	/^	EntityEvent_Activate = Flag(8),$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_Activate	src/rituals_game_info.cpp	/^	EntityEvent_Activate = Flag(7), \/\/ singular$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_Animate	src/rituals_game_info.cpp	/^	EntityEvent_Animate = Flag(3),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_Contact	src/rituals_game_info.cpp	/^	EntityEvent_Contact = Flag(10),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_Create	src/rituals_game_info.cpp	/^	EntityEvent_Create = Flag(4),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_Destroy	src/rituals_game_info.cpp	/^	EntityEvent_Destroy = Flag(7),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_FrameTick	src/rituals_game_info.cpp	/^	EntityEvent_FrameTick = Flag(5),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_Hit	src/rituals_game_info.cpp	/^	EntityEvent_Hit = Flag(9),$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_Contact	src/rituals_game_info.cpp	/^	EntityEvent_Contact = Flag(9),$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_Destroy	src/rituals_game_info.cpp	/^	EntityEvent_Destroy = Flag(6), \/\/ singular$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_FrameTick	src/rituals_game_info.cpp	/^	EntityEvent_FrameTick = Flag(4),$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_Hit	src/rituals_game_info.cpp	/^	EntityEvent_Hit = Flag(8),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_Interact	src/rituals_game_info.cpp	/^	EntityEvent_Interact = Flag(2),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_Sim	src/rituals_game_info.cpp	/^	EntityEvent_Sim = Flag(0),$/;"	e	enum:Entity_Event_Type	file:
-EntityEvent_SlowTick	src/rituals_game_info.cpp	/^	EntityEvent_SlowTick = Flag(6),$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_None	src/rituals_game_info.cpp	/^	EntityEvent_None = Flag(0),$/;"	e	enum:Entity_Event_Type	file:
+EntityEvent_SlowTick	src/rituals_game_info.cpp	/^	EntityEvent_SlowTick = Flag(5),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_Walk	src/rituals_game_info.cpp	/^	EntityEvent_Walk = Flag(1),$/;"	e	enum:Entity_Event_Type	file:
 EntityFlag_None	src/rituals_world_area.cpp	/^	EntityFlag_None,$/;"	e	enum:Entity_Flags	file:
 EntityFlag_Tail	src/rituals_world_area.cpp	/^	EntityFlag_Tail = Flag(1)$/;"	e	enum:Entity_Flags	file:
@@ -94,9 +94,9 @@ EntityOnActivateDecl	src/rituals_game_info.cpp	22;"	d	file:
 Entity_Event_Type	src/rituals_game_info.cpp	/^enum Entity_Event_Type$/;"	g	file:
 Entity_Flags	src/rituals_world_area.cpp	/^enum Entity_Flags$/;"	g	file:
 FAST_BITS	src/thirdparty/stb_image.h	1456;"	d
-FilePathMaxLength	src/rituals_main.cpp	147;"	d	file:
+FilePathMaxLength	src/rituals_main.cpp	150;"	d	file:
 File_Path_Max_Length	src/rituals_win32.cpp	77;"	d	file:
-Flag	src/rituals_main.cpp	155;"	d	file:
+Flag	src/rituals_main.cpp	158;"	d	file:
 GLAPI	src/thirdparty/gl_core_3_3.h	61;"	d
 GLDEBUGPROC	src/thirdparty/gl_core_3_3.h	/^		typedef void (APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);$/;"	t
 GLDEBUGPROCAMD	src/thirdparty/gl_core_3_3.h	/^		typedef void (APIENTRY *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severity,GLsizei length,const GLchar *message,void *userParam);$/;"	t
@@ -966,7 +966,7 @@ GenerateBinarySearchForType	src/rituals_game.cpp	99;"	d	file:
 GenerateInsertionSortForType	src/rituals_game.cpp	48;"	d	file:
 GenerateIntrosortForType	src/rituals_game.cpp	62;"	d	file:
 GenerateQuicksortForType	src/rituals_game.cpp	25;"	d	file:
-Gigabytes	src/rituals_main.cpp	160;"	d	file:
+Gigabytes	src/rituals_main.cpp	163;"	d	file:
 Gigabytes	src/rituals_win32.cpp	84;"	d	file:
 Gui_ButtonActiveColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_Tint;$/;"	v
 Gui_ButtonDownColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonDownColor = _color(.5, .5, .5, 1) * Gui_Tint;$/;"	v
@@ -994,7 +994,7 @@ Gui_Text_Input_Handle	src/rituals_gui.cpp	/^struct Gui_Text_Input_Handle$/;"	s	f
 Gui_Tint	src/rituals_gui.cpp	/^Vec4 Gui_Tint = _color(0.88, 0.89, 1, 1);$/;"	v
 Gui_Window_Handle	src/rituals_gui.cpp	/^struct Gui_Window_Handle$/;"	s	file:
 Half_TS	src/rituals_game_registry.cpp	129;"	d	file:
-Has_Flag	src/rituals_main.cpp	156;"	d	file:
+Has_Flag	src/rituals_main.cpp	159;"	d	file:
 Hitbox	src/rituals_world_area.cpp	/^struct Hitbox$/;"	s	file:
 Hitbox_Contact	src/rituals_world_area.cpp	/^struct Hitbox_Contact$/;"	s	file:
 Input	src/rituals_game.cpp	/^Game_Input* Input;$/;"	v
@@ -1009,35 +1009,33 @@ Item_None	src/rituals_game_info.cpp	/^	Item_None,$/;"	e	enum:Item_Info_Types	fil
 Item_Rock	src/rituals_game_info.cpp	/^	Item_Rock,$/;"	e	enum:Item_Info_Types	file:
 Item_Rope	src/rituals_game_info.cpp	/^	Item_Rope,$/;"	e	enum:Item_Info_Types	file:
 Item_Stack	src/rituals_inventory.cpp	/^struct Item_Stack$/;"	s	file:
-Kilobytes	src/rituals_main.cpp	158;"	d	file:
+Kilobytes	src/rituals_main.cpp	161;"	d	file:
 Kilobytes	src/rituals_win32.cpp	82;"	d	file:
 Log_Error	src/rituals_game.cpp	141;"	d	file:
 Map	helping_gb.cpp	/^struct Map {$/;"	s	file:
 MapEntry	helping_gb.cpp	/^struct MapEntry {$/;"	s	file:
 MapFindResult	helping_gb.cpp	/^typedef struct MapFindResult {$/;"	s	file:
 MapFindResult	helping_gb.cpp	/^} MapFindResult;$/;"	t	typeref:struct:MapFindResult	file:
-Mat2	src/rituals_math.cpp	/^union Mat2$/;"	u	file:
-Mat3	src/rituals_math.cpp	/^union Mat3$/;"	u	file:
 Math_Deg2Rad	src/rituals_win32.cpp	67;"	d	file:
-Math_DegToRad	src/rituals_main.cpp	137;"	d	file:
-Math_InvSqrt2	src/rituals_main.cpp	133;"	d	file:
+Math_DegToRad	src/rituals_main.cpp	140;"	d	file:
+Math_InvSqrt2	src/rituals_main.cpp	136;"	d	file:
 Math_InvSqrt2	src/rituals_win32.cpp	63;"	d	file:
-Math_Pi	src/rituals_main.cpp	134;"	d	file:
+Math_Pi	src/rituals_main.cpp	137;"	d	file:
 Math_Pi	src/rituals_win32.cpp	64;"	d	file:
 Math_Rad2Deg	src/rituals_win32.cpp	66;"	d	file:
-Math_RadToDeg	src/rituals_main.cpp	136;"	d	file:
-Math_Sqrt2	src/rituals_main.cpp	132;"	d	file:
+Math_RadToDeg	src/rituals_main.cpp	139;"	d	file:
+Math_Sqrt2	src/rituals_main.cpp	135;"	d	file:
 Math_Sqrt2	src/rituals_win32.cpp	62;"	d	file:
-Math_Tau	src/rituals_main.cpp	135;"	d	file:
+Math_Tau	src/rituals_main.cpp	138;"	d	file:
 Math_Tau	src/rituals_win32.cpp	65;"	d	file:
-Max	src/rituals_main.cpp	153;"	d	file:
+Max	src/rituals_main.cpp	156;"	d	file:
 MaxRegistryInfoEntries	src/rituals_game_registry.cpp	41;"	d	file:
-Megabytes	src/rituals_main.cpp	159;"	d	file:
+Megabytes	src/rituals_main.cpp	162;"	d	file:
 Megabytes	src/rituals_win32.cpp	83;"	d	file:
 Memory_Arena	src/rituals_game.cpp	/^struct Memory_Arena$/;"	s	file:
 Menu_State	src/rituals_main.cpp	/^struct Menu_State$/;"	s	file:
-Min	src/rituals_main.cpp	152;"	d	file:
-MixerNumberOfChannels	src/rituals_main.cpp	145;"	d	file:
+Min	src/rituals_main.cpp	155;"	d	file:
+MixerNumberOfChannels	src/rituals_main.cpp	148;"	d	file:
 Mixer_Number_Of_Channels	src/rituals_win32.cpp	75;"	d	file:
 NOMINMAX	src/thirdparty/gl_core_3_3.h	35;"	d
 NOMINMAX	src/thirdparty/gl_core_3_3.h	43;"	d
@@ -1045,8 +1043,9 @@ OpenGL_Renderer	src/rituals_game.cpp	/^typedef struct OpenGL_Renderer OpenGL_Ren
 OpenGL_Renderer	src/rituals_renderer.cpp	/^struct OpenGL_Renderer$/;"	s	file:
 OpenGL_Renderer	src/wtb_sprite_renderer.h	/^struct OpenGL_Renderer$/;"	s
 POINTER_C_GENERATED_HEADER_OPENGL_H	src/thirdparty/gl_core_3_3.h	2;"	d
-PathSeparator	src/rituals_main.cpp	149;"	d	file:
-PathSeparatorChar	src/rituals_main.cpp	150;"	d	file:
+Particle	src/rituals_renderer.cpp	/^struct Particle$/;"	s	file:
+PathSeparator	src/rituals_main.cpp	152;"	d	file:
+PathSeparatorChar	src/rituals_main.cpp	153;"	d	file:
 Path_Separator	src/rituals_win32.cpp	79;"	d	file:
 Path_Separator_Char	src/rituals_win32.cpp	80;"	d	file:
 PickupKind_Health	src/rituals_game_info.cpp	/^	PickupKind_Health$/;"	e	enum:Rituals_Pickup_Kind	file:
@@ -1149,7 +1148,7 @@ Sprite_Flags	src/wtb_sprite_renderer.h	/^enum Sprite_Flags$/;"	g
 Spritefont	rituals_gui.cpp	/^struct Spritefont$/;"	s	file:
 Spritefont	src/rituals_game.cpp	/^typedef struct Spritefont Spritefont;$/;"	t	typeref:struct:Spritefont	file:
 Spritefont	src/rituals_gui.cpp	/^struct Spritefont$/;"	s	file:
-StackAlloc	src/rituals_main.cpp	140;"	d	file:
+StackAlloc	src/rituals_main.cpp	143;"	d	file:
 StackAlloc	src/rituals_win32.cpp	70;"	d	file:
 State_Just_Pressed	src/rituals_game.cpp	/^	State_Just_Pressed = 2,$/;"	e	enum:Button_State	file:
 State_Just_Released	src/rituals_game.cpp	/^	State_Just_Released = -1,$/;"	e	enum:Button_State	file:
@@ -1178,11 +1177,10 @@ Tilemap	src/rituals_tilemap.cpp	/^struct Tilemap$/;"	s	file:
 TimeStep	src/rituals_simulation.cpp	143;"	d	file:
 Time_Step	src/rituals_win32.cpp	225;"	d	file:
 Title_Font	src/rituals_game.cpp	/^Spritefont* Title_Font;$/;"	v
-Transform	src/rituals_math.cpp	/^struct Transform$/;"	s	file:
 UNICODE	src/thirdparty/tinydir.h	37;"	d
 Vec2	src/rituals_math.cpp	/^union Vec2 $/;"	u	file:
 Vec2i	src/rituals_math.cpp	/^union Vec2i$/;"	u	file:
-Vec3	src/rituals_math.cpp	/^struct Vec3$/;"	s	file:
+Vec3	src/rituals_math.cpp	/^union Vec3$/;"	u	file:
 Vec4	src/rituals_math.cpp	/^union Vec4$/;"	u	file:
 WIN32_LEAN_AND_MEAN	src/thirdparty/gl_core_3_3.h	32;"	d
 WIN32_LEAN_AND_MEAN	src/thirdparty/gl_core_3_3.h	40;"	d
@@ -1199,7 +1197,7 @@ World_Area_Biome	src/rituals_world_area.cpp	/^enum World_Area_Biome$/;"	g	file:
 World_Area_Stub	src/rituals_world_area.cpp	/^struct World_Area_Stub$/;"	s	file:
 World_Area_Stub	src/rituals_world_area.cpp	/^typedef struct World_Area_Stub World_Area_Stub;$/;"	t	typeref:struct:World_Area_Stub	file:
 YCbCr_to_RGB_kernel	src/thirdparty/stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);$/;"	m	struct:__anon6
-_CRT_SECURE_NO_WARNINGS	src/rituals_main.cpp	87;"	d	file:
+_CRT_SECURE_NO_WARNINGS	src/rituals_main.cpp	90;"	d	file:
 _CRT_SECURE_NO_WARNINGS	src/rituals_win32.cpp	26;"	d	file:
 _TINYDIR_DIR	src/thirdparty/tinydir.h	131;"	d
 _TINYDIR_DIR	src/thirdparty/tinydir.h	137;"	d
@@ -1232,8 +1230,8 @@ _body_get_min_x	src/rituals_simulation.cpp	48;"	d	file:
 _body_get_min_y	src/rituals_simulation.cpp	49;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	53;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
-_check	src/rituals_entity_events.cpp	126;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	464;"	d	file:
+_check	src/rituals_entity_events.cpp	178;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	468;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	226;"	d	file:
 _color	src/rituals_gui.cpp	353;"	d	file:
@@ -1248,11 +1246,11 @@ _generate_registry_lookup	src/rituals_game_registry.cpp	57;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_game.cpp	121;"	d	file:
 _get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
-_get_member_address	src/rituals_renderer.cpp	132;"	d	file:
+_get_member_address	src/rituals_renderer.cpp	131;"	d	file:
 _get_member_address	src/wtb_sprite_renderer.h	123;"	d
-_get_sprite_y_base	src/rituals_renderer.cpp	81;"	d	file:
+_get_sprite_y_base	src/rituals_renderer.cpp	80;"	d	file:
 _get_sprite_y_base	src/wtb_sprite_renderer.h	72;"	d
-_gl_offset	src/rituals_renderer.cpp	133;"	d	file:
+_gl_offset	src/rituals_renderer.cpp	132;"	d	file:
 _gl_offset	src/wtb_sprite_renderer.h	124;"	d
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
 _hitbox_get_x1	src/rituals_world_area.cpp	34;"	d	file:
@@ -1266,7 +1264,7 @@ _recursive_delete	src/rituals_serialization.cpp	/^int _recursive_delete(const ch
 _rotate_left	src/rituals_game.cpp	/^static inline uint64 _rotate_left(const uint64 t, int64 k)$/;"	f	file:
 _s	src/thirdparty/tinydir.h	/^	struct _stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::_stat
 _s	src/thirdparty/tinydir.h	/^	struct stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::stat
-_scancode	src/rituals_entity_events.cpp	127;"	d	file:
+_scancode	src/rituals_entity_events.cpp	179;"	d	file:
 _set_registry_arrays	src/rituals_game_registry.cpp	44;"	d	file:
 _splitmix64	src/rituals_game.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 _th	src/rituals_simulation.cpp	/^isize _tw, _th;$/;"	v
@@ -1303,11 +1301,6 @@ _tw	src/rituals_simulation.cpp	/^isize _tw, _th;$/;"	v
 _tw	src/rituals_win32.cpp	/^isize _tw, _th;$/;"	v
 a	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 a	src/rituals_world_area.cpp	/^	Entity* a;$/;"	m	struct:Hitbox_Contact	file:
-a1	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:
-a1	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
-a2	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:
-a2	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
-a3	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 a_id	src/rituals_simulation.cpp	/^	isize a_id;$/;"	m	struct:Sim_Contact	file:
 a_id	src/rituals_world_area.cpp	/^	isize a_id;$/;"	m	struct:Hitbox_Contact	file:
 aabb	src/rituals_math.cpp	/^static inline AABB aabb(Vec2 c, real hw, real hh)$/;"	f	file:
@@ -1317,6 +1310,7 @@ aabb_intersect	src/rituals_math.cpp	/^static inline bool aabb_intersect(AABB* a,
 aabb_overlap	src/rituals_math.cpp	/^static inline void aabb_overlap(AABB* a, AABB* b, Vec2* s)$/;"	f	file:
 aabb_to_intrect	src/rituals_math.cpp	/^static inline Rect2i aabb_to_intrect(AABB* b)$/;"	f	file:
 aabb_to_rect	src/rituals_math.cpp	/^static inline Rect2 aabb_to_rect(AABB* b)$/;"	f	file:
+acceleration	src/rituals_renderer.cpp	/^	Vec3 acceleration;$/;"	m	struct:Emitter	file:
 accept_newlines	src/rituals_gui.cpp	/^	bool accept_newlines;$/;"	m	struct:Gui_Text_Input_Handle	file:
 accept_tabs	src/rituals_gui.cpp	/^	bool accept_tabs;$/;"	m	struct:Gui_Text_Input_Handle	file:
 accumulator	src/rituals_main.cpp	/^	real accumulator = 0;$/;"	m	struct:Play_State	file:
@@ -1328,11 +1322,11 @@ alert_dist	src/rituals_game_info.cpp	/^		real alert_dist;$/;"	m	struct:Rituals_E
 all_a	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 amount	src/rituals_game_info.cpp	/^				isize amount;$/;"	m	struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon11	file:
 amount	src/rituals_game_info.cpp	/^		isize amount;$/;"	m	struct:Rituals_Entity_Userdata::__anon1	file:
-angle	src/rituals_math.cpp	/^	real angle;$/;"	m	struct:Transform	file:
+angle	src/rituals_renderer.cpp	/^	real angle;$/;"	m	struct:Particle	file:
 angle	src/rituals_renderer.cpp	/^	real angle;$/;"	m	struct:Sprite	file:
 angle	src/wtb_sprite_renderer.h	/^	real angle;$/;"	m	struct:Sprite
+angular_vel	src/rituals_renderer.cpp	/^	real angular_vel;$/;"	m	struct:Particle	file:
 append_input_text	src/rituals_game.cpp	/^isize append_input_text(char* str, isize str_cap, isize str_len, isize insert_from_end=0)$/;"	f
-apply_transform_vec2	src/rituals_math.cpp	/^Vec2 apply_transform_vec2(Transform* tr, Vec2* v)$/;"	f
 area_stubs	src/rituals_world.cpp	/^	World_Area_Stub* area_stubs;$/;"	m	struct:World	file:
 areas_capacity	src/rituals_world.cpp	/^	isize areas_count, areas_capacity;$/;"	m	struct:World	file:
 areas_count	src/rituals_world.cpp	/^	isize areas_count, areas_capacity;$/;"	m	struct:World	file:
@@ -1349,11 +1343,6 @@ axis	src/rituals_gui.cpp	/^	isize axis;$/;"	m	struct:Gui_Context	file:
 b	src/rituals_main.cpp	/^bool b = false;$/;"	v
 b	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 b	src/rituals_world_area.cpp	/^	Entity* b;$/;"	m	struct:Hitbox_Contact	file:
-b1	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:
-b1	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
-b2	src/rituals_math.cpp	/^		real a1, b1, a2, b2;$/;"	m	struct:Mat2::__anon11	file:
-b2	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
-b3	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 b_id	src/rituals_simulation.cpp	/^	isize b_id;$/;"	m	struct:Sim_Contact	file:
 b_id	src/rituals_world_area.cpp	/^	isize b_id;$/;"	m	struct:Hitbox_Contact	file:
 base_path	src/rituals_game.cpp	/^	const char* base_path;$/;"	m	struct:Game_Main	file:
@@ -1380,14 +1369,10 @@ buffer_capacity	src/rituals_gui.cpp	/^	isize buffer_length, buffer_capacity;$/;"
 buffer_length	src/rituals_gui.cpp	/^	isize buffer_length, buffer_capacity;$/;"	m	struct:Gui_Text_Input_Handle	file:
 buffer_start	src/thirdparty/stb_image.h	/^   stbi_uc buffer_start[128];$/;"	m	struct:__anon3
 buflen	src/thirdparty/stb_image.h	/^   int buflen;$/;"	m	struct:__anon3
-c1	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
-c2	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
-c3	src/rituals_math.cpp	/^		real a1, b1, c1, a2, b2, c2, a3, b3, c3;$/;"	m	struct:Mat3::__anon12	file:
 capacity	src/rituals_game.cpp	/^	isize capacity, head;$/;"	m	struct:Memory_Arena	file:
 capture_newlines	src/rituals_game.cpp	/^	bool capture_newlines;$/;"	m	struct:Game_Input	file:
 capture_tabs	src/rituals_game.cpp	/^	bool capture_tabs;$/;"	m	struct:Game_Input	file:
-center	src/rituals_math.cpp	/^		Vec2 center;$/;"	m	struct:AABB::__anon5	file:
-center	src/rituals_math.cpp	/^	Vec2 center;$/;"	m	struct:Transform	file:
+center	src/rituals_math.cpp	/^		Vec2 center;$/;"	m	struct:AABB::__anon6	file:
 center	src/rituals_renderer.cpp	/^	Vec2 center;$/;"	m	struct:Sprite	file:
 center	src/wtb_sprite_renderer.h	/^	Vec2 center;$/;"	m	struct:Sprite
 channel	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
@@ -1412,6 +1397,7 @@ coeff_w	src/thirdparty/stb_image.h	/^      int      coeff_w, coeff_h; \/\/ numbe
 collision_vel	src/rituals_simulation.cpp	/^	Vec2 velocity, force, collision_vel;$/;"	m	struct:Sim_Body	file:
 color	rituals_gui.cpp	/^	Vec4 color;$/;"	m	struct:Spritefont	file:
 color	src/rituals_gui.cpp	/^	Vec4 color;$/;"	m	struct:Spritefont	file:
+color	src/rituals_renderer.cpp	/^	Vec4 color;$/;"	m	struct:Emitter	file:
 color	src/rituals_renderer.cpp	/^	Vec4 color;$/;"	m	struct:Sprite	file:
 color	src/wtb_sprite_renderer.h	/^	Vec4 color;$/;"	m	struct:Sprite
 color_table	src/thirdparty/stb_image.h	/^   stbi_uc *color_table;$/;"	m	struct:__anon17
@@ -1512,15 +1498,17 @@ diff2	src/rituals_math.cpp	/^	Vec2 diff2;$/;"	m	struct:Rect2_Clip_Info	file:
 direction	src/rituals_world_area.cpp	/^	Direction direction;$/;"	m	struct:Entity	file:
 e	src/rituals_math.cpp	/^	int32 e[2];$/;"	m	union:Vec2i	file:
 e	src/rituals_math.cpp	/^	real e[2];$/;"	m	union:Vec2	file:
+e	src/rituals_math.cpp	/^	real e[3];$/;"	m	union:Vec3	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:AABB	file:
-e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Mat2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Rect2	file:
 e	src/rituals_math.cpp	/^	real e[4];$/;"	m	union:Vec4	file:
-e	src/rituals_math.cpp	/^	real e[9];$/;"	m	union:Mat3	file:
 e	src/rituals_renderer.cpp	/^	Sprite e[4];$/;"	m	struct:Sprite4	file:
 e	src/wtb_sprite_renderer.h	/^	Sprite e[4];$/;"	m	struct:Sprite4
 east	src/rituals_world_area.cpp	/^	Area_Link east;$/;"	m	struct:World_Area_Stub	file:
 eflags	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
+emitter	src/rituals_world.cpp	/^	Emitter emitter;$/;"	m	struct:World	file:
+emitter_render	src/rituals_renderer.cpp	/^void emitter_render(Emitter* e, real dt)$/;"	f
+emitter_spawn	src/rituals_renderer.cpp	/^void emitter_spawn(Emitter* e, Vec2 pos, real height_off_ground, isize count, Vec2 impulse_mag_range, Vec2 scale_range, Vec2 impulse_angle_range)$/;"	f
 end_temp_arena	src/rituals_game.cpp	/^void end_temp_arena(Memory_Arena* arena)$/;"	f
 enemy	src/rituals_game_info.cpp	/^	} enemy;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon3	file:
 entities	src/rituals_world_area.cpp	/^	Entity* entities;$/;"	m	struct:World_Area	file:
@@ -1555,6 +1543,7 @@ float2fixed	src/thirdparty/stb_image.h	3072;"	d
 float2fixed	src/thirdparty/stb_image.h	3100;"	d
 follow_dist	src/rituals_game_info.cpp	/^		real follow_dist;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
 force	src/rituals_simulation.cpp	/^	Vec2 velocity, force, collision_vel;$/;"	m	struct:Sim_Body	file:
+frame	src/rituals_renderer.cpp	/^	int32 frame;$/;"	m	struct:Particle	file:
 friction	src/rituals_game_info.cpp	/^	real friction;$/;"	m	struct:Tile_Info	file:
 g	src/rituals_math.cpp	/^		uint8 r, g, b, a;$/;"	m	struct:Color::__anon1	file:
 game_arena	src/rituals_game.cpp	/^	Memory_Arena* game_arena;$/;"	m	struct:Game_Main	file:
@@ -1933,7 +1922,7 @@ gui_add_slider	src/rituals_gui.cpp	/^void gui_add_slider(Vec2 position, Vec2 siz
 gui_add_text_input	src/rituals_gui.cpp	/^void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size, char* default_text=NULL)$/;"	f
 gui_query_mouse	src/rituals_gui.cpp	/^bool gui_query_mouse(Rect2 region, Vec2 parent)$/;"	f
 h	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
-h	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon9	file:
+h	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon10	file:
 h	src/rituals_math.cpp	/^	int32 x, y, w, h;$/;"	m	struct:Rect2i	file:
 h	src/rituals_tilemap.cpp	/^	isize w, h;$/;"	m	struct:Tilemap	file:
 h	src/thirdparty/stb_image.h	/^      int h,v;$/;"	m	struct:__anon6::__anon7
@@ -1958,8 +1947,8 @@ heal_to_interval	src/rituals_game_info.cpp	/^		int32 heal_to_interval;$/;"	m	str
 health	src/rituals_game_info.cpp	/^			} health;$/;"	m	union:Rituals_Entity_Userdata::__anon8::__anon9	typeref:struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon11	file:
 health	src/rituals_world_area.cpp	/^	int32 health;$/;"	m	struct:Entity	file:
 held_entity_id	src/rituals_game_info.cpp	/^		isize held_entity_id;$/;"	m	struct:Rituals_Entity_Userdata::__anon2	file:
-hext	src/rituals_math.cpp	/^				Vec2 hext;$/;"	m	struct:AABB::__anon5::__anon6::__anon8	file:
-hh	src/rituals_math.cpp	/^				real hw, hh;$/;"	m	struct:AABB::__anon5::__anon6::__anon7	file:
+hext	src/rituals_math.cpp	/^				Vec2 hext;$/;"	m	struct:AABB::__anon6::__anon7::__anon9	file:
+hh	src/rituals_math.cpp	/^				real hw, hh;$/;"	m	struct:AABB::__anon6::__anon7::__anon8	file:
 hitbox	src/rituals_world_area.cpp	/^	Hitbox hitbox;$/;"	m	struct:Entity	file:
 hitbox_contacts	src/rituals_world_area.cpp	/^	Hitbox_Contact* hitbox_contacts;$/;"	m	struct:World_Area	file:
 hitbox_contacts_capacity	src/rituals_world_area.cpp	/^	isize hitbox_contacts_count, hitbox_contacts_capacity;$/;"	m	struct:World_Area	file:
@@ -1972,7 +1961,7 @@ hs	src/thirdparty/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each ax
 hsz	src/thirdparty/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon14
 huff_ac	src/thirdparty/stb_image.h	/^   stbi__huffman huff_ac[4];$/;"	m	struct:__anon6
 huff_dc	src/thirdparty/stb_image.h	/^   stbi__huffman huff_dc[4];$/;"	m	struct:__anon6
-hw	src/rituals_math.cpp	/^				real hw, hh;$/;"	m	struct:AABB::__anon5::__anon6::__anon7	file:
+hw	src/rituals_math.cpp	/^				real hw, hh;$/;"	m	struct:AABB::__anon6::__anon7::__anon8	file:
 id	src/rituals_game_info.cpp	/^				isize id, count;$/;"	m	struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon10	file:
 id	src/rituals_game_info.cpp	/^	isize id;$/;"	m	struct:Item_Info	file:
 id	src/rituals_game_info.cpp	/^	isize id;$/;"	m	struct:Tile_Info	file:
@@ -2004,6 +1993,7 @@ img_y	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__
 immune_to_damage	src/rituals_game_info.cpp	/^	bool immune_to_damage;$/;"	m	struct:Tile_Info	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
 init_body	src/rituals_simulation.cpp	/^void init_body(Sim_Body* b)$/;"	f
+init_emitter	src/rituals_renderer.cpp	/^void init_emitter(Emitter* e, isize max_particles, Rect2 texture, Vec4 color, Vec2 size, int32 min_time, int32 max_time, Memory_Arena* arena)$/;"	f
 init_entity	src/rituals_world_area.cpp	/^void init_entity(Entity* entity)$/;"	f
 init_game_registry	src/rituals_game_registry.cpp	/^void init_game_registry(Game_Registry* registry, Memory_Arena* arena)$/;"	f
 init_group	src/rituals_renderer.cpp	/^void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)$/;"	f
@@ -2012,6 +2002,7 @@ init_inventory	src/rituals_inventory.cpp	/^void init_inventory(Inventory* invent
 init_item_stack	src/rituals_inventory.cpp	/^void init_item_stack(Item_Stack* stack, Item_Info* info)$/;"	f
 init_memory_arena	src/rituals_game.cpp	/^void init_memory_arena(Memory_Arena* arena, usize size)$/;"	f
 init_menu_state	src/rituals_main.cpp	/^void init_menu_state()$/;"	f
+init_particle	src/rituals_renderer.cpp	/^void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real anglev, int32 frame, int32 time)$/;"	f
 init_play_state	src/rituals_play_state.cpp	/^void init_play_state()$/;"	f
 init_random	src/rituals_game.cpp	/^void init_random(Random* r, uint64 seed) $/;"	f
 init_renderer	src/rituals_renderer.cpp	/^void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)$/;"	f
@@ -2059,9 +2050,9 @@ is_valid_filename_char	src/rituals_game.cpp	/^bool is_valid_filename_char(char c
 isize	src/rituals_game.cpp	/^_generate_sort_and_search_for_numeric_type(isize);$/;"	v
 isize	src/rituals_main.cpp	/^typedef ptrdiff_t isize;$/;"	t	file:
 isize	src/rituals_win32.cpp	/^typedef ptrdiff_t isize;$/;"	t	file:
-isizeof	src/rituals_main.cpp	142;"	d	file:
+isizeof	src/rituals_main.cpp	145;"	d	file:
 isizeof	src/rituals_win32.cpp	72;"	d	file:
-isz	src/rituals_main.cpp	143;"	d	file:
+isz	src/rituals_main.cpp	146;"	d	file:
 isz	src/rituals_win32.cpp	73;"	d	file:
 item	src/rituals_game_info.cpp	/^			} item;$/;"	m	union:Rituals_Entity_Userdata::__anon8::__anon9	typeref:struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon10	file:
 items	src/rituals_game_registry.cpp	/^	Item_Info* items;$/;"	m	struct:Game_Registry	file:
@@ -2115,6 +2106,7 @@ mask	src/rituals_world_area.cpp	/^	uint64 mask;$/;"	m	struct:Hitbox	file:
 max_chars_by_width	src/rituals_gui.cpp	/^	isize max_chars_by_width;$/;"	m	struct:Gui_Text_Input_Handle	file:
 max_damage	src/rituals_game_info.cpp	/^	int32 max_damage;$/;"	m	struct:Tile_Info	file:
 max_stack	src/rituals_game_info.cpp	/^	int32 max_stack;$/;"	m	struct:Item_Info	file:
+max_time	src/rituals_renderer.cpp	/^	int32 max_time;$/;"	m	struct:Emitter	file:
 max_x	src/thirdparty/stb_image.h	/^   int max_x, max_y;$/;"	m	struct:__anon17
 max_y	src/thirdparty/stb_image.h	/^   int max_x, max_y;$/;"	m	struct:__anon17
 maxcode	src/thirdparty/stb_image.h	/^   int maxcode[17];$/;"	m	struct:__anon9
@@ -2124,6 +2116,7 @@ mem_align_4	src/rituals_game.cpp	/^static inline isize mem_align_4(isize p)$/;"	
 menu_state	src/rituals_main.cpp	/^Menu_State* menu_state;$/;"	v
 meta_arena	src/rituals_game.cpp	/^	Memory_Arena* meta_arena;$/;"	m	struct:Game_Main	file:
 mg	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
+min_time	src/rituals_renderer.cpp	/^	int32 min_time;$/;"	m	struct:Emitter	file:
 mode	src/rituals_game_info.cpp	/^		isize mode;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
 modulus	src/rituals_math.cpp	/^static inline isize modulus(isize a, isize b)$/;"	f	file:
 mouse	src/rituals_game.cpp	/^	int8* mouse;$/;"	m	struct:Game_Input	file:
@@ -2132,7 +2125,6 @@ mouse_x	src/rituals_game.cpp	/^	int32 mouse_x;$/;"	m	struct:Game_Input	file:
 mouse_y	src/rituals_game.cpp	/^	int32 mouse_y;$/;"	m	struct:Game_Input	file:
 movement_modifier	src/rituals_game_info.cpp	/^	real movement_modifier;$/;"	m	struct:Tile_Info	file:
 mr	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
-mul_mat3_vec2_affline	src/rituals_math.cpp	/^Vec2 mul_mat3_vec2_affline(Mat3* m, Vec2* v)$/;"	f
 n_files	src/thirdparty/tinydir.h	/^	size_t n_files;$/;"	m	struct:tinydir_dir
 name	src/rituals_game_info.cpp	/^	const char* name;$/;"	m	struct:Item_Info	file:
 name	src/rituals_game_info.cpp	/^	const char* name;$/;"	m	struct:Tile_Info	file:
@@ -2176,18 +2168,29 @@ old_out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/
 operator *	src/rituals_math.cpp	/^static inline Vec2 operator*(Vec2 a, Vec2 b)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec2 operator*(Vec2 a, real s)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec2 operator*(real s, Vec2 a)$/;"	f	file:
+operator *	src/rituals_math.cpp	/^static inline Vec3 operator*(Vec3 a, Vec3 b)$/;"	f	file:
+operator *	src/rituals_math.cpp	/^static inline Vec3 operator*(Vec3 a, real s)$/;"	f	file:
+operator *	src/rituals_math.cpp	/^static inline Vec3 operator*(real s, Vec3 a)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec4 operator*(Vec4 a, Vec4 b)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec4 operator*(Vec4 a, real b)$/;"	f	file:
 operator *	src/rituals_math.cpp	/^static inline Vec4 operator*(real b, Vec4 a) $/;"	f	file:
 operator *=	src/rituals_math.cpp	/^static inline Vec2& operator*=(Vec2& a, real b)$/;"	f	file:
+operator *=	src/rituals_math.cpp	/^static inline Vec3& operator*=(Vec3& a, real b)$/;"	f	file:
 operator *=	src/rituals_math.cpp	/^static inline Vec4 operator*=(Vec4& a, real b)$/;"	f	file:
 operator +	src/rituals_math.cpp	/^static inline Vec2 operator+(Vec2 a, Vec2 b)$/;"	f	file:
+operator +	src/rituals_math.cpp	/^static inline Vec3 operator+(Vec3 a, Vec3 b)$/;"	f	file:
 operator +=	src/rituals_math.cpp	/^static inline Vec2& operator+=(Vec2& a, Vec2 b)$/;"	f	file:
+operator +=	src/rituals_math.cpp	/^static inline Vec3& operator+=(Vec3& a, Vec3 b)$/;"	f	file:
 operator -	src/rituals_math.cpp	/^static inline Vec2 operator-(Vec2 a)$/;"	f	file:
 operator -	src/rituals_math.cpp	/^static inline Vec2 operator-(Vec2 a, Vec2 b)$/;"	f	file:
+operator -	src/rituals_math.cpp	/^static inline Vec3 operator-(Vec3 a)$/;"	f	file:
+operator -	src/rituals_math.cpp	/^static inline Vec3 operator-(Vec3 a, Vec3 b)$/;"	f	file:
 operator -=	src/rituals_math.cpp	/^static inline Vec2& operator-=(Vec2& a, Vec2 b)$/;"	f	file:
+operator -=	src/rituals_math.cpp	/^static inline Vec3& operator-=(Vec3& a, Vec3 b)$/;"	f	file:
 operator /	src/rituals_math.cpp	/^static inline Vec2 operator\/(Vec2 a, real s)$/;"	f	file:
 operator /	src/rituals_math.cpp	/^static inline Vec2 operator\/(real s, Vec2 a)$/;"	f	file:
+operator /	src/rituals_math.cpp	/^static inline Vec3 operator\/(Vec3 a, real s)$/;"	f	file:
+operator /	src/rituals_math.cpp	/^static inline Vec3 operator\/(real s, Vec3 a)$/;"	f	file:
 operator /	src/rituals_math.cpp	/^static inline Vec4 operator\/(Vec4 a, real b)$/;"	f	file:
 operator ==	src/rituals_math.cpp	/^static inline bool operator==(Rect2 a, Rect2 b)$/;"	f	file:
 order	src/thirdparty/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon6
@@ -2200,6 +2203,10 @@ pal	src/thirdparty/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon17
 parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
+particle_size	src/rituals_renderer.cpp	/^	Vec2 particle_size;$/;"	m	struct:Emitter	file:
+particles	src/rituals_renderer.cpp	/^	Particle* particles;$/;"	m	struct:Emitter	file:
+particles_capacity	src/rituals_renderer.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
+particles_count	src/rituals_renderer.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
 path	src/thirdparty/tinydir.h	/^	_tinydir_char_t path[_TINYDIR_PATH_MAX];$/;"	m	struct:tinydir_dir
 path	src/thirdparty/tinydir.h	/^	_tinydir_char_t path[_TINYDIR_PATH_MAX];$/;"	m	struct:tinydir_file
 patrol_end	src/rituals_game_info.cpp	/^				Vec2 patrol_end;$/;"	m	struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon7	file:
@@ -2208,14 +2215,15 @@ perch	src/rituals_game_info.cpp	/^				Vec2 perch;$/;"	m	struct:Rituals_Entity_Us
 pickup	src/rituals_game_info.cpp	/^	} pickup;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon8	file:
 play_arena	src/rituals_game.cpp	/^	Memory_Arena* play_arena;$/;"	m	struct:Game_Main	file:
 play_state	src/rituals_main.cpp	/^Play_State* play_state;$/;"	v
+play_state_end	src/rituals_play_state.cpp	/^void play_state_end(Game_State nextstate)$/;"	f
 play_state_stop	src/rituals_play_state.cpp	/^void play_state_stop()$/;"	f
 play_state_update	src/rituals_play_state.cpp	/^void play_state_update()$/;"	f
 player	src/rituals_game_info.cpp	/^	} player;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon2	file:
 player	src/rituals_world_area.cpp	/^	Entity* player;$/;"	m	struct:World_Area	file:
 position	src/rituals_gui.cpp	/^	Vec2 position;$/;"	m	struct:Gui_Window_Handle	file:
-position	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon10	file:
-position	src/rituals_math.cpp	/^	Vec2 position;$/;"	m	struct:Transform	file:
+position	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon11	file:
 position	src/rituals_renderer.cpp	/^	Vec2 position;$/;"	m	struct:Sprite	file:
+position	src/rituals_renderer.cpp	/^	Vec3 position;$/;"	m	struct:Particle	file:
 position	src/rituals_world_area.cpp	/^	Vec2i position;$/;"	m	struct:Area_Link	file:
 position	src/wtb_sprite_renderer.h	/^	Vec2 position;$/;"	m	struct:Sprite
 prefix	src/thirdparty/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon16
@@ -2319,9 +2327,13 @@ rgba	src/rituals_math.cpp	/^	uint32 rgba;$/;"	m	union:Color	file:
 rituals_animate_entities	src/rituals_entity_events.cpp	/^void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_contact_entities	src/rituals_entity_events.cpp	/^void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world)$/;"	f
 rituals_entity_on_contact_terrain	src/rituals_entity_events.cpp	/^void rituals_entity_on_contact_terrain(Entity* e, World_Area* area, World* world)$/;"	f
+rituals_frametick_entities	src/rituals_entity_events.cpp	/^void rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_hit_entities	src/rituals_entity_events.cpp	/^void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world)$/;"	f
 rituals_interact_entities	src/rituals_entity_events.cpp	/^void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
+rituals_on_activate_entity	src/rituals_entity_events.cpp	/^void rituals_on_activate_entity(Entity* entity, World_Area* area, World* world)$/;"	f
+rituals_on_destroy_entity	src/rituals_entity_events.cpp	/^void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)$/;"	f
 rituals_prop_drop_on_break	src/rituals_entity_events.cpp	/^void rituals_prop_drop_on_break(World_Area* area, Entity* a) $/;"	f
+rituals_slowtick_entities	src/rituals_entity_events.cpp	/^void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_spawn_enemy	src/rituals_entity_events.cpp	/^Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position) $/;"	f
 rituals_walk_entities	src/rituals_entity.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
 rituals_walk_entities	src/rituals_entity_events.cpp	/^void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)$/;"	f
@@ -2335,8 +2347,7 @@ save_dir_len	src/rituals_main.cpp	/^	isize save_dir_len;$/;"	m	struct:Menu_State
 saves	src/rituals_main.cpp	/^	tinydir_dir saves;$/;"	m	struct:Menu_State	file:
 saves_dirty	src/rituals_main.cpp	/^	bool saves_dirty;$/;"	m	struct:Menu_State	file:
 scale	src/rituals_game.cpp	/^	real scale;$/;"	m	struct:Game_Main	file:
-scale_x	src/rituals_math.cpp	/^	real scale_x;$/;"	m	struct:Transform	file:
-scale_y	src/rituals_math.cpp	/^	real scale_y;$/;"	m	struct:Transform	file:
+scale	src/rituals_renderer.cpp	/^	real scale;$/;"	m	struct:Particle	file:
 scan_n	src/thirdparty/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon6
 scancodes	src/rituals_game.cpp	/^	int8* scancodes;$/;"	m	struct:Game_Input	file:
 screen_mouse_pos	src/rituals_game.cpp	/^	Vec2i screen_mouse_pos;$/;"	m	struct:Game_Input	file:
@@ -2370,13 +2381,15 @@ sim_update	src/rituals_simulation.cpp	/^void sim_update(Simulator* sim, Tilemap*
 size	src/rituals_game.cpp	/^	Vec2 size;$/;"	m	struct:Game_Main	file:
 size	src/rituals_game_info.cpp	/^		isize size;$/;"	m	struct:Rituals_Entity_Userdata::__anon12	file:
 size	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
-size	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon10	file:
+size	src/rituals_math.cpp	/^		Vec2 position, size;$/;"	m	struct:Rect2::__anon11	file:
 size	src/rituals_renderer.cpp	/^	Vec2 size;$/;"	m	struct:Sprite	file:
 size	src/thirdparty/stb_image.h	/^   stbi_uc  size[257];$/;"	m	struct:__anon5
 size	src/thirdparty/stb_image.h	/^   stbi_uc  size[288];$/;"	m	struct:__anon9
 size	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
 size	src/wtb_sprite_renderer.h	/^	Vec2 size;$/;"	m	struct:Sprite
 skip	src/thirdparty/stb_image.h	/^   void     (*skip)  (void *user,int n);                 \/\/ skip the next 'n' bytes, or 'unget' the last -n bytes if negative$/;"	m	struct:__anon2
+slowtick_timer	src/rituals_world.cpp	/^	usize slowtick_timer;$/;"	m	struct:World	file:
+slowtick_timer_interval	src/rituals_world.cpp	/^	usize slowtick_timer_interval;$/;"	m	struct:World	file:
 snake	src/rituals_game_info.cpp	/^			} snake;$/;"	m	union:Rituals_Entity_Userdata::__anon3::__anon4	typeref:struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon6	file:
 solid	src/rituals_game_info.cpp	/^	bool solid;$/;"	m	struct:Tile_Info	file:
 sort_axis	src/rituals_simulation.cpp	/^	isize sort_axis;$/;"	m	struct:Simulator	file:
@@ -2665,6 +2678,7 @@ text_count	src/rituals_game.cpp	/^	isize text_count;$/;"	m	struct:Game_Input	fil
 texture	src/rituals_game_info.cpp	/^	Rect2 texture;$/;"	m	struct:Item_Info	file:
 texture	src/rituals_game_info.cpp	/^	Rect2 texture;$/;"	m	struct:Tile_Info	file:
 texture	src/rituals_renderer.cpp	/^	GLuint texture;$/;"	m	struct:Render_Group	file:
+texture	src/rituals_renderer.cpp	/^	Rect2 texture;$/;"	m	struct:Emitter	file:
 texture	src/rituals_renderer.cpp	/^	Rect2 texture;$/;"	m	struct:Sprite	file:
 texture	src/wtb_sprite_renderer.h	/^	GLuint texture;$/;"	m	struct:Render_Group
 texture	src/wtb_sprite_renderer.h	/^	Rect2 texture;$/;"	m	struct:Sprite
@@ -2680,6 +2694,7 @@ tiles	src/rituals_game_registry.cpp	/^	Tile_Info* tiles;$/;"	m	struct:Game_Regis
 tiles	src/rituals_tilemap.cpp	/^	Tile* tiles;$/;"	m	struct:Tilemap	file:
 tiles_count	src/rituals_game_registry.cpp	/^	isize tiles_count;$/;"	m	struct:Game_Registry	file:
 tiles_hash	src/rituals_game_registry.cpp	/^	usize* tiles_hash;$/;"	m	struct:Game_Registry	file:
+time	src/rituals_renderer.cpp	/^	int32 time;$/;"	m	struct:Particle	file:
 tinydir_close	src/thirdparty/tinydir.h	/^void tinydir_close(tinydir_dir *dir)$/;"	f
 tinydir_dir	src/thirdparty/tinydir.h	/^typedef struct tinydir_dir$/;"	s
 tinydir_dir	src/thirdparty/tinydir.h	/^} tinydir_dir;$/;"	t	typeref:struct:tinydir_dir
@@ -2696,8 +2711,8 @@ title	src/rituals_gui.cpp	/^	char* title;$/;"	m	struct:Gui_Window_Handle	file:
 title_font	src/rituals_game.cpp	/^	Spritefont* title_font;$/;"	m	struct:Game_Main	file:
 todo	src/thirdparty/stb_image.h	/^   int restart_interval, todo;$/;"	m	struct:__anon6
 top_texture	src/rituals_game_info.cpp	/^	Rect2 top_texture;$/;"	m	struct:Tile_Info	file:
+total_time	src/rituals_renderer.cpp	/^	int32 total_time;$/;"	m	struct:Particle	file:
 tq	src/thirdparty/stb_image.h	/^      int tq;$/;"	m	struct:__anon6::__anon7
-transform_to_mat3	src/rituals_math.cpp	/^Mat3 transform_to_mat3(Transform* tr)$/;"	f
 transparent	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 tt	src/rituals_main.cpp	/^float tt = 0;$/;"	v
 type	src/thirdparty/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon11
@@ -2725,7 +2740,6 @@ uint64_t	src/thirdparty/gl_core_3_3.h	/^typedef unsigned long long int uint64_t;
 uint8	src/rituals_game.cpp	/^_generate_sort_and_search_for_numeric_type(uint8);$/;"	v
 uint8	src/rituals_main.cpp	/^typedef uint8_t uint8;$/;"	t	file:
 uint8	src/rituals_win32.cpp	/^typedef uint8_t uint8;$/;"	t	file:
-undo_transform_vec2	src/rituals_math.cpp	/^Vec2 undo_transform_vec2(Transform* tr, Vec2* v)$/;"	f
 unknown	src/rituals_game_info.cpp	/^	} unknown;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon12	file:
 update	src/rituals_main.cpp	/^void update()$/;"	f
 update	src/rituals_win32.cpp	/^void update()$/;"	f
@@ -2746,9 +2760,11 @@ v2_from_angle	src/rituals_math.cpp	/^inline Vec2 v2_from_angle(real normal)$/;"	
 v2_normalize	src/rituals_math.cpp	/^inline Vec2 v2_normalize(Vec2 v)$/;"	f
 v2_perpendicular	src/rituals_math.cpp	/^inline Vec2 v2_perpendicular(Vec2 v)$/;"	f
 v2_to_angle	src/rituals_math.cpp	/^inline real v2_to_angle(Vec2 v)$/;"	f
-v2i	src/rituals_math.cpp	/^static inline Vec2i v2i(Vec2 v)$/;"	f	file:
 v2i	src/rituals_math.cpp	/^static inline Vec2i v2i(int32 x, int32 y)$/;"	f	file:
-v4	src/rituals_math.cpp	/^Vec4 v4(real x, real y, real z, real w)$/;"	f
+v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
+v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
+v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
+v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
 v4_to_color	src/rituals_math.cpp	/^Color v4_to_color(Vec4* v)$/;"	f
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
@@ -2758,11 +2774,12 @@ vao	src/rituals_renderer.cpp	/^	GLuint shader_program, vbo, vao;$/;"	m	struct:Op
 vao	src/wtb_sprite_renderer.h	/^	GLuint shader_program, vbo, vao;$/;"	m	struct:OpenGL_Renderer
 vbo	src/rituals_renderer.cpp	/^	GLuint shader_program, vbo, vao;$/;"	m	struct:OpenGL_Renderer	file:
 vbo	src/wtb_sprite_renderer.h	/^	GLuint shader_program, vbo, vao;$/;"	m	struct:OpenGL_Renderer
+velocity	src/rituals_renderer.cpp	/^	Vec3 velocity;$/;"	m	struct:Particle	file:
 velocity	src/rituals_simulation.cpp	/^	Vec2 velocity, force, collision_vel;$/;"	m	struct:Sim_Body	file:
 vs	src/thirdparty/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon8
 w	src/rituals_inventory.cpp	/^	isize w, h, size;$/;"	m	struct:Inventory	file:
-w	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon9	file:
-w	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon4	file:
+w	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon10	file:
+w	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon5	file:
 w	src/rituals_math.cpp	/^	int32 x, y, w, h;$/;"	m	struct:Rect2i	file:
 w	src/rituals_tilemap.cpp	/^	isize w, h;$/;"	m	struct:Tilemap	file:
 w	src/thirdparty/stb_image.h	/^   int w,h;$/;"	m	struct:__anon17
@@ -2779,45 +2796,50 @@ world_area_build_hitboxes	src/rituals_world_area.cpp	/^void world_area_build_hit
 world_area_contact_entities	src/rituals_world.cpp	/^void world_area_contact_entities(World_Area* area, World* world)$/;"	f
 world_area_deinit_player	src/rituals_world.cpp	/^void world_area_deinit_player(World_Area* area, bool move_player=true)$/;"	f
 world_area_find_entity	src/rituals_world_area.cpp	/^Entity* world_area_find_entity(World_Area* area, isize id)$/;"	f
+world_area_frametick_entities	src/rituals_world.cpp	/^void world_area_frametick_entities(World_Area* area, World* world)$/;"	f
 world_area_get_next_entity	src/rituals_world_area.cpp	/^Entity* world_area_get_next_entity(World_Area* area)$/;"	f
 world_area_hit_entities	src/rituals_world.cpp	/^void world_area_hit_entities(World_Area* area, World* world)$/;"	f
 world_area_init_player	src/rituals_world.cpp	/^void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)$/;"	f
 world_area_interact	src/rituals_world.cpp	/^void world_area_interact(World_Area* area, World* world)$/;"	f
+world_area_on_activate_entity	src/rituals_world.cpp	/^void world_area_on_activate_entity(Entity* e, World_Area* area, World* world)$/;"	f
+world_area_on_destroy_entity	src/rituals_world.cpp	/^void world_area_on_destroy_entity(Entity* e, World_Area* area, World* world)$/;"	f
 world_area_process_hitboxes	src/rituals_world_area.cpp	/^void world_area_process_hitboxes(World_Area* area)$/;"	f
 world_area_process_removed_entities	src/rituals_world_area.cpp	/^void world_area_process_removed_entities(World_Area* area)$/;"	f
 world_area_remove_entity	src/rituals_world_area.cpp	/^bool world_area_remove_entity(World_Area* area, Entity* entity)$/;"	f
 world_area_remove_entity_internal	src/rituals_world_area.cpp	/^void world_area_remove_entity_internal(World_Area* area, isize id)$/;"	f
 world_area_render	src/rituals_world.cpp	/^void world_area_render(World_Area* area, World* world)$/;"	f
+world_area_slowtick_entities	src/rituals_world.cpp	/^void world_area_slowtick_entities(World_Area* area, World* world)$/;"	f
 world_area_sort_entities_on_id	src/rituals_world_area.cpp	/^void world_area_sort_entities_on_id(World_Area* area)$/;"	f
 world_area_synchronize_entities_and_bodies	src/rituals_world_area.cpp	/^void world_area_synchronize_entities_and_bodies(World_Area* area)$/;"	f
 world_area_update	src/rituals_world.cpp	/^void world_area_update(World_Area* area, World* world)$/;"	f
 world_area_walk_entities	src/rituals_world.cpp	/^void world_area_walk_entities(World_Area* area, World* world)$/;"	f
 world_arena	src/rituals_game.cpp	/^	Memory_Arena* world_arena;$/;"	m	struct:Game_Main	file:
+world_delete_self	src/rituals_world.cpp	/^void world_delete_self(World* world)$/;"	f
 world_load_area	src/rituals_world.cpp	/^World_Area* world_load_area(World* world, isize id, Memory_Arena* arena)$/;"	f
 world_start_in_area	src/rituals_world.cpp	/^void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* arena)$/;"	f
 world_switch_current_area	src/rituals_world.cpp	/^void world_switch_current_area(World* world, Area_Link link, Memory_Arena* arena)$/;"	f
 world_xy	src/rituals_main.cpp	/^	Vec2i world_xy;$/;"	m	struct:Play_State	file:
 x	src/rituals_game.cpp	/^	uint64 x, y;$/;"	m	struct:Random	file:
 x	src/rituals_math.cpp	/^		int32 x, y;$/;"	m	struct:Vec2i::__anon3	file:
-x	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon9	file:
-x	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon4	file:
+x	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon10	file:
+x	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon5	file:
+x	src/rituals_math.cpp	/^		real x, y, z;$/;"	m	struct:Vec3::__anon4	file:
 x	src/rituals_math.cpp	/^		real x, y;$/;"	m	struct:Vec2::__anon2	file:
 x	src/rituals_math.cpp	/^	int32 x, y, w, h;$/;"	m	struct:Rect2i	file:
-x	src/rituals_math.cpp	/^	real x, y, z;$/;"	m	struct:Vec3	file:
 x	src/thirdparty/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon6::__anon7
 y	src/rituals_game.cpp	/^	uint64 x, y;$/;"	m	struct:Random	file:
 y	src/rituals_math.cpp	/^		int32 x, y;$/;"	m	struct:Vec2i::__anon3	file:
-y	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon9	file:
-y	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon4	file:
+y	src/rituals_math.cpp	/^		real x, y, w, h;$/;"	m	struct:Rect2::__anon10	file:
+y	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon5	file:
+y	src/rituals_math.cpp	/^		real x, y, z;$/;"	m	struct:Vec3::__anon4	file:
 y	src/rituals_math.cpp	/^		real x, y;$/;"	m	struct:Vec2::__anon2	file:
 y	src/rituals_math.cpp	/^	int32 x, y, w, h;$/;"	m	struct:Rect2i	file:
-y	src/rituals_math.cpp	/^	real x, y, z;$/;"	m	struct:Vec3	file:
 y	src/thirdparty/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon6::__anon7
 ypos	src/thirdparty/stb_image.h	/^   int ypos;    \/\/ which pre-expansion row we're on$/;"	m	struct:__anon8
 ystep	src/thirdparty/stb_image.h	/^   int ystep;   \/\/ how far through vertical expansion we are$/;"	m	struct:__anon8
 z	src/rituals_gui.cpp	/^	int32 z;$/;"	m	struct:Gui_Window_Handle	file:
-z	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon4	file:
-z	src/rituals_math.cpp	/^	real x, y, z;$/;"	m	struct:Vec3	file:
+z	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon5	file:
+z	src/rituals_math.cpp	/^		real x, y, z;$/;"	m	struct:Vec3::__anon4	file:
 z_distance	src/thirdparty/stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon10
 z_expandable	src/thirdparty/stb_image.h	/^   int   z_expandable;$/;"	m	struct:__anon10
 z_length	src/thirdparty/stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon10

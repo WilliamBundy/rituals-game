@@ -123,6 +123,58 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	return e;
 }
 
+void rituals_on_activate_entity(Entity* entity, World_Area* area, World* world)
+{
+
+}
+
+void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)
+{
+	if(e->kind == EntityKind_Bullet) {
+		emitter_spawn(&world->emitter, e->sprite.position + v2(0, 16), 16, 4, v2(0, 100), v2(0.5f, 1.5f), v2(-Math_Pi, Math_Pi));
+	}
+}
+
+void rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world)
+{
+	for(isize i = 0; i < count; ++i) {
+		Entity* e = entities + i;
+		if(e->kind == EntityKind_Player) {
+			auto p = &e->userdata.player;
+			if(p->heal_timer > 0) {
+				p->heal_timer -= TimeStep;
+			}
+
+			int32 last_health = e->health;
+			int32 ivl = p->heal_to_interval;
+			if(last_health % ivl != 0)  {
+				if(p->heal_timer <= 0) {
+					int32 new_health = e->health + p->heal_rate;
+					if(((new_health % ivl) < (last_health % ivl))) {
+						while(new_health % ivl != 0) {
+							new_health--;
+						}
+					}
+					e->health = new_health;
+				}
+			}
+
+			if(e->health <= 0) {
+				world_delete_self(world);
+				play_state_end(Game_State_Menu);
+				return;
+			}
+		}
+	}
+}
+
+void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world)
+{
+	for(isize i = 0; i < count; ++i) {
+		Entity* e = entities + i;
+	}
+}
+
 #define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
 #define _scancode(s1) ((Input->scancodes[SDL_SCANCODE_##s1]))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
@@ -269,6 +321,30 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				s->texture = rect2(0  + frame * 32, 0, 32, 32);
 			}
 		}
+
+		Sim_Body* b = e->body;
+		if (b != NULL) {
+			e->sprite.position = b->shape.center;
+			e->sprite.position.y += b->shape.hh;
+			if(Has_Flag(e->flags, EntityFlag_Tail)) {
+				Vec2 v = b->velocity / 30.0f; 
+				Sprite s = e->sprite;
+				for(isize i = 0; i < 16; ++i) {
+					render_add(&s);
+					s.position -= v / 16;
+					s.color = Color_White;
+					s.color.w = lerp(1.0f, 0.0f, i/16.0);
+					s.color.w *= s.color.w;
+					s.sort_offset -= 10;
+				}
+			}
+			render_add(&e->sprite);
+		} else {
+			render_add(&e->sprite);
+		}
+#if 0
+		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
+#endif
 	}
 }
 void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)

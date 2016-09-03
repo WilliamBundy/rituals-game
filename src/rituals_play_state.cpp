@@ -43,6 +43,12 @@ void start_play_state(char* world_name_in)
 	}
 }
 
+void play_state_end(Game_State nextstate)
+{
+	init_play_state();
+	Game->state = nextstate;
+}
+
 void play_state_update()
 {
 	if(_scancode(ESCAPE) == State_Just_Pressed) {

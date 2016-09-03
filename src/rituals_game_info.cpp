@@ -90,18 +90,17 @@ struct Item_Info
 
 enum Entity_Event_Type
 {
-	EntityEvent_Sim = Flag(0),
+	EntityEvent_None = Flag(0),
 	EntityEvent_Walk = Flag(1),
 	EntityEvent_Interact = Flag(2),
 	EntityEvent_Animate = Flag(3),
-	EntityEvent_Create = Flag(4),
-	EntityEvent_FrameTick = Flag(5),
-	EntityEvent_SlowTick = Flag(6),
-	EntityEvent_Destroy = Flag(7),
-	EntityEvent_Activate = Flag(8),
+	EntityEvent_FrameTick = Flag(4),
+	EntityEvent_SlowTick = Flag(5),
+	EntityEvent_Destroy = Flag(6), // singular
+	EntityEvent_Activate = Flag(7), // singular
 	//Entity health_hitbox was hit by a attack_hitbox
-	EntityEvent_Hit = Flag(9),
-	EntityEvent_Contact = Flag(10),
+	EntityEvent_Hit = Flag(8),
+	EntityEvent_Contact = Flag(9),
 };	
 
 enum Rituals_Entity_Kinds
@@ -128,7 +127,6 @@ enum Rituals_Pickup_Kind
 	PickupKind_Item,
 	PickupKind_Health
 };
- 
 
 union Rituals_Entity_Userdata
 {

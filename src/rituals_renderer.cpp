@@ -16,7 +16,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * none of this would work.
  */
 
-
 enum Sprite_Anchor
 {
 	Anchor_Center = 0,
@@ -360,7 +359,7 @@ void render_draw(OpenGL_Renderer* r, Render_Group* group, Vec2 size, real scale)
 		group->texture_size.x,
 		group->texture_size.y);
 
-	glUniform1f(r->u_night_amount, 1.0f - group->night_amount);
+	glUniform1f(r->u_night_amount, group->night_amount);
 	glUniform1f(r->u_night_cutoff, group->night_cutoff);
 
 	Vec4 screen = v4(
@@ -583,3 +582,120 @@ void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 t
 {
 	render_box_outline_primitive(CurrentGroup, center, size, color, thickness);
 }
+
+struct Particle
+{
+	Vec3 position;
+	Vec3 velocity;
+	real scale;
+	real angle;
+	real angular_vel;
+	int32 frame;
+	int32 time;
+	int32 total_time;
+};
+
+void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real anglev, int32 frame, int32 time)
+{
+	p->position = pos;
+	p->velocity = vel;
+	p->scale = scale;
+	p->angle = angle;
+	p->angular_vel = anglev;
+	p->frame = frame;
+	p->time = time;
+	p->total_time = time;
+}
+
+struct Emitter
+{
+	Particle* particles;
+	isize particles_count, particles_capacity;
+
+	Rect2 texture;
+	Vec2 particle_size;
+	Vec4 color;
+
+	Vec3 acceleration;
+
+	int32 min_time;
+	int32 max_time;
+};
+
+void init_emitter(Emitter* e, isize max_particles, Rect2 texture, Vec4 color, Vec2 size, int32 min_time, int32 max_time, Memory_Arena* arena)
+{
+	e->particles_count = 0; 
+	e->particles_capacity = max_particles;
+	e->particles = arena_push_array(arena, Particle, max_particles);
+	e->texture = texture;
+	e->particle_size = size;
+	e->color = color;
+
+	e->acceleration = v3(0, 0, -400);
+	e->min_time = min_time;
+	e->max_time = max_time;
+}
+
+void emitter_spawn(Emitter* e, Vec2 pos, real height_off_ground, isize count, Vec2 impulse_mag_range, Vec2 scale_range, Vec2 impulse_angle_range)
+{
+	for(isize i = 0; i < count; ++i) {
+		isize next_particle = e->particles_count++;
+		next_particle %= e->particles_capacity;
+		Particle* p = e->particles + next_particle;
+		real mag = rand_range(&Game->r, impulse_mag_range.x, impulse_mag_range.y);
+		Vec2 impulse = v2_from_angle(rand_range(&Game->r, impulse_angle_range.x, impulse_angle_range.y)) * mag;
+		init_particle(p, v3(pos, height_off_ground), 
+				v3(impulse, rand_range(&Game->r, -height_off_ground/4, height_off_ground/4)), 
+				rand_range(&Game->r, scale_range.x, scale_range.y), 
+				0.0f,
+				10 * ((mag - impulse_mag_range.x) / (impulse_mag_range.y - impulse_mag_range.x)) - 0.5f * Math_Tau,
+				0, 
+				rand_range_int(&Game->r, e->min_time, e->max_time));
+	}
+}
+
+void emitter_render(Emitter* e, real dt)
+{
+	isize count = e->particles_count;
+	if(count > e->particles_capacity) {
+		count = e->particles_capacity;
+	}
+	for(isize i = 0; i < count; ++i) {
+		Particle* p = e->particles + i;
+		if(p->time <= 0) continue;
+		real tscale = (real)p->time / (real)p->total_time;
+		tscale /= 2;
+		tscale += 0.5f;
+		p->time--;
+		Sprite s;
+		init_sprite(&s);
+		Vec3 prev_vel = p->velocity;
+		p->velocity += e->acceleration * dt;
+		p->position += (p->velocity + prev_vel) * 0.5f * dt;
+		p->velocity *= 0.99f;
+		if(p->position.z < 0) {
+			p->position.z = 0;
+			//the .88 is ground restitution
+			p->velocity.z *= -1 * 0.5f;
+			p->velocity += 50 * v3(
+					rand_range(&Game->r, -1, 1),
+					rand_range(&Game->r, -1, 1), 0);
+			p->velocity.x *= rand_range(&Game->r, 0.4f, 0.6f); //skid
+			p->velocity.y *= rand_range(&Game->r, 0.4f, 0.6f);//skid
+		}
+		p->angle += p->angular_vel * dt;
+		s.position = v2(p->position.x, p->position.y - p->position.z);
+		s.sort_offset = p->position.z;
+		s.angle = p->angle;
+		s.size = e->particle_size * p->scale * tscale;
+		s.texture = e->texture;
+		s.texture.x += s.texture.w * p->frame;
+		s.color = e->color;
+		render_add(&s);
+		s.position = v2(p->position.x, p->position.y);
+		s.color = v4(0, 0, 0, 0.3f);
+		s.sort_offset = -1;
+		render_add(&s);
+	}
+}
+
