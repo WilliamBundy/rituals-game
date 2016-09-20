@@ -273,6 +273,9 @@ static inline Vec2i v2i(int32 x, int32 y)
 		x, y
 	};
 }
+
+
+
 inline Vec2 v2_perpendicular(Vec2 v)
 {
 	return Vec2 {

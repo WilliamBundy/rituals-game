@@ -17,6 +17,8 @@ void init_play_state()
 	clear_arena(Game->play_arena);
 	clear_arena(Game->world_arena);
 	play_state = arena_push_struct(Game->game_arena, Play_State);
+	play_state->delete_world_on_stop = false;
+	play_state->save_world_on_stop = true;
 	play_state->world = arena_push_struct(Game->world_arena, World);
 	play_state->running = true;
 }
@@ -43,14 +45,9 @@ void start_play_state(char* world_name_in)
 	}
 }
 
-void play_state_end(Game_State nextstate)
-{
-	init_play_state();
-	Game->state = nextstate;
-}
-
 void play_state_update()
 {
+	if(Game->state != Game_State_Play) return;
 	if(_scancode(ESCAPE) == State_Just_Pressed) {
 		play_state->running = !play_state->running;
 	}
@@ -78,6 +75,13 @@ void play_state_update()
 
 void play_state_stop()
 {
-	serialize_world(play_state->world);
+	printf("Stopping play state... \n");
+	if(play_state->save_world_on_stop) {
+		serialize_world(play_state->world);
+	}
+	if(play_state->delete_world_on_stop) {
+		world_delete_self(play_state->world);
+	}
+	init_play_state();
 }
 
