@@ -70,8 +70,94 @@ void init_body(Sim_Body* b)
 	b->group = 0;
 }
 
+#define SimGridCellSide (Tile_Size * 4.0f)
+struct Sim_Grid_Cell
+{
+	Sim_Body* body;
+	Sim_Grid_Cell* next;
+};
+
+struct Sim_Static_Grid
+{
+	Sim_Grid_Cell* cell_storage;
+	isize cell_storage_count, cell_storage_capacity;
+
+	Sim_Grid_Cell** cells;
+	isize cells_length;
+	Vec2i size;
+};
+
+void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, Memory_Arena* arena)
+{
+	grid->cell_storage = arena_push_array(arena, Sim_Grid_Cell, capacity);
+	grid->cell_storage_capacity = capacity;
+	grid->cell_storage_count = 0;
+
+	size.x += 1;
+	size.y += 1;
+
+	grid->cells = arena_push_array(arena, Sim_Grid_Cell*, size.x * size.y);
+	grid->size = size;
+	grid->cells_length = size.x * size.y;
+}
+
+Sim_Grid_Cell* get_next_grid_cell(Sim_Static_Grid* grid)
+{
+	if(grid->cell_storage_count >= grid->cell_storage_capacity) {
+		//Hacky, should allocate more in a free-list style thing?
+		Log_Error("Ran out of grid space");
+		grid->cell_storage_count = 0;
+	}
+	Sim_Grid_Cell* cell = grid->cell_storage + grid->cell_storage_count++;
+	cell->body = NULL;
+	cell->next = NULL;
+	return cell;
+}
+
+
+void build_static_grid(Sim_Static_Grid* grid, Sim_Body* bodies, isize count)
+{
+	isize width = grid->size.x;
+	for(isize i = 0; i < count; ++i) {
+		Sim_Body* b = bodies + i;
+		AABB s = b->shape;
+		isize min_x, max_x, min_y, max_y;
+		min_x = AABB_x1(s) / SimGridCellSide;
+		min_y = AABB_y1(s) / SimGridCellSide;
+		max_x = AABB_x2(s) / SimGridCellSide;
+		max_y = AABB_y2(s) / SimGridCellSide;
+
+		if(min_x < 0) min_x = 0;
+		if(max_x >= grid->size.x) min_x = grid->size.x - 1;
+
+		if(min_y < 0) min_y = 0;
+		if(max_y >= grid->size.y) min_y = grid->size.y - 1;
+
+		for(isize y = min_y; y <= max_y; ++y) {
+			for(isize x = min_x; x <= max_x; ++x) {
+				isize index = x + y * width;
+				if(grid->cells[index] == NULL) {
+					grid->cells[index] = get_next_grid_cell(grid);			
+				}
+				Sim_Grid_Cell* c = grid->cells[index];
+				if(c->body != NULL) {
+					grid->cells[index] = get_next_grid_cell(grid);
+					grid->cells[index]->next = c;
+					c = grid->cells[index];
+				}
+				c->body = b;
+			}
+		}
+	}
+}
+
 struct Simulator
 {
+	Sim_Body* static_bodies;
+	isize static_bodies_count, static_bodies_capacity;
+
+	Sim_Static_Grid* grid;
+
 	Sim_Body* bodies;
 	isize bodies_count, bodies_capacity, next_body_id;
 	Sim_Contact* contacts;
@@ -79,6 +165,19 @@ struct Simulator
 
 	isize sort_axis;
 };
+
+Sim_Body* sim_get_next_static_body(Simulator* sim)
+{
+	if(sim->bodies_count + 1 > sim->bodies_capacity) {
+		Log_Error("Ran out of bodies");
+		return NULL;
+	}
+
+	Sim_Body* e = sim->static_bodies + sim->static_bodies_count++;
+	init_body(e);
+
+	return e;
+}
 
 Sim_Body* sim_get_next_body(Simulator* sim)
 {
@@ -99,11 +198,17 @@ void init_simulator(Simulator* sim, isize cap, Memory_Arena* arena)
 {
 	sim->bodies_count = 0;
 	sim->bodies_capacity = cap;
+	sim->static_bodies_capacity = cap;
+	sim->static_bodies_count = 0;
 	sim->sort_axis = 0;
 	sim->next_body_id = 0;
+	sim->grid = arena_push_struct(arena, Sim_Static_Grid);
+	init_static_grid(sim->grid, v2i(WorldAreaTilemapWidth/4, WorldAreaTilemapHeight/4), 8192, arena);
 	sim->bodies = arena_push_array(arena, Sim_Body, cap);
+	sim->static_bodies = arena_push_array(arena, Sim_Body, cap);
 	sim->contacts_capacity = Max(512, cap / 16);
 	sim->contacts = arena_push_array(arena, Sim_Contact, sim->contacts_capacity);
+	
 }
 
 Sim_Body* sim_find_body(Simulator* sim, isize id)
@@ -143,6 +248,7 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define TimeStep (1.0f/60.0f)
 #define SimIter_i (8)
 #define SimIter ((real)SimIter_i)
+#define _collision_slop (0.8f)
 void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = true)
 {
 	if(capture_contacts)
@@ -167,6 +273,74 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 			}
 
 			//if(a->is_static) continue;
+			AABB s = a->shape;
+			isize min_x, max_x, min_y, max_y;
+			min_x = AABB_x1(s) / SimGridCellSide;
+			min_y = AABB_y1(s) / SimGridCellSide;
+			max_x = AABB_x2(s) / SimGridCellSide;
+			max_y = AABB_y2(s) / SimGridCellSide;
+
+			if(min_x < 0) min_x = 0;
+			if(max_x >= sim->grid->size.x) max_x = sim->grid->size.x - 1;
+
+			if(min_y < 0) min_y = 0;
+			if(max_y >= sim->grid->size.y) max_y = sim->grid->size.y - 1;
+
+			for(isize y = min_y; y <= max_y; ++y) {
+				for(isize x = min_x; x <= max_x; ++x) {
+					isize index = x + y * sim->grid->size.x;
+					Sim_Grid_Cell* c = sim->grid->cells[index];
+					if(c == NULL) continue;
+					
+					do {
+						b = c->body;
+						if(aabb_intersect(&a->shape, &b->shape)) {
+							Vec2 overlap;
+							aabb_overlap(&a->shape, &b->shape, &overlap);
+							real ovl_mag = sqrtf(v2_dot(overlap, overlap));
+							if (ovl_mag < 0.0001f) continue;
+							Vec2 normal = overlap * (1.0f / ovl_mag);
+
+							if(a->id == 0 || b->id  == 0) {
+								aabb_intersect(&a->shape, &b->shape);
+							}
+
+							if(capture_contacts && 
+									((times == 1) || 
+									 Has_Flag(a->flags, Body_Flag_Always_Contact) || 
+									 Has_Flag(b->flags, Body_Flag_Always_Contact))) {
+								Sim_Contact c;
+								c.a_id = a->id;
+								c.b_id = b->id;
+								c.overlap = overlap;
+								c.normal = normal;
+								c.mag = ovl_mag;
+								if(sim->contacts_count < sim->contacts_capacity) {
+									sim->contacts[sim->contacts_count++] = c;
+								}
+							}
+
+
+							if(Has_Flag(a->flags, Body_Flag_Sensor) ||
+									Has_Flag(b->flags, Body_Flag_Sensor)) {
+								continue;
+							}
+
+							a->shape.center -= overlap;
+							Vec2 relative_velocity = -a->velocity;
+							real velocity_on_normal = v2_dot(relative_velocity, normal);
+							if(velocity_on_normal > 0) continue;
+
+							real e = Min(a->restitution, b->restitution);
+							real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+							mag /= a->inv_mass + 0;
+							Vec2 impulse = mag * normal;
+							a->collision_vel -= a->inv_mass * impulse;
+						}
+
+					} while(c = c->next);
+				}
+			}
 
 			for(isize j = i + 1; j < sim->bodies_count; ++j) {
 				b = sim->bodies + j;
@@ -223,7 +397,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 					   Has_Flag(b->flags, Body_Flag_Sensor)) {
 							continue;
 					}
-					#define _collision_slop (0.8f)
 					if(a_is_static && !b_is_static) {
 						b->shape.center += overlap;
 						Vec2 relative_velocity = b->velocity;
@@ -404,7 +577,7 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	for(isize i = 0; i < rects_count; ++i) {
 		Rect2i* r = rects + i;
 		Tile_Info* first = _get_at(r->x, r->y);
-		Sim_Body* e = sim_get_next_body(sim);
+		Sim_Body* e = sim_get_next_static_body(sim);
 		e->shape.center.x = (r->x + r->w / 2.0f) * Tile_Size;//+ Half_TS;
 		e->shape.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
 		e->shape.hw = r->w * Half_TS;
@@ -415,6 +588,9 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 		e->group = first->body_group;
 		e->mask = first->body_mask;
 	}
+
+	build_static_grid(sim->grid, sim->static_bodies, sim->static_bodies_count);
+
 	end_temp_arena(Game->temp_arena);
 }
 

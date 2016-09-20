@@ -23,13 +23,38 @@ SET LIBS=SDL2.lib ^
 	opengl32.lib ^
 	Shlwapi.lib
 
-rem start python autogit.py
+start python autogit.py
 
 ctime -begin rituals.ctm
 if "%~1"=="" goto DEBUG_BUILD
+if "%~1"=="meta" goto META_BUILD
 if "%~1"=="release" goto RELEASE_BUILD
 if "%~1"=="debug" goto DEBUG_BUILD
 if "%~1"=="run" goto DEBUG_BUILD
+
+:META_BUILD
+set META_MAIN=src\metaprogram\metaprogram_main.cpp
+set META_OUT=metaprogram.exe
+set META_PDB=metaprogram.pdb
+
+cl ^
+	/Zi ^
+	/MTd ^
+	/W3 ^
+	/Gd ^
+	%DISABLED_WARNINGS% ^
+	%META_MAIN% ^
+	/EHsc ^
+	/Fe%META_OUT% ^
+	/Fd%META_PDB% ^
+	/D%DEBUG_DEF% ^
+	/DRITUALS_WINDOWS#1 ^
+	/link ^
+	/SUBSYSTEM:CONSOLE ^
+	/NOLOGO ^
+	/INCREMENTAL:NO
+goto END
+
 
 :DEBUG_BUILD
 echo Building a debug build with %DEBUG_DEF% defined

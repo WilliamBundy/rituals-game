@@ -28,6 +28,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *		- Improved primitive generation functions
  *			- Mostly name/argument/return standardization
  *		- Particle emitters
+ *			- TODO(will) initial implementation done
+ *			- Need to add some kind of Particle_Style struct to call spray with
+ *			- Tradeoff: storing stuff on the emitter v. per particle
+ *			- Emitter: harder to work with
+ *			- Particle: slower
  *		- Texture atlas stitching
  *			- able to combine pow2 squares into one big atlas
  *		- Release as lightweight spriting library
@@ -35,6 +40,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *  	- Static and dynamic friction
  *  	- Multithreading/SIMD body processing?
  *  	- Look at dynamic tree broadphase/fancier broadphase schemes
+ *  		- Use a grid system for positional lookups
+ *  		- Basically: linked list of bodies at x,y
  * 	- UI
  * 		- Improve responsiveness of things
  * 			- Newer elemnts need highlights
@@ -127,7 +134,12 @@ typedef float real32;
 typedef double real64;
 
 //TODO(will): use this as all floating point sizes
+#define RITUALS_USE_FLOAT32
+#ifdef RITUALS_USE_FLOAT32
 typedef real32 real;
+#else
+typedef real64 real;
+#endif
 
 typedef ptrdiff_t isize;
 typedef size_t usize;
@@ -165,9 +177,9 @@ typedef size_t usize;
 //local imports
 #include "rituals_math.cpp"
 #include "rituals_game.cpp"
+void switch_state(Game_State newstate);
 
 #include "rituals_renderer.cpp"
-//#include "wtb_sprite_renderer.h"
 #include "rituals_gui.cpp"
 
 typedef struct World World;
@@ -180,6 +192,8 @@ struct Play_State
 	bool running;
 
 	Vec2i world_xy;
+	bool delete_world_on_stop;
+	bool save_world_on_stop;
 };
 Play_State* play_state;
 
@@ -212,7 +226,6 @@ Menu_State* menu_state;
 
 #include "rituals_serialization.cpp"
 
-
 void init_menu_state()
 {	
 	menu_state = arena_push_struct(Game->game_arena, Menu_State);
@@ -222,6 +235,36 @@ void init_menu_state()
 	menu_state->save_dir_len = snprintf(menu_state->save_dir, FilePathMaxLength, "%ssave", Game->base_path);
 	check_dir(menu_state->save_dir);
 	tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+}
+
+void stop_state()
+{
+	switch(Game->state) {
+		case Game_State_None:
+			break;
+		case Game_State_Menu:
+			break;
+		case Game_State_Play:
+			//TODO(will) write stop function
+			play_state_stop();
+			break;
+		default:
+			break;
+	}
+	Game->state = Game_State_None;
+}
+
+void start_state()
+{
+
+}
+
+void switch_state(Game_State newstate)
+{
+	stop_state();
+	Game->state = newstate;
+	start_state();
+
 }
 
 
@@ -351,21 +394,6 @@ void update()
 	}
 }
 
-void stop()
-{
-	switch(Game->state) {
-		case Game_State_None:
-			break;
-		case Game_State_Menu:
-			break;
-		case Game_State_Play:
-			//TODO(will) write stop function
-			play_state_stop();
-			break;
-		default:
-			break;
-	}
-}
 void load_assets()
 {
 	isize w, h;
@@ -462,7 +490,15 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+#if 1
 	int ret = SDL_GL_SetSwapInterval(-1);
+	if(ret == -1) {
+		ret = SDL_GL_SetSwapInterval(1);
+		if(ret == -1) {
+			Log_Error("Could not get Vsync");
+		}
+	}
+#endif 
 
 	{
 #define _check_gl_attribute(attr, val) int _##attr##_val; \
@@ -590,8 +626,9 @@ int main(int argc, char** argv)
 			//TODO(will) handle text input
 			switch(event.type) {
 				case SDL_QUIT:
-					stop();
+					stop_state();
 					running = false;
+					return 0;
 					break;
 				case SDL_WINDOWEVENT:
 					update_screen();
@@ -664,7 +701,10 @@ int main(int argc, char** argv)
 
 		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-		//if(frame_ticks > 18) printf("Slow frame! %d\n", frame_ticks);
+		//60hz lock?
+		if(frame_ticks < 16) {
+			SDL_Delay(16 - frame_ticks);
+		}
 	}
 
 	SDL_Quit();

@@ -30,6 +30,7 @@ struct World
 	usize slowtick_timer;
 	usize slowtick_timer_interval;
 
+	Particle_Style base_style;
 	Emitter emitter;
 };
 
@@ -65,7 +66,25 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	p->heal_rate = 1;
 	p->heal_to_interval = 25;
 	p->heal_timer = 0;
-	init_emitter(&world->emitter, 8192, rect2(64, 0, 32, 32), v4(1, .9f, 0.0f, 1), v2(4, 4), 10, 60, arena);
+
+	world->base_style = make_particle_style(
+			rect2(64, 0, 32, 32),
+			v2(4, 4),
+			v4(1, 0.9f, 0, 1),
+			v3(0, 0, -600),
+			v2(0, 0), 
+			v2(-Math_Pi, Math_Pi),
+			v2(0, 0),
+			v2(0.5f, 1),
+			v2i(0, 0),
+			0, 0,
+			v2i(10, 60),
+			true,
+			0.5f, 
+			v2(0.4f, 0.6f),
+			50
+			);
+	init_emitter(&world->emitter, 8192, arena);
 }
 
 
@@ -227,6 +246,7 @@ void world_start_in_area(World* world, World_Area_Stub* area, Memory_Arena* aren
 	world->current_area = new_area;
 }
 
+int recursively_delete_folder(char* path, bool append_base_path);
 void world_delete_self(World* world)
 {
 	char world_path[FilePathMaxLength];
@@ -281,7 +301,7 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world);
 void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world);
 
-void rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world);
+bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world);
 void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world);
 
 void rituals_on_destroy_entity(Entity* entity, World_Area* area, World* world);
@@ -297,9 +317,9 @@ void world_area_animate_entities(World_Area* area, World* world)
 	rituals_animate_entities(area->entities, area->entities_count, area, world);
 }
 
-void world_area_frametick_entities(World_Area* area, World* world)
+bool world_area_frametick_entities(World_Area* area, World* world)
 {
-	rituals_frametick_entities(area->entities, area->entities_count, area, world);
+	return rituals_frametick_entities(area->entities, area->entities_count, area, world);
 }
 
 void world_area_slowtick_entities(World_Area* area, World* world)
@@ -420,7 +440,8 @@ void world_area_update(World_Area* area, World* world)
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
 
-	world_area_frametick_entities(area, world);
+	bool exit = world_area_frametick_entities(area, world);
+	if(exit) return;
 	world_area_slowtick_entities(area, world);
 
 	world_area_walk_entities(area, world);
@@ -476,16 +497,16 @@ void world_area_update(World_Area* area, World* world)
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
-			emitter_spawn(&world->emitter, area->player->sprite.position, 16, 4, v2(200, 400), v2(0.5f, 1.5f), v2(a-0.2f, a+0.2f));
+			emitter_spawn(&world->emitter, 
+					v3(area->player->sprite.position, 16), 
+					v2(a-0.2f, a+0.2f),
+					4,
+					copy_particle_style(world->base_style, v2(200, 400), v2(-45, 45) * Math_DegToRad));
 			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
 
 			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));
 			area->player->body->velocity -= e->body->velocity;
 		}
-	}
-
-	if(Input->mouse[SDL_BUTTON_RIGHT] == State_Pressed) {
-		emitter_spawn(&world->emitter, Input->mouse_pos, 16, 32, v2(0, 100), v2(1, 2), v2(-25, 25));
 	}
 
 	world_area_build_hitboxes(area);

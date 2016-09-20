@@ -20,6 +20,8 @@ struct Tilemap
 	Tile_State* states;
 };
 
+#define WorldAreaTilemapWidth (64)
+#define WorldAreaTilemapHeight (64)
 
 void init_tilemap(Tilemap* tilemap, isize w, isize h, Memory_Arena* arena)
 {
@@ -293,7 +295,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 						s.size = v2(Tile_Size, Tile_Size);
 						s.texture = bottom->top_texture;
 						s.flags = Anchor_Bottom;
-						s.sort_offset = Tile_Size;
+						s.sort_offset = 4;
 						render_add(&s);
 					}
 				}

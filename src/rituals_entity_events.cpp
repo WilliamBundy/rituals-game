@@ -131,11 +131,15 @@ void rituals_on_activate_entity(Entity* entity, World_Area* area, World* world)
 void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)
 {
 	if(e->kind == EntityKind_Bullet) {
-		emitter_spawn(&world->emitter, e->sprite.position + v2(0, 16), 16, 4, v2(0, 100), v2(0.5f, 1.5f), v2(-Math_Pi, Math_Pi));
+			emitter_spawn(&world->emitter, 
+					v3(e->sprite.position, 16), 
+					v2(-Math_Pi, Math_Pi),
+					4,
+					copy_particle_style(world->base_style, v2(100, 200), v2(-45, 45) * Math_DegToRad));
 	}
 }
 
-void rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world)
+bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
@@ -160,12 +164,14 @@ void rituals_frametick_entities(Entity* entities, isize count, World_Area* area,
 			}
 
 			if(e->health <= 0) {
-				world_delete_self(world);
-				play_state_end(Game_State_Menu);
-				return;
+				play_state->delete_world_on_stop = true;
+				play_state->save_world_on_stop = false;
+				switch_state(Game_State_Menu);
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world)

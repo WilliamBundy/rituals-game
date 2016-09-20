@@ -1,0 +1,152 @@
+/* 
+Copyright (c) 2016 William Bundy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+#if RITUALS_WINDOWS == 1
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <windows.h>
+#include <Shlwapi.h>
+#include <malloc.h>
+#endif
+
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <math.h>
+#include <stdlib.h>
+#include <time.h>
+#include <ctype.h>
+#include <stddef.h>
+#include <errno.h>
+
+typedef int8_t int8;
+typedef int16_t int16;
+typedef int32_t int32;
+typedef int64_t int64;
+
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+
+typedef float real32;
+typedef double real64;
+
+typedef real32 real;
+
+typedef ptrdiff_t isize;
+typedef size_t usize;
+
+#define FilePathMaxLength (4096)
+
+#define PathSeparator ("\\")
+#define PathSeparatorChar ('\\')
+
+#define Min(x,y) ((x<y)?x:y)
+#define Max(x,y) ((x>y)?x:y)
+
+#define Flag(x) (1 << x)
+#define Has_Flag(x, y) (x & y)
+
+#define Kilobytes(b) (b * UINT64_C(1024))
+#define Megabytes(b) (Kilobytes(b) * UINT64_C(1024))
+#define Gigabytes(b) (Megabytes(b) * UINT64_C(1024))
+
+#define Log_Error(ii) printf("%s \n", (ii));
+
+#include "../rituals_memory.cpp"
+#include "../rituals_sort_macros.cpp"
+
+struct Metaprogram_Core
+{
+	Memory_Arena base_arena;
+	Memory_Arena work_arena;
+	Memory_Arena temp_arena;
+};
+Metaprogram_Core* Metaprogram;
+Memory_Arena* Base_Arena;
+Memory_Arena* Work_Arena;
+Memory_Arena* Temp_Arena;
+
+char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
+{
+	char* str = NULL;
+	FILE* fp = fopen(filename, "r");
+	if(fp != NULL) {
+		fseek(fp, 0L, SEEK_END);
+		isize size = ftell(fp);
+		rewind(fp);
+		str = arena_push_array(arena, char, size + 1);
+		fread(str, sizeof(char), size, fp);
+		str[size] = '\0';
+		fclose(fp);
+		if(size_out != NULL) {
+			*size_out = size;
+		}
+	} else {
+		printf("Could not open file %s", filename);
+	}
+	return str;
+}
+
+
+#include "metaprogram_parser.cpp"
+
+
+int main(int argc, char** argv)
+{
+	//Core + arena initialization
+	Memory_Arena base;
+	init_memory_arena(&base, Megabytes(1));
+	Metaprogram = arena_push_struct(&base, Metaprogram_Core);
+	Metaprogram->base_arena = base;
+	init_memory_arena(&Metaprogram->work_arena, Megabytes(256));
+	init_memory_arena(&Metaprogram->temp_arena, Megabytes(256));
+	Base_Arena = &Metaprogram->base_arena;
+	Work_Arena = &Metaprogram->work_arena;
+	Temp_Arena = &Metaprogram->temp_arena;
+
+	//argc = 2;
+	if(argc >= 2) {
+		//char* str = load_file("src/rituals_game.cpp", NULL, Work_Arena);
+		char* str = load_file(argv[1], NULL, Work_Arena);
+		//char* str = "#define Log_Error(e) printf(\"There was an error: %s \n\", e);";
+
+		Lexer_File f;
+		f.start = str;
+		f.head = str;
+		Token* head = arena_push_struct(Work_Arena, Token);
+		Token* start = head;
+		Token t;
+		while(lexer_get_token(NULL, &f, &t)) {
+			*head = t;
+			head->next = arena_push_struct(Work_Arena, Token);
+			head = head->next;
+		}
+
+		printf("\n\n");
+		head = start;
+		do {
+			printf("%.*s ", head->len, head->start);
+			switch(head->kind) {
+				case Token_Semicolon:
+				case Token_OpenBrace:
+				case Token_CloseBrace:
+				case Token_CompilerDirective:
+					printf("\n");
+					break;
+				default:
+					break;
+			}
+		} while(head = head->next);
+	}
+
+
+	return 0;
+}
