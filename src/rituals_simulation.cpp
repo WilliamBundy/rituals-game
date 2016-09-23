@@ -309,7 +309,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 		if(sim->contacts_count < sim->contacts_capacity) {
 			sim->contacts[sim->contacts_count++] = c;
 		}
-	//}
+	}
 
 
 	if(Has_Flag(a->flags, Body_Flag_Sensor) ||
