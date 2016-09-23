@@ -1143,8 +1143,8 @@ STBI_rgb	src/thirdparty/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon1
 STBI_rgb_alpha	src/thirdparty/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon1
 STB_IMAGE_IMPLEMENTATION	src/thirdparty.h	19;"	d
 SimGridCellSide	src/rituals_simulation.cpp	73;"	d	file:
-SimIter	src/rituals_simulation.cpp	300;"	d	file:
-SimIter_i	src/rituals_simulation.cpp	299;"	d	file:
+SimIter	src/rituals_simulation.cpp	251;"	d	file:
+SimIter_i	src/rituals_simulation.cpp	250;"	d	file:
 Sim_Body	src/rituals_simulation.cpp	/^struct Sim_Body$/;"	s	file:
 Sim_Body_Flags	src/rituals_simulation.cpp	/^enum Sim_Body_Flags$/;"	g	file:
 Sim_Contact	src/rituals_simulation.cpp	/^struct Sim_Contact$/;"	s	file:
@@ -1199,7 +1199,7 @@ Tile_Tree_Wall	src/rituals_game_registry.cpp	/^isize Tile_Tree_Wall = 0;$/;"	v
 Tile_Void	src/rituals_game_registry.cpp	/^isize Tile_Void = 0;$/;"	v
 Tile_Water	src/rituals_game_registry.cpp	/^isize Tile_Water = 0;$/;"	v
 Tilemap	src/rituals_tilemap.cpp	/^struct Tilemap$/;"	s	file:
-TimeStep	src/rituals_simulation.cpp	298;"	d	file:
+TimeStep	src/rituals_simulation.cpp	249;"	d	file:
 Time_Step	src/rituals_win32.cpp	225;"	d	file:
 Title_Font	src/rituals_game.cpp	/^Spritefont* Title_Font;$/;"	v
 Token	src/metaprogram/metaprogram_parser.cpp	/^struct Token$/;"	s	file:
@@ -1296,7 +1296,7 @@ _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	184;"	d	file:
 _check_gl_attribute	src/rituals_main.cpp	504;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
-_collision_slop	src/rituals_simulation.cpp	301;"	d	file:
+_collision_slop	src/rituals_simulation.cpp	252;"	d	file:
 _color	src/rituals_gui.cpp	353;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _do_collide_bodies	src/rituals_simulation.cpp	/^bool _do_collide_bodies(Sim_Body* a, Sim_Body* b)$/;"	f
@@ -1329,7 +1329,7 @@ _rotate_left	src/rituals_random.cpp	/^static inline uint64 _rotate_left(const ui
 _s	src/thirdparty/tinydir.h	/^	struct _stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::_stat
 _s	src/thirdparty/tinydir.h	/^	struct stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::stat
 _scancode	src/rituals_entity_events.cpp	185;"	d	file:
-_separate_bodies	src/rituals_simulation.cpp	/^void _separate_bodies(Sim_Body* a, Sim_Body* b, Vec2 overlap, Vec2 normal)$/;"	f
+_separate_bodies	src/rituals_simulation.cpp	/^void _separate_bodies(Sim_Body* a, Sim_Body* b, Vec2 overlap, Vec2 normal, )$/;"	f
 _set_registry_arrays	src/rituals_game_registry.cpp	44;"	d	file:
 _splitmix64	src/rituals_random.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 _th	src/rituals_simulation.cpp	/^isize _tw, _th;$/;"	v
