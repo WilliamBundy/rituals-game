@@ -198,7 +198,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
 	}
 
-	for(isize i = 0; i < WorldAreaTilemapWidth/4; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
 		Vec2 pos;
 		do {
 			pos = v2(
@@ -421,7 +421,7 @@ void init_play_state();
 int recursively_delete_folder(char* path, bool append_base_path);
 void world_area_update(World_Area* area, World* world)
 {
-	game_set_scale(0.5f);
+	game_set_scale(0.25f);
 	game_calc_mouse_pos(area->offset - Game->size * 0.5f);
 	//Simulation timing
 	
