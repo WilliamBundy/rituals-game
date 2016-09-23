@@ -247,7 +247,6 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 					}
 					
 					
-					p->time = 0;
 				}
 			} while(c = c->next);
 		}
