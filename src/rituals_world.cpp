@@ -108,8 +108,6 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 {
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
-	//*player_entity = area->world->global_player_entity;
-	//*player = area->world->global_player_body;
 	area->world->global_player_entity = *player_entity;
 	area->world->global_player_body = *player;
 }

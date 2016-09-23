@@ -1587,7 +1587,7 @@ e	src/wtb_sprite_renderer.h	/^	Sprite e[4];$/;"	m	struct:Sprite4
 east	src/rituals_world_area.cpp	/^	Area_Link east;$/;"	m	struct:World_Area_Stub	file:
 eflags	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 emitter	src/rituals_world.cpp	/^	Emitter emitter;$/;"	m	struct:World	file:
-emitter_render	src/rituals_renderer.cpp	/^void emitter_render(Emitter* e, real dt)$/;"	f
+emitter_render	src/rituals_renderer.cpp	/^void emitter_render(Emitter* e, Simulator* sim, real dt)$/;"	f
 emitter_spawn	src/rituals_renderer.cpp	/^void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle_Style style) $/;"	f
 end_temp_arena	src/rituals_memory.cpp	/^void end_temp_arena(Memory_Arena* arena)$/;"	f
 enemy	src/rituals_game_info.cpp	/^	} enemy;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon3	file:
