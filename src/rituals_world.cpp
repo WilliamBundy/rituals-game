@@ -479,7 +479,7 @@ void world_area_update(World_Area* area, World* world)
 					v3(area->player->sprite.position, 16), 
 					v2(a-0.2f, a+0.2f),
 					32,
-					copy_particle_style(world->base_style, v2(200, 400), v2(-45, 45) * Math_DegToRad));
+					copy_particle_style(world->base_style, v2(200, 600), v2(-45, 45) * Math_DegToRad));
 		for(isize i = 5; i < 5; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
