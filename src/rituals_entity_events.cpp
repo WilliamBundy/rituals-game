@@ -349,10 +349,10 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 					s.sort_offset -= 10;
 				}
 			}
-			if(aabb_intersect(&b->shape, &screen);
+			if(aabb_intersect(&b->shape, &screen)
 			render_add(&e->sprite);
 		} else {
-			if(aabb_intersect(&b->shape, &screen);
+			if(aabb_intersect(&b->shape, &screen)
 			render_add(&e->sprite);
 		}
 #if 0
