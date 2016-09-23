@@ -473,7 +473,12 @@ void world_area_update(World_Area* area, World* world)
 	world_area_render(area, world);
 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
-		for(isize i = 0; i < 5; ++i) {
+			emitter_spawn(&world->emitter, 
+					v3(area->player->sprite.position, 16), 
+					v2(a-0.2f, a+0.2f),
+					32,
+					copy_particle_style(world->base_style, v2(200, 400), v2(-45, 45) * Math_DegToRad));
+		for(isize i = 5; i < 5; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
 			e->sprite = create_box_primitive(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.25f, 0, 1));
