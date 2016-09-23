@@ -254,7 +254,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		s.color = style.color;
 		render_add(&s);
 		s.position = v2(p->position.x, p->position.y);
-		s.color = v4(0, 0, 0, 0.3f) * p->color.w;
+		s.color = v4(0, 0, 0, 0.3f);
 		s.sort_offset = -1;
 		render_add(&s);
 	}
