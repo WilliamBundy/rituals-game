@@ -205,7 +205,7 @@ void init_simulator(Simulator* sim, isize cap, Memory_Arena* arena)
 	sim->sort_axis = 0;
 	sim->next_body_id = 0;
 	sim->grid = arena_push_struct(arena, Sim_Static_Grid);
-	init_static_grid(sim->grid, v2i(WorldAreaTilemapWidth/4, WorldAreaTilemapHeight/4), 8192, arena);
+	init_static_grid(sim->grid, v2i(WorldAreaTilemapWidth/4, WorldAreaTilemapHeight/4), cap ,arena);
 	sim->bodies = arena_push_array(arena, Sim_Body, cap);
 	sim->static_bodies = arena_push_array(arena, Sim_Body, cap);
 	sim->contacts_capacity = Max(512, cap / 16);
