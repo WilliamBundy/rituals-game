@@ -392,52 +392,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 						b = c->body;
 						if(_do_collide_bodies(a, b, sim, false)) 
 							_separate_bodies(a, b, capture_contacts, times, sim);
-#if 0
-						if(aabb_intersect(&a->shape, &b->shape)) {
-							Vec2 overlap;
-							aabb_overlap(&a->shape, &b->shape, &overlap);
-							real ovl_mag = sqrtf(v2_dot(overlap, overlap));
-							if (ovl_mag < 0.0001f) continue;
-							Vec2 normal = overlap * (1.0f / ovl_mag);
-
-							if(a->id == 0 || b->id  == 0) {
-								aabb_intersect(&a->shape, &b->shape);
-							}
-
-							if(capture_contacts && 
-									((times == 1) || 
-									 Has_Flag(a->flags, Body_Flag_Always_Contact) || 
-									 Has_Flag(b->flags, Body_Flag_Always_Contact))) {
-								Sim_Contact c;
-								c.a_id = a->id;
-								c.b_id = b->id;
-								c.overlap = overlap;
-								c.normal = normal;
-								c.mag = ovl_mag;
-								if(sim->contacts_count < sim->contacts_capacity) {
-									sim->contacts[sim->contacts_count++] = c;
-								}
-							}
-
-
-							if(Has_Flag(a->flags, Body_Flag_Sensor) ||
-									Has_Flag(b->flags, Body_Flag_Sensor)) {
-								continue;
-							}
-
-							a->shape.center -= overlap;
-							Vec2 relative_velocity = -a->velocity;
-							real velocity_on_normal = v2_dot(relative_velocity, normal);
-							if(velocity_on_normal > 0) continue;
-
-							real e = Min(a->restitution, b->restitution);
-							real mag = -1.0f * (1.0f + e) * velocity_on_normal;
-							mag /= a->inv_mass + 0;
-							Vec2 impulse = mag * normal;
-							a->collision_vel -= a->inv_mass * impulse;
-						}
-#endif
-
 					} while(c = c->next);
 				}
 			}
@@ -453,79 +407,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 
 				if(_do_collide_bodies(a, b, sim, true)) {
 					_separate_bodies(a, b, capture_contacts, times, sim);
-				}
-
-#if 0
-
-			
-				if(aabb_intersect(&a->shape, &b->shape)) {
-					Vec2 overlap;
-					aabb_overlap(&a->shape, &b->shape, &overlap);
-					real ovl_mag = sqrtf(v2_dot(overlap, overlap));
-					if (ovl_mag < 0.0001f) continue;
-					Vec2 normal = overlap * (1.0f / ovl_mag);
-
-					if(capture_contacts && 
-							((times == 1) || 
-							Has_Flag(a->flags, Body_Flag_Always_Contact) || 
-							Has_Flag(b->flags, Body_Flag_Always_Contact))) {
-						Sim_Contact c;
-						c.a_id = a->id;
-						c.b_id = b->id;
-						c.overlap = overlap;
-						c.normal = normal;
-						c.mag = ovl_mag;
-						if(sim->contacts_count < sim->contacts_capacity) {
-							sim->contacts[sim->contacts_count++] = c;
-						}
-					}
-
-
-					if(Has_Flag(a->flags, Body_Flag_Sensor) ||
-					   Has_Flag(b->flags, Body_Flag_Sensor)) {
-							continue;
-					}
-					if(a_is_static && !b_is_static) {
-						b->shape.center += overlap;
-						Vec2 relative_velocity = b->velocity;
-						real velocity_on_normal = v2_dot(relative_velocity, normal);
-						if(velocity_on_normal > 0) continue;
-
-						real e = Min(a->restitution, b->restitution);
-						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
-						mag /= b->inv_mass;
-						Vec2 impulse = mag * normal;
-						b->collision_vel += b->inv_mass * impulse;
-					} else if(!a_is_static && b_is_static) {
-						a->shape.center -= overlap;
-
-						Vec2 relative_velocity = -a->velocity;
-						real velocity_on_normal = v2_dot(relative_velocity, normal);
-						if(velocity_on_normal > 0) continue;
-
-						real e = Min(a->restitution, b->restitution);
-						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
-						mag /= a->inv_mass + 0;
-						Vec2 impulse = mag * normal;
-						a->collision_vel -= a->inv_mass * impulse;
-					} else {
-						Vec2 separation = Max(ovl_mag - _collision_slop, 0) 
-							* (1.0f / (a->inv_mass + b->inv_mass)) * 0.5f * normal;
-						a->shape.center -= a->inv_mass * separation;
-						b->shape.center += b->inv_mass * separation;
-
-						Vec2 relative_velocity = b->velocity - a->velocity;
-						real velocity_on_normal = v2_dot(relative_velocity, normal);
-						if(velocity_on_normal > 0) continue;
-
-						real e = Min(a->restitution, b->restitution);
-						real mag = -1.0f * (1.0f + e) * velocity_on_normal;
-						mag /= a->inv_mass + b->inv_mass;
-						Vec2 impulse = mag * normal;
-						a->collision_vel -= a->inv_mass * impulse;
-						b->collision_vel += b->inv_mass * impulse;
-					}
-#endif
 				}
 			}
 		}
