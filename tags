@@ -1299,7 +1299,7 @@ _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	252;"	d	file:
 _color	src/rituals_gui.cpp	353;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
-_do_collide_bodies	src/rituals_simulation.cpp	/^bool _do_collide_bodies(Sim_Body* a, Sim_Body* b)$/;"	f
+_do_collide_bodies	src/rituals_simulation.cpp	/^int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b)$/;"	f
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _entity_get_id	src/rituals_world_area.cpp	74;"	d	file:
 _ep	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_ep;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
