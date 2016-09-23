@@ -545,10 +545,10 @@ int main(int argc, char** argv)
 		init_memory_arena(Game->meta_arena, isz(Memory_Arena) * 20);
 		Game->game_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
 		Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
-		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
-		Game->play_arena = new_memory_arena(Megabytes(2048), Game->meta_arena);
+		Game->temp_arena = new_memory_arena(Gigabytes(4), Game->meta_arena);
+		Game->play_arena = new_memory_arena(Gigabytes(4), Game->meta_arena);
 		Game->renderer_arena = new_memory_arena(Megabytes(256), Game->meta_arena);
-		Game->world_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
+		Game->world_arena = new_memory_arena(Megabytes(1024), Game->meta_arena);
 		Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 
 		Game->base_path = SDL_GetBasePath();
