@@ -473,6 +473,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_render(area, world);
 
 	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
+#if 0 
 			Vec2 dmouse =  Input->mouse_pos - area->player->sprite.position; 
 			real a = v2_to_angle(dmouse);
 			emitter_spawn(&world->emitter, 
@@ -480,6 +481,7 @@ void world_area_update(World_Area* area, World* world)
 					v2(a-0.2f, a+0.2f),
 					32,
 					copy_particle_style(world->base_style, v2(200, 600), v2(-45, 45) * Math_DegToRad));
+#endif
 		for(isize i = 0; i < 1; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
