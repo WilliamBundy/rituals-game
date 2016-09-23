@@ -20,8 +20,8 @@ struct Tilemap
 	Tile_State* states;
 };
 
-#define WorldAreaTilemapWidth (64)
-#define WorldAreaTilemapHeight (64)
+#define WorldAreaTilemapWidth (256)
+#define WorldAreaTilemapHeight (256)
 
 void init_tilemap(Tilemap* tilemap, isize w, isize h, Memory_Arena* arena)
 {
