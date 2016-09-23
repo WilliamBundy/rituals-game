@@ -284,10 +284,6 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
-	AABB screen = aabb(
-			area->offset.x,
-			area->offset.y, 
-			Game->size.x, Game->size.y);
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 
@@ -349,10 +345,8 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 					s.sort_offset -= 10;
 				}
 			}
-			if(aabb_intersect(&b->shape, &screen))
 			render_add(&e->sprite);
 		} else {
-			if(aabb_intersect(&b->shape, &screen)) 
 			render_add(&e->sprite);
 		}
 #if 0
