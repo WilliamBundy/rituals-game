@@ -235,7 +235,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 				AABB shape = b->shape;
 				AABB point = aabb(v2(p->position), 0, 0);
 				if(aabb_intersect(&shape, &point)) {
-					p->color = v4(0, 0, 0, 0);
+					p->time = 0;
 				}
 			} while(c = c->next);
 		}
