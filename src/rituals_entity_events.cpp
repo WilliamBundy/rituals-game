@@ -504,7 +504,12 @@ void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* ar
 		Sim_Contact* c = contacts + i;
 		Sim_Body* body_a = sim_find_body(sim, c->a_id);
 		if(body_a == NULL) continue;
-		Sim_Body* body_b = sim_find_body(sim, c->b_id);
+		Sim_Body* body_b;
+		if(c->b_id == -1) {
+			body_b = c->static_b;
+		} else {
+			body_b = sim_find_body(sim, c->b_id);
+		}
 		if(body_b == NULL) continue;
 
 		Entity* a = body_a->entity;
