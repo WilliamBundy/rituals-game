@@ -246,6 +246,8 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 						p->velocity.y *= -1;
 					}
 
+					p->velocity *= style.ground_restitution;
+
 					p->position.x = newpos.x;
 					p->position.y = newpos.y;
 					
