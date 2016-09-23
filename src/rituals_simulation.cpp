@@ -255,7 +255,7 @@ bool _do_collide_bodies(Sim_Body* a, Sim_Body* b)
 
 }
 
-void _separate_bodies(Sim_Body* a, Sim_Body* b)
+void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 times, Sim_Area* sim)
 {
 	uint32 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
 	uint32 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
