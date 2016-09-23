@@ -40,6 +40,7 @@ struct Sim_Contact
 {
 	isize a_id;
 	isize b_id;
+	Sim_Body* static_b;
 	Vec2 overlap;
 	real mag;
 	Vec2 normal;
@@ -175,6 +176,7 @@ Sim_Body* sim_get_next_static_body(Simulator* sim)
 
 	Sim_Body* e = sim->static_bodies + sim->static_bodies_count++;
 	init_body(e);
+	e->id = -1;
 
 	return e;
 }
@@ -288,15 +290,19 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 	if (ovl_mag < 0.0001f) return;
 	Vec2 normal = overlap * (1.0f / ovl_mag);
 
-#if 0
 	if(capture_contacts && 
-			((times > -1) || 
+			((times == 1) || 
 			 Has_Flag(a->flags, Body_Flag_Always_Contact) || 
 			 Has_Flag(b->flags, Body_Flag_Always_Contact))) {
-#endif
 		Sim_Contact c;
 		c.a_id = a->id;
 		c.b_id = b->id;
+		if(b_is_static) {
+			c.static_b = b;
+			c.b_id = -1;
+		} else {
+			c.static_b = NULL;
+		}
 		c.overlap = overlap;
 		c.normal = normal;
 		c.mag = ovl_mag;
