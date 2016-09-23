@@ -289,7 +289,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 	Vec2 normal = overlap * (1.0f / ovl_mag);
 
 	if(capture_contacts && 
-			((times == 1) || 
+			((times > -1) || 
 			 Has_Flag(a->flags, Body_Flag_Always_Contact) || 
 			 Has_Flag(b->flags, Body_Flag_Always_Contact))) {
 		Sim_Contact c;
