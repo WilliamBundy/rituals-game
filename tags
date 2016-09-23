@@ -1329,7 +1329,7 @@ _rotate_left	src/rituals_random.cpp	/^static inline uint64 _rotate_left(const ui
 _s	src/thirdparty/tinydir.h	/^	struct _stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::_stat
 _s	src/thirdparty/tinydir.h	/^	struct stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::stat
 _scancode	src/rituals_entity_events.cpp	185;"	d	file:
-_separate_bodies	src/rituals_simulation.cpp	/^void _separate_bodies(Sim_Body* a, Sim_Body* b)$/;"	f
+_separate_bodies	src/rituals_simulation.cpp	/^void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 times, Sim_Area* sim)$/;"	f
 _set_registry_arrays	src/rituals_game_registry.cpp	44;"	d	file:
 _splitmix64	src/rituals_random.cpp	/^static inline uint64 _splitmix64(uint64* x)$/;"	f	file:
 _th	src/rituals_simulation.cpp	/^isize _tw, _th;$/;"	v
