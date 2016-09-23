@@ -1,8 +1,8 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	331;"	d	file:
-AABB_x2	src/rituals_math.cpp	332;"	d	file:
-AABB_y1	src/rituals_math.cpp	333;"	d	file:
-AABB_y2	src/rituals_math.cpp	334;"	d	file:
+AABB_x1	src/rituals_math.cpp	336;"	d	file:
+AABB_x2	src/rituals_math.cpp	337;"	d	file:
+AABB_y1	src/rituals_math.cpp	338;"	d	file:
+AABB_y2	src/rituals_math.cpp	339;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	154;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
@@ -2905,6 +2905,7 @@ usize	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_typ
 usize	src/rituals_win32.cpp	/^typedef size_t usize;$/;"	t	file:
 v	src/thirdparty/stb_image.h	/^      int h,v;$/;"	m	struct:__anon6::__anon7
 v2	src/rituals_math.cpp	/^static inline Vec2 v2(Vec2i vi)$/;"	f	file:
+v2	src/rituals_math.cpp	/^static inline Vec2 v2(Vec3 v)$/;"	f	file:
 v2	src/rituals_math.cpp	/^static inline Vec2 v2(real x, real y)$/;"	f	file:
 v2_cross	src/rituals_math.cpp	/^inline real v2_cross(Vec2 a, Vec2 b)$/;"	f
 v2_dot	src/rituals_math.cpp	/^inline real v2_dot(Vec2 a, Vec2 b)$/;"	f

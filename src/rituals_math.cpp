@@ -262,6 +262,11 @@ static inline Vec2 v2(real x, real y)
 {
 	return Vec2{x, y};
 }
+static inline Vec2 v2(Vec3 v)
+{
+	return v2(v.x, v.y);
+}
+
 static inline Vec2 v2(Vec2i vi)
 {
 	return v2(vi.x, vi.y);
