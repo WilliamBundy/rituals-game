@@ -758,7 +758,7 @@ void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle
 	}
 }
 
-void emitter_render(Emitter* e, real dt)
+void emitter_render(Emitter* e, Simulator* sim, real dt)
 {
 	if(e == NULL || e->particles == NULL) return;
 
@@ -769,6 +769,8 @@ void emitter_render(Emitter* e, real dt)
 
 	Particle_Style style = {0};
 	style.id = -1;
+	Sim_Static_Grid* grid = sim->grid;
+	Vec2i gridsize = grid->size;
 	for(isize i = 0; i < count; ++i) {
 		Particle* p = e->particles + i;
 		if(p->time <= 0) continue;
@@ -786,6 +788,7 @@ void emitter_render(Emitter* e, real dt)
 		p->velocity += style.acceleration * dt;
 		p->position += (p->velocity + prev_vel) * 0.5f * dt;
 		p->velocity *= 0.99f;
+		
 		if(p->position.z < 0) {
 			p->position.z = 0;
 			p->velocity.z *= -1 * style.ground_restitution;
@@ -799,6 +802,27 @@ void emitter_render(Emitter* e, real dt)
 					style.skid_on_bounce_min,
 					style.skid_on_bounce_max);
 		}
+
+		isize gx,gy;
+		gx = p->position.x / SimGridCellSide;
+		gy = p->position.y / SimGridCellSide;
+		if(gx < 0) gx = 0;
+		else if(gx >= gridsize.x) gx = gridsize.x - 1;
+		if(gy < 0) gy = 0;
+		else if(gy >= gridsize.y) gy = gridsize.y - 1;
+		Sim_Grid_Cell* c = grid->cells[gx + gy * gridsize.x];
+		if(c != NULL) {
+			do {
+				Sim_Body* b = c->body;
+				AABB shape = b->shape;
+				AABB point = aabb(v2(p->position), 0, 0);
+			} while(c = c->next);
+		}
+
+
+
+
+
 		p->angle += p->angular_vel * dt;
 		s.position = v2(p->position.x, p->position.y - p->position.z);
 		s.sort_offset = p->position.z;
