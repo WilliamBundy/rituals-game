@@ -302,7 +302,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 		c.mag = ovl_mag;
 		if(sim->contacts_count < sim->contacts_capacity) {
 			sim->contacts[sim->contacts_count++] = c;
-	//	}
+		}
 	//}
 
 
