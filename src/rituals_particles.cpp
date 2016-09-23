@@ -237,8 +237,15 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 				if(aabb_intersect(&shape, &point)) {
 					Vec2 overlap;
 					aabb_overlap(&shape, &point, &overlap);
-					overlap *= 100;
-					printf("%.2f %.2f \n", overlap.x, overlap.y);
+					Vec2 newpos = v2(p->position);
+					newpos += overlap;
+
+					if(overlap.y == 0) {
+						p->velocity.x *= -1;
+					} else {
+						p->velocity.y *= -1;
+					}
+					
 					
 					p->time = 0;
 				}
