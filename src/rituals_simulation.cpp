@@ -255,7 +255,7 @@ bool _do_collide_bodies(Sim_Body* a, Sim_Body* b)
 
 }
 
-void _separate_bodies(Sim_Body* a, Sim_Body* b, Vec2 overlap, Vec2 normal, )
+void _separate_bodies(Sim_Body* a, Sim_Body* b, Vec2 overlap, Vec2 normal)
 {
 	uint32 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
 	uint32 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
