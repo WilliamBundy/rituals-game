@@ -263,7 +263,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 	Vec2 overlap;
 	aabb_overlap(&a->shape, &b->shape, &overlap);
 	real ovl_mag = sqrtf(v2_dot(overlap, overlap));
-	if (ovl_mag < 0.0001f) continue;
+	if (ovl_mag < 0.0001f) return;
 	Vec2 normal = overlap * (1.0f / ovl_mag);
 
 	if(capture_contacts && 
@@ -284,7 +284,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 
 	if(Has_Flag(a->flags, Body_Flag_Sensor) ||
 			Has_Flag(b->flags, Body_Flag_Sensor)) {
-		continue;
+		return;
 	}
 	if(a_is_static && !b_is_static) {
 		b->shape.center += overlap;
