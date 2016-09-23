@@ -198,7 +198,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		while (Registry->tiles[tilemap_get_at(&area->map, b->shape.center)].solid);
 	}
 
-	for(isize i = 0; i < WorldAreaTilemapWidth/4 ; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth ; ++i) {
 		Vec2 pos;
 		do {
 			pos = v2(
