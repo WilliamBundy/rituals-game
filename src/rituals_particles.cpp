@@ -235,14 +235,15 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 				AABB shape = b->shape;
 				AABB point = aabb(v2(p->position), 0, 0);
 				if(aabb_intersect(&shape, &point)) {
+					Vec2 overlap;
+					aabb_overlap(&shape, &point, &overlap);
+					overlap *= 100;
+					printf("%.2f %.2f \n", overlap.x, overlap.y);
+					
 					p->time = 0;
 				}
 			} while(c = c->next);
 		}
-
-
-
-
 
 		p->angle += p->angular_vel * dt;
 		s.position = v2(p->position.x, p->position.y - p->position.z);
