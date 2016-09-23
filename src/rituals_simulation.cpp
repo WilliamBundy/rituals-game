@@ -405,7 +405,9 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				b = sim->bodies + j;
 
 
-				if(_do_collide_bodies(a, b, sim, true)) {
+				int32 out = _do_collide_bodies(a, b, sim, true);
+				if(out == -1) break;
+				else if(out == 1) {
 					_separate_bodies(a, b, capture_contacts, times, sim);
 				}
 			}
