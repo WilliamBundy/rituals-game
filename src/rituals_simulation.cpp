@@ -252,12 +252,6 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define _collision_slop (0.8f)
 int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep)
 {
-	uint64 ma = a->mask & b->group;
-	uint64 mb = a->group & b->mask;
-	if(ma != 0 || mb != 0) {
-		return 0;		
-	}
-
 	if(do_sweep)
 	if(sim->sort_axis == 0) {
 		if(AABB_x1(b->shape) > AABB_x2(a->shape)) {
@@ -268,7 +262,18 @@ int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep
 			return -1;
 		}
 	}
-	return 1;
+
+	uint64 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
+	uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
+	if(a_is_static && b_is_static) return 0;
+
+	uint64 ma = a->mask & b->group;
+	uint64 mb = a->group & b->mask;
+	if(ma != 0 || mb != 0) {
+		return 0;		
+	}
+
+	return aabb_intersect(&a->shape, &b->shape);
 }
 
 
@@ -399,11 +404,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 			for(isize j = i + 1; j < sim->bodies_count; ++j) {
 				b = sim->bodies + j;
 
-				//if(!(a->mask == 0 && b->mask == 0)) {
-
-				uint64 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
-				uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
-				if(a_is_static && b_is_static) continue;
 
 				if(_do_collide_bodies(a, b, sim, true)) {
 					_separate_bodies(a, b, capture_contacts, times, sim);
