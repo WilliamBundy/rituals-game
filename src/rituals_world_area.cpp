@@ -90,7 +90,7 @@ enum World_Area_Biome
 
 //#define WorldAreaTilemapWidth (64)
 //#define WorldAreaTilemapHeight (64)
-#define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight * 4)
+#define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight)
 struct World_Area_Stub
 {
 	isize id;
