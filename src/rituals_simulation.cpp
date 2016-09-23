@@ -288,10 +288,12 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 	if (ovl_mag < 0.0001f) return;
 	Vec2 normal = overlap * (1.0f / ovl_mag);
 
+#if 0
 	if(capture_contacts && 
 			((times > -1) || 
 			 Has_Flag(a->flags, Body_Flag_Always_Contact) || 
 			 Has_Flag(b->flags, Body_Flag_Always_Contact))) {
+#endif
 		Sim_Contact c;
 		c.a_id = a->id;
 		c.b_id = b->id;
@@ -300,8 +302,8 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 		c.mag = ovl_mag;
 		if(sim->contacts_count < sim->contacts_capacity) {
 			sim->contacts[sim->contacts_count++] = c;
-		}
-	}
+	//	}
+	//}
 
 
 	if(Has_Flag(a->flags, Body_Flag_Sensor) ||
@@ -373,7 +375,6 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				center_sum2.e[q] += a->shape.center.e[q] * a->shape.center.e[q];
 			}
 
-			//if(a->is_static) continue;
 			AABB s = a->shape;
 			isize min_x, max_x, min_y, max_y;
 			min_x = AABB_x1(s) / SimGridCellSide;
