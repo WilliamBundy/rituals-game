@@ -245,6 +245,56 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 	return NULL;
 }
 
+
+bool _do_collide_bodies(Sim_Body* a, Sim_Body* b)
+{
+
+}
+
+void _separate_bodies(Sim_Body* a, Sim_Body* b, Vec2 overlap, Vec2 normal)
+{
+	if(a_is_static && !b_is_static) {
+		b->shape.center += overlap;
+		Vec2 relative_velocity = b->velocity;
+		real velocity_on_normal = v2_dot(relative_velocity, normal);
+		if(velocity_on_normal > 0) continue;
+
+		real e = Min(a->restitution, b->restitution);
+		real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+		mag /= b->inv_mass;
+		Vec2 impulse = mag * normal;
+		b->collision_vel += b->inv_mass * impulse;
+	} else if(!a_is_static && b_is_static) {
+		a->shape.center -= overlap;
+
+		Vec2 relative_velocity = -a->velocity;
+		real velocity_on_normal = v2_dot(relative_velocity, normal);
+		if(velocity_on_normal > 0) continue;
+
+		real e = Min(a->restitution, b->restitution);
+		real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+		mag /= a->inv_mass + 0;
+		Vec2 impulse = mag * normal;
+		a->collision_vel -= a->inv_mass * impulse;
+	} else {
+		Vec2 separation = Max(ovl_mag - _collision_slop, 0) 
+			* (1.0f / (a->inv_mass + b->inv_mass)) * 0.5f * normal;
+		a->shape.center -= a->inv_mass * separation;
+		b->shape.center += b->inv_mass * separation;
+
+		Vec2 relative_velocity = b->velocity - a->velocity;
+		real velocity_on_normal = v2_dot(relative_velocity, normal);
+		if(velocity_on_normal > 0) continue;
+
+		real e = Min(a->restitution, b->restitution);
+		real mag = -1.0f * (1.0f + e) * velocity_on_normal;
+		mag /= a->inv_mass + b->inv_mass;
+		Vec2 impulse = mag * normal;
+		a->collision_vel -= a->inv_mass * impulse;
+		b->collision_vel += b->inv_mass * impulse;
+	}
+}
+
 #define TimeStep (1.0f/60.0f)
 #define SimIter_i (8)
 #define SimIter ((real)SimIter_i)
