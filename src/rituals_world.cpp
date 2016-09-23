@@ -472,7 +472,7 @@ void world_area_update(World_Area* area, World* world)
 	world_area_interact(area, world);
 	world_area_render(area, world);
 
-	if(Input->mouse[SDL_BUTTON_LEFT] == State_Just_Pressed) {
+	if(Input->mouse[SDL_BUTTON_LEFT] == State_Pressed) {
 			Vec2 dmouse =  Input->mouse_pos - area->player->sprite.position; 
 			real a = v2_to_angle(dmouse);
 			emitter_spawn(&world->emitter, 
