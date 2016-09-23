@@ -379,7 +379,7 @@ void world_area_render(World_Area* area, World* world)
 
 	world_area_animate_entities(area, world);
 
-	emitter_render(&world->emitter, &area->sim TimeStep);
+	emitter_render(&world->emitter, &area->sim,  TimeStep);
 
 	render_sort(sprite_count_offset);
 	char buf[256];
