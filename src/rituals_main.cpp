@@ -546,7 +546,7 @@ int main(int argc, char** argv)
 		Game->game_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
 		Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
 		Game->temp_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
-		Game->play_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
+		Game->play_arena = new_memory_arena(Megabytes(2048), Game->meta_arena);
 		Game->renderer_arena = new_memory_arena(Megabytes(256), Game->meta_arena);
 		Game->world_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
 		Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
