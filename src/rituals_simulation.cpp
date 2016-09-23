@@ -390,6 +390,9 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 					
 					do {
 						b = c->body;
+						if(_do_collide_bodies(a, b, sim, false)) 
+							_separate_bodies(a, b, capture_contacts, times, sim);
+#if 0
 						if(aabb_intersect(&a->shape, &b->shape)) {
 							Vec2 overlap;
 							aabb_overlap(&a->shape, &b->shape, &overlap);
@@ -433,6 +436,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 							Vec2 impulse = mag * normal;
 							a->collision_vel -= a->inv_mass * impulse;
 						}
+#endif
 
 					} while(c = c->next);
 				}
@@ -446,6 +450,12 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				uint64 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
 				uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
 				if(a_is_static && b_is_static) continue;
+
+				if(_do_collide_bodies(a, b, sim, true)) {
+					_separate_bodies(a, b, capture_contacts, times, sim);
+				}
+
+#if 0
 
 			
 				if(aabb_intersect(&a->shape, &b->shape)) {
@@ -515,6 +525,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 						a->collision_vel -= a->inv_mass * impulse;
 						b->collision_vel += b->inv_mass * impulse;
 					}
+#endif
 				}
 			}
 		}
