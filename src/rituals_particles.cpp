@@ -234,6 +234,9 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 				Sim_Body* b = c->body;
 				AABB shape = b->shape;
 				AABB point = aabb(v2(p->position), 0, 0);
+				if(aabb_intersect(&shape, &point)) {
+					p->color = v4(0, 0, 0, 0);
+				}
 			} while(c = c->next);
 		}
 
@@ -251,7 +254,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		s.color = style.color;
 		render_add(&s);
 		s.position = v2(p->position.x, p->position.y);
-		s.color = v4(0, 0, 0, 0.3f);
+		s.color = v4(0, 0, 0, 0.3f) * p->color.w;
 		s.sort_offset = -1;
 		render_add(&s);
 	}
