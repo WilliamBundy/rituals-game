@@ -250,13 +250,15 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define SimIter_i (8)
 #define SimIter ((real)SimIter_i)
 #define _collision_slop (0.8f)
-int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b)
+int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep)
 {
 	uint64 ma = a->mask & b->group;
 	uint64 mb = a->group & b->mask;
 	if(ma != 0 || mb != 0) {
 		return 0;		
 	}
+
+	if(do_sweep)
 	if(sim->sort_axis == 0) {
 		if(AABB_x1(b->shape) > AABB_x2(a->shape)) {
 			return -1;
