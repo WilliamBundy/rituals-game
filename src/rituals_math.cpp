@@ -30,14 +30,6 @@ real lerp(real a, real b, real t)
 	return (1.0f - t) * a + t * b;
 }
 
-union Color
-{
-	struct {
-		uint8 r, g, b, a;
-	};
-	uint32 rgba;
-};
-
 union Vec2 
 {
 	struct {
@@ -236,32 +228,16 @@ static inline Vec4 v4(real x, real y, real z, real w)
 	};
 }
 
-Vec4 color_to_v4(Color* c)
+Vec4 hex_to_v4(uint32 hex) 
 {
 	Vec4 v;
-	v.x = clamp_01(c->r / 255.0f);
-	v.y = clamp_01(c->g / 255.0f);
-	v.z = clamp_01(c->b / 255.0f);
-	v.w = clamp_01(c->a / 255.0f);
+	v.x = (hex >> 24 & 0xFF) / 255.0f;
+	v.y = (hex >> 16 & 0xFF) / 255.0f;
+	v.z = (hex >> 8 & 0xFF) / 255.0f;
+	v.w = (hex & 0xFF) / 255.0f;
 	return v;
 }
 
-Vec4 hex_to_v4(uint32 hex) 
-{
-	Color c;
-	c.rgba = hex;
-	return color_to_v4(&c);
-}
-
-Color v4_to_color(Vec4* v)
-{
-	Color c = {0};
-	c.r = (uint8)(clamp_01(v->x) * 255);	
-	c.g = (uint8)(clamp_01(v->y) * 255);	
-	c.b = (uint8)(clamp_01(v->z) * 255);	
-	c.a = (uint8)(clamp_01(v->w) * 255);	
-	return c;
-}
 
 static inline Vec2 v2(real x, real y)
 {
