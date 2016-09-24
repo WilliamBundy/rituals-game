@@ -149,7 +149,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	generate_tilemap(&area->map, stub->seed);
 	area->id = stub->id;
 	//Spawn boxes
-	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = rect2(8*32, 16, 32, 48);
