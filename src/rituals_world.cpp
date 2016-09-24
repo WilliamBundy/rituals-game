@@ -545,8 +545,8 @@ void world_area_update(World_Area* area, World* world)
 					2,
 					style);
 
-			style.impulse_min = 50;
-			style.impulse_max = 100;
+			style.impulse_min = 0;
+			style.impulse_max = 300;
 			style.time_min = 15;
 			style.time_max = 45;
 			style.time_alpha = true;
