@@ -539,12 +539,6 @@ void world_area_update(World_Area* area, World* world)
 					4,
 					style);
 			
-			style.color = hex_to_v4(0xFFFFFFFF);
-			emitter_spawn(&world->emitter, 
-					v3(area->player->sprite.position, 16), 
-					angle_range,
-					4,
-					style);
 					
 			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
 
