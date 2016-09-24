@@ -537,9 +537,12 @@ void world_area_update(World_Area* area, World* world)
 					
 			angle_range = v2(a - 0.2f, a + 0.2f);
 
+			//Yellow
 			style.color = hex_to_v4(0xFFFF33FF);
-			style.impulse_min = 0;
-			style.impulse_max = 100;
+			style.impulse_min = 25;
+			style.impulse_max = 150;
+			style.time_min = 15;
+			style.time_max = 35;
 			style.acceleration.z = -300;
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
