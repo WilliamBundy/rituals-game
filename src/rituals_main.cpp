@@ -318,6 +318,7 @@ void main_menu_update()
 		tinydir_readfile_n(&menu_state->saves, &file, i);
 		if(file.is_dir && (file.name[0] != '.')) {
 			if(gui_add_button(v2(32, lasty), file.name, v2(144, 0))) {
+				recursively_delete_folder(file.path);
 				start_play_state(file.name);
 				Game->state = Game_State_Play;
 			}
