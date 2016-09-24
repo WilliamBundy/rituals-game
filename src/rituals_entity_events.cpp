@@ -366,6 +366,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 			shadow.sort_offset = -1;
 			shadow.color = v4(0, 0, 0, 0.3f);
 			shadow.flags = e->sprite.flags;
+			shadow.size *= e->shadow_scale;
 		} else {
 			shadow.size = e->sprite.size * 0.75f * e->shadow_scale;
 			shadow.size.y = shadow.size.x / 2;
