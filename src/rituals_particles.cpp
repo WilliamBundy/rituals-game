@@ -269,13 +269,13 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		s.texture.x += s.texture.w * p->frame;
 		s.color = style.color;
 		if(style.time_alpha) {
-			s.color *= tscale;
+			s.color.w *= tscale;
 		}
 		render_add(&s);
 		s.position = v2(p->position.x, p->position.y);
 		s.color = style.shadow_color;
 		if(style.time_alpha) {
-			s.color *= tscale;
+			s.color.w *= tscale;
 		}
 		s.sort_offset = -1;
 		render_add(&s);
