@@ -284,6 +284,11 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
+	Sprite shadow;
+	init_sprite(&shadow);
+	shadow.flags = Anchor_Center;
+	shadow.texture = rect2(96, 16, 32, 16);
+	shadow.color.w = 0.3f;
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 
@@ -346,8 +351,13 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				}
 			}
 		}
+		shadow.position = e->sprite.position;
 		e->sprite.position.y -= e->z;
 		render_add(&e->sprite);
+		
+		shadow.size = e->sprite.size;
+		shadow.size.y = shadow.size.x / 2;
+		render_add(&shadow);
 #if 0
 		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
 #endif
