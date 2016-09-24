@@ -58,6 +58,7 @@ struct Entity
 	real knockback;
 
 	Sprite sprite;
+	real z;
 	isize kind;
 
 	int32 counter;
@@ -163,6 +164,7 @@ void init_entity(Entity* entity)
 	entity->attack = 0;
 	entity->attack_interval = 0.5f;
 	entity->attack_timer = 0;
+	entity->z = 0;
 }
 
 Entity* world_area_get_next_entity(World_Area* area)

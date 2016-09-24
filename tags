@@ -1249,7 +1249,7 @@ Work_Arena	src/metaprogram/metaprogram_main.cpp	/^Memory_Arena* Work_Arena;$/;"	
 World	src/rituals_game_info.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_main.cpp	/^typedef struct World World;$/;"	t	typeref:struct:World	file:
 World	src/rituals_world.cpp	/^struct World$/;"	s	file:
-WorldAreaEntityCapacity	src/rituals_world_area.cpp	93;"	d	file:
+WorldAreaEntityCapacity	src/rituals_world_area.cpp	94;"	d	file:
 WorldAreaTilemapHeight	src/rituals_tilemap.cpp	24;"	d	file:
 WorldAreaTilemapWidth	src/rituals_tilemap.cpp	23;"	d	file:
 World_Area	src/rituals_game_info.cpp	/^typedef struct World_Area World_Area;$/;"	t	typeref:struct:World_Area	file:
@@ -1300,7 +1300,7 @@ _color	src/rituals_gui.cpp	353;"	d	file:
 _d	src/thirdparty/tinydir.h	/^	_TINYDIR_DIR *_d;$/;"	m	struct:tinydir_dir
 _do_collide_bodies	src/rituals_simulation.cpp	/^int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep)$/;"	f
 _e	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_e;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
-_entity_get_id	src/rituals_world_area.cpp	74;"	d	file:
+_entity_get_id	src/rituals_world_area.cpp	75;"	d	file:
 _ep	src/thirdparty/tinydir.h	/^	struct _tinydir_dirent *_ep;$/;"	m	struct:tinydir_dir	typeref:struct:tinydir_dir::_tinydir_dirent
 _f	src/thirdparty/tinydir.h	/^	WIN32_FIND_DATA _f;$/;"	m	struct:tinydir_dir
 _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_dir
@@ -2991,6 +2991,7 @@ ystep	src/thirdparty/stb_image.h	/^   int ystep;   \/\/ how far through vertical
 z	src/rituals_gui.cpp	/^	int32 z;$/;"	m	struct:Gui_Window_Handle	file:
 z	src/rituals_math.cpp	/^		real x, y, z, w;$/;"	m	struct:Vec4::__anon4	file:
 z	src/rituals_math.cpp	/^		real x, y, z;$/;"	m	struct:Vec3::__anon3	file:
+z	src/rituals_world_area.cpp	/^	real z;$/;"	m	struct:Entity	file:
 z_distance	src/thirdparty/stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon10
 z_expandable	src/thirdparty/stb_image.h	/^   int   z_expandable;$/;"	m	struct:__anon10
 z_length	src/thirdparty/stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon10
