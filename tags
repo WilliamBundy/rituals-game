@@ -63,7 +63,7 @@ Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	fi
 Direction_South	src/rituals_game.cpp	/^	Direction_South,$/;"	e	enum:Direction	file:
 Direction_West	src/rituals_game.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
 Emitter	src/rituals_particles.cpp	/^struct Emitter$/;"	s	file:
-EmitterStyleCapacity	src/rituals_particles.cpp	132;"	d	file:
+EmitterStyleCapacity	src/rituals_particles.cpp	133;"	d	file:
 EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime,$/;"	e	enum:Rituals_Enemy_Kind	file:
@@ -2833,6 +2833,7 @@ tiles	src/rituals_tilemap.cpp	/^	Tile* tiles;$/;"	m	struct:Tilemap	file:
 tiles_count	src/rituals_game_registry.cpp	/^	isize tiles_count;$/;"	m	struct:Game_Registry	file:
 tiles_hash	src/rituals_game_registry.cpp	/^	usize* tiles_hash;$/;"	m	struct:Game_Registry	file:
 time	src/rituals_particles.cpp	/^	int32 time;$/;"	m	struct:Particle	file:
+time_alpha	src/rituals_particles.cpp	/^	bool time_alpha;$/;"	m	struct:Particle_Style	file:
 time_max	src/rituals_particles.cpp	/^	int32 time_max;$/;"	m	struct:Particle_Style	file:
 time_min	src/rituals_particles.cpp	/^	int32 time_min;$/;"	m	struct:Particle_Style	file:
 time_scaling	src/rituals_particles.cpp	/^	bool time_scaling;$/;"	m	struct:Particle_Style	file:

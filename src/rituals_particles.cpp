@@ -54,6 +54,7 @@ struct Particle_Style
 	int32 time_max;
 
 	bool time_scaling;
+	bool time_alpha;
 	real ground_restitution;
 	real skid_on_bounce_min;
 	real skid_on_bounce_max;
@@ -264,9 +265,15 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		s.texture = style.texture;
 		s.texture.x += s.texture.w * p->frame;
 		s.color = style.color;
+		if(style.time_alpha) {
+			s.color *= tscale;
+		}
 		render_add(&s);
 		s.position = v2(p->position.x, p->position.y);
 		s.color = v4(0, 0, 0, 0.3f);
+		if(style.time_alpha) {
+			s.color *= tscale;
+		}
 		s.sort_offset = -1;
 		render_add(&s);
 	}
