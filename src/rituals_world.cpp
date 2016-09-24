@@ -516,7 +516,7 @@ void world_area_update(World_Area* area, World* world)
 					v2(0.5, 1),
 					v2i(0, 0),
 					0, 0,
-					v2i(2, 6),
+					v2i(5, 10),
 					true,
 					0.5f, 
 					v2(0.4f, 0.6f),
