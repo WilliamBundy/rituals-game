@@ -543,8 +543,8 @@ void world_area_update(World_Area* area, World* world)
 			style.impulse_max = 100;
 			style.time_min = 15;
 			style.time_max = 45;
-			style.size_min = 1.5f;
-			style.size_max = 2.5f; 
+			style.scale_min = 1.5f;
+			style.scale_max = 2.5f; 
 			style.color = hex_to_v4(0xCCCCCCAA);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
