@@ -158,6 +158,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 		b->inv_mass = 1.0f;
 		e->sprite.size = v2(32, 48);
 		e->sprite.flags = Anchor_Bottom;
+		e->shadow_scale = 1/0.75f;  
 		e->kind = EntityKind_Prop;
 		auto p = &e->userdata.prop;
 		p->contains = EntityKind_Pickup;
