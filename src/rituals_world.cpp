@@ -504,11 +504,29 @@ void world_area_update(World_Area* area, World* world)
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
+			
+			Particle_Style style = make_particle_style(
+					rect2(64, 0, 32, 32),
+					v2(4, 4),
+					hex_to_v4(0xDF6646FF),
+					v3(0, 0, 100),
+					v2(0, 0),
+					v2(-Math_Pi, Math_Pi),
+					v2(-Math_Pi, Math_Pi), 
+					v2(0.5, 1),
+					v2i(0, 0),
+					0, 0,
+					v2i(10, 20),
+					true,
+					0.5f, 
+					v2(0.4f, 0.6f),
+					50);
+
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					v2(a-0.2f, a+0.2f),
 					4,
-					copy_particle_style(world->base_style, v2(200, 400), v2(-45, 45) * Math_DegToRad));
+					style);
 			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
 
 			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));

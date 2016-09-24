@@ -61,13 +61,13 @@ struct Particle_Style
 };
 
 Particle_Style copy_particle_style(Particle_Style s,
-		Vec2 impulse_range, Vec2 angle_vel_range)
+		Vec2 impulse_range, Vec2i time_range)
 		 
 {
 	s.impulse_min = impulse_range.x;
 	s.impulse_max = impulse_range.y;
-	s.angle_vel_min = angle_vel_range.x;
-	s.angle_vel_max = angle_vel_range.y;
+	s.time_min = time_range.x;
+	s.time_max = time_range.y;
 	return s;
 }
 
