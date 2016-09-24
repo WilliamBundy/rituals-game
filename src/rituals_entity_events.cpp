@@ -135,7 +135,7 @@ void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)
 					v3(e->sprite.position, 16), 
 					v2(-Math_Pi, Math_Pi),
 					4,
-					copy_particle_style(world->base_style, v2(100, 200), v2(-45, 45) * Math_DegToRad));
+					copy_particle_style(world->base_style, v2(100, 200), v2i(20, 60));
 	}
 }
 
