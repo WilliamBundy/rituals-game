@@ -536,7 +536,7 @@ void world_area_update(World_Area* area, World* world)
 			style.color = hex_to_v4(0xFFFF33FF);
 			style.time_min = 5;
 			style.time_max = 15;
-			style.impulse_min = 200
+			style.impulse_min = 200;
 			style.impulse_max = 600;
 			style.acceleration.z = -600;
 			emitter_spawn(&world->emitter, 
