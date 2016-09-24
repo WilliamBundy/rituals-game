@@ -1,8 +1,8 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	336;"	d	file:
-AABB_x2	src/rituals_math.cpp	337;"	d	file:
-AABB_y1	src/rituals_math.cpp	338;"	d	file:
-AABB_y2	src/rituals_math.cpp	339;"	d	file:
+AABB_x1	src/rituals_math.cpp	342;"	d	file:
+AABB_x2	src/rituals_math.cpp	343;"	d	file:
+AABB_y1	src/rituals_math.cpp	344;"	d	file:
+AABB_y2	src/rituals_math.cpp	345;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	154;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
@@ -2037,6 +2037,7 @@ heal_to_interval	src/rituals_game_info.cpp	/^		int32 heal_to_interval;$/;"	m	str
 health	src/rituals_game_info.cpp	/^			} health;$/;"	m	union:Rituals_Entity_Userdata::__anon8::__anon9	typeref:struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon11	file:
 health	src/rituals_world_area.cpp	/^	int32 health;$/;"	m	struct:Entity	file:
 held_entity_id	src/rituals_game_info.cpp	/^		isize held_entity_id;$/;"	m	struct:Rituals_Entity_Userdata::__anon2	file:
+hex_to_v4	src/rituals_math.cpp	/^Vec4 hex_to_v4(uint32 hex) $/;"	f
 hext	src/rituals_math.cpp	/^				Vec2 hext;$/;"	m	struct:AABB::__anon6::__anon7::__anon9	file:
 hh	src/rituals_math.cpp	/^				real hw, hh;$/;"	m	struct:AABB::__anon6::__anon7::__anon8	file:
 hitbox	src/rituals_world_area.cpp	/^	Hitbox hitbox;$/;"	m	struct:Entity	file:

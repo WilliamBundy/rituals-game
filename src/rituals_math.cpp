@@ -236,8 +236,6 @@ static inline Vec4 v4(real x, real y, real z, real w)
 	};
 }
 
-
-
 Vec4 color_to_v4(Color* c)
 {
 	Vec4 v;
@@ -246,6 +244,14 @@ Vec4 color_to_v4(Color* c)
 	v.z = clamp_01(c->b / 255.0f);
 	v.w = clamp_01(c->a / 255.0f);
 	return v;
+}
+
+Vec4 hex_to_v4(uint32 hex) 
+{
+	Color c = Color{
+		hex
+	};
+	return color_to_v4(&c);
 }
 
 Color v4_to_color(Vec4* v)
