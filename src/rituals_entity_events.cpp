@@ -342,7 +342,9 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				Vec2 v = b->velocity / 30.0f; 
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
-					render_add(&s);
+					Sprite ss = s;
+					ss.position.y -= e->z;
+					render_add(&ss);
 					s.position -= v / 16;
 					s.color = Color_White;
 					s.color.w = lerp(1.0f, 0.0f, i/16.0);
@@ -353,8 +355,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		}
 		shadow.position = e->sprite.position;
 		Sprite s = e->sprite;
-
-		s.position.y = e->z;
+		s.position.y -= e->z;
 		s.sort_offset += e->z;
 		render_add(&s);
 		
