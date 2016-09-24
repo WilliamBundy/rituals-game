@@ -537,8 +537,8 @@ void world_area_update(World_Area* area, World* world)
 
 			style.color = hex_to_v4(0xFFFF33FF);
 			style.impulse_min = 200;
-			style.impulse_max = 400;
-			style.acceleration.z = -400;
+			style.impulse_max = 300;
+			style.acceleration.z = -300;
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					angle_range,
