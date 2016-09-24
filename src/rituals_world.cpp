@@ -508,7 +508,7 @@ void world_area_update(World_Area* area, World* world)
 			Particle_Style style = make_particle_style(
 					rect2(64, 0, 32, 32),
 					v2(4, 4),
-					hex_to_v4(0xDF6646FF),
+					hex_to_v4(0xFF8846FF),
 					v3(0, 0, 200),
 					v2(0, 0),
 					v2(-Math_Pi, Math_Pi),
@@ -532,7 +532,7 @@ void world_area_update(World_Area* area, World* world)
 					4,
 					style);
 					
-			style.color = hex_to_v4(0xFFC800FF);
+			style.color = hex_to_v4(0xFFFF33FF);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					angle_range,
