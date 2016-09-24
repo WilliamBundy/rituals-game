@@ -71,6 +71,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 			rect2(64, 0, 32, 32),
 			v2(4, 4),
 			v4(1, 0.9f, 0, 1),
+			v4(0, 0, 0, 0.3f),
 			v3(0, 0, -600),
 			v2(0, 0), 
 			v2(-Math_Pi, Math_Pi),
