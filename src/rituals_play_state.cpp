@@ -31,10 +31,13 @@ void start_play_state(char* world_name_in)
 	char* world_name = arena_push_array(Game->world_arena, char, wnl + 1);
 	memcpy(world_name, world_name_in, wnl+1);
 	FILE* fp = get_world_file(world_name, "rb");
-	if(false && fp != NULL) {
+#if 0
+	if(fp != NULL) {
 		deserialize_world(world, fp);
 		world->name = world_name;
-	} else {
+	} else
+#endif
+	{
 	
 		init_world(world, 4, 4, next_random_uint64(&Game->r), Game->world_arena);
 		generate_world(world_name, world);
