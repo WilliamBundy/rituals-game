@@ -509,6 +509,7 @@ void world_area_update(World_Area* area, World* world)
 					rect2(64, 0, 32, 32),
 					v2(4, 4),
 					hex_to_v4(0xFF8846FF),
+					v4(0, 0, 0, 0.1f),
 					v3(0, 0, 200),
 					v2(0, 0),
 					v2(-Math_Pi, Math_Pi),

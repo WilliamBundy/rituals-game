@@ -63,7 +63,7 @@ Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	fi
 Direction_South	src/rituals_game.cpp	/^	Direction_South,$/;"	e	enum:Direction	file:
 Direction_West	src/rituals_game.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
 Emitter	src/rituals_particles.cpp	/^struct Emitter$/;"	s	file:
-EmitterStyleCapacity	src/rituals_particles.cpp	133;"	d	file:
+EmitterStyleCapacity	src/rituals_particles.cpp	136;"	d	file:
 EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime,$/;"	e	enum:Rituals_Enemy_Kind	file:
@@ -2488,6 +2488,7 @@ serialize_world	src/rituals_serialization.cpp	/^void serialize_world(World* worl
 serialize_world_area_stub	src/rituals_serialization.cpp	/^void serialize_world_area_stub(World_Area_Stub* stub, FILE* fp)$/;"	f
 shader_program	src/rituals_renderer.cpp	/^	GLuint shader_program, vbo, vao;$/;"	m	struct:OpenGL_Renderer	file:
 shader_program	src/wtb_sprite_renderer.h	/^	GLuint shader_program, vbo, vao;$/;"	m	struct:OpenGL_Renderer
+shadow_color	src/rituals_particles.cpp	/^	Vec4 shadow_color;$/;"	m	struct:Particle_Style	file:
 shape	src/rituals_simulation.cpp	/^	AABB shape;$/;"	m	struct:Sim_Body	file:
 sim	src/rituals_win32.cpp	/^Simulator sim;$/;"	v
 sim	src/rituals_world_area.cpp	/^	Simulator sim;$/;"	m	struct:World_Area	file:
