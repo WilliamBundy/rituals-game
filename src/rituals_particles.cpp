@@ -30,6 +30,7 @@ struct Particle_Style
 	Rect2 texture;
 	Vec2 size;
 	Vec4 color;
+	Vec4 shadow_color;
 
 	Vec3 acceleration;
 
@@ -76,6 +77,7 @@ Particle_Style make_particle_style(
 		Rect2 texture, 
 		Vec2 size, 
 		Vec4 color, 
+		Vec4 shadow_color,
 		Vec3 acl, 
 		Vec2 impulse_range, 
 		Vec2 angle_range, 
@@ -94,6 +96,7 @@ Particle_Style make_particle_style(
 	s.texture = texture;
 	s.size = size;
 	s.color = color;
+	s.shadow_color = shadow_color;
 	s.acceleration = acl;
 	s.impulse_min = impulse_range.x;
 	s.impulse_max = impulse_range.y;
@@ -270,7 +273,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		}
 		render_add(&s);
 		s.position = v2(p->position.x, p->position.y);
-		s.color = v4(0, 0, 0, 0.3f);
+		s.color = style.shadow_color;
 		if(style.time_alpha) {
 			s.color *= tscale;
 		}
