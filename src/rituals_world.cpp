@@ -505,6 +505,9 @@ void world_area_update(World_Area* area, World* world)
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
+
+			real player_mag = v2_dot(area->player->body->velocity, area->player->body->velocity);
+			player_mag = sqrtf(player_mag);
 			
 			Particle_Style style = make_particle_style(
 					rect2(64, 0, 32, 32),
@@ -527,8 +530,8 @@ void world_area_update(World_Area* area, World* world)
 
 			style.time_scaling = false;
 			style.time_alpha = true;
-			style.impulse_min = 0;
-			style.impulse_max = 100;
+			style.impulse_min = 0 + player_mag;
+			style.impulse_max = 100 + player_mag;
 			Vec2 angle_range = v2(a - 0.5f, a + 0.5f);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
@@ -542,8 +545,8 @@ void world_area_update(World_Area* area, World* world)
 			style.time_alpha = false;
 			style.time_scaling = true;
 			style.color = hex_to_v4(0xFFDD33FF);
-			style.impulse_min = 25;
-			style.impulse_max = 150;
+			style.impulse_min = 25 + player_mag;
+			style.impulse_max = 150 + player_mag;
 			style.time_min = 15;
 			style.time_max = 35;
 			style.acceleration.z = -300;
@@ -553,8 +556,8 @@ void world_area_update(World_Area* area, World* world)
 					2,
 					style);
 
-			style.impulse_min = 0;
-			style.impulse_max = 100;
+			style.impulse_min = 0 + player_mag;
+			style.impulse_max = 100 + player_mag;
 			style.time_min = 15;
 			style.time_max = 45;
 			style.time_alpha = true;
