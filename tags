@@ -1294,7 +1294,7 @@ _body_get_min_y	src/rituals_simulation.cpp	50;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	54;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	184;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	509;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	510;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	254;"	d	file:
 _color	src/rituals_gui.cpp	353;"	d	file:
