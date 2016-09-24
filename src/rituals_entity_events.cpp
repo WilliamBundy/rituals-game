@@ -346,6 +346,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				}
 			}
 		}
+		e->sprite.y -= e->z;
 		render_add(&e->sprite);
 #if 0
 		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
