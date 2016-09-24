@@ -538,6 +538,23 @@ void world_area_update(World_Area* area, World* world)
 					angle_range,
 					2,
 					style);
+
+			style.impulse_min = 50;
+			style.impulse_max = 100;
+			style.time_min = 15;
+			style.time_max = 45;
+			style.color = hex_to_v4(0xAAAAAAFF);
+			emitter_spawn(&world->emitter, 
+					v3(area->player->sprite.position, 16), 
+					angle_range,
+					4,
+					style);
+			style.color = hex_to_v4(0x555555FF);
+			emitter_spawn(&world->emitter, 
+					v3(area->player->sprite.position, 16), 
+					angle_range,
+					4,
+					style);
 			
 					
 			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
