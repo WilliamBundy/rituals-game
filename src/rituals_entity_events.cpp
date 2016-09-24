@@ -373,6 +373,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 			shadow.flags = Anchor_Center;
 			shadow.texture = rect2(96, 16, 32, 16);
 			shadow.color.w = 0.3f;
+			shadow.sort_offset -= e->sprite.sort_offset;
 		}
 		render_add(&shadow);
 #if 0
