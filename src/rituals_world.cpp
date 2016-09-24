@@ -526,8 +526,8 @@ void world_area_update(World_Area* area, World* world)
 
 
 			style.time_alpha = false;
-			style.impulse_min = 100;
-			style.impulse_max = 200;
+			style.impulse_min = 0;
+			style.impulse_max = 100;
 			Vec2 angle_range = v2(a - 0.5f, a + 0.5f);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
@@ -548,7 +548,7 @@ void world_area_update(World_Area* area, World* world)
 					style);
 
 			style.impulse_min = 0;
-			style.impulse_max = 200;
+			style.impulse_max = 100;
 			style.time_min = 15;
 			style.time_max = 45;
 			style.time_alpha = true;
