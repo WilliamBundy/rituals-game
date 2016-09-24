@@ -31,7 +31,7 @@ void start_play_state(char* world_name_in)
 	char* world_name = arena_push_array(Game->world_arena, char, wnl + 1);
 	memcpy(world_name, world_name_in, wnl+1);
 	FILE* fp = get_world_file(world_name, "rb");
-	if(fp != NULL) {
+	if(false && fp != NULL) {
 		deserialize_world(world, fp);
 		world->name = world_name;
 	} else {

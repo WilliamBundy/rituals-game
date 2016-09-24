@@ -536,12 +536,14 @@ void world_area_update(World_Area* area, World* world)
 					v2(a-0.2f, a+0.2f),
 					4,
 					style);
+			/*
 			style.color = hex_to_v4(0xFFFFFFFF);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					v2(a-0.2f, a+0.2f),
 					4,
 					style);
+					*/
 			a += rand_range(&Game->r, -5, 5) * Math_DegToRad;
 
 			e->body->velocity = v2_from_angle(a) * (600 - rand_range(&Game->r, 0, 200));
