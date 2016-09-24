@@ -483,7 +483,7 @@ void world_area_update(World_Area* area, World* world)
 					32,
 					copy_particle_style(world->base_style, v2(200, 600), v2(-45, 45) * Math_DegToRad));
 #endif
-		Vec2 pv = area->player->walk_impulse;
+		Vec2 pv = area->player->walk_impulse * TimeStep;
 		printf("%.2f %.2f \n", pv.x, pv.y);
 		real player_mag = v2_dot(pv, pv);
 		player_mag = sqrtf(player_mag);
