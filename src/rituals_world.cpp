@@ -530,7 +530,7 @@ void world_area_update(World_Area* area, World* world)
 					v2(a-0.2f, a+0.2f),
 					4,
 					style);
-			style.color = hex_to_v4(0xFFF6B2FF);
+			style.color = hex_to_v4(0xFFC800FF);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					v2(a-0.2f, a+0.2f),
