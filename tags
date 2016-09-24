@@ -1,8 +1,8 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	342;"	d	file:
-AABB_x2	src/rituals_math.cpp	343;"	d	file:
-AABB_y1	src/rituals_math.cpp	344;"	d	file:
-AABB_y2	src/rituals_math.cpp	345;"	d	file:
+AABB_x1	src/rituals_math.cpp	341;"	d	file:
+AABB_x2	src/rituals_math.cpp	342;"	d	file:
+AABB_y1	src/rituals_math.cpp	343;"	d	file:
+AABB_y2	src/rituals_math.cpp	344;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	154;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
