@@ -248,9 +248,8 @@ Vec4 color_to_v4(Color* c)
 
 Vec4 hex_to_v4(uint32 hex) 
 {
-	Color c = Color{
-		hex
-	};
+	Color c;
+	c.rgba = hex;
 	return color_to_v4(&c);
 }
 
