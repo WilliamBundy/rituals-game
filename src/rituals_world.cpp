@@ -522,6 +522,9 @@ void world_area_update(World_Area* area, World* world)
 					v2(0.4f, 0.6f),
 					50);
 
+
+			style.impulse_min = 50;
+			style.impulse_max = 100;
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					v2(a-0.2f, a+0.2f),
