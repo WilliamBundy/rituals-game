@@ -236,6 +236,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		if(c != NULL) {
 			do {
 				Sim_Body* b = c->body;
+				if(b->group == 1) continue;
 				AABB shape = b->shape;
 				AABB point = aabb(v2(p->position), 0, 0);
 				if(aabb_intersect(&shape, &point)) {
