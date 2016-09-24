@@ -483,6 +483,9 @@ void world_area_update(World_Area* area, World* world)
 					32,
 					copy_particle_style(world->base_style, v2(200, 600), v2(-45, 45) * Math_DegToRad));
 #endif
+		Vec2 pv = area->player->body->velocity;
+		real player_mag = v2_dot(pv, pv);
+		player_mag = sqrtf(player_mag);
 		for(isize i = 0; i < 2; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
@@ -505,9 +508,6 @@ void world_area_update(World_Area* area, World* world)
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
-
-			real player_mag = v2_dot(area->player->body->velocity, area->player->body->velocity);
-			player_mag = sqrtf(player_mag);
 			
 			Particle_Style style = make_particle_style(
 					rect2(64, 0, 32, 32),
