@@ -83,7 +83,8 @@ EntityEvent_None	src/rituals_game_info.cpp	/^	EntityEvent_None = Flag(0),$/;"	e	
 EntityEvent_SlowTick	src/rituals_game_info.cpp	/^	EntityEvent_SlowTick = Flag(5),$/;"	e	enum:Entity_Event_Type	file:
 EntityEvent_Walk	src/rituals_game_info.cpp	/^	EntityEvent_Walk = Flag(1),$/;"	e	enum:Entity_Event_Type	file:
 EntityFlag_None	src/rituals_world_area.cpp	/^	EntityFlag_None,$/;"	e	enum:Entity_Flags	file:
-EntityFlag_Tail	src/rituals_world_area.cpp	/^	EntityFlag_Tail = Flag(1)$/;"	e	enum:Entity_Flags	file:
+EntityFlag_SelfShadow	src/rituals_world_area.cpp	/^	EntityFlag_SelfShadow = Flag(2)$/;"	e	enum:Entity_Flags	file:
+EntityFlag_Tail	src/rituals_world_area.cpp	/^	EntityFlag_Tail = Flag(1),$/;"	e	enum:Entity_Flags	file:
 EntityKind_Bullet	src/rituals_game_info.cpp	/^	EntityKind_Bullet,$/;"	e	enum:Rituals_Entity_Kinds	file:
 EntityKind_Enemy	src/rituals_game_info.cpp	/^	EntityKind_Enemy,$/;"	e	enum:Rituals_Entity_Kinds	file:
 EntityKind_Pickup	src/rituals_game_info.cpp	/^	EntityKind_Pickup,$/;"	e	enum:Rituals_Entity_Kinds	file:

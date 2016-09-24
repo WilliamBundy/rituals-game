@@ -39,7 +39,7 @@ GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
 enum Entity_Flags
 {
 	EntityFlag_None,
-	EntityFlag_Tail = Flag(1)
+	EntityFlag_Tail = Flag(1),
 	EntityFlag_SelfShadow = Flag(2)
 };
 
