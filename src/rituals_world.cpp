@@ -534,7 +534,7 @@ void world_area_update(World_Area* area, World* world)
 			style.impulse_max = 100 + player_mag;
 			Vec2 angle_range = v2(a - 0.5f, a + 0.5f);
 			emitter_spawn(&world->emitter, 
-					v3(area->player->sprite.position, 16), 
+					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
 					4,
 					style);
@@ -551,7 +551,7 @@ void world_area_update(World_Area* area, World* world)
 			style.time_max = 35;
 			style.acceleration.z = -300;
 			emitter_spawn(&world->emitter, 
-					v3(area->player->sprite.position, 16), 
+					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
 					2,
 					style);
@@ -567,13 +567,13 @@ void world_area_update(World_Area* area, World* world)
 			style.color = hex_to_v4(0xEEEEEE88);
 			style.acceleration.z = 400;
 			emitter_spawn(&world->emitter, 
-					v3(area->player->sprite.position, 16), 
+					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
 					1,
 					style);
 			style.color = hex_to_v4(0xFFFFFF33);
 			emitter_spawn(&world->emitter, 
-					v3(area->player->sprite.position, 16), 
+					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
 					4,
 					style);
