@@ -490,7 +490,7 @@ void world_area_update(World_Area* area, World* world)
 		for(isize i = 0; i < 5; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
-			e->sprite = create_box_primitive(area->player->sprite.position - v2(0, 16), v2(2, 2), v4(1, 0.25f, 0, 1));
+			e->sprite = create_box_primitive(area->player->sprite.position, v2(2, 2), v4(1, 0.25f, 0, 1));
 			e->sprite.position += v2(
 					rand_range(&Game->r, -3, 3),
 					rand_range(&Game->r, -3, 3));
@@ -506,6 +506,7 @@ void world_area_update(World_Area* area, World* world)
 			e->hitbox.mask = Flag(2);
 			e->hitbox.box.hext = e->body->shape.hext * 1.5f;;
 			e->flags = EntityFlag_Tail;
+			e->z = 16;
 
 			Vec2 dmouse =  Input->mouse_pos - e->sprite.position; 
 			real a = v2_to_angle(dmouse);
