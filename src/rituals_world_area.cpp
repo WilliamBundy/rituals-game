@@ -40,6 +40,7 @@ enum Entity_Flags
 {
 	EntityFlag_None,
 	EntityFlag_Tail = Flag(1)
+	EntityFlag_SelfShadow = Flag(2)
 };
 
 

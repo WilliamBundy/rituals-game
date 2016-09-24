@@ -360,8 +360,19 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		render_add(&s);
 		
 		shadow.sort_offset = -4;
-		shadow.size = e->sprite.size * 0.75f * e->shadow_scale;
-		shadow.size.y = shadow.size.x / 2;
+		if(Has_Flag(e->flags, EntityFlag_SameShadow)) {
+			shadow = s;
+			shadow.position = e->sprite.position;
+			shadow.sort_offset = -1;
+			shadow.colow = v4(0, 0, 0, 0.3f);
+			shadow.flags = e->sprite.flags;
+		} else {
+			shadow.size = e->sprite.size * 0.75f * e->shadow_scale;
+			shadow.size.y = shadow.size.x / 2;
+			shadow.flags = Anchor_Center;
+			shadow.texture = rect2(96, 16, 32, 16);
+			shadow.color.w = 0.3f;
+		}
 		render_add(&shadow);
 #if 0
 		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
