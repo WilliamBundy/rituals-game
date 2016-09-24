@@ -59,6 +59,7 @@ struct Entity
 
 	Sprite sprite;
 	real z;
+	real shadow_scale;
 	isize kind;
 
 	int32 counter;
@@ -165,6 +166,7 @@ void init_entity(Entity* entity)
 	entity->attack_interval = 0.5f;
 	entity->attack_timer = 0;
 	entity->z = 0;
+	entity->shadow_scale = 1.0f;
 }
 
 Entity* world_area_get_next_entity(World_Area* area)
