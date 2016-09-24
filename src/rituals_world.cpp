@@ -525,7 +525,8 @@ void world_area_update(World_Area* area, World* world)
 					50);
 
 
-			style.time_alpha = false;
+			style.time_scaling = false;
+			style.time_alpha = true;
 			style.impulse_min = 0;
 			style.impulse_max = 100;
 			Vec2 angle_range = v2(a - 0.5f, a + 0.5f);
@@ -538,6 +539,8 @@ void world_area_update(World_Area* area, World* world)
 			angle_range = v2(a - 0.2f, a + 0.2f);
 
 			//Yellow
+			style.time_alpha = false;
+			style.time_scaling = true;
 			style.color = hex_to_v4(0xFFDD33FF);
 			style.impulse_min = 25;
 			style.impulse_max = 150;
