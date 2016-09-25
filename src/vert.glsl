@@ -56,15 +56,31 @@ void main()
 	vertex_x += uint(4) * v_anchor;
 	vertex_y += uint(4) * v_anchor;
 
+	uint v_fliphoriz = v_flags & (1<<4);
+	uint v_flipvert = v_flags & (1<<5);
+
+
 	vec2 coords = vec2(
 		coords_arr[vertex_x],
 		coords_arr[vertex_y]
 	);
 
-	float[4] texcoords_arr = float[](
+	vec4 tex_rect = vec4(
 		v_texcoords.x, v_texcoords.y,
 		v_texcoords.x + v_texcoords.z, 
 		v_texcoords.y + v_texcoords.w
+	);
+
+	if(v_fliphoriz == 1) {
+		tex_rect = tex_rect.zyxw;
+	}
+	if(v_flipvert == 1) {
+		tex_rect = tex_rect.xwzy;
+	}
+
+	float[4] texcoords_arr = float[](
+			tex_rect.x, tex_rect.y,
+			tex_rect.z, tex_rect.w
 	);
 
 	f_texcoords = vec2(
