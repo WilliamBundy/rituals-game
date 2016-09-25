@@ -46,7 +46,7 @@ struct Animation
 void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
 {
 	a->id = -1;
-	a->frames = arena_push_array(arena, Frame, capacity);
+	a->frames = arena_push_array(arena, Animation_Frame, capacity);
 	a->frames_count = 0;
 	a->frames_capacity = 0;
 	a->fps = fps;
