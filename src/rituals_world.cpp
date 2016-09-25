@@ -34,6 +34,10 @@ struct World
 	Emitter emitter;
 };
 
+isize Anim_Standing;
+isize Anim_Walking;
+
+
 void init_world(World* world, isize width, isize height, usize seed, Memory_Arena* arena)
 {
 	world->seed = seed;
@@ -53,6 +57,11 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	Entity* e = &world->global_player_entity;
 	Sim_Body* b = &world->global_player_body;
 	e->sprite.texture = rect2(0, 0, 32, 32);
+	e->anim = arena_push_struct(arena, Animated_Sprite); 
+	init_animated_sprite(e->anim, 64, arena);
+	Anim_Standing = add_animation(e->anim, make_animaiton_from_strip(arena, 12, rect2(0, 0, 32, 32), 1));
+	Anim_Walking = add_animation(e->anim, make_animaiton_from_strip(arena, 12, rect2(0, 11 * 32, 32, 32), 4));
+	
 	b->shape.hext = v2(5, 5);
 	e->sprite.size = v2(32, 32);
 	b->group = 1;

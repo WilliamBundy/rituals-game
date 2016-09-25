@@ -24,6 +24,8 @@ Anchor_Top_Left	src/rituals_renderer.cpp	/^	Anchor_Top_Left = 1,$/;"	e	enum:Spri
 Anchor_Top_Left	src/wtb_sprite_renderer.h	/^	Anchor_Top_Left = 1,$/;"	e	enum:Sprite_Anchor
 Anchor_Top_Right	src/rituals_renderer.cpp	/^	Anchor_Top_Right = 3,$/;"	e	enum:Sprite_Anchor	file:
 Anchor_Top_Right	src/wtb_sprite_renderer.h	/^	Anchor_Top_Right = 3,$/;"	e	enum:Sprite_Anchor
+Anim_Standing	src/rituals_world.cpp	/^isize Anim_Standing;$/;"	v
+Anim_Walking	src/rituals_world.cpp	/^isize Anim_Walking;$/;"	v
 Animated_Sprite	src/rituals_animations.cpp	/^struct Animated_Sprite$/;"	s	file:
 Animation	src/rituals_animations.cpp	/^struct Animation$/;"	s	file:
 Animation_Frame	src/rituals_animations.cpp	/^struct Animation_Frame$/;"	s	file:

@@ -213,6 +213,11 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 
 			move_impulse *= player_tile->movement_modifier;
 			e->walk_impulse = move_impulse;
+			if(v2_dot(move_impulse, move_impulse) > 0.001f) {
+				play_animation(e->anim, Anim_Walking);
+			} else {
+				play_animation(e->anim, Anim_Standing);
+			}
 		} else if(e->kind == EntityKind_Enemy) {
 			auto enemy = &e->userdata.enemy;
 			Vec2 walk = Vec2{};
