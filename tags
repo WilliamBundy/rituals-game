@@ -1,8 +1,8 @@
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	323;"	d	file:
-AABB_x2	src/rituals_math.cpp	324;"	d	file:
-AABB_y1	src/rituals_math.cpp	325;"	d	file:
-AABB_y2	src/rituals_math.cpp	326;"	d	file:
+AABB_x1	src/rituals_math.cpp	325;"	d	file:
+AABB_x2	src/rituals_math.cpp	326;"	d	file:
+AABB_y1	src/rituals_math.cpp	327;"	d	file:
+AABB_y2	src/rituals_math.cpp	328;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	154;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
@@ -2309,6 +2309,7 @@ operator *	src/rituals_math.cpp	/^static inline Vec4 operator*(Vec4 a, real b)$/
 operator *	src/rituals_math.cpp	/^static inline Vec4 operator*(real b, Vec4 a) $/;"	f	file:
 operator *=	src/rituals_math.cpp	/^static inline Vec2& operator*=(Vec2& a, real b)$/;"	f	file:
 operator *=	src/rituals_math.cpp	/^static inline Vec3& operator*=(Vec3& a, real b)$/;"	f	file:
+operator *=	src/rituals_math.cpp	/^static inline Vec4 operator*=(Vec4& a, Vec4 b)$/;"	f	file:
 operator *=	src/rituals_math.cpp	/^static inline Vec4 operator*=(Vec4& a, real b)$/;"	f	file:
 operator +	src/rituals_math.cpp	/^static inline Vec2 operator+(Vec2 a, Vec2 b)$/;"	f	file:
 operator +	src/rituals_math.cpp	/^static inline Vec3 operator+(Vec3 a, Vec3 b)$/;"	f	file:
