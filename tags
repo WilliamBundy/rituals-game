@@ -26,7 +26,6 @@ Anchor_Top_Right	src/rituals_renderer.cpp	/^	Anchor_Top_Right = 3,$/;"	e	enum:Sp
 Anchor_Top_Right	src/wtb_sprite_renderer.h	/^	Anchor_Top_Right = 3,$/;"	e	enum:Sprite_Anchor
 Animated_Sprite	src/rituals_animations.cpp	/^struct Animated_Sprite$/;"	s	file:
 Animation	src/rituals_animations.cpp	/^struct Animation$/;"	s	file:
-AnimationFramesCapacity	src/rituals_animations.cpp	28;"	d	file:
 Animation_Frame	src/rituals_animations.cpp	/^struct Animation_Frame$/;"	s	file:
 AreaBiome_Desert	src/rituals_world_area.cpp	/^	AreaBiome_Desert$/;"	e	enum:World_Area_Biome	file:
 AreaBiome_Grassland	src/rituals_world_area.cpp	/^	AreaBiome_Grassland,$/;"	e	enum:World_Area_Biome	file:
@@ -1643,7 +1642,8 @@ frame_max	src/rituals_particles.cpp	/^	int32 frame_max;$/;"	m	struct:Particle_St
 frame_min	src/rituals_particles.cpp	/^	int32 frame_min;$/;"	m	struct:Particle_Style	file:
 framerate	src/rituals_particles.cpp	/^	int32 framerate;$/;"	m	struct:Particle_Style	file:
 frames	src/rituals_animations.cpp	/^	Animation_Frame* frames;$/;"	m	struct:Animation	file:
-frames_count	src/rituals_animations.cpp	/^	isize frames_count;$/;"	m	struct:Animation	file:
+frames_capacity	src/rituals_animations.cpp	/^	isize frames_count, frames_capacity;$/;"	m	struct:Animation	file:
+frames_count	src/rituals_animations.cpp	/^	isize frames_count, frames_capacity;$/;"	m	struct:Animation	file:
 friction	src/rituals_game_info.cpp	/^	real friction;$/;"	m	struct:Tile_Info	file:
 game_arena	src/rituals_game.cpp	/^	Memory_Arena* game_arena;$/;"	m	struct:Game_Main	file:
 game_calc_mouse_pos	src/rituals_game.cpp	/^void game_calc_mouse_pos(Vec2 offset)$/;"	f
@@ -2103,6 +2103,8 @@ impulse_max	src/rituals_particles.cpp	/^	real impulse_max;$/;"	m	struct:Particle
 impulse_min	src/rituals_particles.cpp	/^	real impulse_min;$/;"	m	struct:Particle_Style	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
 init_animated_sprite	src/rituals_animations.cpp	/^void init_animated_sprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)$/;"	f
+init_animation	src/rituals_animations.cpp	/^void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)$/;"	f
+init_animation_frame	src/rituals_animations.cpp	/^void init_animation_frame(Animation_Frame* fr)$/;"	f
 init_body	src/rituals_simulation.cpp	/^void init_body(Sim_Body* b)$/;"	f
 init_emitter	src/rituals_particles.cpp	/^void init_emitter(Emitter* e, isize max_particles, Memory_Arena* arena)$/;"	f
 init_entity	src/rituals_world_area.cpp	/^void init_entity(Entity* entity)$/;"	f
@@ -2220,6 +2222,7 @@ main	src/metaprogram/metaprogram_main.cpp	/^int main(int argc, char** argv)$/;"	
 main	src/rituals_main.cpp	/^int main(int argc, char** argv)$/;"	f
 main	src/rituals_win32.cpp	/^int main(int argc, char** argv)$/;"	f
 main_menu_update	src/rituals_main.cpp	/^void main_menu_update()$/;"	f
+make_animaiton_from_strip	src/rituals_animations.cpp	/^Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame, isize count) $/;"	f
 make_particle_style	src/rituals_particles.cpp	/^Particle_Style make_particle_style($/;"	f
 map	src/rituals_win32.cpp	/^Tilemap map;$/;"	v
 map	src/rituals_world_area.cpp	/^	Tilemap map;$/;"	m	struct:World_Area	file:
