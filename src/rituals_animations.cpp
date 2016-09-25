@@ -1,5 +1,3 @@
-
-
 /* 
 Copyright (c) 2016 William Bundy
 
@@ -25,16 +23,52 @@ struct Animation_Frame
 	real sort_offset;
 };
 
-#define AnimationFramesCapacity (256)
+void init_animation_frame(Animation_Frame* fr)
+{
+	fr->position = v3(0, 0, 0);
+	fr->angle = 0;
+	fr->color = v4(1, 1, 1, 1);
+	fr->size = v2(0, 0);
+	fr->texture = rect2(0, 0, 0, 0);
+	fr->sort_offset = 0;
+}
+
 struct Animation
 {
 	isize id;
 	Animation_Frame* frames;
-	isize frames_count;
+	isize frames_count, frames_capacity;
 	real fps;
 	real inv_fps;
 	bool looping;
 };
+
+void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
+{
+	a->id = -1;
+	a->frames = arena_push_array(arena, Frame, capacity);
+	a->frames_count = 0;
+	a->frames_capacity = 0;
+	a->fps = fps;
+	a->inv_fps = 1.0f / fps;
+	a->looping = true;
+}
+
+Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame, isize count) 
+{
+	Animation* anim = arena_push_struct(arena, Animation);
+	init_animation(anim, fps, capacity, arena);
+	anim->frames_count = count;
+
+	for(isize i = 0; i < count; ++i) {
+		Animation_Frame* fr = anim->frames + i;
+		init_animation_frame(fr);
+		fr->texture = frame;
+		frame.x += frame.w;
+	}
+
+	return anim;
+}
 
 struct Animated_Sprite
 {
@@ -82,6 +116,7 @@ isize add_animation(Animated_Sprite* s, Animation* a)
 	}
 	s->current_animation = s->animations_count;
 	s->current_frame = 0;
+	a->id = s->animations_count;
 	s->animations[s->animations_count++] = a;
 
 	return s->animations_count - 1;
