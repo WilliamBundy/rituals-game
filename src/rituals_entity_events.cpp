@@ -365,7 +365,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				s.position += v2(frame->position);
 				s.angle += frame->angle;
 				s.color *= frame->color;
-				s.size = frame.size;
+				s.size = frame->size;
 				s.texture = frame->texture;
 				s.sort_offset += frame->sort_offset;
 				s.position.y -= frame->position.z;
