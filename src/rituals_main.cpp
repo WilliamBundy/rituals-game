@@ -182,6 +182,7 @@ typedef size_t usize;
 void switch_state(Game_State newstate);
 
 #include "rituals_renderer.cpp"
+#include "rituals_animations.cpp"
 #include "rituals_gui.cpp"
 
 typedef struct World World;
