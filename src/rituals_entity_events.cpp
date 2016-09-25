@@ -327,14 +327,11 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 			}
 
 			Sprite* s = &e->sprite;
+				s->texture.x = frame * 32;
 			if(e->facing == -1) {
-				//s->texture = rect2(32 + frame * 32, 0, -32, 32);
-				s->texture.x = frame * 32;
-				s->flags |= SpriteFlag_FlipHoriz;
+				Enable_Flag(s->flags, SpriteFlag_FlipHoriz);
 			} else if(e->facing == 1) {
-				s->flags &= ~SpriteFlag_FlipHoriz;
-				s->texture.x = frame * 32;
-				//s->texture = rect2(0  + frame * 32, 0, 32, 32);
+				Disable_Flag(s->flags, SpriteFlag_FlipHoriz);
 			}
 		}
 
