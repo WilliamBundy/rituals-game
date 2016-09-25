@@ -3,6 +3,7 @@ SET msvcdir=C:\Program Files^ (x86)\Microsoft^ Visual^ Studio^ 14.0\VC\
 if not defined DevEnvDir call "%msvcdir%vcvarsall.bat" amd64
 
 SET MAINFILE=src\rituals_main.cpp
+SET BASENAME=Rituals
 SET OUTPUT=bin\Rituals.exe
 SET PDBOUT=bin\Rituals.pdb
 SET LIBRARIES="msvc_libs\lib"
@@ -114,7 +115,7 @@ if "%~2"=="run" goto RUN_APP
 GOTO END2
 
 :RUN_APP
-taskkill /IM %OUTPUT% 
+taskkill /IM %BASENAME% 
 start %OUTPUT%
 GOTO END2
 
