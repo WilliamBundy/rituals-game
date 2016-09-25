@@ -71,10 +71,10 @@ void main()
 		v_texcoords.y + v_texcoords.w
 	);
 
-	if(v_fliphoriz == 1) {
+	if(v_fliphoriz == uint(1)) {
 		tex_rect = tex_rect.zyxw;
 	}
-	if(v_flipvert == 1) {
+	if(v_flipvert == uint(1)) {
 		tex_rect = tex_rect.xwzy;
 	}
 
