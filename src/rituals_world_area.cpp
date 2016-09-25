@@ -43,7 +43,7 @@ enum Entity_Flags
 	EntityFlag_SameShadow = Flag(2)
 };
 
-struct AnimFrame
+struct Animation_Frame
 {
 	Vec3 position; 
 	real angle;
@@ -53,25 +53,57 @@ struct AnimFrame
 	real sort_offset;
 };
 
+#define AnimationFramesCapacity (256)
 struct Animation
 {
 	isize id;
-	AnimFrame* frames;
-	isize frames_count, frames_capacity;
-	isize current_frame;
+	Animation_Frame* frames;
+	isize frames_count;
 	real fps;
 	bool looping;
 };
 
-struct AnimatedSprite
+struct Animated_Sprite
 {
-	Animation* animations;
+	Animation** animations;
 	isize animations_count, animations_capacity;
-	isize current_animation;
+	isize current_animation, current_frame;
 	bool running;
 	real timer;
 };	
 
+void init_animatedsprite(Animated_Sprite* s, isize anim_capacity, Memory_Arena* arena)
+{
+	s->animations = arena_push_array(arena, Animation, anim_capacity);
+	s->animations_count = 0;
+	s->animations_capacity = capacity;
+	s->running = true;
+	s->timer = 0.0f;
+	s->current_frame = -1;
+	s->current_animation = -1;
+}
+
+isize add_animation(Animated_Sprite* s, Animation* a) 
+{
+	if(s->animations_count >= s->animations_capacity) {
+		return -1;
+	}
+	s->current_animation = s->animations_count;
+	s->current_frame = 0;
+	s->animations[s->animations_count++] = a;
+
+	return s->animations_count - 1;
+}
+
+isize play_animation(Animated_Sprite* s, isize anim_index)
+{
+	if(s->current_animation == anim_index) {
+		return 0;
+	} 
+	s->current_frame = 0;
+	s->current_animation = anim_index;
+
+}
 
 struct Entity
 {
@@ -87,7 +119,7 @@ struct Entity
 	real attack_timer;
 	real knockback;
 
-	AnimatedSprite* anim;
+	Animated_Sprite* anim;
 	Sprite sprite;
 	real z;
 	real shadow_scale;
