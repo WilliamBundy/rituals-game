@@ -64,6 +64,7 @@ Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame,
 		Animation_Frame* fr = anim->frames + i;
 		init_animation_frame(fr);
 		fr->texture = frame;
+		fr->size = frame.size;
 		frame.x += frame.w;
 	}
 
