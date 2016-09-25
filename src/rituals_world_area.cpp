@@ -72,7 +72,7 @@ struct Animated_Sprite
 	real timer;
 };	
 
-void init_animatedsprite(Animated_Sprite* s, isize anim_capacity, Memory_Arena* arena)
+void init_animatedsprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)
 {
 	s->animations = arena_push_array(arena, Animation*, anim_capacity);
 	s->animations_count = 0;
