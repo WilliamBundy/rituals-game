@@ -360,7 +360,9 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		s.position.y -= e->z;
 		s.sort_offset += e->z;
 		if(e->anim != NULL) {
+
 			if(e->anim->current_animation != -1) {
+				animated_sprite_update(e->anim, TimeStep);
 				Animation* anim = e->anim->animations[e->anim->current_animation];
 				Animation_Frame* frame = anim->frames + e->anim->current_frame;
 				s.position += v2(frame->position);
