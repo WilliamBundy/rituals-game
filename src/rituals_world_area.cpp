@@ -74,7 +74,7 @@ struct Animated_Sprite
 
 void init_animatedsprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)
 {
-	s->animations = arena_push_array(arena, Animation*, anim_capacity);
+	s->animations = arena_push_array(arena, Animation*, capacity);
 	s->animations_count = 0;
 	s->animations_capacity = capacity;
 	s->running = true;
