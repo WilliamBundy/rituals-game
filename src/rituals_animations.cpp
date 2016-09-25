@@ -57,7 +57,7 @@ void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
 Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame, isize count) 
 {
 	Animation* anim = arena_push_struct(arena, Animation);
-	init_animation(anim, fps, capacity, arena);
+	init_animation(anim, fps, count, arena);
 	anim->frames_count = count;
 
 	for(isize i = 0; i < count; ++i) {
