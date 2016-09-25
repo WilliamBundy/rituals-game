@@ -284,6 +284,12 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 					break;
 			}
 		}
+		if(e->walk_impulse.x < 0.001f) {
+			e->facing = -1;
+		} else if (e->walk_impulse.x > 0.001f) {
+			e->facing = 1;
+		}
+
 	}
 }
 
@@ -297,48 +303,12 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 
-		if(e->kind == EntityKind_Player) {
-			Direction old_direction = e->direction;
-			Vec2 walk = e->walk_impulse;
-			if(walk.y < 0) {
-				e->direction = Direction_North;
-			} else if(walk.y > 0) {
-				e->direction = Direction_South;
-			}
-
-			if(walk.x < 0) {
-				e->facing = -1;
-				e->direction = Direction_West;
-			} else if(walk.x > 0) {
-				e->facing = 1;
-				e->direction = Direction_East;
-			}
-			if(Input->scancodes[SDL_SCANCODE_SPACE] == State_Pressed) {
-				e->direction = old_direction;
-			}
-			int32 frame = 0;
-			if(v2_dot(walk, walk) > 0){
-				e->counter++;
-				frame = 1;
-				if(e->counter > 15) {
-					frame = 0;
-					if(e->counter > 30) {
-						e->counter = 0;
-					}
-				}
-			} else {
-				e->counter = 0;
-				frame = 0;
-			}
-
-			Sprite* s = &e->sprite;
-				s->texture.x = frame * 32;
-			if(e->facing == -1) {
-				Enable_Flag(s->flags, SpriteFlag_FlipHoriz);
-			} else if(e->facing == 1) {
-				Disable_Flag(s->flags, SpriteFlag_FlipHoriz);
-			}
+		if(e->facing == -1) {
+			Enable_Flag(e->sprite->flags, SpriteFlag_FlipHoriz);
+		} else if(e->facing == 1) {
+			Disable_Flag(e->sprite->flags, SpriteFlag_FlipHoriz);
 		}
+		
 
 		Sim_Body* b = e->body;
 		if (b != NULL) {
