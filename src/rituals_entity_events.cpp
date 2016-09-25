@@ -304,9 +304,9 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		Entity* e = entities + i;
 
 		if(e->facing == -1) {
-			Enable_Flag(e->sprite->flags, SpriteFlag_FlipHoriz);
+			Enable_Flag(e->sprite.flags, SpriteFlag_FlipHoriz);
 		} else if(e->facing == 1) {
-			Disable_Flag(e->sprite->flags, SpriteFlag_FlipHoriz);
+			Disable_Flag(e->sprite.flags, SpriteFlag_FlipHoriz);
 		}
 		
 
