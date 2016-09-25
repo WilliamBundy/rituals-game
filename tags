@@ -2101,7 +2101,7 @@ immune_to_damage	src/rituals_game_info.cpp	/^	bool immune_to_damage;$/;"	m	struc
 impulse_max	src/rituals_particles.cpp	/^	real impulse_max;$/;"	m	struct:Particle_Style	file:
 impulse_min	src/rituals_particles.cpp	/^	real impulse_min;$/;"	m	struct:Particle_Style	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
-init_animatedsprite	src/rituals_world_area.cpp	/^void init_animatedsprite(Animated_Sprite* s, isize anim_capacity, Memory_Arena* arena)$/;"	f
+init_animatedsprite	src/rituals_world_area.cpp	/^void init_animatedsprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)$/;"	f
 init_body	src/rituals_simulation.cpp	/^void init_body(Sim_Body* b)$/;"	f
 init_emitter	src/rituals_particles.cpp	/^void init_emitter(Emitter* e, isize max_particles, Memory_Arena* arena)$/;"	f
 init_entity	src/rituals_world_area.cpp	/^void init_entity(Entity* entity)$/;"	f
