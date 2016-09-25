@@ -360,7 +360,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		s.sort_offset += e->z;
 		if(e->anim != NULL) {
 			if(e->anim->current_animation != -1) {
-				Animation* anim = e->anim->animations + e->current_animation;
+				Animation* anim = e->anim->animations + e->anim->current_animation;
 				AnimationFrame* frame = anim->frames + anim->current_frame;
 				s.position += v2(frame->position);
 				s.angle += frame->angle;
