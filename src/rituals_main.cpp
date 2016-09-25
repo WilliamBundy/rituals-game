@@ -218,10 +218,7 @@ Menu_State* menu_state;
 
 #include "rituals_simulation.cpp"
 
-
-
 #include "rituals_particles.cpp"
-
 
 #include "rituals_world_area.cpp"
 #include "rituals_world.cpp"
@@ -269,7 +266,6 @@ void switch_state(Game_State newstate)
 	stop_state();
 	Game->state = newstate;
 	start_state();
-
 }
 
 
@@ -356,28 +352,13 @@ Sprite* boxes;
 
 void test_init()
 {
-	boxes = arena_push_array(Game->play_arena, Sprite, 100);
-	for(isize i = 0; i < 100; ++i) {
-		//init_sprite(boxes + i);
-#if 0
-		boxes[i] = get_box_sprite(v2(
-			rand_range(&Game->r, 0,1000),
-			rand_range(&Game->r, 0,1000)),
-			v2(32, 16),
-		v4(rand_range(&Game->r, 0.5f, 1.0), .8, .8, .9));
-#endif
-
-	}
 }
 
 void test_update()
 {
 	game_set_scale(2.0);
 	render_start();
-	render_set_clip_rect(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale, 200, 200);
-	for(isize i = 0; i < 100; ++i) {
-		render_add(boxes + i);
-	}	
+
 	render_draw(Game->size, Game->scale);
 }
 
