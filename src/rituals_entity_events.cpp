@@ -377,6 +377,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				s.sort_offset += frame->sort_offset;
 				s.position.y -= frame->position.z;
 				s.sort_offset += frame->position.z;
+				printf("%.2f %.2f %.2f %.2f \n", s.texture.x, s.texture.y, s.texture.w, s.texture.h);
 			}
 		}
 
