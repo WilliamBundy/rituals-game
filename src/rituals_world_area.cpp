@@ -43,6 +43,35 @@ enum Entity_Flags
 	EntityFlag_SameShadow = Flag(2)
 };
 
+struct AnimFrame
+{
+	Vec3 position; 
+	real angle;
+	Vec4 color;
+	Vec2 size;
+	Rect2 texture;
+	real sort_offset;
+};
+
+struct Animation
+{
+	isize id;
+	AnimFrame* frames;
+	isize frames_count, frames_capacity;
+	isize current_frame;
+	real fps;
+	bool looping;
+};
+
+struct AnimatedSprite
+{
+	Animation* animations;
+	isize animations_count, animations_capacity;
+	isize current_animation;
+	bool running;
+	real timer;
+};	
+
 
 struct Entity
 {
@@ -58,6 +87,7 @@ struct Entity
 	real attack_timer;
 	real knockback;
 
+	AnimatedSprite* anim;
 	Sprite sprite;
 	real z;
 	real shadow_scale;
@@ -168,6 +198,7 @@ void init_entity(Entity* entity)
 	entity->attack_timer = 0;
 	entity->z = 0;
 	entity->shadow_scale = 1.0f;
+	entity->anim = NULL;
 }
 
 Entity* world_area_get_next_entity(World_Area* area)
