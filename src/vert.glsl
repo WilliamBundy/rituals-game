@@ -78,10 +78,6 @@ void main()
 		tex_rect = tex_rect.xwzy;
 	}
 
-
-	//tex_rect.x += v_fliphoriz;
-	//tex_rect.y += v_flipvert;
-
 	float[4] texcoords_arr = float[](
 			tex_rect.x, tex_rect.y,
 			tex_rect.z, tex_rect.w

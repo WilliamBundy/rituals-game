@@ -169,6 +169,8 @@ typedef size_t usize;
 
 #define Flag(x) (1 << x)
 #define Has_Flag(x, y) (x & y)
+#define Enable_Flag(x, y) (x |= y)
+#define Disable_Flag(x, y) (x &= ~y)
 
 #define Kilobytes(b) (b * UINT64_C(1024))
 #define Megabytes(b) (Kilobytes(b) * UINT64_C(1024))

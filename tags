@@ -65,8 +65,10 @@ Direction_East	src/rituals_game.cpp	/^	Direction_East,$/;"	e	enum:Direction	file
 Direction_North	src/rituals_game.cpp	/^	Direction_North,$/;"	e	enum:Direction	file:
 Direction_South	src/rituals_game.cpp	/^	Direction_South,$/;"	e	enum:Direction	file:
 Direction_West	src/rituals_game.cpp	/^	Direction_West$/;"	e	enum:Direction	file:
+Disable_Flag	src/rituals_main.cpp	173;"	d	file:
 Emitter	src/rituals_particles.cpp	/^struct Emitter$/;"	s	file:
 EmitterStyleCapacity	src/rituals_particles.cpp	136;"	d	file:
+Enable_Flag	src/rituals_main.cpp	172;"	d	file:
 EnemyKind_Bat	src/rituals_game_info.cpp	/^	EnemyKind_Bat,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Goblin_Knight	src/rituals_game_info.cpp	/^	EnemyKind_Goblin_Knight,$/;"	e	enum:Rituals_Enemy_Kind	file:
 EnemyKind_Slime	src/rituals_game_info.cpp	/^	EnemyKind_Slime,$/;"	e	enum:Rituals_Enemy_Kind	file:
@@ -974,7 +976,7 @@ GenerateInsertionSortForType	src/rituals_sort_generator.cpp	35;"	d	file:
 GenerateIntrosortForType	src/rituals_sort_generator.cpp	49;"	d	file:
 GenerateQuicksortForType	src/rituals_sort_generator.cpp	12;"	d	file:
 Gigabytes	src/metaprogram/metaprogram_main.cpp	59;"	d	file:
-Gigabytes	src/rituals_main.cpp	175;"	d	file:
+Gigabytes	src/rituals_main.cpp	177;"	d	file:
 Gigabytes	src/rituals_win32.cpp	84;"	d	file:
 Gui_ButtonActiveColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonActiveColor = _color(.9, .9, .9, 1) * Gui_Tint;$/;"	v
 Gui_ButtonDownColor	src/rituals_gui.cpp	/^Vec4 Gui_ButtonDownColor = _color(.5, .5, .5, 1) * Gui_Tint;$/;"	v
@@ -1020,7 +1022,7 @@ Item_Rock	src/rituals_game_info.cpp	/^	Item_Rock,$/;"	e	enum:Item_Info_Types	fil
 Item_Rope	src/rituals_game_info.cpp	/^	Item_Rope,$/;"	e	enum:Item_Info_Types	file:
 Item_Stack	src/rituals_inventory.cpp	/^struct Item_Stack$/;"	s	file:
 Kilobytes	src/metaprogram/metaprogram_main.cpp	57;"	d	file:
-Kilobytes	src/rituals_main.cpp	173;"	d	file:
+Kilobytes	src/rituals_main.cpp	175;"	d	file:
 Kilobytes	src/rituals_win32.cpp	82;"	d	file:
 Lexer	src/metaprogram/metaprogram_parser.cpp	/^struct Lexer$/;"	s	file:
 Lexer_File	src/metaprogram/metaprogram_parser.cpp	/^struct Lexer_File$/;"	s	file:
@@ -1047,7 +1049,7 @@ Max	src/metaprogram/metaprogram_main.cpp	52;"	d	file:
 Max	src/rituals_main.cpp	168;"	d	file:
 MaxRegistryInfoEntries	src/rituals_game_registry.cpp	41;"	d	file:
 Megabytes	src/metaprogram/metaprogram_main.cpp	58;"	d	file:
-Megabytes	src/rituals_main.cpp	174;"	d	file:
+Megabytes	src/rituals_main.cpp	176;"	d	file:
 Megabytes	src/rituals_win32.cpp	83;"	d	file:
 Memory_Arena	src/rituals_memory.cpp	/^struct Memory_Arena$/;"	s	file:
 Menu_State	src/rituals_main.cpp	/^struct Menu_State$/;"	s	file:
@@ -1297,7 +1299,7 @@ _body_get_min_y	src/rituals_simulation.cpp	50;"	d	file:
 _body_get_not_static	src/rituals_simulation.cpp	54;"	d	file:
 _check	src/rituals_entity.cpp	16;"	d	file:
 _check	src/rituals_entity_events.cpp	184;"	d	file:
-_check_gl_attribute	src/rituals_main.cpp	491;"	d	file:
+_check_gl_attribute	src/rituals_main.cpp	493;"	d	file:
 _check_gl_attribute	src/rituals_win32.cpp	414;"	d	file:
 _collision_slop	src/rituals_simulation.cpp	254;"	d	file:
 _color	src/rituals_gui.cpp	353;"	d	file:
