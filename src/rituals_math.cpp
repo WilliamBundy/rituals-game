@@ -211,6 +211,12 @@ static inline Vec4 operator*(real b, Vec4 a)
 {
 	return a * b;
 }
+
+static inline Vec4 operator*(Vec4 a, Vec4 b)
+{
+	return Vec3{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
 static inline Vec4 operator/(Vec4 a, real b)
 {
 	return a * (1.0f/b);
