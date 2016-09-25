@@ -114,6 +114,7 @@ if "%~2"=="run" goto RUN_APP
 GOTO END2
 
 :RUN_APP
+taskkill /IM %OUTPUT% 
 start %OUTPUT%
 GOTO END2
 
