@@ -2454,6 +2454,7 @@ render_line_primitive	src/rituals_renderer.cpp	/^void render_line_primitive(Vec2
 render_line_primitive	src/wtb_sprite_renderer.h	/^void render_line_primitive(Render_Group* group, Vec2 start, Vec2 end, Vec4 color, int32 thickness)$/;"	f
 render_set_clip_rect	src/rituals_renderer.cpp	/^void render_set_clip_rect(Render_Group* group, real x, real y, real w, real h)$/;"	f
 render_set_clip_rect	src/rituals_renderer.cpp	/^void render_set_clip_rect(real x, real y, real w, real h)$/;"	f
+render_set_current_group	src/rituals_renderer.cpp	/^void render_set_current_group(isize index)$/;"	f
 render_sort	src/rituals_renderer.cpp	/^void render_sort(Render_Group* group, isize offset)$/;"	f
 render_sort	src/rituals_renderer.cpp	/^void render_sort(isize offset)$/;"	f
 render_start	src/rituals_renderer.cpp	/^void render_start()$/;"	f

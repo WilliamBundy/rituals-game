@@ -398,6 +398,11 @@ void render_draw(OpenGL_Renderer* r, Render_Group* group, Vec2 size, real scale)
 
 /* Implicit state functions */
 
+void render_set_current_group(isize index)
+{
+	CurrentGroup = Renderer->groups + index;
+}
+
 void render_start()
 {
 	render_start(CurrentGroup);

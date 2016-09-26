@@ -363,6 +363,7 @@ void world_area_interact(World_Area* area, World* world)
 
 void world_area_render(World_Area* area, World* world)
 {	
+	render_set
 	Vec2 target = area->target;
 	area->offset += (target - area->offset) * 0.1f;
 	area->offset -= Game->size * 0.5f;
@@ -418,6 +419,7 @@ void world_area_render(World_Area* area, World* world)
 	render_draw(Game->size, Game->scale);
 
 #if 1
+
 	render_start(CurrentGroup);
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
