@@ -363,7 +363,7 @@ void world_area_interact(World_Area* area, World* world)
 
 void world_area_render(World_Area* area, World* world)
 {	
-	render_set
+	render_set_current_group(0);
 	Vec2 target = area->target;
 	area->offset += (target - area->offset) * 0.1f;
 	area->offset -= Game->size * 0.5f;
@@ -380,7 +380,7 @@ void world_area_render(World_Area* area, World* world)
 	CurrentGroup->offset = area->offset;
 	area->offset += Game->size * 0.5f;
 
-	render_start(CurrentGroup);
+	render_start();
 
 	Rect2 screen = rect2(
 			area->offset.x - Game->size.x / 2,
@@ -420,13 +420,15 @@ void world_area_render(World_Area* area, World* world)
 
 #if 1
 
-	render_start(CurrentGroup);
+	render_set_current_group(1);
+	render_start();
 	snprintf(buf, 256, "Area %d", area->id);
 	render_body_text(buf, v2(16, 16), true);
 	render_draw(Game->size, Game->scale);
 #endif
 
 }
+
 
 void init_play_state();
 int recursively_delete_folder(char* path, bool append_base_path);
