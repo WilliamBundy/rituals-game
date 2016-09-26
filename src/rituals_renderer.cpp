@@ -189,8 +189,6 @@ void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char
 	glEnableVertexAttribArray(6);
 	glVertexAttribDivisor(6, vertex_count);
 	
-	printf(">>> %x \n", glGetError());
-
 	glBindVertexArray(0);
 
 	glEnable(GL_BLEND);
