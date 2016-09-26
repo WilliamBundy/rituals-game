@@ -63,7 +63,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	Anim_Walking = add_animation(e->anim, make_animaiton_from_strip(arena, 12, rect2(0, 11 * 32, 32, 32), 4));
 	
 	b->shape.hext = v2(5, 5);
-	e->hitbox.box.hext = b->shape.hext + v2(1, 2);
+	e->hitbox.box.hext = b->shape.hext + v2(1, 1);
 	e->hitbox.box.center.y -= b->shape.hh;
 	e->sprite.size = v2(32, 32);
 	b->group = 1;
@@ -98,7 +98,6 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 			);
 	init_emitter(&world->emitter, 8192, arena);
 }
-
 
 //Make a player struct?
 void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)
