@@ -188,7 +188,9 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 		e->walk_impulse = Vec2{};	
-		if(e->kind == EntityKind_Player) {
+		if(e->kind == EntityKind_Static || e->kind == EntityKind_Prop) {
+			continue;
+		} else if(e->kind == EntityKind_Player) {
 			real movespeed = 800;
 			Vec2 move_impulse = v2(0, 0);
 
@@ -302,13 +304,12 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 	shadow.color.w = 0.3f;
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
-
+		
 		if(e->facing == -1) {
 			Enable_Flag(e->sprite.flags, SpriteFlag_FlipHoriz);
 		} else if(e->facing == 1) {
 			Disable_Flag(e->sprite.flags, SpriteFlag_FlipHoriz);
 		}
-		
 
 		Sim_Body* b = e->body;
 		if (b != NULL) {
