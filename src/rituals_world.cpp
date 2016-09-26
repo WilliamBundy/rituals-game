@@ -64,6 +64,7 @@ void init_world(World* world, isize width, isize height, usize seed, Memory_Aren
 	
 	b->shape.hext = v2(5, 5);
 	e->hitbox.box.hext = b->shape.hext + v2(1, 1);
+	e->hitbox.box.center.y -= b->shape.hh;
 	e->sprite.size = v2(32, 32);
 	b->group = 1;
 	e->sprite.flags = Anchor_Bottom;
