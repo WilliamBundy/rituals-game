@@ -50,6 +50,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 						e->sprite.size = v2(8, 8);
 						e->body->group = 1;
 						e->hitbox.box.hext = e->body->shape.hext * 2.0;
+						e->hitbox.box.center.y += e->sprite.size.y / 2;
 					}
 					break;
 			}
