@@ -370,7 +370,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 			shadow.sort_offset += e->sprite.sort_offset;
 		}
 		render_add(&shadow);
-#if 0
+#if 1
 		draw_box_outline(e->hitbox.box.center + e->sprite.position + v2(0, 1), e->hitbox.box.hext * 2, v4(1, 1, 1, 1), 1);
 #endif
 	}
