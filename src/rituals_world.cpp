@@ -412,8 +412,8 @@ void world_area_render(World_Area* area, World* world)
 
 		if (b == NULL) continue;
 		render_box_outline_primitive(b->shape.center, b->shape.hext * 2, v4(.6f, 1, .6f, 1), 1);	
-		isize len = snprintf(buf, 256, "%d", b->group);
-		render_body_text(buf, b->shape.center - v2(Body_Font->glyph_width * len / 2, 0), true);
+	//	isize len = snprintf(buf, 256, "%d", b->group);
+	//	render_body_text(buf, b->shape.center - v2(Body_Font->glyph_width * len / 2, 0), true);
 	}
 #endif
 	render_draw(Game->size, Game->scale);
