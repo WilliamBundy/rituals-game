@@ -450,10 +450,10 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 						b->velocity += impulse;// * b->inv_mass;
 				}
 			}
-
 		}
 	}
 }
+
 void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
