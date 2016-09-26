@@ -495,7 +495,7 @@ void world_area_update(World_Area* area, World* world)
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position, 16), 
 					v2(a-0.2f, a+0.2f),
-					32,
+					320,
 					copy_particle_style(world->base_style, v2(200, 600), v2i(0, 45)));
 #endif
 		Vec2 pv = area->player->walk_impulse * TimeStep;
