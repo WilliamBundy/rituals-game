@@ -397,7 +397,7 @@ void world_area_render(World_Area* area, World* world)
 	char buf[256];
 	Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
 
-#if 0
+#if 1
 	for(isize i = 0; i < area->entities_count; ++i) {
 		Entity* e = area->entities + i;
 		if(e->kind != EntityKind_Enemy && e->kind != EntityKind_Player) continue;
