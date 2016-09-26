@@ -402,7 +402,7 @@ void world_area_render(World_Area* area, World* world)
 		Entity* e = area->entities + i;
 		if(e->kind != EntityKind_Enemy && e->kind != EntityKind_Player) continue;
 		//snprintf(buf, 256, "%d %d/%d %d", e->kind, e->id, e->body_id, e->health);
-		isize len = snprintf(buf, 256, "HP: %d", e->health);
+		isize len = snprintf(buf, 256, "%d", e->health);
 		render_body_text(buf, e->sprite.position - v2(Body_Font->glyph_width * len / 4, e->sprite.size.y + 16), true, 0.5f);
 	}
 #endif 
