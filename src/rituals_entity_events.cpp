@@ -86,7 +86,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->follow_dist = 512;
 			e->health = 100;
 			e->hitbox.box.hext *= 0.85;
-			e->hitbox.box.center.y += e->sprite.size.y * 0.85 / 4;
+			e->hitbox.box.center.y += e->sprite.size.y * 0.85 / 8;
 			break;
 		case EnemyKind_Bat:
 			enemy->speed = 600;
