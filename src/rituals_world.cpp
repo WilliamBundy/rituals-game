@@ -569,7 +569,6 @@ void world_area_update(World_Area* area, World* world)
 			style.time_min = 15;
 			style.time_max = 35;
 			style.acceleration.z = -300;
-			angle_range = v2(a - 0.5f, a + 0.5f);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
@@ -586,6 +585,7 @@ void world_area_update(World_Area* area, World* world)
 			style.scale_max = 2.5f; 
 			style.color = hex_to_v4(0xEEEEEE88);
 			style.acceleration.z = 400;
+			angle_range = v2(a - 0.5f, a + 0.5f);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
