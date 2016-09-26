@@ -234,28 +234,10 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
 	if(index == -1) {
-		//printf("Trying to remove invalid id %d\n", id);
 		return;
 	}
 	Entity* entity = area->entities + index;
 	world_area_on_destroy_entity(entity, area, area->world);
-	
-#if 0
-		Sim_Body* b = entity->body;
-		if(b == NULL) {
-			b = sim_find_body(&area->sim, entity->body_id);
-		}
-		
-		if(b == NULL) {
-			printf("Entity removed: kind:%d id:%d x:? y:? \n", 
-				entity->kind, entity->id);
-		} else {
-			printf("Entity removed: kind:%d id:%d x:%.2f y:%.2f \n", 
-					entity->kind, entity->id,
-					b->shape.center.x,
-					b->shape.center.y);
-		}
-#endif
 	sim_remove_body(&area->sim, entity->body_id);
 	area->entities[index] = area->entities[--area->entities_count];
 	world_area_synchronize_entities_and_bodies(area);
