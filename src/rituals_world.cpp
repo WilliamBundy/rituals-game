@@ -407,7 +407,7 @@ void world_area_render(World_Area* area, World* world)
 		render_body_text(buf, e->sprite.position - v2(Body_Font->glyph_width * len / 4, e->sprite.size.y + 16), true, 0.5f);
 	}
 #endif 
-#if 1
+#if 0
 	for(isize i = 0; i < area->sim.bodies_count; ++i) {
 		Sim_Body* b = area->sim.bodies + i;
 
