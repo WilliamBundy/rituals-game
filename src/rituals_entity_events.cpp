@@ -92,7 +92,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->follow_dist = 512;
 			enemy->bat.perch = e->body->shape.center;
 			e->body->flags = Body_Flag_No_Friction;
-			e->hitbox.box.hh *= 0.75;
+			e->hitbox.box.hh *= 0.8;
 			e->hitbox.box.center.y += e->sprite.size.y / 4;
 			e->sprite.size *= 0.5f;
 			e->body->shape.hext *= 0.5f;
@@ -104,7 +104,7 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			enemy->alert_dist = 128; 
 			enemy->follow_dist = 512;
 			enemy->snake.chase_speed_modifier = 3.0f;
-			e->hitbox.box.hh *= 0.5;
+			e->hitbox.box.hh *= 0.6;
 			e->hitbox.box.center.y += e->sprite.size.y / 4;
 			e->sprite.size *= 0.75f;
 			e->body->shape.hext *= 0.75f;
