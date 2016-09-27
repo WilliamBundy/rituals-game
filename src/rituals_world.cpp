@@ -493,6 +493,7 @@ void world_area_update(World_Area* area, World* world)
 		real player_mag = v2_dot(pv, pv);
 		player_mag = sqrtf(player_mag);
 		for(isize i = 0; i < 5; ++i) {
+			int32 particle_multiplier = 4;
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
 			e->sprite = create_box_primitive(area->player->sprite.position, v2(2, 2), v4(1, 0.25f, 0, 1));
@@ -546,7 +547,7 @@ void world_area_update(World_Area* area, World* world)
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
-					4,
+					4 * particle_multiplier,
 					style);
 					
 			angle_range = v2(a - 0.2f, a + 0.2f);
@@ -563,7 +564,7 @@ void world_area_update(World_Area* area, World* world)
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
-					2,
+					2 * particle_multiplier,
 					style);
 
 			style.impulse_min = 0 + player_mag;
@@ -580,13 +581,13 @@ void world_area_update(World_Area* area, World* world)
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
-					1,
+					1 * particle_multiplier,
 					style);
 			style.color = hex_to_v4(0xFFFFFF33);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
 					angle_range,
-					4,
+					4 * particle_multiplier,
 					style);
 			
 					
