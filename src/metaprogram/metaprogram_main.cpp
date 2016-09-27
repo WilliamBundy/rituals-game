@@ -137,7 +137,7 @@ int main(int argc, char** argv)
 			switch(head->kind) {
 				case Token_Ampersand:
 					next = head->next;
-					if(next->kind == Token_Ampersand) {
+					if(next && next->kind == Token_Ampersand) {
 						head->kind = Operator_LogicalAnd;
 						head->len++;
 						head->next = next->next;
@@ -145,7 +145,7 @@ int main(int argc, char** argv)
 					break;
 				case Token_Pipe:
 					next = head->next;
-					if(next->kind == Token_Pipe) {
+					if(next && next->kind == Token_Pipe) {
 						head->kind = Operator_LogicalOr;
 						head->len++;
 						head->next = next->next;
@@ -153,7 +153,7 @@ int main(int argc, char** argv)
 					break;
 				case Token_Equals:
 					next = head->next;
-					if(next->kind == Token_Equals) {
+					if(next && next->kind == Token_Equals) {
 						head->kind = Operator_BooleanEquals;
 						head->len++;
 						head->next = next->next;
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 					break;
 				case Token_ExclamationMark:
 					next = head->next;
-					if(next->kind == Token_Equals) {
+					if(next && next->kind == Token_Equals) {
 						head->kind = Operator_BooleanNotEquals;
 						head->len++;
 						head->next = next->next;
@@ -169,7 +169,7 @@ int main(int argc, char** argv)
 					break;
 				case Token_GreaterThan:
 					next = head->next;
-					if(next->kind == Token_Equals) {
+					if(next && next->kind == Token_Equals) {
 						head->kind = Operator_BooleanGreaterEquals;
 						head->len++;
 						head->next = next->next;
@@ -177,7 +177,7 @@ int main(int argc, char** argv)
 					break;
 				case Token_LessThan:
 					next = head->next;
-					if(next->kind == Token_Equals) {
+					if(next && next->kind == Token_Equals) {
 						head->kind = Operator_BooleanLessEquals;
 						head->len++;
 						head->next = next->next;
@@ -185,11 +185,11 @@ int main(int argc, char** argv)
 					break;
 				case Token_Minus:
 					next = head->next;
-					if(next->kind == Token_GreaterThan) {
+					if(next && next->kind == Token_GreaterThan) {
 						head->kind = Operator_PtrMemberAccess;
 						head->len++;
 						head->next = next->next;
-					} else if(next->kind == Token_Minus) {
+					} else if(next && next->kind == Token_Minus) {
 						head->kind = Operator_Decrement;
 						head->len++;
 						head->next = next->next;
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 					break;
 				case Token_Plus:
 					next = head->next;
-					if(next->kind == Token_Plus) {
+					if(next && next->kind == Token_Plus) {
 						head->kind = Operator_Increment;
 						head->len++;
 						head->next = next->next;
