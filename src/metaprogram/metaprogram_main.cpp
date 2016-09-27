@@ -139,7 +139,7 @@ int main(int argc, char** argv)
 			switch(head->kind) {
 				case Token_CompilerDirective: {
 					if(head->start[0] == 'i') {
-						parse_include_directive(head);
+						parse_include_directive(&lex, head);
 					}
 				} break;
 				case Token_Ampersand:
