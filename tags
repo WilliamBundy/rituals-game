@@ -2280,7 +2280,7 @@ name	src/thirdparty/tinydir.h	/^	_tinydir_char_t name[_TINYDIR_FILENAME_MAX];$/;
 new_item_stack	src/rituals_inventory.cpp	/^Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)$/;"	f
 new_memory_arena	src/rituals_memory.cpp	/^Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)$/;"	f
 next	helping_gb.cpp	/^	isize next;$/;"	m	struct:MapEntry	file:
-next	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, next;$/;"	m	struct:Token	file:
+next	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, *next;$/;"	m	struct:Token	file:
 next	src/rituals_memory.cpp	/^	Memory_Arena* next;$/;"	m	struct:Memory_Arena	file:
 next	src/rituals_simulation.cpp	/^	Sim_Grid_Cell* next;$/;"	m	struct:Sim_Grid_Cell	file:
 next_area_id	src/rituals_world.cpp	/^	isize next_area_id;$/;"	m	struct:World	file:
@@ -2384,7 +2384,7 @@ position	src/rituals_renderer.cpp	/^	Vec2 position;$/;"	m	struct:Sprite	file:
 position	src/rituals_world_area.cpp	/^	Vec2i position;$/;"	m	struct:Area_Link	file:
 position	src/wtb_sprite_renderer.h	/^	Vec2 position;$/;"	m	struct:Sprite
 prefix	src/thirdparty/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon16
-prev	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, next;$/;"	m	struct:Token	file:
+prev	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, *next;$/;"	m	struct:Token	file:
 prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	struct:Play_State	file:
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6

@@ -80,7 +80,7 @@ struct Token
 
 	Lexer_Location location;
 
-	Token* prev, next;
+	Token* prev, *next;
 };
 
 struct Lexer
