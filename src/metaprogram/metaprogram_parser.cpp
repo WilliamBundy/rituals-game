@@ -378,6 +378,11 @@ void parse_include_directive(Token* directive)
 			head = head->next;
 		}
 	}
+	if(start->hash != hash_string("include", sizeof("include") - 1)) {
+		end_temp_arena(Temp_Arena);
+		return;
+	}
+
 
 	head = start;
 	do {
