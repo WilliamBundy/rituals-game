@@ -525,7 +525,7 @@ void world_area_update(World_Area* area, World* world)
 					v2(4, 4),
 					hex_to_v4(0xFF8822FF),
 					v4(0, 0, 0, 0.1f),
-					v3(0, 0, 0),
+					v3(0, 0, 100),
 					v2(0, 0),
 					v2(-Math_Pi, Math_Pi),
 					v2(-Math_Pi, Math_Pi), 
@@ -542,7 +542,7 @@ void world_area_update(World_Area* area, World* world)
 			style.time_scaling = false;
 			style.time_alpha = true;
 			style.impulse_min = 0 + player_mag;
-			style.impulse_max = 100 + player_mag;
+			style.impulse_max = 200 + player_mag;
 			Vec2 angle_range = v2(a - 0.5f, a + 0.5f);
 			emitter_spawn(&world->emitter, 
 					v3(area->player->sprite.position + pv, 16), 
