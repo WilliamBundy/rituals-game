@@ -332,6 +332,7 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 			}
 			break;
 	}
+	t->hash = hash_string(t->start, t->len);
 
 	return true;
 }
