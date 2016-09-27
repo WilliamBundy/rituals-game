@@ -442,7 +442,7 @@ void parse_include_directive(Lexer* lex, Token* directive)
 			filename[head->len] = '\0';
 			Lexer_File* file = get_next_file(lex);
 			Lexer_File* including = lex->files + directive->location.file;
-			init_file(file, filename, including->filename, including->pathlen, Work_Arena);
+			init_lexer_file(file, filename, including->filename, including->pathlen, Work_Arena);
 			if(file->start != NULL) {
 				Token* new_file_head = arena_push_struct(Work_Arena, Token);
 				Token* new_file_start = new_file_head;
