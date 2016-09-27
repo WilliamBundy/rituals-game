@@ -390,7 +390,7 @@ void parse_include_directive(Token* directive)
 				Lexer_File f;
 				f.head = file;
 				f.start = file;
-				Token* new_file_head = arena_push_struct(Work_Arena);
+				Token* new_file_head = arena_push_struct(Work_Arena, Token);
 				Token* new_file_start = new_file_next;
 				Token t;
 				while(lexer_get_token(NULL, &f, &t)) {
