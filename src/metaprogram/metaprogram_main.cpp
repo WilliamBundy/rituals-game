@@ -189,8 +189,19 @@ int main(int argc, char** argv)
 						head->kind = Operator_PtrMemberAccess;
 						head->len++;
 						head->next = next->next;
+					} else if(next->kind == Token_Minus) {
+						head->kind = Operator_Decrement;
+						head->len++;
+						head->next = next->next;
 					}
 					break;
+				case Token_Plus:
+					next = head->next;
+					if(next->kind == Token_Plus) {
+						head->kind = Operator_Increment;
+						head->len++;
+						head->next = next->next;
+					}
 				default:
 					break;
 			}
@@ -199,7 +210,7 @@ int main(int argc, char** argv)
 		head = start;
 		do {
 			printf("%.*s ", head->len, head->start);
-			if(head->next->kind == Token_CloseBrace) {
+			if(head->next && head->next->kind == Token_CloseBrace) {
 				printf("\n");
 			}
 			switch(head->kind) {
