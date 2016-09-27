@@ -378,6 +378,7 @@ void parse_include_directive(Token* directive)
 			head->next = arena_push_struct(Temp_Arena, Token);
 			head = head->next;
 		}
+		head->next = NULL;
 	}
 	if(start->hash != hash_string("include", sizeof("include") - 1)) {
 		end_temp_arena(Temp_Arena);
