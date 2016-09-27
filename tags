@@ -1236,8 +1236,10 @@ Token_Dot	src/metaprogram/metaprogram_parser.cpp	/^	Token_Dot,$/;"	e	enum:Token_
 Token_EndOfFile	src/metaprogram/metaprogram_parser.cpp	/^	Token_EndOfFile,$/;"	e	enum:Token_Kind	file:
 Token_Equals	src/metaprogram/metaprogram_parser.cpp	/^	Token_Equals,$/;"	e	enum:Token_Kind	file:
 Token_ExclamationMark	src/metaprogram/metaprogram_parser.cpp	/^	Token_ExclamationMark,$/;"	e	enum:Token_Kind	file:
+Token_Float	src/metaprogram/metaprogram_parser.cpp	/^	Token_Float,$/;"	e	enum:Token_Kind	file:
 Token_GreaterThan	src/metaprogram/metaprogram_parser.cpp	/^	Token_GreaterThan,$/;"	e	enum:Token_Kind	file:
 Token_Identifier	src/metaprogram/metaprogram_parser.cpp	/^	Token_Identifier,$/;"	e	enum:Token_Kind	file:
+Token_Integer	src/metaprogram/metaprogram_parser.cpp	/^	Token_Integer,$/;"	e	enum:Token_Kind	file:
 Token_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Token_Kind$/;"	g	file:
 Token_Kind_Count	src/metaprogram/metaprogram_parser.cpp	/^	Token_Kind_Count,$/;"	e	enum:Token_Kind	file:
 Token_LessThan	src/metaprogram/metaprogram_parser.cpp	/^	Token_LessThan,$/;"	e	enum:Token_Kind	file:
@@ -2278,7 +2280,7 @@ name	src/thirdparty/tinydir.h	/^	_tinydir_char_t name[_TINYDIR_FILENAME_MAX];$/;
 new_item_stack	src/rituals_inventory.cpp	/^Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)$/;"	f
 new_memory_arena	src/rituals_memory.cpp	/^Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)$/;"	f
 next	helping_gb.cpp	/^	isize next;$/;"	m	struct:MapEntry	file:
-next	src/metaprogram/metaprogram_parser.cpp	/^	Token* next;$/;"	m	struct:Token	file:
+next	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, next;$/;"	m	struct:Token	file:
 next	src/rituals_memory.cpp	/^	Memory_Arena* next;$/;"	m	struct:Memory_Arena	file:
 next	src/rituals_simulation.cpp	/^	Sim_Grid_Cell* next;$/;"	m	struct:Sim_Grid_Cell	file:
 next_area_id	src/rituals_world.cpp	/^	isize next_area_id;$/;"	m	struct:World	file:
@@ -2292,8 +2294,8 @@ next_random_double	src/rituals_random.cpp	/^real64 next_random_double(Random* r)
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float()$/;"	f
 next_random_float	src/rituals_random.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_random.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
-nextchar	src/metaprogram/metaprogram_parser.cpp	113;"	d	file:
-nextchar	src/metaprogram/metaprogram_parser.cpp	337;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	114;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	338;"	d	file:
 night_amount	src/rituals_renderer.cpp	/^	real night_amount;$/;"	m	struct:Render_Group	file:
 night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Render_Group
 night_cutoff	src/rituals_renderer.cpp	/^	real night_cutoff;$/;"	m	struct:Render_Group	file:
@@ -2355,6 +2357,7 @@ out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ out
 overlap	src/rituals_simulation.cpp	/^	Vec2 overlap;$/;"	m	struct:Sim_Contact	file:
 pal	src/thirdparty/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon17
 parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
+parse_number_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_number_tokens(Token* head)$/;"	f
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 particles	src/rituals_particles.cpp	/^	Particle* particles;$/;"	m	struct:Emitter	file:
@@ -2381,6 +2384,7 @@ position	src/rituals_renderer.cpp	/^	Vec2 position;$/;"	m	struct:Sprite	file:
 position	src/rituals_world_area.cpp	/^	Vec2i position;$/;"	m	struct:Area_Link	file:
 position	src/wtb_sprite_renderer.h	/^	Vec2 position;$/;"	m	struct:Sprite
 prefix	src/thirdparty/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon16
+prev	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, next;$/;"	m	struct:Token	file:
 prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	struct:Play_State	file:
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
@@ -2962,8 +2966,8 @@ v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
 v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
-valid	src/metaprogram/metaprogram_parser.cpp	123;"	d	file:
-valid	src/metaprogram/metaprogram_parser.cpp	338;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	124;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	339;"	d	file:
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
 value	src/thirdparty/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon9

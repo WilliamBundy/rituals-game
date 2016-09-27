@@ -123,10 +123,13 @@ int main(int argc, char** argv)
 		f.head = str;
 		Token* head = arena_push_struct(Work_Arena, Token);
 		Token* start = head;
+		Token* last = NULL;
 		Token t;
 		while(lexer_get_token(NULL, &f, &t)) {
 			*head = t;
 			head->next = arena_push_struct(Work_Arena, Token);
+			head->prev = last;
+			last = head;
 			head = head->next;
 		}
 
@@ -183,6 +186,9 @@ int main(int argc, char** argv)
 						head->next = next->next;
 					}
 					break;
+				case Token_Number:
+					parse_number_tokens(head);
+					break;
 				case Token_Minus:
 					next = head->next;
 					if(next && next->kind == Token_GreaterThan) {
@@ -193,6 +199,20 @@ int main(int argc, char** argv)
 						head->kind = Operator_Decrement;
 						head->len++;
 						head->next = next->next;
+					} else if(next && next->kind == Token_Number) {
+						Token_Kind prevkind = Token_Unknown;
+						if(head->prev != NULL)
+							Token_Kind prevkind = head->prev->kind;
+						if(prevkind != Token_Number &&
+								prevkind != Token_Integer && 
+								prevkind != Token_Float && 
+								prevkind != Token_Identifier ) {
+							head->kind = Token_Number;
+							head->len += next->len;
+							head->next = next->next;
+							next = head->next;
+							parse_number_tokens(head);
+						}
 					}
 					break;
 				case Token_Plus:

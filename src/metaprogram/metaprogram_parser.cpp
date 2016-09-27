@@ -53,6 +53,9 @@ enum Token_Kind
 	Token_Number,
 	Token_Identifier,
 
+	Token_Integer,
+	Token_Float,
+
 	Operator_LogicalAnd,
 	Operator_LogicalOr,
 	Operator_BooleanEquals,
@@ -62,11 +65,9 @@ enum Token_Kind
 	Operator_PtrMemberAccess,
 	Operator_Decrement,
 	Operator_Increment,
-	
 
 	Token_EndOfFile,
 	Token_Kind_Count,
-
 	
 };
 
@@ -79,7 +80,7 @@ struct Token
 
 	Lexer_Location location;
 
-	Token* next;
+	Token* prev, next;
 };
 
 struct Lexer
@@ -336,3 +337,23 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 }
 #undef nextchar
 #undef valid
+
+void parse_number_tokens(Token* head)
+{
+	Token* next = head->next;
+	if(head->kind == Token_Number) {
+		if(next && next->kind == Token_Dot) {
+			head->kind = Token_Float;
+			head->len++;
+			head->next = next->next;
+			parse_number_tokens(head);
+		} else {
+			head->kind = Token_Integer;
+		}
+	} else if(head->kind == Token_Float) {
+		if(next && next->kind == Token_Number) {
+			head->len += next->len;
+			head->next = next->next;
+		}
+	}
+}
