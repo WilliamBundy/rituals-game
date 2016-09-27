@@ -383,19 +383,9 @@ void parse_include_directive(Token* directive)
 	if(start->hash != hash_string("include", sizeof("include") - 1)) {
 		end_temp_arena(Temp_Arena);
 		return;
-	} else {
-		printf("============================================\n");
-		printf("Got an include directive!!!\n");
-		printf("Start %x Head %x\n", start, head);
-		printf("============================================\n");
 	}
 
-
 	head = start;
-	printf("============================================\n");
-	printf("Got an include directive!!!\n");
-	printf("Start %x Next %x Head %x\n", start, start->next, head);
-	printf("============================================\n");
 	do {
 		if(head->kind == Token_String) {
 			char* filename = arena_push_array(Temp_Arena, char, head->len + 1);
