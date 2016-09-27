@@ -136,7 +136,7 @@ void init_lexer(Lexer* lex, isize file_capacity, Memory_Arena* arena)
 
 Lexer_File* get_next_file(Lexer* lex)
 {
-	Lexer_File* file =  lex->files + lex->file_count++;
+	Lexer_File* file =  lex->files + lex->files_count++;
 	file->index = lex->file_count - 1;
 	return file;
 }
