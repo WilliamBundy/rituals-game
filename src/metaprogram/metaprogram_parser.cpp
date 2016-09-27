@@ -106,7 +106,7 @@ void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize pr
 	isize pathlen = 0;
 	for(isize i = len - 1; i >= 0; --i) {
 		if(filename_copy[i] == '/' || filename_copy[i] == '\\') {
-			pathlen = i;
+			pathlen = i + 1;
 			break;
 		}
 	}
