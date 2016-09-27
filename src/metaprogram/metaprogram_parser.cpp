@@ -106,7 +106,7 @@ bool is_number(char c)
 
 bool is_valid_identifier(char c)
 {
-	return ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')) || c == '_';
+	return is_number(c) || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')) || c == '_';
 }
 
 
