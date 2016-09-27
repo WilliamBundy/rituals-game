@@ -170,6 +170,8 @@ typedef real64 real;
 typedef ptrdiff_t isize;
 typedef size_t usize;
 
+#define $(...) 
+
 #define Math_Sqrt2 1.414213f
 #define Math_InvSqrt2 0.7071067f
 #define Math_Pi 3.141592f
