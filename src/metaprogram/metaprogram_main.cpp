@@ -133,13 +133,63 @@ int main(int argc, char** argv)
 		printf("\n\n");
 		head = start;
 		do {
-			printf("%.*s ", head->len, head->start);
+			Token* next;
 			switch(head->kind) {
-				case Token_Semicolon:
-				case Token_OpenBrace:
-				case Token_CloseBrace:
-				case Token_CompilerDirective:
-					printf("\n");
+				case Token_Ampersand:
+					next = head->next;
+					if(next->kind == Token_Ampersand) {
+						head->kind = Operator_LogicalAnd;
+						head->len++;
+						head->next = next->next;
+					}
+					break;
+				case Token_Pipe:
+					next = head->next;
+					if(next->kind == Token_Pipe) {
+						head->kind = Operator_LogicalOr;
+						head->len++;
+						head->next = next->next;
+					}
+					break;
+				case Token_Equals:
+					next = head->next;
+					if(next->kind == Token_Equals) {
+						head->kind = Operator_BooleanEquals;
+						head->len++;
+						head->next = next->next;
+					}
+					break;
+				case Token_ExclamationMark:
+					next = head->next;
+					if(next->kind == Token_Equals) {
+						head->kind = Operator_BooleanNotEquals;
+						head->len++;
+						head->next = next->next;
+					}
+					break;
+				case Token_GreaterThan:
+					next = head->next;
+					if(next->kind == Token_Equals) {
+						head->kind = Operator_BooleanGreaterEquals;
+						head->len++;
+						head->next = next->next;
+					}
+					break;
+				case Token_LessThan:
+					next = head->next;
+					if(next->kind == Token_Equals) {
+						head->kind = Operator_BooleanLessEquals;
+						head->len++;
+						head->next = next->next;
+					}
+					break;
+				case Token_Minus:
+					next = head->next;
+					if(next->kind == Token_GreaterThan) {
+						head->kind = Operator_PtrMemberAccess;
+						head->len++;
+						head->next = next->next;
+					}
 					break;
 				default:
 					break;
