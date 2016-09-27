@@ -101,7 +101,7 @@ void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize pr
 	memcpy(filename_copy, prev_path, prev_path_len);
 	memcpy(filename_copy + prev_path_len, filename, len);
 	filename_copy[len + prev_path_len] = '\0';
-	printf(">>>>%.*s \n", filename_copy);
+	printf(">>>>%s \n", filename_copy);
 	len = strlen(filename_copy);
 	isize pathlen = 0;
 	for(isize i = len - 1; i >= 0; --i) {
