@@ -2132,7 +2132,7 @@ init_group	src/rituals_renderer.cpp	/^void init_group(Render_Group* group, isize
 init_group	src/wtb_sprite_renderer.h	/^void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)$/;"	f
 init_inventory	src/rituals_inventory.cpp	/^void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)$/;"	f
 init_item_stack	src/rituals_inventory.cpp	/^void init_item_stack(Item_Stack* stack, Item_Info* info)$/;"	f
-init_lexer	src/metaprogram/metaprogram_parser.cpp	/^void init_lexer(Lexer* lex, isize file_capacity Memory_Arena* arena)$/;"	f
+init_lexer	src/metaprogram/metaprogram_parser.cpp	/^void init_lexer(Lexer* lex, isize file_capacity, Memory_Arena* arena)$/;"	f
 init_lexer_file	src/metaprogram/metaprogram_parser.cpp	/^void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize prev_path_len, Memory_Arena* arena)$/;"	f
 init_memory_arena	src/rituals_memory.cpp	/^void init_memory_arena(Memory_Arena* arena, usize size)$/;"	f
 init_menu_state	src/rituals_main.cpp	/^void init_menu_state()$/;"	f

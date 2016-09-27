@@ -125,7 +125,7 @@ struct Lexer
 	isize files_count, files_capacity;
 };
 
-void init_lexer(Lexer* lex, isize file_capacity Memory_Arena* arena)
+void init_lexer(Lexer* lex, isize file_capacity, Memory_Arena* arena)
 {
 	lex->files = arena_push_array(arena, Lexer_File, file_capacity);
 	lex->files_count = 0;
