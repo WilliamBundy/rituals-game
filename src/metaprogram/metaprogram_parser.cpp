@@ -386,6 +386,11 @@ void parse_include_directive(Token* directive)
 		printf("============================================\n");
 		end_temp_arena(Temp_Arena);
 		return;
+	} else {
+		printf("============================================\n");
+		printf("Got an include directive!!!\n");
+		printf("Start %x Head %x", start, head);
+		printf("============================================\n");
 	}
 
 
