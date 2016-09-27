@@ -129,7 +129,7 @@ void init_lexer(Lexer* lex, isize file_capacity, Memory_Arena* arena)
 {
 	lex->files = arena_push_array(arena, Lexer_File, file_capacity);
 	lex->files_count = 0;
-	lex->files_capacity = files_capacity;
+	lex->files_capacity = file_capacity;
 	lex->main_file = lex->files;
 	lex->main_file->index = 0;
 }
