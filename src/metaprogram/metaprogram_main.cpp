@@ -138,6 +138,11 @@ int main(int argc, char** argv)
 		do {
 			Token* next;
 			switch(head->kind) {
+				case Token_CompilerDirective: {
+					if(head->start[0] == 'i') {
+						parse_include_directive(head);
+					}
+				} break;
 				case Token_Ampersand:
 					next = head->next;
 					if(next && next->kind == Token_Ampersand) {
