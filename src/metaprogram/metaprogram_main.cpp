@@ -195,6 +195,23 @@ int main(int argc, char** argv)
 					break;
 			}
 		} while(head = head->next);
+
+		head = start;
+		do {
+			printf("%.*s ", head->len, head->start);
+			if(head->next->kind == Token_CloseBrace) {
+				printf("\n")q
+			}
+			switch(head->kind) {
+				case Token_Semicolon:
+				case Token_OpenBrace:
+				case Token_CloseBrace:
+				case Token_CompilerDirective:
+					printf("\n");
+			}
+
+				
+		} while(head = head->next);
 	}
 
 
