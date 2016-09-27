@@ -9,13 +9,6 @@ Hash hash_string(char* c, int len)
 	return hash;
 }
 
-struct Lexer_Location
-{
-	isize file;
-	isize line;
-	isize offset;
-};
-
 enum Token_Kind
 {
 	Token_Unknown,
@@ -71,6 +64,14 @@ enum Token_Kind
 	
 };
 
+
+struct Lexer_Location
+{
+	isize file;
+	isize line;
+	isize offset;
+};
+
 struct Token
 {
 	Token_Kind kind;	
@@ -83,17 +84,63 @@ struct Token
 	Token* prev, *next;
 };
 
-struct Lexer
-{
-	
-};
-
 struct Lexer_File
 {
+	char* filename;
+	isize pathlen;
+	isize index;
 	Lexer_Location location;
 	char* start;
 	char* head;
 };
+
+void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize prev_path_len, Memory_Arena* arena)
+{
+	char* filename_copy = arena_push_array(arena, char, len + prev_path_len+1);
+	memcpy(filename_copy, prev_path, prev_path_len);
+	memcpy(filename_copy + prev_path_len, filename, len);
+	filename_copy[len + prev_path_len] = '\0';
+	printf("%.*s \n", filename_copy);
+	isize pathlen = 0;
+	isize len = strlen(filename_copy);
+	for(isize i = len - 1; i >= 0; --i) {
+		if(filename_copy[i] == '/' || filename_copy[i] == '\\') {
+			pathlen = i;
+			break;
+		}
+	}
+	file->pathlen = pathlen;
+	file->filename = filename_copy;
+	file->start = load_file(filename_copy, NULL, arena);
+	file->head = file->start;
+}
+
+
+struct Lexer
+{
+	Lexer_File* main_file;
+
+	Lexer_File* files;
+	isize files_count, files_capacity;
+};
+
+void init_lexer(Lexer* lex, isize file_capacity Memory_Arena* arena)
+{
+	lex->files = arena_push_array(arena, Lexer_File, file_capacity);
+	lex->files_count = 0;
+	lex->files_capacity = files_capacity;
+	lex->main_file = lex->files;
+	lex->main_file->index = 0;
+}
+
+Lexer_File* get_next_file(Lexer* lex)
+{
+	Lexer_File* file =  lex->files + lex->file_count++;
+	file->index = lex->file_count - 1;
+	return file;
+}
+
+
 
 bool is_space(char c)
 {
@@ -156,6 +203,7 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 	t->start = f->head;
 	t->len = 1;
 	t->kind = Token_Unknown;
+	f->location.file = f->index;
 	t->location = f->location;
 	t->next = NULL;
 
@@ -359,7 +407,7 @@ void parse_number_tokens(Token* head)
 	}
 }
 
-void parse_include_directive(Token* directive)
+void parse_include_directive(Lexer* lex, Token* directive)
 {
 	start_temp_arena(Temp_Arena);
 	char* buf = arena_push_array(Temp_Arena, char, directive->len + 1);
@@ -391,15 +439,14 @@ void parse_include_directive(Token* directive)
 			char* filename = arena_push_array(Temp_Arena, char, head->len + 1);
 			memcpy(filename, head->start, head->len);
 			filename[head->len] = '\0';
-			char* file = load_file(filename, NULL, Work_Arena);
-			if(file != NULL) {
-				Lexer_File f;
-				f.head = file;
-				f.start = file;
+			Lexer_File* file = get_next_file(lex);
+			Lexer_File* including = lex->files[directive->location.file];
+			init_file(file, filename, including->filename, including->pathlen, Work_Arena);
+			if(file->start != NULL) {
 				Token* new_file_head = arena_push_struct(Work_Arena, Token);
 				Token* new_file_start = new_file_head;
 				Token t;
-				while(lexer_get_token(NULL, &f, &t)) {
+				while(lexer_get_token(lex, file, &t)) {
 					*new_file_head = t;
 					new_file_head->next = arena_push_struct(Work_Arena, Token);
 					new_file_head = new_file_head->next;

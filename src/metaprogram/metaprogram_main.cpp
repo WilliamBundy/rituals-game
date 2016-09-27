@@ -90,7 +90,7 @@ char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 			*size_out = size;
 		}
 	} else {
-		printf("\n=========================\nCould not open file %s\n=======================\n", filename);
+		printf("\n=========================\nCould not open file %s\n=========================\n", filename);
 	}
 	return str;
 }
@@ -106,8 +106,8 @@ int main(int argc, char** argv)
 	init_memory_arena(&base, Megabytes(1));
 	Metaprogram = arena_push_struct(&base, Metaprogram_Core);
 	Metaprogram->base_arena = base;
-	init_memory_arena(&Metaprogram->work_arena, Megabytes(256));
-	init_memory_arena(&Metaprogram->temp_arena, Megabytes(256));
+	init_memory_arena(&Metaprogram->work_arena, Gigabytes(1));
+	init_memory_arena(&Metaprogram->temp_arena, Gigabytes(1));
 	Base_Arena = &Metaprogram->base_arena;
 	Work_Arena = &Metaprogram->work_arena;
 	Temp_Arena = &Metaprogram->temp_arena;
@@ -115,17 +115,16 @@ int main(int argc, char** argv)
 	//argc = 2;
 	if(argc >= 2) {
 		//char* str = load_file("src/rituals_game.cpp", NULL, Work_Arena);
-		char* str = load_file(argv[1], NULL, Work_Arena);
-		//char* str = "#define Log_Error(e) printf(\"There was an error: %s \n\", e);";
+		//char* file = load_file(filename, NULL, Work_Arena);
+		Lexer lex;
+		init_lexer(&lex, 1024, Work_Arena);
+		init_file(get_next_file(&lex), argv[1], NULL, 0, Work_Arena);
 
-		Lexer_File f;
-		f.start = str;
-		f.head = str;
 		Token* head = arena_push_struct(Work_Arena, Token);
 		Token* start = head;
 		Token* last = NULL;
 		Token t;
-		while(lexer_get_token(NULL, &f, &t)) {
+		while(lexer_get_token(&lex, lex.main_file, &t)) {
 			*head = t;
 			head->next = arena_push_struct(Work_Arena, Token);
 			head->prev = last;
