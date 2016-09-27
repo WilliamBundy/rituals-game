@@ -2303,8 +2303,8 @@ next_random_double	src/rituals_random.cpp	/^real64 next_random_double(Random* r)
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float()$/;"	f
 next_random_float	src/rituals_random.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_random.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
-nextchar	src/metaprogram/metaprogram_parser.cpp	161;"	d	file:
-nextchar	src/metaprogram/metaprogram_parser.cpp	387;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	162;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	388;"	d	file:
 night_amount	src/rituals_renderer.cpp	/^	real night_amount;$/;"	m	struct:Render_Group	file:
 night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Render_Group
 night_cutoff	src/rituals_renderer.cpp	/^	real night_cutoff;$/;"	m	struct:Render_Group	file:
@@ -2977,8 +2977,8 @@ v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
 v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
-valid	src/metaprogram/metaprogram_parser.cpp	171;"	d	file:
-valid	src/metaprogram/metaprogram_parser.cpp	388;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	172;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	389;"	d	file:
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
 value	src/thirdparty/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon9
