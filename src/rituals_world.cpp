@@ -549,6 +549,12 @@ void world_area_update(World_Area* area, World* world)
 					angle_range,
 					4 * particle_multiplier,
 					style);
+			style.color = hex_to_v4(0xFF4400FF);
+			emitter_spawn(&world->emitter, 
+					v3(area->player->sprite.position + pv, 16), 
+					angle_range,
+					4 * particle_multiplier,
+					style);
 					
 			angle_range = v2(a - 0.2f, a + 0.2f);
 
