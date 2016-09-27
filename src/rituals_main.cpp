@@ -14,6 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /* TODO(will) features
  * 	- Big Projects
+ * 		- Massive refactoring
  * 		- Programmable ini replacement
  * 		- Memory dumps, logging
  * 		- Reflection/introspection metaprogramming system
@@ -22,68 +23,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 		- Modding with packages
  * 			- requires a lot of sorting per package id.
  * 	- Graphics
- *  	- Multiple renderers, supporting multiple display lists
- *  	- render_draw_sprite(Renderer0, &sprite);
- *			- specializaitons: r0_draw_sprite(...)
- *		- Improved primitive generation functions
- *			- Mostly name/argument/return standardization
- *		- Particle emitters
- *			- TODO(will) initial implementation done
- *			- Need to add some kind of Particle_Style struct to call spray with
- *			- Tradeoff: storing stuff on the emitter v. per particle
- *			- Emitter: harder to work with
- *			- Particle: slower
  *		- Texture atlas stitching
  *			- able to combine pow2 squares into one big atlas
  *		- Release as lightweight spriting library
  *  - Physics
  *  	- Static and dynamic friction
  *  	- Multithreading/SIMD body processing?
- *  	- Look at dynamic tree broadphase/fancier broadphase schemes
- *  		- Use a grid system for positional lookups
- *  		- Basically: linked list of bodies at x,y
+ * 		- More sophisticated spacial partitioning?
+ * 			- Hierarchical grids, quadtrees, k-d trees
+ * 			- Current grid system works, but rather inflexible and memory-hungry
  * 	- UI
- * 		- Improve responsiveness of things
- * 			- Newer elemnts need highlights
- * 			- Option to draw things without border.
- * 			- Make it easier to accept certain types of data
- * 				- Numerical typing input box
- * 				- Sliders for different types (int, uint, etc)
- * 				- Maybe macroitize some functions for that
- *		- Add more components
- * 			- Scrollable frame
- * 			- Floating window
- * 			- Checkbox
- * 			- Radio button
- * 		- Logging window + write to file
- * 			- plus, better logging overall
- * 			- need to be able to log stuff to file to help people
- * 			  run the game on their computuers.
- * 			- ties in with programmable ini replacement to have a 
- * 			  console type thing.
+ * 		- Needs to be reworked
  *  - Play
- *  	- Entity/physics inspector?
- *  	- All the entity events need to be hooked up, then you need to refactor 
- *  		all the hacky code written to get around them 
- *  	- More art for particles
+ *  	- Entity inspector
+ *  	- Another art pass
  *
  * TODO(will) bugs???
- *  - If the player is pushed right up against a block from the block's bottom,
- *  	bullets are caught within the block and don't shoot.
- *
- * TODO(will) Game design musings
- * 	- A place to stay? 
- * 		- Why do players need to/want to build stuff?
- * 		- Day/night cycle
- * 		- Reasons to sleep?
- * 			- Visiting dream world?
- * 			- Where you return after you die?
- * 			- Walking/floating back to your sleeping body as a ghost
- * 			- What does the afterlife state do for the game?
- * 				- Special rituals activated
- * 				- Special monsters to fight
- * 				- Time runs backwards or something?
- *
+ *	- All of serialization is broken
+ *	- Current animation implementation is not serializable
+ *		
  */
 
 //platform imports
