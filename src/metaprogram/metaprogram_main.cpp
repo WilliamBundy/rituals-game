@@ -114,8 +114,8 @@ int main(int argc, char** argv)
 
 	//argc = 2;
 	if(argc >= 2) {
-		char* str = load_file("src/rituals_game.cpp", NULL, Work_Arena);
-		//char* str = load_file(argv[1], NULL, Work_Arena);
+		//char* str = load_file("src/rituals_game.cpp", NULL, Work_Arena);
+		char* str = load_file(argv[1], NULL, Work_Arena);
 		//char* str = "#define Log_Error(e) printf(\"There was an error: %s \n\", e);";
 
 		Lexer_File f;
