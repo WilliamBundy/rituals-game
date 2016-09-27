@@ -379,6 +379,10 @@ void parse_include_directive(Token* directive)
 		}
 	}
 	if(start->hash != hash_string("include", sizeof("include") - 1)) {
+		printf("============================================\n");
+		printf("Looked at compiler directive <%.*s>\n", start->len, start->start);
+		printf("Got hash %u, wanted %u\n", start->hash, hash_string("include", sizeof("include") - 1));
+		printf("============================================\n");
 		end_temp_arena(Temp_Arena);
 		return;
 	}
