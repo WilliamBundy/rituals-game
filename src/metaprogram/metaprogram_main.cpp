@@ -90,7 +90,7 @@ char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 			*size_out = size;
 		}
 	} else {
-		printf("Could not open file %s", filename);
+		printf("=========================Could not open file %s", filename);
 	}
 	return str;
 }
