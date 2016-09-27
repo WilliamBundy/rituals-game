@@ -30,7 +30,6 @@ enum Token_Kind
 	Token_CloseBracket,
 	Token_Tilde,
 	Token_ExclamationMark,
-	//Token_Hash,
 	Token_DollarSign,
 	Token_Modulo,
 	Token_Caret,
@@ -54,8 +53,19 @@ enum Token_Kind
 	Token_Number,
 	Token_Identifier,
 
+	Operator_LogicalAnd,
+	Operator_LogicalOr,
+	Operator_BooleanEquals,
+	Operator_BooleanNotEquals,
+	Operator_BooleanGreaterEquals,
+	Operator_BooleanLessEquals,
+	Operator_PtrMemberAccess,
+	
+
 	Token_EndOfFile,
 	Token_Kind_Count,
+
+	
 };
 
 struct Token
