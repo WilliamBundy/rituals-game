@@ -90,7 +90,7 @@ char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 			*size_out = size;
 		}
 	} else {
-		printf("=========================Could not open file %s", filename);
+		printf("\n=========================\nCould not open file %s\n=======================\n", filename);
 	}
 	return str;
 }
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
 
 		head = start;
 		do {
-			printf("%u %.*s ", head->hash, head->len, head->start);
+			printf("%.*s ", head->len, head->start);
 			if(head->next && head->next->kind == Token_CloseBrace) {
 				printf("\n");
 			}
