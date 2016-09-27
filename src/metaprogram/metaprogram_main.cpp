@@ -231,6 +231,7 @@ int main(int argc, char** argv)
 			}
 		} while(head = head->next);
 
+#if 0
 		head = start;
 		do {
 			printf("%.*s ", head->len, head->start);
@@ -247,6 +248,7 @@ int main(int argc, char** argv)
 
 				
 		} while(head = head->next);
+#endif
 	}
 
 
