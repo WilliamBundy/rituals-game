@@ -493,7 +493,7 @@ void world_area_update(World_Area* area, World* world)
 		real player_mag = v2_dot(pv, pv);
 		player_mag = sqrtf(player_mag);
 		for(isize i = 0; i < 5; ++i) {
-			int32 particle_multiplier = 16;
+			int32 particle_multiplier = 1;
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
 			e->sprite = create_box_primitive(area->player->sprite.position, v2(2, 2), v4(1, 0.25f, 0, 1));
