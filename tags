@@ -1635,6 +1635,10 @@ fast	src/thirdparty/stb_image.h	/^   stbi__uint16 fast[1 << STBI__ZFAST_BITS];$/
 fast	src/thirdparty/stb_image.h	/^   stbi_uc  fast[1 << FAST_BITS];$/;"	m	struct:__anon5
 fast_ac	src/thirdparty/stb_image.h	/^   stbi__int16 fast_ac[4][1 << FAST_BITS];$/;"	m	struct:__anon6
 file	src/metaprogram/metaprogram_parser.cpp	/^	isize file;$/;"	m	struct:Lexer_Location	file:
+filename	src/metaprogram/metaprogram_parser.cpp	/^	char* filename;$/;"	m	struct:Lexer_File	file:
+files	src/metaprogram/metaprogram_parser.cpp	/^	Lexer_File* files;$/;"	m	struct:Lexer	file:
+files_capacity	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
+files_count	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 finalize_game_registry	src/rituals_game_registry.cpp	/^void finalize_game_registry()$/;"	f
 first	src/thirdparty/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon16
 first_row_filter	src/thirdparty/stb_image.h	/^static stbi_uc first_row_filter[5] =$/;"	v
@@ -1667,6 +1671,7 @@ generate_tilemap	src/rituals_tilemap.cpp	/^void generate_tilemap(Tilemap* tilema
 generate_world	src/rituals_world.cpp	/^void generate_world(char* name, World* world)$/;"	f
 generate_world_area	src/rituals_world.cpp	/^void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)$/;"	f
 get_area_file	src/rituals_serialization.cpp	/^FILE* get_area_file(const char* name, isize id, const char* mode)$/;"	f
+get_next_file	src/metaprogram/metaprogram_parser.cpp	/^Lexer_File* get_next_file(Lexer* lex)$/;"	f
 get_next_grid_cell	src/rituals_simulation.cpp	/^Sim_Grid_Cell* get_next_grid_cell(Sim_Static_Grid* grid)$/;"	f
 get_world_file	src/rituals_serialization.cpp	/^FILE* get_world_file(const char* name, const char* mode)$/;"	f
 glActiveTexture	src/thirdparty/gl_core_3_3.h	1118;"	d
@@ -2114,6 +2119,7 @@ img_y	src/thirdparty/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__
 immune_to_damage	src/rituals_game_info.cpp	/^	bool immune_to_damage;$/;"	m	struct:Tile_Info	file:
 impulse_max	src/rituals_particles.cpp	/^	real impulse_max;$/;"	m	struct:Particle_Style	file:
 impulse_min	src/rituals_particles.cpp	/^	real impulse_min;$/;"	m	struct:Particle_Style	file:
+index	src/metaprogram/metaprogram_parser.cpp	/^	isize index;$/;"	m	struct:Lexer_File	file:
 info	src/rituals_inventory.cpp	/^	Item_Info* info;$/;"	m	struct:Item_Stack	file:
 init_animated_sprite	src/rituals_animations.cpp	/^void init_animated_sprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)$/;"	f
 init_animation	src/rituals_animations.cpp	/^void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)$/;"	f
@@ -2126,6 +2132,8 @@ init_group	src/rituals_renderer.cpp	/^void init_group(Render_Group* group, isize
 init_group	src/wtb_sprite_renderer.h	/^void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)$/;"	f
 init_inventory	src/rituals_inventory.cpp	/^void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)$/;"	f
 init_item_stack	src/rituals_inventory.cpp	/^void init_item_stack(Item_Stack* stack, Item_Info* info)$/;"	f
+init_lexer	src/metaprogram/metaprogram_parser.cpp	/^void init_lexer(Lexer* lex, isize file_capacity Memory_Arena* arena)$/;"	f
+init_lexer_file	src/metaprogram/metaprogram_parser.cpp	/^void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize prev_path_len, Memory_Arena* arena)$/;"	f
 init_memory_arena	src/rituals_memory.cpp	/^void init_memory_arena(Memory_Arena* arena, usize size)$/;"	f
 init_menu_state	src/rituals_main.cpp	/^void init_menu_state()$/;"	f
 init_particle	src/rituals_particles.cpp	/^void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real anglev, int32 frame, int32 time, int32 style_index)$/;"	f
@@ -2234,6 +2242,7 @@ main	git_post_rev.py	/^def main(tracking_file):$/;"	f
 main	src/metaprogram/metaprogram_main.cpp	/^int main(int argc, char** argv)$/;"	f
 main	src/rituals_main.cpp	/^int main(int argc, char** argv)$/;"	f
 main	src/rituals_win32.cpp	/^int main(int argc, char** argv)$/;"	f
+main_file	src/metaprogram/metaprogram_parser.cpp	/^	Lexer_File* main_file;$/;"	m	struct:Lexer	file:
 main_menu_update	src/rituals_main.cpp	/^void main_menu_update()$/;"	f
 make_animaiton_from_strip	src/rituals_animations.cpp	/^Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame, isize count) $/;"	f
 make_particle_style	src/rituals_particles.cpp	/^Particle_Style make_particle_style($/;"	f
@@ -2294,8 +2303,8 @@ next_random_double	src/rituals_random.cpp	/^real64 next_random_double(Random* r)
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float()$/;"	f
 next_random_float	src/rituals_random.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_random.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
-nextchar	src/metaprogram/metaprogram_parser.cpp	114;"	d	file:
-nextchar	src/metaprogram/metaprogram_parser.cpp	339;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	161;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	387;"	d	file:
 night_amount	src/rituals_renderer.cpp	/^	real night_amount;$/;"	m	struct:Render_Group	file:
 night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Render_Group
 night_cutoff	src/rituals_renderer.cpp	/^	real night_cutoff;$/;"	m	struct:Render_Group	file:
@@ -2357,7 +2366,7 @@ out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ out
 overlap	src/rituals_simulation.cpp	/^	Vec2 overlap;$/;"	m	struct:Sim_Contact	file:
 pal	src/thirdparty/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon17
 parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
-parse_include_directive	src/metaprogram/metaprogram_parser.cpp	/^void parse_include_directive(Token* directive)$/;"	f
+parse_include_directive	src/metaprogram/metaprogram_parser.cpp	/^void parse_include_directive(Lexer* lex, Token* directive)$/;"	f
 parse_number_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_number_tokens(Token* head)$/;"	f
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
@@ -2366,6 +2375,7 @@ particles_capacity	src/rituals_particles.cpp	/^	isize particles_count, particles
 particles_count	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
 path	src/thirdparty/tinydir.h	/^	_tinydir_char_t path[_TINYDIR_PATH_MAX];$/;"	m	struct:tinydir_dir
 path	src/thirdparty/tinydir.h	/^	_tinydir_char_t path[_TINYDIR_PATH_MAX];$/;"	m	struct:tinydir_file
+pathlen	src/metaprogram/metaprogram_parser.cpp	/^	isize pathlen;$/;"	m	struct:Lexer_File	file:
 patrol_end	src/rituals_game_info.cpp	/^				Vec2 patrol_end;$/;"	m	struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon7	file:
 patrol_start	src/rituals_game_info.cpp	/^				Vec2 patrol_start;$/;"	m	struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon7	file:
 perch	src/rituals_game_info.cpp	/^				Vec2 perch;$/;"	m	struct:Rituals_Entity_Userdata::__anon3::__anon4::__anon5	file:
@@ -2967,8 +2977,8 @@ v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
 v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
-valid	src/metaprogram/metaprogram_parser.cpp	124;"	d	file:
-valid	src/metaprogram/metaprogram_parser.cpp	340;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	171;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	388;"	d	file:
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
 value	src/thirdparty/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon9
