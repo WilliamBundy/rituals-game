@@ -2357,6 +2357,7 @@ out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ out
 overlap	src/rituals_simulation.cpp	/^	Vec2 overlap;$/;"	m	struct:Sim_Contact	file:
 pal	src/thirdparty/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon17
 parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
+parse_include_directive	src/metaprogram/metaprogram_parser.cpp	/^void parse_include_directive(Token* directive)$/;"	f
 parse_number_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_number_tokens(Token* head)$/;"	f
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f

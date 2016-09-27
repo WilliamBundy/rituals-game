@@ -357,3 +357,56 @@ void parse_number_tokens(Token* head)
 		}
 	}
 }
+
+void parse_include_directive(Token* directive)
+{
+	start_temp_arena(Temp_Arena);
+	char* buf = arena_push_array(Temp_Arena, char, directive->len + 1);
+	memcpy(buf, directive->start, directive->len);
+	buf[directive->len] = '\0';
+	Token* head = arena_push_struct(Temp_Arena, Token);
+	Token* start = head;
+
+	{
+		Token t;
+		Lexer_File f;
+		f.head = buf;
+		f.start = buf;
+		while(lexer_get_token(NULL, &f, &t)) {
+			*head = t;
+			head->next = arena_push_struct(Temp_Arena, Token);
+			head = head->next;
+		}
+	}
+
+	head = start;
+	do {
+		if(head->kind == Token_String) {
+			char* filename = arena_push_array(Temp_Arena, char, head->len + 1);
+			memcpy(filename, head->start, head->len);
+			filename[head->len] = '\0';
+			char* file = load_file(filename, NULL, Work_Arena);
+			if(file != NULL) {
+				Lexer_File f;
+				f.head = file;
+				f.start = file;
+				Token* new_file_head = arena_push_struct(Work_Arena);
+				Token* new_file_start = new_file_next;
+				Token t;
+				while(lexer_get_token(NULL, &f, &t)) {
+					*new_file_head = t;
+					new_file_head->next = arena_push_struct(Work_Arena, Token);
+					new_file_head = new_file_head->next;
+				}
+				Token* oldnext = directive->next;
+				directive->next = new_file_start;
+				new_file_start->prev = directive;
+				new_file_head->next = oldnext;
+				oldnext->prev = new_file_head;
+			} 
+			break;
+		}
+	} while(head = head->next);
+
+	end_temp_arena(Temp_Arena);
+}
