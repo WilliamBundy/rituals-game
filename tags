@@ -1123,7 +1123,7 @@ STBI_NO_SIMD	src/thirdparty/stb_image.h	658;"	d
 STBI_NO_SIMD	src/thirdparty/stb_image.h	673;"	d
 STBI_NO_TGA	src/thirdparty/stb_image.h	544;"	d
 STBI_NO_ZLIB	src/thirdparty/stb_image.h	561;"	d
-STBI_ONLY_PNG	src/thirdparty.h	20;"	d
+STBI_ONLY_PNG	src/thirdparty.h	21;"	d
 STBI_REALLOC	src/thirdparty/stb_image.h	637;"	d
 STBI_REALLOC_SIZED	src/thirdparty/stb_image.h	642;"	d
 STBI_SIMD_ALIGN	src/thirdparty/stb_image.h	703;"	d
@@ -1157,7 +1157,7 @@ STBI_grey	src/thirdparty/stb_image.h	/^   STBI_grey       = 1,$/;"	e	enum:__anon
 STBI_grey_alpha	src/thirdparty/stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:__anon1
 STBI_rgb	src/thirdparty/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon1
 STBI_rgb_alpha	src/thirdparty/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon1
-STB_IMAGE_IMPLEMENTATION	src/thirdparty.h	19;"	d
+STB_IMAGE_IMPLEMENTATION	src/thirdparty.h	20;"	d
 SimGridCellSide	src/rituals_simulation.cpp	74;"	d	file:
 SimIter	src/rituals_simulation.cpp	253;"	d	file:
 SimIter_i	src/rituals_simulation.cpp	252;"	d	file:
