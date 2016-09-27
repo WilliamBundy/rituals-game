@@ -200,7 +200,7 @@ int main(int argc, char** argv)
 		do {
 			printf("%.*s ", head->len, head->start);
 			if(head->next->kind == Token_CloseBrace) {
-				printf("\n")q
+				printf("\n");
 			}
 			switch(head->kind) {
 				case Token_Semicolon:
