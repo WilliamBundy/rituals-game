@@ -60,6 +60,8 @@ enum Token_Kind
 	Operator_BooleanGreaterEquals,
 	Operator_BooleanLessEquals,
 	Operator_PtrMemberAccess,
+	Operator_Decrement,
+	Operator_Increment,
 	
 
 	Token_EndOfFile,
