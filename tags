@@ -1088,7 +1088,7 @@ Path_Separator_Char	src/rituals_win32.cpp	80;"	d	file:
 PickupKind_Health	src/rituals_game_info.cpp	/^	PickupKind_Health$/;"	e	enum:Rituals_Pickup_Kind	file:
 PickupKind_Item	src/rituals_game_info.cpp	/^	PickupKind_Item,$/;"	e	enum:Rituals_Pickup_Kind	file:
 Play_State	src/rituals_main.cpp	/^struct Play_State$/;"	s	file:
-Proc_Args	src/metaprogram/metaprogram_parser.cpp	/^struct Proc_Args$/;"	s	file:
+Proc_Arg	src/metaprogram/metaprogram_parser.cpp	/^struct Proc_Arg$/;"	s	file:
 Proc_Prototype	src/metaprogram/metaprogram_parser.cpp	/^struct Proc_Prototype$/;"	s	file:
 RITUALS_USE_FLOAT32	src/rituals_main.cpp	164;"	d	file:
 Random	src/rituals_random.cpp	/^struct Random$/;"	s	file:
@@ -1431,7 +1431,7 @@ areas_width	src/rituals_world.cpp	/^	isize areas_width, areas_height;$/;"	m	stru
 arena_push	src/rituals_memory.cpp	/^uint8* arena_push(Memory_Arena* arena, isize size)$/;"	f
 arena_push_array	src/rituals_memory.cpp	15;"	d	file:
 arena_push_struct	src/rituals_memory.cpp	14;"	d	file:
-args	src/metaprogram/metaprogram_parser.cpp	/^	Proc_Args* args;$/;"	m	struct:Proc_Prototype	file:
+args	src/metaprogram/metaprogram_parser.cpp	/^	Proc_Arg* args;$/;"	m	struct:Proc_Prototype	file:
 args_count	src/metaprogram/metaprogram_parser.cpp	/^	isize args_count;$/;"	m	struct:Proc_Prototype	file:
 asset_arena	src/rituals_game.cpp	/^	Memory_Arena* asset_arena;$/;"	m	struct:Game_Main	file:
 attack	src/rituals_world_area.cpp	/^	int32 attack;$/;"	m	struct:Entity	file:
@@ -1514,6 +1514,7 @@ contacts_count	src/rituals_simulation.cpp	/^	isize contacts_count, contacts_capa
 contains	src/rituals_game_info.cpp	/^		Rituals_Entity_Kinds contains;$/;"	m	struct:Rituals_Entity_Userdata::__anon1	file:
 contents	src/rituals_inventory.cpp	/^	Item_Stack** contents;$/;"	m	struct:Inventory	file:
 copy_particle_style	src/rituals_particles.cpp	/^Particle_Style copy_particle_style(Particle_Style s,$/;"	f
+count	src/metaprogram/metaprogram_parser.cpp	/^	isize count;$/;"	m	struct:Proc_Arg	file:
 count	src/rituals_game_info.cpp	/^				isize id, count;$/;"	m	struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon10	file:
 counter	src/rituals_world_area.cpp	/^	int32 counter;$/;"	m	struct:Entity	file:
 create_box_outline_primitive	src/rituals_renderer.cpp	/^Sprite4 create_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color, int32 thickness)$/;"	f
@@ -1583,6 +1584,9 @@ dct_wsub	src/thirdparty/stb_image.h	2248;"	d
 dct_wsub	src/thirdparty/stb_image.h	2410;"	d
 dec_str_to_int	rituals_gui.cpp	/^static inline int32 dec_str_to_int(char* str, isize len)$/;"	f	file:
 dec_str_to_int	src/rituals_gui.cpp	/^static inline int32 dec_str_to_int(char* str, isize len)$/;"	f	file:
+decorators	src/metaprogram/metaprogram_parser.cpp	/^	char** decorators;$/;"	m	struct:Proc_Prototype	file:
+decorators_count	src/metaprogram/metaprogram_parser.cpp	/^	isize decorators_count;$/;"	m	struct:Proc_Prototype	file:
+defaults	src/metaprogram/metaprogram_parser.cpp	/^	char* defaults;$/;"	m	struct:Proc_Arg	file:
 delay	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 delete_file	src/rituals_serialization.cpp	/^int delete_file(char* path, isize path_length, char* file)$/;"	f
 delete_folder	src/rituals_serialization.cpp	/^int delete_folder(char* path, isize path_length)$/;"	f
@@ -1645,6 +1649,7 @@ files	src/metaprogram/metaprogram_parser.cpp	/^	Lexer_File* files;$/;"	m	struct:
 files_capacity	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 files_count	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 finalize_game_registry	src/rituals_game_registry.cpp	/^void finalize_game_registry()$/;"	f
+find_next_procedure	src/metaprogram/metaprogram_parser.cpp	/^Proc_Prototype find_next_procedure(Token* start)$/;"	f
 first	src/thirdparty/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon16
 first_row_filter	src/thirdparty/stb_image.h	/^static stbi_uc first_row_filter[5] =$/;"	v
 firstcode	src/thirdparty/stb_image.h	/^   stbi__uint16 firstcode[16];$/;"	m	struct:__anon9
@@ -2144,6 +2149,7 @@ init_memory_arena	src/rituals_memory.cpp	/^void init_memory_arena(Memory_Arena* 
 init_menu_state	src/rituals_main.cpp	/^void init_menu_state()$/;"	f
 init_particle	src/rituals_particles.cpp	/^void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real anglev, int32 frame, int32 time, int32 style_index)$/;"	f
 init_play_state	src/rituals_play_state.cpp	/^void init_play_state()$/;"	f
+init_proc_arg	src/metaprogram/metaprogram_parser.cpp	/^void init_proc_arg(Proc_Arg* arg, isize count, Memory_Arena* arena)$/;"	f
 init_random	src/rituals_random.cpp	/^void init_random(Random* r, uint64 seed) $/;"	f
 init_renderer	src/rituals_renderer.cpp	/^void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)$/;"	f
 init_renderer	src/wtb_sprite_renderer.h	/^void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)$/;"	f
@@ -2288,7 +2294,6 @@ mouse_y	src/rituals_game.cpp	/^	int32 mouse_y;$/;"	m	struct:Game_Input	file:
 movement_modifier	src/rituals_game_info.cpp	/^	real movement_modifier;$/;"	m	struct:Tile_Info	file:
 mr	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 n_files	src/thirdparty/tinydir.h	/^	size_t n_files;$/;"	m	struct:tinydir_dir
-name	src/metaprogram/metaprogram_parser.cpp	/^	char* name;$/;"	m	struct:Proc_Args	file:
 name	src/metaprogram/metaprogram_parser.cpp	/^	char* name;$/;"	m	struct:Proc_Prototype	file:
 name	src/rituals_game_info.cpp	/^	const char* name;$/;"	m	struct:Item_Info	file:
 name	src/rituals_game_info.cpp	/^	const char* name;$/;"	m	struct:Tile_Info	file:
@@ -2297,6 +2302,7 @@ name	src/thirdparty/tinydir.h	/^	_tinydir_char_t name[_TINYDIR_FILENAME_MAX];$/;
 new_item_stack	src/rituals_inventory.cpp	/^Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)$/;"	f
 new_memory_arena	src/rituals_memory.cpp	/^Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)$/;"	f
 next	helping_gb.cpp	/^	isize next;$/;"	m	struct:MapEntry	file:
+next	src/metaprogram/metaprogram_parser.cpp	/^	Proc_Prototype* next;$/;"	m	struct:Proc_Prototype	file:
 next	src/metaprogram/metaprogram_parser.cpp	/^	Token* prev, *next;$/;"	m	struct:Token	file:
 next	src/rituals_memory.cpp	/^	Memory_Arena* next;$/;"	m	struct:Memory_Arena	file:
 next	src/rituals_simulation.cpp	/^	Sim_Grid_Cell* next;$/;"	m	struct:Sim_Grid_Cell	file:
@@ -2879,6 +2885,7 @@ target	src/rituals_world_area.cpp	/^	Vec2 target;$/;"	m	struct:World_Area	file:
 temp_arena	src/metaprogram/metaprogram_main.cpp	/^	Memory_Arena temp_arena;$/;"	m	struct:Metaprogram_Core	file:
 temp_arena	src/rituals_game.cpp	/^	Memory_Arena* temp_arena;$/;"	m	struct:Game_Main	file:
 temp_head	src/rituals_memory.cpp	/^	isize temp_head;$/;"	m	struct:Memory_Arena	file:
+terms	src/metaprogram/metaprogram_parser.cpp	/^	char** terms;$/;"	m	struct:Proc_Arg	file:
 test_init	src/rituals_main.cpp	/^void test_init()$/;"	f
 test_update	src/rituals_main.cpp	/^void test_update()$/;"	f
 text	src/rituals_game.cpp	/^	char* text;$/;"	m	struct:Game_Input	file:
@@ -2929,7 +2936,6 @@ total_time	src/rituals_particles.cpp	/^	int32 total_time;$/;"	m	struct:Particle	
 tq	src/thirdparty/stb_image.h	/^      int tq;$/;"	m	struct:__anon6::__anon7
 transparent	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 tt	src/rituals_main.cpp	/^float tt = 0;$/;"	v
-type	src/metaprogram/metaprogram_parser.cpp	/^	char* type;$/;"	m	struct:Proc_Args	file:
 type	src/thirdparty/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon11
 type	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
 u_night_amount	src/rituals_renderer.cpp	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:OpenGL_Renderer	file:
