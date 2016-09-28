@@ -479,3 +479,18 @@ void parse_include_directive(Lexer* lex, Token* directive)
 
 	end_temp_arena(Temp_Arena);
 }
+
+
+struct Proc_Args
+{
+	char* type;
+	char* name;
+}
+
+struct Proc_Prototype
+{
+	char* name;
+	Proc_Args* args;
+	isize args_count;
+};
+
