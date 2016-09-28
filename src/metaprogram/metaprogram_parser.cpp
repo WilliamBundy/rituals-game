@@ -485,7 +485,7 @@ struct Proc_Args
 {
 	char* type;
 	char* name;
-}
+};
 
 struct Proc_Prototype
 {
