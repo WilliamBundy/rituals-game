@@ -557,6 +557,15 @@ Proc_Prototype find_next_procedure(Token* start)
 						case 1:
 							if(sub_head->kind == Token_CloseParen) {
 								if(paren_depth == 0) {
+									if(default_args_token != NULL) {
+										char* start = default_args_token->start;
+										isize len = sub_head->start - start + sub_head->len;
+										char* buf = arena_push_array(Temp_Arena, char, len+1);
+										memcpy(buf, start, len);
+										buf[len] = '\0';
+										arg->defaults = buf;
+										default_args_token = NULL;
+									}
 									mode = 2;
 								} else {
 									paren_depth--;
@@ -578,12 +587,14 @@ Proc_Prototype find_next_procedure(Token* start)
 							} else if (sub_head->kind == Token_Comma) {
 								if(paren_depth == 0) {
 									if(default_args_token != NULL) {
+										//TODO(will) code duplication
 										char* start = default_args_token->start;
 										isize len = sub_head->start - start + sub_head->len;
 										char* buf = arena_push_array(Temp_Arena, char, len+1);
 										memcpy(buf, start, len);
 										buf[len] = '\0';
 										arg->defaults = buf;
+										default_args_token = NULL;
 									}
 									arg = proc.args + proc.args_count++;
 									init_proc_arg(arg, 256, Temp_Arena);
