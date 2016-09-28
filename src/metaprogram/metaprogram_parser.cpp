@@ -528,7 +528,7 @@ Proc_Prototype find_next_procedure(Token* start)
 
 				Token* sub_head = head;
 				int32 mode = 0;
-				Token* default_args_start = NULL;
+				Token* default_args_token = NULL;
 				int32 paren_depth = 0;
 				Proc_Arg* arg = proc.args;
 				init_proc_arg(arg, 256, Temp_Arena);
