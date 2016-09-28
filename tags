@@ -1,4 +1,4 @@
-$	src/rituals_main.cpp	173;"	d	file:
+$$	src/rituals_main.cpp	173;"	d	file:
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
 AABB_x1	src/rituals_math.cpp	325;"	d	file:
 AABB_x2	src/rituals_math.cpp	326;"	d	file:
