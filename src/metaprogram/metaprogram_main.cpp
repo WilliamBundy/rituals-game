@@ -251,6 +251,9 @@ int main(int argc, char** argv)
 
 		Proc_Prototype* p = find_proc_prototypes(start, Work_Arena);
 
+		do {
+			
+		} while (p = p->next);
 
 
 #if 0
