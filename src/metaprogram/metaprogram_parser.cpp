@@ -607,7 +607,17 @@ Proc_Prototype find_next_procedure(Token* start)
 							break;
 						case 2: 
 							if(sub_head->kind == Token_OpenBrace) {
-								break;
+								int32 brace_depth = 0;
+								do {
+									if(sub_head->kind == Token_OpenBrace) {
+										brace_depth++;
+									} else if(sub_head->kind == Token_CloseBrace) {
+										if(brace_depth == 0) {
+											break;	
+										}
+										brace_depth--;
+									}
+								} while (sub_head = sub_head->next);
 							}
 							break;
 					}
