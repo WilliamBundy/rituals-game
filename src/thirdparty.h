@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */
 
-$(exclude)
+$$(exclude)
 #pragma once
 
 #define STB_IMAGE_IMPLEMENTATION
