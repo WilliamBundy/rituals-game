@@ -139,10 +139,6 @@ int main(int argc, char** argv)
 			switch(head->kind) {
 				case Token_DollarSign:
 					next = head->next->next;
-					//printf("%u %u \n", next->hash, hash_literal("exclude"));
-					//printf("%d $(%.*s)\n", next->hash == hash_literal("exclude"), next->len, next->start);
-
-
 					if(next->hash == hash_literal("exclude")) {
 						do {
 							if(next->kind == Token_DollarSign) {
@@ -251,8 +247,11 @@ int main(int argc, char** argv)
 					break;
 			}
 		} while(head = head->next);
+		printf("Using: %.2f%% of Work_Arena \n", Work_Arena->head - (isize)Work_Arena->data / (float)Work_Arena->capacity);
 
-#if 1
+
+
+#if 0
 		head = start;
 		do {
 			printf("%.*s ", head->len, head->start);
