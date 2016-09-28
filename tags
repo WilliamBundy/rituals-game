@@ -1655,7 +1655,7 @@ files	src/metaprogram/metaprogram_parser.cpp	/^	Lexer_File* files;$/;"	m	struct:
 files_capacity	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 files_count	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 finalize_game_registry	src/rituals_game_registry.cpp	/^void finalize_game_registry()$/;"	f
-find_next_procedure	src/metaprogram/metaprogram_parser.cpp	/^Proc_Prototype* find_next_procedure(Token* start, Memory_Arena* arena)$/;"	f
+find_proc_prototypes	src/metaprogram/metaprogram_parser.cpp	/^Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)$/;"	f
 first	src/thirdparty/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon16
 first_row_filter	src/thirdparty/stb_image.h	/^static stbi_uc first_row_filter[5] =$/;"	v
 firstcode	src/thirdparty/stb_image.h	/^   stbi__uint16 firstcode[16];$/;"	m	struct:__anon9
