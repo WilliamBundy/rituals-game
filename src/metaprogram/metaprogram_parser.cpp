@@ -524,7 +524,7 @@ Proc_Prototype find_next_procedure(Token* start)
 				//	mode 2 <open brace>
 				Proc_Prototype proc;
 				proc.decorators = arena_push_array(Temp_Arena, char*, 256);
-				proc.args = arena_push_array(Temp_Arena, char*, 256);
+				proc.args = arena_push_array(Temp_Arena, Proc_Arg, 256);
 
 				Token* sub_head = head;
 				int32 mode = 0;
