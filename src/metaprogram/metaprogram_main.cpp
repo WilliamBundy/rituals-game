@@ -249,7 +249,8 @@ int main(int argc, char** argv)
 			}
 		} while(head = head->next);
 
-		Proc_Prototype* p = find_proc_prototypes(start, arena);
+		Proc_Prototype* p = find_proc_prototypes(start, Work_Arena);
+
 
 
 #if 0
