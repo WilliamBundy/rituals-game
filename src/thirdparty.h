@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *
  */
 
-$(ignore)
+$(exclude)
 #pragma once
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -25,4 +25,5 @@ $(ignore)
 #include "thirdparty/gl_core_3_3.c"
 
 #include "thirdparty/tinydir.h"
+$(end)
 

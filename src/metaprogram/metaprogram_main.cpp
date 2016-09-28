@@ -137,6 +137,27 @@ int main(int argc, char** argv)
 		do {
 			Token* next;
 			switch(head->kind) {
+				case Token_DollarSign:
+					next = head->next->next;
+					//printf("%u %u \n", next->hash, hash_literal("exclude"));
+					//printf("%d $(%.*s)\n", next->hash == hash_literal("exclude"), next->len, next->start);
+
+
+					if(next->hash == hash_literal("exclude")) {
+						do {
+							if(next->kind == Token_DollarSign) {
+								Token* tk = next->next->next;
+								if(tk->kind == Token_Identifier) {
+									if(tk->hash == hash_literal("end")) {
+										head = next->next;
+										break;
+									}
+								}
+							}
+						} while(next = next->next);
+					}
+					
+					break;
 				case Token_CompilerDirective: {
 					if(head->start[0] == 'i') {
 						parse_include_directive(&lex, head);
@@ -231,7 +252,7 @@ int main(int argc, char** argv)
 			}
 		} while(head = head->next);
 
-#if 0
+#if 1
 		head = start;
 		do {
 			printf("%.*s ", head->len, head->start);
