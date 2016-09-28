@@ -491,7 +491,7 @@ struct Proc_Arg
 
 void init_proc_arg(Proc_Arg* arg, isize count, Memory_Arena* arena)
 {
-	arg->terms = area_push_array(arena, char*, count);
+	arg->terms = arena_push_array(arena, char*, count);
 }
 
 struct Proc_Prototype
