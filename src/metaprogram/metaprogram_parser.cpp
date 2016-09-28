@@ -565,7 +565,7 @@ Proc_Prototype find_next_procedure(Token* start)
 								int len = sub_head->len;
 								next = sub_head->next;
 								while(next->kind == Token_Asterisk) {
-									buf[len++] = "*";
+									buf[len++] = '*';
 									next = next->next;
 								}
 								buf[len] = '\0';
