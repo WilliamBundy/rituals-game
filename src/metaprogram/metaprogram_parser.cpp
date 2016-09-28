@@ -515,7 +515,7 @@ Proc_Prototype find_next_procedure(Token* start)
 	do {
 		if (head->kind == Token_Identifier) {
 			if(head->hash != structhash && head->hash != enumhash) {
-				start_temp_arena(Temp_Ar	ena);
+				start_temp_arena(Temp_Arena);
 				//pattern: 
 				//	mode 0 <identifiers...>
 				//	mode 0 <open paren> 
