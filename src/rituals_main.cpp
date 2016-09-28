@@ -112,7 +112,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  *		
  ***/
 
-	//platform imports
+#define $(...)
+ //platform imports
 #if RITUALS_WINDOWS == 1
 #include <windows.h>
 #include <Shlwapi.h>
@@ -170,7 +171,6 @@ typedef real64 real;
 typedef ptrdiff_t isize;
 typedef size_t usize;
 
-#define metaprogram(...)  ;
 
 #define Math_Sqrt2 1.414213f
 #define Math_InvSqrt2 0.7071067f

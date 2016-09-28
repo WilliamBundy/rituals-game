@@ -1,3 +1,4 @@
+$	src/rituals_main.cpp	115;"	d	file:
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
 AABB_x1	src/rituals_math.cpp	325;"	d	file:
 AABB_x2	src/rituals_math.cpp	326;"	d	file:
@@ -1087,7 +1088,7 @@ Path_Separator_Char	src/rituals_win32.cpp	80;"	d	file:
 PickupKind_Health	src/rituals_game_info.cpp	/^	PickupKind_Health$/;"	e	enum:Rituals_Pickup_Kind	file:
 PickupKind_Item	src/rituals_game_info.cpp	/^	PickupKind_Item,$/;"	e	enum:Rituals_Pickup_Kind	file:
 Play_State	src/rituals_main.cpp	/^struct Play_State$/;"	s	file:
-RITUALS_USE_FLOAT32	src/rituals_main.cpp	163;"	d	file:
+RITUALS_USE_FLOAT32	src/rituals_main.cpp	164;"	d	file:
 Random	src/rituals_random.cpp	/^struct Random$/;"	s	file:
 Rect2	src/rituals_math.cpp	/^union Rect2$/;"	u	file:
 Rect2_Clip_Info	src/rituals_math.cpp	/^struct Rect2_Clip_Info$/;"	s	file:
@@ -1278,7 +1279,7 @@ World_Area_Stub	src/rituals_world_area.cpp	/^struct World_Area_Stub$/;"	s	file:
 World_Area_Stub	src/rituals_world_area.cpp	/^typedef struct World_Area_Stub World_Area_Stub;$/;"	t	typeref:struct:World_Area_Stub	file:
 YCbCr_to_RGB_kernel	src/thirdparty/stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);$/;"	m	struct:__anon6
 _CRT_SECURE_NO_WARNINGS	src/metaprogram/metaprogram_main.cpp	12;"	d	file:
-_CRT_SECURE_NO_WARNINGS	src/rituals_main.cpp	123;"	d	file:
+_CRT_SECURE_NO_WARNINGS	src/rituals_main.cpp	124;"	d	file:
 _CRT_SECURE_NO_WARNINGS	src/rituals_win32.cpp	26;"	d	file:
 _TINYDIR_DIR	src/thirdparty/tinydir.h	131;"	d
 _TINYDIR_DIR	src/thirdparty/tinydir.h	137;"	d
@@ -2272,7 +2273,6 @@ mb	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct
 mem_align_4	src/rituals_memory.cpp	/^static inline isize mem_align_4(isize p)$/;"	f	file:
 menu_state	src/rituals_main.cpp	/^Menu_State* menu_state;$/;"	v
 meta_arena	src/rituals_game.cpp	/^	Memory_Arena* meta_arena;$/;"	m	struct:Game_Main	file:
-metaprogram	src/rituals_main.cpp	173;"	d	file:
 mg	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 mode	src/rituals_game_info.cpp	/^		isize mode;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
 modulus	src/rituals_math.cpp	/^static inline isize modulus(isize a, isize b)$/;"	f	file:
