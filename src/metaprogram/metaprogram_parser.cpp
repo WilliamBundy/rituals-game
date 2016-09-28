@@ -635,9 +635,11 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 						proc_head = proc_head->next;
 						break;
 					}
+					if (sub_head == NULL) break;
 				} while(sub_head = sub_head->next);
 			}
 		}
+		if (head == NULL) break;
 	} while(head = head->next);
 	return proc_start;
 }
