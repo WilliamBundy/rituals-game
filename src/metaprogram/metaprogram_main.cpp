@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 	Work_Arena = &Metaprogram->work_arena;
 	Temp_Arena = &Metaprogram->temp_arena;
 
-	//argc = 2;
+	argc = 2;
 	if(argc >= 2) {
 		//char* str = load_file("src/rituals_game.cpp", NULL, Work_Arena);
 		//char* file = load_file(filename, NULL, Work_Arena);
