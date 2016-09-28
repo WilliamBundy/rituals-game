@@ -305,7 +305,6 @@ inline Vec2 v2_normalize(Vec2 v)
 	return v2(v.x / mag, v.y / mag);
 }
 
-
 union AABB
 {
 	struct {

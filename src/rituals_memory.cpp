@@ -91,7 +91,6 @@ void clear_arena(Memory_Arena* arena)
 	arena->temp_head = -1;
 }
 
-
 Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)
 {
 	Memory_Arena* arena = (Memory_Arena*)arena_push(src, sizeof(Memory_Arena));

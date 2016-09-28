@@ -507,7 +507,7 @@ struct Proc_Prototype
 	Proc_Prototype* next;
 };
 
-Proc_Prototype find_next_procedure(Token* start)
+Proc_Prototype* find_next_procedure(Token* start, Memory_Arena* arena)
 {
 	//NOTE(will) will not find C-style "struct Type function() {"
 	Token* head = start;
@@ -516,31 +516,34 @@ Proc_Prototype find_next_procedure(Token* start)
 	Hash enumhash = hash_literal("enum");
 
 	Proc_Prototype proc = {0};
+	Proc_Prototype* proc_start = arena_push_struct(arena, Proc_Prototype);
+	Proc_Prototype* proc_head = proc_start;
 
 	do {
 		if (head->kind == Token_Identifier) {
 			if(head->hash != structhash && head->hash != enumhash) {
-				start_temp_arena(Temp_Arena);
 				//pattern: 
 				//	mode 0 <identifiers...>
 				//	mode 0 <open paren> 
 				//	mode 1 <identifier, * identifier, comma...>
 				//	mode 1 <close paren> 
 				//	mode 2 <open brace>
-				proc.decorators = arena_push_array(Temp_Arena, char*, 256);
-				proc.args = arena_push_array(Temp_Arena, Proc_Arg, 256);
+				proc = {0};
+				proc.decorators = arena_push_array(arena, char*, 256);
+				proc.args = arena_push_array(arena, Proc_Arg, 256);
 
 				Token* sub_head = head;
 				int32 mode = 0;
 				Token* default_args_token = NULL;
 				int32 paren_depth = 0;
 				Proc_Arg* arg = proc.args;
-				init_proc_arg(arg, 256, Temp_Arena);
+				init_proc_arg(arg, 256, arena);
+				bool quit = false;
 				do {
 					switch(mode) {
 						case 0:
 							if (sub_head->kind == Token_Identifier) {
-								char* buf = arena_push_array(Temp_Arena, char, 256);
+								char* buf = arena_push_array(arena, char, 256);
 								memcpy(buf, sub_head->start, sub_head->len);
 								int len = sub_head->len;
 								next = sub_head->next;
@@ -562,7 +565,7 @@ Proc_Prototype find_next_procedure(Token* start)
 									if(default_args_token != NULL) {
 										char* start = default_args_token->start;
 										isize len = sub_head->start - start + sub_head->len;
-										char* buf = arena_push_array(Temp_Arena, char, len+1);
+										char* buf = arena_push_array(arena, char, len+1);
 										memcpy(buf, start, len);
 										buf[len] = '\0';
 										arg->defaults = buf;
@@ -573,7 +576,7 @@ Proc_Prototype find_next_procedure(Token* start)
 									paren_depth--;
 								}
 							} else if(sub_head->kind == Token_Identifier) {
-								char* buf = arena_push_array(Temp_Arena, char, 256);
+								char* buf = arena_push_array(arena, char, 256);
 								memcpy(buf, sub_head->start, sub_head->len);
 								int len = sub_head->len;
 								next = sub_head->next;
@@ -592,14 +595,14 @@ Proc_Prototype find_next_procedure(Token* start)
 										//TODO(will) code duplication
 										char* start = default_args_token->start;
 										isize len = sub_head->start - start + sub_head->len;
-										char* buf = arena_push_array(Temp_Arena, char, len+1);
+										char* buf = arena_push_array(arena, char, len+1);
 										memcpy(buf, start, len);
 										buf[len] = '\0';
 										arg->defaults = buf;
 										default_args_token = NULL;
 									}
 									arg = proc.args + proc.args_count++;
-									init_proc_arg(arg, 256, Temp_Arena);
+									init_proc_arg(arg, 256, arena);
 								}
 							} else if(sub_head->kind == Token_OpenParen) {
 								paren_depth++;
@@ -609,10 +612,14 @@ Proc_Prototype find_next_procedure(Token* start)
 							if(sub_head->kind == Token_OpenBrace) {
 								int32 brace_depth = 0;
 								do {
+									//TODO(will) this gets us to the end of the function
+									// change this function into a loop that returns a ll of
+									// procedures
 									if(sub_head->kind == Token_OpenBrace) {
 										brace_depth++;
 									} else if(sub_head->kind == Token_CloseBrace) {
 										if(brace_depth == 0) {
+											quit = true;
 											break;	
 										}
 										brace_depth--;
@@ -621,9 +628,16 @@ Proc_Prototype find_next_procedure(Token* start)
 							}
 							break;
 					}
+					if(quit) {
+						head = sub_head;
+						*proc_head = proc;
+						proc_head->next = arena_push_struct(arena, Proc_Prototype);
+						proc_head = proc_head->next;
+						break;
+					}
 				} while(sub_head = sub_head->next);
 			}
 		}
 	} while(head = head->next);
-	return proc;
+	return proc_start;
 }
