@@ -604,15 +604,14 @@ Proc_Prototype find_next_procedure(Token* start)
 							}
 							break;
 						case 2: 
+							if(sub_head->kind == Token_OpenBrace) {
+								break;
+							}
 							break;
 					}
 				} while(sub_head = sub_head->next);
-
-
-				
 			}
 		}
-
 	} while(head = head->next);
 	return proc;
 }

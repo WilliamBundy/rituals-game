@@ -248,6 +248,7 @@ int main(int argc, char** argv)
 			}
 		} while(head = head->next);
 
+		Proc_Prototype p = find_next_procedure(start);
 
 
 #if 0
