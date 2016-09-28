@@ -507,7 +507,7 @@ struct Proc_Prototype
 	Proc_Prototype* next;
 };
 
-Proc_Prototype* find_next_procedure(Token* start, Memory_Arena* arena)
+Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 {
 	//NOTE(will) will not find C-style "struct Type function() {"
 	Token* head = start;
