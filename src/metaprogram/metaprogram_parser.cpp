@@ -9,6 +9,8 @@ Hash hash_string(char* c, int len)
 	return hash;
 }
 
+#define hash_literal(c) hash_string(c, sizeof(c) - 1)
+
 enum Token_Kind
 {
 	Token_Unknown,
@@ -101,14 +103,27 @@ void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize pr
 	memcpy(filename_copy, prev_path, prev_path_len);
 	memcpy(filename_copy + prev_path_len, filename, len);
 	filename_copy[len + prev_path_len] = '\0';
-	printf(">>>>%s \n", filename_copy);
+	//printf(">>>>%s \n", filename_copy);
 	len = strlen(filename_copy);
 	isize pathlen = 0;
+	isize extlen = 0;
 	for(isize i = len - 1; i >= 0; --i) {
+		if(filename_copy[i] == '.') {
+			extlen = i;
+		}
 		if(filename_copy[i] == '/' || filename_copy[i] == '\\') {
 			pathlen = i + 1;
 			break;
 		}
+	}
+	Hash exthash = hash_string(filename_copy + extlen, len - extlen);
+	if(exthash != hash_literal(".c") && exthash != hash_literal(".cpp") && exthash != hash_literal(".h")) {
+		//printf("Hit invalid file suffix: %d %d %d %.*s", len, extlen, len - extlen, len - extlen, filename_copy + extlen);
+		file->pathlen = pathlen;
+		file->filename = filename_copy;
+		file->start = NULL;
+		file->head = NULL;
+		return;
 	}
 	file->pathlen = pathlen;
 	file->filename = filename_copy;
@@ -332,17 +347,17 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 			t->start++;
 			nextchar;
 			while(valid) {
-				nextchar;
 				if(f->head[0] == '"') {
 					char* last = f->head - 1;
 					if(last[0] != '\\') {
 						break;
 					}
 				}
+				nextchar;
 
 				if(f->head[0] == '\n') {
-					printf("Error, encountered newline in string literal");
-					printf("line %d, char %d\n", f->location.line, f->location.offset);
+					printf(">>> Error, encountered newline in string literal\n");
+					printf(">>> line %d, char %d\n", f->location.line, f->location.offset);
 					break;
 				}
 			}
