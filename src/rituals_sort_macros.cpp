@@ -78,10 +78,6 @@ void func_name(T* array, isize count) \
 	} \
 }
 
-
-
-
-
 // Returns -1 on fail to find.
 #define GenerateBinarySearchForType(func_name, T, K, Member_Key_Macro) \
 isize func_name(K key, T* array, isize count) \

@@ -1,9 +1,9 @@
 $	src/rituals_main.cpp	115;"	d	file:
 AABB	src/rituals_math.cpp	/^union AABB$/;"	u	file:
-AABB_x1	src/rituals_math.cpp	325;"	d	file:
-AABB_x2	src/rituals_math.cpp	326;"	d	file:
-AABB_y1	src/rituals_math.cpp	327;"	d	file:
-AABB_y2	src/rituals_math.cpp	328;"	d	file:
+AABB_x1	src/rituals_math.cpp	324;"	d	file:
+AABB_x2	src/rituals_math.cpp	325;"	d	file:
+AABB_y1	src/rituals_math.cpp	326;"	d	file:
+AABB_y2	src/rituals_math.cpp	327;"	d	file:
 APIENTRY	src/thirdparty/gl_core_3_3.h	47;"	d
 Allocate	src/rituals_main.cpp	182;"	d	file:
 Allocate	src/rituals_win32.cpp	69;"	d	file:
@@ -975,9 +975,13 @@ Game_State_Menu	src/rituals_game.cpp	/^	Game_State_Menu,$/;"	e	enum:Game_State	f
 Game_State_None	src/rituals_game.cpp	/^	Game_State_None,$/;"	e	enum:Game_State	file:
 Game_State_Play	src/rituals_game.cpp	/^	Game_State_Play$/;"	e	enum:Game_State	file:
 GenerateBinarySearchForType	src/rituals_sort_generator.cpp	86;"	d	file:
+GenerateBinarySearchForType	src/rituals_sort_macros.cpp	82;"	d	file:
 GenerateInsertionSortForType	src/rituals_sort_generator.cpp	35;"	d	file:
+GenerateInsertionSortForType	src/rituals_sort_macros.cpp	35;"	d	file:
 GenerateIntrosortForType	src/rituals_sort_generator.cpp	49;"	d	file:
+GenerateIntrosortForType	src/rituals_sort_macros.cpp	49;"	d	file:
 GenerateQuicksortForType	src/rituals_sort_generator.cpp	12;"	d	file:
+GenerateQuicksortForType	src/rituals_sort_macros.cpp	12;"	d	file:
 Gigabytes	src/metaprogram/metaprogram_main.cpp	59;"	d	file:
 Gigabytes	src/rituals_main.cpp	205;"	d	file:
 Gigabytes	src/rituals_win32.cpp	84;"	d	file:
@@ -1329,6 +1333,7 @@ _files	src/thirdparty/tinydir.h	/^	tinydir_file *_files;$/;"	m	struct:tinydir_di
 _game_registry__key_macro	src/rituals_game_registry.cpp	56;"	d	file:
 _generate_registry_lookup	src/rituals_game_registry.cpp	57;"	d	file:
 _generate_sort_and_search_for_numeric_type	src/rituals_sort_generator.cpp	108;"	d	file:
+_generate_sort_and_search_for_numeric_type	src/rituals_sort_macros.cpp	104;"	d	file:
 _get_at	src/rituals_simulation.cpp	/^Tile_Info* _get_at(isize x, isize y)$/;"	f
 _get_at	src/rituals_win32.cpp	/^uint8 _get_at(isize x, isize y)$/;"	f
 _get_member_address	src/rituals_renderer.cpp	131;"	d	file:
@@ -1345,6 +1350,7 @@ _isnt_spritefont_separator	src/rituals_gui.cpp	/^static inline bool _isnt_sprite
 _naive_generate_statics_for_tilemap	src/rituals_win32.cpp	/^void _naive_generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)$/;"	f
 _new_tile	src/rituals_game_registry.cpp	132;"	d	file:
 _passthru_macro	src/rituals_sort_generator.cpp	107;"	d	file:
+_passthru_macro	src/rituals_sort_macros.cpp	103;"	d	file:
 _recursive_delete	src/rituals_serialization.cpp	/^int _recursive_delete(const char* last_path, isize last_path_len, char* path)$/;"	f
 _rotate_left	src/rituals_random.cpp	/^static inline uint64 _rotate_left(const uint64 t, int64 k)$/;"	f	file:
 _s	src/thirdparty/tinydir.h	/^	struct _stat _s;$/;"	m	struct:tinydir_file	typeref:struct:tinydir_file::_stat
@@ -1649,7 +1655,7 @@ files	src/metaprogram/metaprogram_parser.cpp	/^	Lexer_File* files;$/;"	m	struct:
 files_capacity	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 files_count	src/metaprogram/metaprogram_parser.cpp	/^	isize files_count, files_capacity;$/;"	m	struct:Lexer	file:
 finalize_game_registry	src/rituals_game_registry.cpp	/^void finalize_game_registry()$/;"	f
-find_next_procedure	src/metaprogram/metaprogram_parser.cpp	/^Proc_Prototype find_next_procedure(Token* start)$/;"	f
+find_next_procedure	src/metaprogram/metaprogram_parser.cpp	/^Proc_Prototype* find_next_procedure(Token* start, Memory_Arena* arena)$/;"	f
 first	src/thirdparty/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon16
 first_row_filter	src/thirdparty/stb_image.h	/^static stbi_uc first_row_filter[5] =$/;"	v
 firstcode	src/thirdparty/stb_image.h	/^   stbi__uint16 firstcode[16];$/;"	m	struct:__anon9
@@ -2171,16 +2177,19 @@ input_text_append_char	src/rituals_game.cpp	/^void input_text_append_char(char c
 int16	src/metaprogram/metaprogram_main.cpp	/^typedef int16_t int16;$/;"	t	file:
 int16	src/rituals_main.cpp	/^typedef int16_t int16;$/;"	t	file:
 int16	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(int16);$/;"	v
+int16	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(int16);$/;"	v
 int16	src/rituals_win32.cpp	/^typedef int16_t int16;$/;"	t	file:
 int32	src/metaprogram/metaprogram_main.cpp	/^typedef int32_t int32;$/;"	t	file:
 int32	src/rituals_main.cpp	/^typedef int32_t int32;$/;"	t	file:
 int32	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(int32);$/;"	v
+int32	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(int32);$/;"	v
 int32	src/rituals_win32.cpp	/^typedef int32_t int32;$/;"	t	file:
 int32_t	src/thirdparty/gl_core_3_3.h	/^typedef __int32 int32_t;$/;"	t
 int32_t	src/thirdparty/gl_core_3_3.h	/^typedef long int int32_t;$/;"	t
 int64	src/metaprogram/metaprogram_main.cpp	/^typedef int64_t int64;$/;"	t	file:
 int64	src/rituals_main.cpp	/^typedef int64_t int64;$/;"	t	file:
 int64	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(int64);$/;"	v
+int64	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(int64);$/;"	v
 int64	src/rituals_win32.cpp	/^typedef int64_t int64;$/;"	t	file:
 int64_t	src/thirdparty/gl_core_3_3.h	/^typedef __int64 int64_t;$/;"	t
 int64_t	src/thirdparty/gl_core_3_3.h	/^typedef long int int64_t;$/;"	t
@@ -2188,6 +2197,7 @@ int64_t	src/thirdparty/gl_core_3_3.h	/^typedef long long int int64_t;$/;"	t
 int8	src/metaprogram/metaprogram_main.cpp	/^typedef int8_t int8;$/;"	t	file:
 int8	src/rituals_main.cpp	/^typedef int8_t int8;$/;"	t	file:
 int8	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(int8);$/;"	v
+int8	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(int8);$/;"	v
 int8	src/rituals_win32.cpp	/^typedef int8_t int8;$/;"	t	file:
 intrect_to_aabb	src/rituals_math.cpp	/^static inline AABB intrect_to_aabb(Rect2i* r)$/;"	f	file:
 intrect_to_rect	src/rituals_math.cpp	/^static inline Rect2 intrect_to_rect(Rect2i* ir)$/;"	f	file:
@@ -2205,6 +2215,7 @@ is_valid_identifier	src/metaprogram/metaprogram_parser.cpp	/^bool is_valid_ident
 isize	src/metaprogram/metaprogram_main.cpp	/^typedef ptrdiff_t isize;$/;"	t	file:
 isize	src/rituals_main.cpp	/^typedef ptrdiff_t isize;$/;"	t	file:
 isize	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(isize);$/;"	v
+isize	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(isize);$/;"	v
 isize	src/rituals_win32.cpp	/^typedef ptrdiff_t isize;$/;"	t	file:
 isizeof	src/rituals_main.cpp	185;"	d	file:
 isizeof	src/rituals_win32.cpp	72;"	d	file:
@@ -2431,14 +2442,17 @@ real	src/metaprogram/metaprogram_main.cpp	/^typedef real32 real;$/;"	t	file:
 real	src/rituals_main.cpp	/^typedef real32 real;$/;"	t	file:
 real	src/rituals_main.cpp	/^typedef real64 real;$/;"	t	file:
 real	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(real);$/;"	v
+real	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(real);$/;"	v
 real	src/rituals_win32.cpp	/^typedef real32 real;$/;"	t	file:
 real32	src/metaprogram/metaprogram_main.cpp	/^typedef float real32;$/;"	t	file:
 real32	src/rituals_main.cpp	/^typedef float real32;$/;"	t	file:
 real32	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(real32);$/;"	v
+real32	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(real32);$/;"	v
 real32	src/rituals_win32.cpp	/^typedef float real32;$/;"	t	file:
 real64	src/metaprogram/metaprogram_main.cpp	/^typedef double real64;$/;"	t	file:
 real64	src/rituals_main.cpp	/^typedef double real64;$/;"	t	file:
 real64	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(real64);$/;"	v
+real64	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(real64);$/;"	v
 real64	src/rituals_win32.cpp	/^typedef double real64;$/;"	t	file:
 rect2	src/rituals_math.cpp	/^static inline Rect2 rect2(real x, real y, real w, real h)$/;"	f	file:
 rect2_clip	src/rituals_math.cpp	/^static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)$/;"	f	file:
@@ -2949,14 +2963,17 @@ u_texturesize	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat, u_ni
 uint16	src/metaprogram/metaprogram_main.cpp	/^typedef uint16_t uint16;$/;"	t	file:
 uint16	src/rituals_main.cpp	/^typedef uint16_t uint16;$/;"	t	file:
 uint16	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(uint16);$/;"	v
+uint16	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(uint16);$/;"	v
 uint16	src/rituals_win32.cpp	/^typedef uint16_t uint16;$/;"	t	file:
 uint32	src/metaprogram/metaprogram_main.cpp	/^typedef uint32_t uint32;$/;"	t	file:
 uint32	src/rituals_main.cpp	/^typedef uint32_t uint32;$/;"	t	file:
 uint32	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(uint32);$/;"	v
+uint32	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(uint32);$/;"	v
 uint32	src/rituals_win32.cpp	/^typedef uint32_t uint32;$/;"	t	file:
 uint64	src/metaprogram/metaprogram_main.cpp	/^typedef uint64_t uint64;$/;"	t	file:
 uint64	src/rituals_main.cpp	/^typedef uint64_t uint64;$/;"	t	file:
 uint64	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(uint64);$/;"	v
+uint64	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(uint64);$/;"	v
 uint64	src/rituals_win32.cpp	/^typedef uint64_t uint64;$/;"	t	file:
 uint64_t	src/thirdparty/gl_core_3_3.h	/^typedef unsigned __int64 uint64_t;$/;"	t
 uint64_t	src/thirdparty/gl_core_3_3.h	/^typedef unsigned long int uint64_t;$/;"	t
@@ -2964,6 +2981,7 @@ uint64_t	src/thirdparty/gl_core_3_3.h	/^typedef unsigned long long int uint64_t;
 uint8	src/metaprogram/metaprogram_main.cpp	/^typedef uint8_t uint8;$/;"	t	file:
 uint8	src/rituals_main.cpp	/^typedef uint8_t uint8;$/;"	t	file:
 uint8	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(uint8);$/;"	v
+uint8	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(uint8);$/;"	v
 uint8	src/rituals_win32.cpp	/^typedef uint8_t uint8;$/;"	t	file:
 unknown	src/rituals_game_info.cpp	/^	} unknown;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon12	file:
 update	src/rituals_main.cpp	/^void update()$/;"	f
@@ -2976,6 +2994,7 @@ userdata	src/rituals_world_area.cpp	/^	Rituals_Entity_Userdata userdata;$/;"	m	s
 usize	src/metaprogram/metaprogram_main.cpp	/^typedef size_t usize;$/;"	t	file:
 usize	src/rituals_main.cpp	/^typedef size_t usize;$/;"	t	file:
 usize	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(usize);$/;"	v
+usize	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(usize);$/;"	v
 usize	src/rituals_win32.cpp	/^typedef size_t usize;$/;"	t	file:
 v	src/thirdparty/stb_image.h	/^      int h,v;$/;"	m	struct:__anon6::__anon7
 v2	src/rituals_math.cpp	/^static inline Vec2 v2(Vec2i vi)$/;"	f	file:
