@@ -247,7 +247,7 @@ int main(int argc, char** argv)
 					break;
 			}
 		} while(head = head->next);
-		printf("Using: %.2f%% of Work_Arena \n", Work_Arena->head - (isize)Work_Arena->data / (float)Work_Arena->capacity);
+		printf("Using: %.2f%% of Work_Arena \n", (Work_Arena->head - (isize)Work_Arena->data) / (float)Work_Arena->capacity);
 
 
 
