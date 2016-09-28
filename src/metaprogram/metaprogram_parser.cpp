@@ -481,16 +481,125 @@ void parse_include_directive(Lexer* lex, Token* directive)
 }
 
 
-struct Proc_Args
+struct Proc_Arg
 {
-	char* type;
-	char* name;
+	char** terms;
+	isize count;
+
+	char* defaults;
 };
+
+void init_proc_arg(Proc_Arg* arg, isize count, Memory_Arena* arena)
+{
+	arg->terms = area_push_array(arena, char*, count);
+}
 
 struct Proc_Prototype
 {
+	char** decorators;
+	isize decorators_count;
 	char* name;
-	Proc_Args* args;
+	Proc_Arg* args;
 	isize args_count;
+
+	Proc_Prototype* next;
 };
 
+Proc_Prototype find_next_procedure(Token* start)
+{
+	//NOTE(will) will not find C-style "struct Type function() {"
+	Token* head = start;
+	Token* next = NULL;
+	Hash structhash = hash_literal("struct");
+	Hash enumhash = hash_literal("enum");
+	do {
+		if (head->kind == Token_Identifier) {
+			if(head->hash != structhash && head->hash != enumhash) {
+				start_temp_arena(Temp_Ar	ena);
+				//pattern: 
+				//	mode 0 <identifiers...>
+				//	mode 0 <open paren> 
+				//	mode 1 <identifier, * identifier, comma...>
+				//	mode 1 <close paren> 
+				//	mode 2 <open brace>
+				Proc_Prototype proc;
+				proc.decorators = arena_push_array(Temp_Arena, char*, 256);
+				proc.args = arena_push_array(Temp_Arena, char*, 256);
+
+				Token* sub_head = head;
+				int32 mode = 0;
+				Token* default_args_start = NULL;
+				int32 paren_depth = 0;
+				Proc_Arg* arg = proc.args;
+				init_proc_arg(arg, 256, Temp_Arena);
+				do {
+					switch(mode) {
+						case 0:
+							if (sub_head->kind == Token_Identifier) {
+								char* buf = arena_push_array(Temp_Arena, char, 256);
+								memcpy(buf, sub_head->start, sub_head->len);
+								int len = sub_head->len;
+								next = sub_head->next;
+								while(next->kind == Token_Asterisk) {
+									buf[len++] = "*";
+									next = next->next;
+								}
+								buf[len] = '\0';
+								proc.decorators[proc.decorators_count++] = buf;
+							} else if(sub_head->kind == Token_OpenParen) {
+								mode = 1;
+							} else if(sub_head->kind == Token_Asterisk) {
+								continue;
+							}
+							break;
+						case 1:
+							if(sub_head->kind == Token_CloseParen) {
+								if(paren_depth == 0) {
+									mode = 2;
+								} else {
+									paren_depth--;
+								}
+							} else if(sub_head->kind == Token_Identifier) {
+								char* buf = arena_push_array(Temp_Arena, char, 256);
+								memcpy(buf, sub_head->start, sub_head->len);
+								int len = sub_head->len;
+								next = sub_head->next;
+								while(next->kind == Token_Asterisk) {
+									buf[len++] = "*";
+									next = next->next;
+								}
+								buf[len] = '\0';
+								arg->terms[arg->count++] = buf;
+								
+							} else if (sub_head->kind == Token_Equals) {
+								default_args_token = sub_head;
+							} else if (sub_head->kind == Token_Comma) {
+								if(paren_depth == 0) {
+									if(default_args_token != NULL) {
+										char* start = default_args_token->start;
+										isize len = sub_head->start - start + sub_head->len;
+										char* buf = arena_push_array(Temp_Arena, char, len+1);
+										mempy(buf, start, len);
+										buf[len] = '\0';
+										arg->defaults = buf;
+									}
+									arg = proc.args + proc.args_count++;
+									init_proc_arg(arg, 256, Temp_Arena);
+								}
+							} else if(sub_head->kind == Token_OpenParen) {
+								paren_depth++;
+							}
+							break;
+						case 2: 
+							break;
+					}
+				} while(sub_head = sub_head->next);
+
+
+				
+			}
+		}
+
+	} while(head = head->next);
+
+}
