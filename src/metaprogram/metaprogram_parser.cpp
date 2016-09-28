@@ -579,7 +579,7 @@ Proc_Prototype find_next_procedure(Token* start)
 										char* start = default_args_token->start;
 										isize len = sub_head->start - start + sub_head->len;
 										char* buf = arena_push_array(Temp_Arena, char, len+1);
-										mempy(buf, start, len);
+										memcpy(buf, start, len);
 										buf[len] = '\0';
 										arg->defaults = buf;
 									}
