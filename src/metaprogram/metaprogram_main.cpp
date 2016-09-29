@@ -292,6 +292,7 @@ int main(int argc, char** argv)
 		} while (p = p->next);
 
 		Struct_Def* structdef = find_struct_defs(start, Work_Arena);
+		
 
 #if 0
 		head = start;

@@ -840,7 +840,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 					} else {
 						int32 value = dec_str_to_int(head->start, head->len);
 						if(var->array_levels == 0) {
-							var->array_sizes = arena_push_array(arena, int32, 256);
+							var->array_sizes = arena_push_array(arena, isize, 256);
 						}
 						var->array_sizes[var->array_levels++] = value;
 					}
