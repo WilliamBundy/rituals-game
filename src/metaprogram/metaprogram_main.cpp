@@ -301,7 +301,7 @@ int main(int argc, char** argv)
 			printf("typedef struct %s %s;\n", s_head->name);
 		} while(s_head = s_head->next);
 
-		Struct_Def* s_head = structdef;
+		s_head = structdef;
 		do {
 			print_struct(s_head);
 		} while(s_head = s_head->next);
