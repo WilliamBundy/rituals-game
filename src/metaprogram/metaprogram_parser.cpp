@@ -797,7 +797,9 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			bool quit = false;
 			do {
 				if(head->kind == Token_Comma) {
-					var->name = var->terms[--var->count];
+					if(mode == 0) {
+						var->name = var->terms[--var->count];
+					}
 					parent->member_count++;
 					Struct_Kind oldkind = *kind;
 					member = parent->members + parent->member_count;
