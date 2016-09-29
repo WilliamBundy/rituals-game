@@ -575,6 +575,11 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 				init_proc_arg(arg, 256, arena);
 				bool quit = false;
 				do {
+					if(sub_head->kind == Token_Semicolon) {
+						proc = {0};
+						mode = -1;
+						break;
+					}
 					switch(mode) {
 						case 0:
 							sub_head = parse_dollarsign_instructions(sub_head);
