@@ -770,6 +770,71 @@ union Struct_Member
 	} member_var;
 };
 
+void print_indent(int32 indent)
+{
+	for(isize i = 0; i < indent; ++i) {
+		printf("\t");
+	}
+}
+
+
+void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)
+{
+	print_indent(indent);
+	if(as_member_struct) {
+		if(def->kind == StructKind_Struct) {
+			printf("struct {\n");
+		} else if(def->kind == StructKind_Union) {
+			printf("union {\n");
+		}
+	} else {
+		if(def->kind == StructKind_Struct) {
+			printf("struct %s\n", s_head->name);
+		} else if(def->kind == StructKind_Union) {
+			printf("union %s\n", s_head->name);
+		}
+		print_indent(indent);
+		printf("{\n");
+	}
+
+	for(isize i = 0; i < s_head->member_count; ++i) {
+		if(s_head->member_kinds == StructKind_Member) {
+			auto var = &s_head->members[i].member_var;
+			print_indent(indent);
+			for(isize a = 0; a < var->count; ++a) {
+				printf("%s ", var->terms[a]);
+			}
+			for(isize a = 0; a < var->asterisk_count; ++a) {
+				printf("*");
+			}
+			printf("%s", s_head->members[i].member_var.name);
+			for(isize a = 0; a < var->array_levels; ++a) {
+				printf("[%s]", var->array_sizes[a]);
+			}
+			printf(";\n");
+		} else {
+			auto var = &s_head->members[i].anon_struct;
+			print_struct(&var->def, true, indent + 1);
+			printf("%s", s_head->members[i].member_var.name);
+			
+			for(isize a = 0; a < var->array_levels; ++a) {
+				printf("[%s]", var->array_sizes[a]);
+			}
+
+			printf(";\n");
+		}	
+
+	}
+	print_indent(indent);
+	if(as_member_struct) {
+		printf("} ");
+	} else {
+		printf("};\n");
+	}
+	
+}
+
+
 // unsigned short**** thinga[400], **thingb, **thingc, a, b, c, d[3], e[44][55], f[44][22][44];
 
 Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena)
@@ -967,4 +1032,5 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 
 	return def_start;
 }
+
 

@@ -2453,6 +2453,8 @@ prefix	src/thirdparty/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon16
 prev	src/metaprogram/metaprogram_parser.cpp	/^	Token *prev, *next;$/;"	m	struct:Token	file:
 prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	struct:Play_State	file:
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
+print_indent	src/metaprogram/metaprogram_parser.cpp	/^void print_indent(int32 indent)$/;"	f
+print_struct	src/metaprogram/metaprogram_parser.cpp	/^void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)$/;"	f
 print_token	src/metaprogram/metaprogram_parser.cpp	/^void print_token(Token* t, Token* start)$/;"	f
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
 prop	src/rituals_game_info.cpp	/^	} prop;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon1	file:
