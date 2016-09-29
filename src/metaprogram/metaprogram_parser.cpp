@@ -1029,7 +1029,7 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 		}
 
 		if(brace_depth < 0) {
-			printf("\nfile %d line %d col %d \n", head->location.file, head->location.line, head->location.offset);
+			fprintf(stderr, "\nfile %d line %d col %d \n", head->location.file, head->location.line, head->location.offset);
 			brace_depth = 0;
 		}
 
