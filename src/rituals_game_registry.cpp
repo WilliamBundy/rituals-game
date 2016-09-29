@@ -53,6 +53,7 @@ void init_game_registry(Game_Registry* registry, Memory_Arena* arena)
 
 
 
+$(exclude)
 #define _game_registry__key_macro(t) (t.k)
 #define _generate_registry_lookup(lookup_func_name, sort_func_name , return_type, array_base_name) \
 return_type* lookup_func_name(const char* name) \
@@ -83,7 +84,8 @@ void sort_func_name() \
 		Registry->array_base_name[i].id = i; \
 	} \
 } 
- 
+$(end)
+
 _generate_registry_lookup(lookup_tile, sort_registered_tiles, Tile_Info, tiles) 
 _generate_registry_lookup(lookup_item, sort_registered_items, Item_Info, items)
 
