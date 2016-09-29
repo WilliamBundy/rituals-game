@@ -25,7 +25,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // TODO(will) implement better error logging
 #define Log_Error(e) printf("There was an error: %s \n", e);
 
+$(exclude)
 #include "rituals_sort_macros.cpp"
+$(end)
 #include "rituals_memory.cpp"
 #include "rituals_random.cpp"
 // Input stuff

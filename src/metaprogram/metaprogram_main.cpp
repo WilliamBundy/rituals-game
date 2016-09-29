@@ -139,21 +139,7 @@ int main(int argc, char** argv)
 			Token* next;
 			switch(head->kind) {
 				case Token_DollarSign:
-					next = head->next->next;
-					if(next->hash == hash_literal("exclude")) {
-						do {
-							if(next->kind == Token_DollarSign) {
-								Token* tk = next->next->next;
-								if(tk->kind == Token_Identifier) {
-									if(tk->hash == hash_literal("end")) {
-										head = next->next;
-										break;
-									}
-								}
-							}
-						} while(next = next->next);
-					}
-					
+					head = parse_dollarsign_instructions(head);
 					break;
 				case Token_CompilerDirective: {
 					if(head->start[0] == 'i') {
