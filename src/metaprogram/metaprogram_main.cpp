@@ -251,6 +251,20 @@ int main(int argc, char** argv)
 			}
 			printf("%s(", p->name);
 
+			for(isize i = 0; i < p->args_count; ++i) {
+				Proc_Arg* a = p->args + i;
+				for(isize j = 0; j < a->count; ++j) {
+					printf("%s", a->terms[j]);
+					if(j == a->count - 1) {
+						if(a->defaults == NULL) {
+							printf(",");
+						} else {
+							printf("%s,", a->defaults);
+						}
+					}
+				}
+			}
+
 			printf("\n");
 			
 		} while (p = p->next);
