@@ -795,6 +795,8 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			} while(head->kind != Token_OpenBrace);
 			head = head->next;
 			Struct_Def def = {0};
+			def.members = arena_push_array(arena, Struct_Member, StructMemberCapacity);
+			def.member_kinds = arena_push_array(arena, Struct_Kind, StructMemberCapacity);
 			do {
 				head = parse_struct_member(&def, head, arena);
 				head = head->next;
@@ -843,6 +845,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 				}
 				if(quit) break;
 			} while(head = head->next);
+			var->def = def;
 		} else {
 			*kind = StructKind_Member;
 			auto var = &member->member_var;
