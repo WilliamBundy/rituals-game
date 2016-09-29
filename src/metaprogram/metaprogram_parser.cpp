@@ -753,8 +753,11 @@ struct Struct_Def
 
 union Struct_Member
 {
-	Struct_Def anon_struct;
-	Struct_Def anon_union;
+	struct {
+		Struct_Def def;
+		char** array_sizes;
+		isize array_levels;
+	} anon_struct;
 	struct {
 		char* name;
 		char** terms;
@@ -762,7 +765,7 @@ union Struct_Member
 
 		int32 asterisk_count;
 
-		isize* array_sizes;
+		char** array_sizes;
 		isize array_levels;
 	} member_var;
 };
@@ -780,10 +783,66 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 	Struct_Kind* kind = parent->member_kinds + parent->member_count;
 
 	if(head->kind == Token_Identifier) {
-		if(head->hash == structhash) {
-			*kind = StructKind_Struct;
-		} else if(head->hash == unionhash) {
-			*kind = StructKind_Union;
+		if(head->hash == structhash || head->hash == unionhash) {
+			if(head->hash == unionhash) {
+				*kind = StructKind_Union;
+			} else {
+				*kind = StructKind_Struct;
+			}
+
+			do {
+ 				head = head->next;
+			} while(head->kind != Token_OpenBrace);
+			head = head->next;
+			Struct_Def def = {0};
+			do {
+				head = parse_struct_member(&def, head, arena);
+				head = head->next;
+			} while(subhead->kind != Token_CloseBrace);
+
+ 			head = head->next;
+			if(head->kind != Token_Identifier) {
+				fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
+						head->kind, head->len, head->start);
+			} else {
+				char* buf = arena_push_array(arena, char, 256);
+				memcpy(buf, head->start, head->len);
+				int len = head->len;
+				next = head->next;
+				buf[len] = '\0';
+				def.name = buf;
+			}
+		
+			head = head->next;
+
+			bool quit = false;
+			auto var = &member->anon_struct;
+			//int32 mode = 0;
+			do { 
+				switch(head->kind) {
+					case Token_Semicolon:
+						quit = true;
+						break;
+					case Token_Comma:
+						//TODO(will) Support commas like with regular variables.
+						break;
+					case Token_OpenBracket:
+						head = head->next;
+						if(var->array_levels == 0) {
+							var->array_sizes = arena_push_array(arena, char*, 256);
+						}
+						char* buf = arena_push_array(arena, char, head->len + 1);
+						memcpy(buf, head->start, head->len);
+						int len = head->len;
+						next = head->next;
+						buf[len] = '\0';
+						var->array_sizes[var->array_levels++] = len;
+						break;
+					default:
+						break;
+				}
+				if(quit) break;
+			} while(head = head->next);
 		} else {
 			*kind = StructKind_Member;
 			auto var = &member->member_var;
@@ -818,7 +877,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 					}
 					break;
 				} else if(head->kind == Token_Identifier) {
-					char* buf = arena_push_array(arena, char, 256);
+					char* buf = arena_push_array(arena, char, head->len + 1);
 					memcpy(buf, head->start, head->len);
 					int len = head->len;
 					next = head->next;
@@ -832,20 +891,15 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 					var->asterisk_count++;
 				} else if(head->kind == Token_OpenBracket) {
 					head = head->next;
-					if(head->kind != Token_Integer) {
-						fprintf(stderr, "ERROR: expected Integer, got %d [%.*s] \n",
-								head->kind, head->len, head->start);
-						fprintf(stderr, "File: %d, Line: %d, Col: %d", 
-								head->location.file, 
-								head->location.line, 
-								head->location.offset);
-					} else {
-						int32 value = dec_str_to_int(head->start, head->len);
-						if(var->array_levels == 0) {
-							var->array_sizes = arena_push_array(arena, isize, 256);
-						}
-						var->array_sizes[var->array_levels++] = value;
+					if(var->array_levels == 0) {
+						var->array_sizes = arena_push_array(arena, char*, 256);
 					}
+					char* buf = arena_push_array(arena, char, head->len + 1);
+					memcpy(buf, head->start, head->len);
+					int len = head->len;
+					next = head->next;
+					buf[len] = '\0';
+					var->array_sizes[var->array_levels++] = len;
 				}
 			} while(head = head->next);
 		}

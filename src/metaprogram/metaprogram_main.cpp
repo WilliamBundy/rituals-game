@@ -310,7 +310,7 @@ int main(int argc, char** argv)
 				}
 				printf("%s", s_head->members[i].member_var.name);
 				for(isize a = 0; a < var->array_levels; ++a) {
-					printf("[%d]", var->array_sizes[a]);
+					printf("[%s]", var->array_sizes[a]);
 				}
 				printf(";\n");
 			}
