@@ -251,7 +251,7 @@ int main(int argc, char** argv)
 					printf("\n");
 				Token* tt = p->start;
 				do {
-					print_token(tt);
+					print_token(tt, start);
 					printf("\n");
 				} while(tt != p->end);
 					printf("\n");
