@@ -298,7 +298,7 @@ int main(int argc, char** argv)
 
 		Struct_Def* s_head = structdef;
 		do {
-			printf("%s\n", s_head->name);
+			printf("struct %s {\n", s_head->name);
 			for(isize i = 0; i < s_head->member_count; ++i) {
 				auto var = &s_head->members[i].member_var;
 				printf("\t"); 
@@ -312,8 +312,9 @@ int main(int argc, char** argv)
 				for(isize a = 0; a < var->array_levels; ++a) {
 					printf("[%d]", var->array_sizes[a]);
 				}
-				printf("\n");
+				printf(";\n");
 			}
+			printf("};\n");
 
 		} while(s_head = s_head->next);
 		
