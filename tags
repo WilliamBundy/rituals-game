@@ -39,8 +39,8 @@ AsciiPrintableStart	src/rituals_gui.cpp	15;"	d	file:
 Ascii_Printable_Count	rituals_gui.cpp	8;"	d	file:
 Ascii_Printable_End	rituals_gui.cpp	7;"	d	file:
 Ascii_Printable_Start	rituals_gui.cpp	6;"	d	file:
-Backspace	src/rituals_game.cpp	159;"	d	file:
-BackspaceStr	src/rituals_game.cpp	160;"	d	file:
+Backspace	src/rituals_game.cpp	157;"	d	file:
+BackspaceStr	src/rituals_game.cpp	158;"	d	file:
 Base_Arena	src/metaprogram/metaprogram_main.cpp	/^Memory_Arena* Base_Arena;$/;"	v
 Body_Flag_Always_Contact	src/rituals_simulation.cpp	/^	Body_Flag_Always_Contact = Flag(4),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_No_Friction	src/rituals_simulation.cpp	/^	Body_Flag_No_Friction = Flag(2),$/;"	e	enum:Sim_Body_Flags	file:
@@ -1205,7 +1205,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	741;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	748;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -2422,6 +2422,7 @@ parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
 parse_dollarsign_instructions	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_dollarsign_instructions(Token* t) $/;"	f
 parse_include_directive	src/metaprogram/metaprogram_parser.cpp	/^void parse_include_directive(Lexer* lex, Token* directive)$/;"	f
 parse_number_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_number_tokens(Token* head)$/;"	f
+parse_sing	src/metaprogram/metaprogram_parser.cpp	/^void parse_sing(Token* t, int32 brace_level) $/;"	f
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_struct_member	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena)$/;"	f

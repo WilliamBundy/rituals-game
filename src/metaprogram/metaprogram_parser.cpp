@@ -546,9 +546,16 @@ Token* parse_dollarsign_instructions(Token* t)
 				}
 			}
 		} while(next = next->next);
-	}
+	} 
 	return head;
 
+}
+
+void parse_sing(Token* t, int32 brace_level) 
+{
+	if(t->hash == hash_literal("sing")) { 
+		fprintf(stderr, ">>>>>>>> %d\n", brace_level);
+	}
 }
 
 Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
@@ -1007,6 +1014,10 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 
 	int32 brace_depth = 0;
 	do {
+		if(head->kind == Token_DollarSign) {
+			next = head->next->next;
+			parse_sing(next, brace_depth);
+		}
 		head = parse_dollarsign_instructions(head);
 
 		if(head->kind == Token_OpenBrace) {
