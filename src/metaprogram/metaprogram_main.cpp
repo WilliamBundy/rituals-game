@@ -132,6 +132,7 @@ int main(int argc, char** argv)
 			last = head;
 			head = head->next;
 		}
+		head->prev = last;
 
 		head = start;
 		
@@ -218,7 +219,7 @@ int main(int argc, char** argv)
 					} else if(next && next->kind == Token_Number) {
 						Token_Kind prevkind = Token_Unknown;
 						if(head->prev != NULL)
-							Token_Kind prevkind = head->prev->kind;
+							prevkind = head->prev->kind;
 						if(prevkind != Token_Number &&
 								prevkind != Token_Integer && 
 								prevkind != Token_Float && 
