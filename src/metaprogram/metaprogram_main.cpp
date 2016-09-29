@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 
 		head = start;
 		
-		do
+		do {
 			print_token(head, start);
 			if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
 				parse_include_directive(&lex, head);
