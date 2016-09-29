@@ -1003,9 +1003,17 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 	Struct_Def* def_start = arena_push_struct(arena, Struct_Def);
 	Struct_Def* def_head = def_start;
 
+	int32 brace_depth = 0;
 	do {
 		head = parse_dollarsign_instructions(head);
-		if(head->kind != Token_Identifier) continue;
+
+		if(head->kind == Token_OpenBrace) {
+			brace_depth++;
+		} else if(head->kind == Token_CloseBrace) {
+			brace_depth--;
+		}
+
+		if(brace_depth > 0 || head->kind != Token_Identifier) continue;
 
 		Struct_Kind kind = StructKind_None;
 		if(head->hash == structhash) {
