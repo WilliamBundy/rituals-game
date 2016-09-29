@@ -89,7 +89,7 @@ struct Token
 void print_token(Token* t, Token* start)
 {
 	isize sp = (isize) start;
-	printf("%x<-[%x %d %.*s]->%x", (isize)t->prev - sp, (isize)t - sp, t->kind, t->len, t->start, (isize)t->next - sp);
+	printf("%d<-[%d %d %.*s]->%d", ((isize)t->prev - sp) / sizeof(Token), ((isize)t - sp) / sizeof(Token), t->kind, t->len, t->start, ((isize)t->next - sp) / sizeof(Token));
 }
 
 
