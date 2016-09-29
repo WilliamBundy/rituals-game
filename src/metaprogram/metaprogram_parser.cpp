@@ -86,9 +86,10 @@ struct Token
 	Token *prev, *next;
 };
 
-void print_token(Token* t)
+void print_token(Token* t, Token* start)
 {
-	printf("%x<-[%x %d %.*s]->%x", (isize)t->prev, (isize)t, t->kind, t->len, t->start, (isize)t->next);
+	isize sp = (isize) start;
+	printf("%x<-[%x %d %.*s]->%x", (isize)t->prev - sp, (isize)t - sp, t->kind, t->len, t->start, (isize)t->next - sp);
 }
 
 
