@@ -540,13 +540,10 @@ Token* parse_dollarsign_instructions(Token* t)
 
 }
 
-
-
 Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 {
 	//NOTE(will) will not find C-style "struct Type function() {"
 	Token* head = start;
-	Token* next = NULL;
 	Hash structhash = hash_literal("struct");
 	Hash enumhash = hash_literal("enum");
 
@@ -690,3 +687,62 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 	} while(head = head->next);
 	return proc_start;
 }
+/* struct <name> {
+ *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
+ *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
+ *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
+ *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
+ *
+ *     union {
+ *	       struct {
+ *
+ *	       } <name>;
+ *	       union {
+ *
+ *	       } <name>;
+ *     } <name>;
+ * };
+ *
+ *
+ *
+ */
+
+enum Struct_Type 
+{
+	StructType_Struct,
+	StructType_Union,
+	StructType_Member
+};
+
+
+typedef union Struct_Member Struct_Member;
+struct Struct_Def
+{
+	char* name;
+	Struct_Member* members;
+	Struct_Type* member_kinds;
+	isize member_count;
+
+	Struct_Def* next;
+}; 
+
+union Struct_Member
+{
+	Struct_Def anon_struct;
+	Struct_Def anon_union;
+	struct {
+		char** modifiers;
+		char* type;
+		int32 asterisk_count;
+		char* name;
+	} member_var;
+};
+
+Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
+{
+	Token* head;
+
+
+}
+
+
