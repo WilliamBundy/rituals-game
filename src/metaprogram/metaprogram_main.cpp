@@ -251,7 +251,6 @@ int main(int argc, char** argv)
 			}
 			printf("%s(", p->name);
 
-			printf("[%d]", p->args_count);
 			for(isize i = 0; i < p->args_count; ++i) {
 				Proc_Arg* a = p->args + i;
 				for(isize j = 0; j < a->count; ++j) {
@@ -267,7 +266,13 @@ int main(int argc, char** argv)
 					}
 				}
 			} 
-			printf(");");
+
+			if(p->args_count != 0) {
+				if(p->args[p->args_count - 1].defaults == NULL) 
+					printf(");");
+				else 
+					printf(";");
+			}
 
 			printf("\n");
 			
