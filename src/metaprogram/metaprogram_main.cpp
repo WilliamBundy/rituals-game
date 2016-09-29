@@ -118,8 +118,8 @@ int main(int argc, char** argv)
 		//char* file = load_file(filename, NULL, Work_Arena);
 		Lexer lex;
 		init_lexer(&lex, 1024, Work_Arena);
-		init_lexer_file(get_next_file(&lex), argv[1], NULL, 0, Work_Arena);
-	//	init_lexer_file(get_next_file(&lex), "src\\rituals_game.cpp", NULL, 0, Work_Arena);
+	//	init_lexer_file(get_next_file(&lex), argv[1], NULL, 0, Work_Arena);
+		init_lexer_file(get_next_file(&lex), "src\\rituals_game.cpp", NULL, 0, Work_Arena);
 
 		Token* head = arena_push_struct(Work_Arena, Token);
 		Token* start = head;
@@ -299,7 +299,6 @@ int main(int argc, char** argv)
 		Struct_Def* s_head = structdef;
 		do {
 			print_struct(s_head);
-			*((char*)(NULL)) = 'A';
 		} while(s_head = s_head->next);
 		
 
