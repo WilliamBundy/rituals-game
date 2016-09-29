@@ -769,7 +769,7 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 		}
 	} while(head = head->next);
 
-
+	return NULL;
 }
 
 
