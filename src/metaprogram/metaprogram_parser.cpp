@@ -581,6 +581,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 						break;
 					}
 					sub_head = parse_dollarsign_instructions(sub_head);
+					sub_head = parse_dollarsign_instructions(sub_head);
 					switch(mode) {
 						case 0:
 							if (sub_head->kind == Token_Identifier) {
