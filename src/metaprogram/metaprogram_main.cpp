@@ -134,6 +134,15 @@ int main(int argc, char** argv)
 		}
 
 		head = start;
+		
+		do {
+			print_token(head);
+			printf("\n");
+
+		} while(head = head->next);
+
+		head = start;
+
 		do {
 			Token* next;
 			switch(head->kind) {
