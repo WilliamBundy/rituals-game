@@ -259,7 +259,8 @@ int main(int argc, char** argv)
 						if(a->defaults == NULL) {
 							if(i != p->args_count - 1) printf(", ");
 						} else {
-							printf(" %s,", a->defaults);
+							printf(" %s", a->defaults);
+							if(i != p->args_count - 1) printf(" ");
 						}
 					} else {
 						printf(" ");
