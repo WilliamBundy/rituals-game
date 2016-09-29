@@ -872,8 +872,13 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 
  			head = head->next;
 			if(head->kind != Token_Identifier) {
-				fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
-						head->kind, head->len, head->start);
+				if(head->kind == Token_Semicolon) {
+					def.name = "";
+
+				} else {
+					fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
+							head->kind, head->len, head->start);
+				}
 			} else {
 				char* buf = arena_push_array(arena, char, 256);
 				memcpy(buf, head->start, head->len);
