@@ -469,7 +469,7 @@ void parse_include_directive(Lexer* lex, Token* directive)
 			if(file->start != NULL) {
 				Token* new_file_head = arena_push_struct(Work_Arena, Token);
 				Token* new_file_start = new_file_head;
-				Token* last;
+				Token* last = directive;
 				Token t;
 				while(lexer_get_token(lex, file, &t)) {
 					*new_file_head = t;
