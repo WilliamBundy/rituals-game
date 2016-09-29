@@ -595,6 +595,8 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 								buf[len] = '\0';
 								proc.decorators[proc.decorators_count++] = buf;
 							} else if(sub_head->kind == Token_OpenParen) {
+								arg = proc.args + proc.args_count++;
+								init_proc_arg(arg, 256, arena);
 								proc.name = proc.decorators[--proc.decorators_count];
 								mode = 1;
 							} else if(sub_head->kind == Token_Asterisk) {
