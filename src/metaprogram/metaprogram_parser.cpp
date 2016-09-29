@@ -798,7 +798,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			do {
 				head = parse_struct_member(&def, head, arena);
 				head = head->next;
-			} while(subhead->kind != Token_CloseBrace);
+			} while(head->kind != Token_CloseBrace);
 
  			head = head->next;
 			if(head->kind != Token_Identifier) {
