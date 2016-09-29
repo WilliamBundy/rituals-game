@@ -783,7 +783,6 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 	if(def->name == NULL) return;
 	print_indent(indent);
 	if(as_member_struct) {
-		printf("%d ", def->kind);
 		if(def->kind == StructKind_Struct) {
 			printf("struct {\n");
 		} else if(def->kind == StructKind_Union) {
