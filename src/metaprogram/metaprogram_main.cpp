@@ -244,6 +244,7 @@ int main(int argc, char** argv)
 
 		Proc_Prototype* p = find_proc_prototypes(start, Work_Arena);
 
+#if 0
 		do {
 			if(p->name == NULL) continue;
 
@@ -290,6 +291,8 @@ int main(int argc, char** argv)
 			printf("\n");
 			
 		} while (p = p->next);
+
+#endif 
 
 		Struct_Def* structdef = find_struct_defs(start, Work_Arena);
 
