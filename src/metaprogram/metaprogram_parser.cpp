@@ -654,6 +654,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 									} else if(sub_head->kind == Token_CloseBrace) {
 										if(brace_depth == 0) {
 											print_token(sub_head, start);
+											printf("\n");
 											quit = true;
 											break;	
 										}
