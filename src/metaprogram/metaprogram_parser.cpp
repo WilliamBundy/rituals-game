@@ -1022,8 +1022,10 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 
 		if(head->kind == Token_OpenBrace) {
 			brace_depth++;
+			fprintf(">>\n");
 		} else if(head->kind == Token_CloseBrace) {
 			brace_depth--;
+			fprintf("<<\n");
 		}
 
 		if(head->hash == typedefhash) {

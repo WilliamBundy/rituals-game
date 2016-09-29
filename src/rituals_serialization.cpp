@@ -77,7 +77,6 @@ int check_path(char* path)
 #if RITUALS_WINDOWS == 1
 	return PathFileExists(path);
 #elif RITUALS_LINUX == 1
-$(sing)
 	struct stat s;
 	return (stat(path, &s) == 0);
 #endif
