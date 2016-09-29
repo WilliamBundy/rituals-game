@@ -244,7 +244,21 @@ int main(int argc, char** argv)
 
 		Proc_Prototype* p = find_proc_prototypes(start, Work_Arena);
 
-#if 0
+		Struct_Def* structdef = find_struct_defs(&lex, start, Work_Arena);
+
+		Struct_Def* s_head = structdef;
+		do {
+			if(s_head->name == NULL) continue;
+			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
+		} while(s_head = s_head->next);
+
+		s_head = structdef;
+		do {
+			if(s_head->name == NULL) continue;
+			print_struct(s_head);
+		} while(s_head = s_head->next);
+		
+#if 1
 		do {
 			if(p->name == NULL) continue;
 
@@ -294,20 +308,6 @@ int main(int argc, char** argv)
 
 #endif 
 
-		Struct_Def* structdef = find_struct_defs(&lex, start, Work_Arena);
-
-		Struct_Def* s_head = structdef;
-		do {
-			if(s_head->name == NULL) continue;
-			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
-		} while(s_head = s_head->next);
-
-		s_head = structdef;
-		do {
-			if(s_head->name == NULL) continue;
-			print_struct(s_head);
-		} while(s_head = s_head->next);
-		
 
 #if 0
 		head = start;
