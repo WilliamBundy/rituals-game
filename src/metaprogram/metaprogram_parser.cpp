@@ -1018,7 +1018,7 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 		if(head->hash == typedefhash) {
 			do {
 				head = head->next;
-			} while(head != Token_Semicolon);
+			} while(head->next != Token_Semicolon);
 		}
 
 		if(brace_depth > 0 || head->kind != Token_Identifier) continue;
