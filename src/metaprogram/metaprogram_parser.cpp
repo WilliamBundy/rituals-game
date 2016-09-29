@@ -815,7 +815,7 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 			printf(";\n");
 		} else {
 			auto var = &def->members[i].anon_struct;
-			print_struct(&var->def, true, indent + 1);
+			print_struct(&var->def, true, indent);
 			printf("%s", def->members[i].member_var.name);
 			
 			for(isize a = 0; a < var->array_levels; ++a) {
