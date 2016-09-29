@@ -529,7 +529,7 @@ Token* parse_dollarsign_instructions(Token* t)
 				Token* tk = next->next->next;
 				if(tk->kind == Token_Identifier) {
 					if(tk->hash == hash_literal("end")) {
-						head = next->next;
+						head = next->next->next->next;
 						break;
 					}
 				}
@@ -580,9 +580,9 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 						mode = -1;
 						break;
 					}
+					sub_head = parse_dollarsign_instructions(sub_head);
 					switch(mode) {
 						case 0:
-							sub_head = parse_dollarsign_instructions(sub_head);
 							if (sub_head->kind == Token_Identifier) {
 								char* buf = arena_push_array(arena, char, 256);
 								memcpy(buf, sub_head->start, sub_head->len);
