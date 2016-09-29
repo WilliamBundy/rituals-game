@@ -218,14 +218,7 @@ int main(int argc, char** argv)
 					} else if(next && next->kind == Token_Number) {
 						Token_Kind prevkind = Token_Unknown;
 						if(head->prev != NULL) {
-
-							if(head->prev < start || head->prev > last) {
-								printf("=======Something is very wrong======\n");
-								print_token(head, start);
-								printf("\n===================================\n");
-							} else {
-								prevkind = head->prev->kind;
-							}
+							prevkind = head->prev->kind;
 						}
 						if(prevkind != Token_Number &&
 								prevkind != Token_Integer && 
