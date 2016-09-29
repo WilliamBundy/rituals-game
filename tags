@@ -2328,8 +2328,8 @@ next_random_double	src/rituals_random.cpp	/^real64 next_random_double(Random* r)
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float()$/;"	f
 next_random_float	src/rituals_random.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_random.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
-nextchar	src/metaprogram/metaprogram_parser.cpp	184;"	d	file:
-nextchar	src/metaprogram/metaprogram_parser.cpp	410;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	185;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	411;"	d	file:
 night_amount	src/rituals_renderer.cpp	/^	real night_amount;$/;"	m	struct:Render_Group	file:
 night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Render_Group
 night_cutoff	src/rituals_renderer.cpp	/^	real night_cutoff;$/;"	m	struct:Render_Group	file:
@@ -2424,7 +2424,7 @@ prefix	src/thirdparty/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon16
 prev	src/metaprogram/metaprogram_parser.cpp	/^	Token *prev, *next;$/;"	m	struct:Token	file:
 prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	struct:Play_State	file:
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
-print_token	src/metaprogram/metaprogram_parser.cpp	/^void print_token(Token* t)$/;"	f
+print_token	src/metaprogram/metaprogram_parser.cpp	/^void print_token(Token* t, Token* start)$/;"	f
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
 prop	src/rituals_game_info.cpp	/^	} prop;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon1	file:
 ptr	src/rituals_game_info.cpp	/^		void* ptr;$/;"	m	struct:Rituals_Entity_Userdata::__anon12	file:
@@ -3013,8 +3013,8 @@ v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
 v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
-valid	src/metaprogram/metaprogram_parser.cpp	194;"	d	file:
-valid	src/metaprogram/metaprogram_parser.cpp	411;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	195;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	412;"	d	file:
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
 value	src/thirdparty/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon9

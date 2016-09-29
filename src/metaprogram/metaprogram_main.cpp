@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 		head = start;
 		
 		do {
-			print_token(head);
+			print_token(head, start);
 			printf("\n");
 
 		} while(head = head->next);
