@@ -509,6 +509,7 @@ void init_proc_arg(Proc_Arg* arg, isize count, Memory_Arena* arena)
 
 struct Proc_Prototype
 {
+	Token *start, *end;
 	char** decorators;
 	isize decorators_count;
 	char* name;
@@ -566,6 +567,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 				proc = {0};
 				proc.decorators = arena_push_array(arena, char*, 256);
 				proc.args = arena_push_array(arena, Proc_Arg, 256);
+				proc.start = head;
 
 				Token* sub_head = head;
 				int32 mode = 0;
@@ -677,6 +679,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 					}
 					if(quit) {
 						head = sub_head;
+						proc.end = head;
 						*proc_head = proc;
 						proc_head->next = arena_push_struct(arena, Proc_Prototype);
 						proc_head = proc_head->next;
