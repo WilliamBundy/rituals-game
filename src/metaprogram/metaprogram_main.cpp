@@ -253,6 +253,7 @@ int main(int argc, char** argv)
 				do {
 					print_token(tt, start);
 					printf("\n");
+					tt = tt->next;
 				} while(tt != p->end);
 					printf("\n");
 					printf("\n");
