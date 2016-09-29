@@ -780,6 +780,7 @@ void print_indent(int32 indent)
 
 void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)
 {
+	if(def->name == NULL) return;
 	print_indent(indent);
 	if(as_member_struct) {
 		if(def->kind == StructKind_Struct) {
