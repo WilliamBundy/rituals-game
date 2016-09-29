@@ -246,6 +246,17 @@ int main(int argc, char** argv)
 
 		do {
 
+			if(hash_string(p->name, strlen(p->name)) == hash_literal("exclude")) {
+					printf("\n");
+					printf("\n");
+				Token* tt = p->start;
+				do {
+					print_token(tt);
+					printf("\n");
+				} while(tt != p->end);
+					printf("\n");
+					printf("\n");
+			}
 			for(isize i = 0; i < p->decorators_count; ++i) {
 				printf("%s ", p->decorators[i]);
 			}
