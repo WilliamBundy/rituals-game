@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 		Lexer lex;
 		init_lexer(&lex, 1024, Work_Arena);
 	//	init_lexer_file(get_next_file(&lex), argv[1], NULL, 0, Work_Arena);
-		init_lexer_file(get_next_file(&lex), "src\\rituals_game.cpp", NULL, 0, Work_Arena);
+		init_lexer_file(get_next_file(&lex), "src\\rituals_math.cpp", NULL, 0, Work_Arena);
 
 		Token* head = arena_push_struct(Work_Arena, Token);
 		Token* start = head;
