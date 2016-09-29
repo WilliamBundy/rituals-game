@@ -302,6 +302,9 @@ int main(int argc, char** argv)
 			for(isize i = 0; i < s_head->member_count; ++i) {
 				auto var = &s_head->members[i].member_var;
 				printf("\t"); 
+				for(isize a = 0; a < var->count; ++a) {
+					printf("%s ", var->terms[a]);
+				}
 				for(isize a = 0; a < var->asterisk_count; ++a) {
 					printf("*");
 				}
