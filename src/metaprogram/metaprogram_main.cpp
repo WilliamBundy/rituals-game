@@ -300,7 +300,15 @@ int main(int argc, char** argv)
 		do {
 			printf("%s\n", s_head->name);
 			for(isize i = 0; i < s_head->member_count; ++i) {
-				printf("\t%s\n", s_head->members[i].member_var.name);
+				auto var = &s_head->members[i].member_var;
+				printf("\t"); 
+				for(isize a = 0; a < var->asterisk_count; ++a) {
+					printf("*");
+				}
+				printf("%s\n", s_head->members[i].member_var.name);
+				for(isize a = 0; a < var->array_levels; ++a) {
+					printf("[%d]", var->array_sizes[a]);
+				}
 			}
 
 		} while(s_head = s_head->next);
