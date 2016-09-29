@@ -590,7 +590,6 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 								buf[len] = '\0';
 								proc.decorators[proc.decorators_count++] = buf;
 							} else if(sub_head->kind == Token_OpenParen) {
-					
 								proc.name = proc.decorators[--proc.decorators_count];
 								mode = 1;
 							} else if(sub_head->kind == Token_Asterisk) {
@@ -624,7 +623,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 								}
 								buf[len] = '\0';
 								arg->terms[arg->count++] = buf;
-								
+
 							} else if (sub_head->kind == Token_Equals) {
 								default_args_token = sub_head;
 							} else if (sub_head->kind == Token_Comma) {
@@ -650,13 +649,11 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 							if(sub_head->kind == Token_OpenBrace) {
 								int32 brace_depth = 0;
 								do {
-									//TODO(will) this gets us to the end of the function
-									// change this function into a loop that returns a ll of
-									// procedures
 									if(sub_head->kind == Token_OpenBrace) {
 										brace_depth++;
 									} else if(sub_head->kind == Token_CloseBrace) {
 										if(brace_depth == 0) {
+											print_token(sub_head);
 											quit = true;
 											break;	
 										}
