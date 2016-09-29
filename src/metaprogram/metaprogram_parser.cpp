@@ -754,7 +754,7 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 	do {
 		if(head->kind != Token_Identifier) continue;
 
-		Struct_Type kind = StructKind_None;
+		Struct_Kind kind = StructKind_None;
 		if(head->hash == structhash) {
 			kind = StructKind_Struct;
 		} else if(head->hash == unionhash) {
