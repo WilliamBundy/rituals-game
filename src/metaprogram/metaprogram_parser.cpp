@@ -836,7 +836,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 						int len = head->len;
 						next = head->next;
 						buf[len] = '\0';
-						var->array_sizes[var->array_levels++] = len;
+						var->array_sizes[var->array_levels++] = buf;
 						break;
 					default:
 						break;
@@ -899,7 +899,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 					int len = head->len;
 					next = head->next;
 					buf[len] = '\0';
-					var->array_sizes[var->array_levels++] = len;
+					var->array_sizes[var->array_levels++] = buf;
 				}
 			} while(head = head->next);
 		}
