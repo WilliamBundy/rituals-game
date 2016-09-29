@@ -710,7 +710,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 
 enum Struct_Kind
 {
-	StructKind_None
+	StructKind_None,
 	StructKind_Struct,
 	StructKind_Union,
 	StructKind_Member

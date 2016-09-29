@@ -1202,7 +1202,7 @@ State_Just_Released	src/rituals_game.cpp	/^	State_Just_Released = -1,$/;"	e	enum
 State_Pressed	src/rituals_game.cpp	/^	State_Pressed = 1,$/;"	e	enum:Button_State	file:
 State_Released	src/rituals_game.cpp	/^	State_Released = 0,$/;"	e	enum:Button_State	file:
 StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;"	e	enum:Struct_Kind	file:
-StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None$/;"	e	enum:Struct_Kind	file:
+StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
 StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	721;"	d	file:
