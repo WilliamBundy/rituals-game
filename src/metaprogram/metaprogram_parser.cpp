@@ -544,6 +544,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 {
 	//NOTE(will) will not find C-style "struct Type function() {"
 	Token* head = start;
+	Token* next = NULL;
 	Hash structhash = hash_literal("struct");
 	Hash enumhash = hash_literal("enum");
 
@@ -707,20 +708,24 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
  *
  */
 
-enum Struct_Type 
+enum Struct_Kind
 {
-	StructType_Struct,
-	StructType_Union,
-	StructType_Member
+	StructKind_None
+	StructKind_Struct,
+	StructKind_Union,
+	StructKind_Member
 };
 
 
 typedef union Struct_Member Struct_Member;
+#define StructMemberCapacity (256)
 struct Struct_Def
 {
 	char* name;
+	Struct_Kind kind;
+
 	Struct_Member* members;
-	Struct_Type* member_kinds;
+	Struct_Kind* member_kinds;
 	isize member_count;
 
 	Struct_Def* next;
@@ -741,6 +746,28 @@ union Struct_Member
 Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 {
 	Token* head;
+	Token* next = NULL;
+
+	Hash structhash = hash_literal("struct");
+	Hash unionhash = hash_literal("union");
+	Struct_Def def = {0};
+	do {
+		if(head->kind != Token_Identifier) continue;
+
+		Struct_Type kind = StructKind_None;
+		if(head->hash == structhash) {
+			kind = StructKind_Struct;
+		} else if(head->hash == unionhash) {
+			kind = StructKind_Union;
+		}
+
+		if(kind != StructKind_None) {
+			def.kind = kind;
+
+
+
+		}
+	} while(head = head->next);
 
 
 }

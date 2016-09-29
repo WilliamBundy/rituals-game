@@ -1201,13 +1201,15 @@ State_Just_Pressed	src/rituals_game.cpp	/^	State_Just_Pressed = 2,$/;"	e	enum:Bu
 State_Just_Released	src/rituals_game.cpp	/^	State_Just_Released = -1,$/;"	e	enum:Button_State	file:
 State_Pressed	src/rituals_game.cpp	/^	State_Pressed = 1,$/;"	e	enum:Button_State	file:
 State_Released	src/rituals_game.cpp	/^	State_Released = 0,$/;"	e	enum:Button_State	file:
-StructType_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructType_Member$/;"	e	enum:Struct_Type	file:
-StructType_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructType_Struct,$/;"	e	enum:Struct_Type	file:
-StructType_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructType_Union,$/;"	e	enum:Struct_Type	file:
+StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;"	e	enum:Struct_Kind	file:
+StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None$/;"	e	enum:Struct_Kind	file:
+StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
+StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	721;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
+Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^union Struct_Member$/;"	u	file:
-Struct_Type	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Type $/;"	g	file:
 TINYDIR_H	src/thirdparty/tinydir.h	30;"	d
 TINYDIR_STRING	src/thirdparty/tinydir.h	69;"	d
 TINYDIR_STRING	src/thirdparty/tinydir.h	78;"	d
@@ -2239,6 +2241,7 @@ items_hash	src/rituals_game_registry.cpp	/^	usize* items_hash;$/;"	m	struct:Game
 jitter_on_bounce_mag	src/rituals_particles.cpp	/^	real jitter_on_bounce_mag;$/;"	m	struct:Particle_Style	file:
 key	helping_gb.cpp	/^	u64 key;$/;"	m	struct:MapEntry	file:
 keycodes	src/rituals_game.cpp	/^	int8* keycodes;$/;"	m	struct:Game_Input	file:
+kind	src/metaprogram/metaprogram_parser.cpp	/^	Struct_Kind kind;$/;"	m	struct:Struct_Def	file:
 kind	src/metaprogram/metaprogram_parser.cpp	/^	Token_Kind kind;	$/;"	m	struct:Token	file:
 kind	src/rituals_game_info.cpp	/^		isize kind;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
 kind	src/rituals_game_info.cpp	/^		isize kind;$/;"	m	struct:Rituals_Entity_Userdata::__anon8	file:
@@ -2305,7 +2308,7 @@ maxcode	src/thirdparty/stb_image.h	/^   unsigned int maxcode[18];$/;"	m	struct:_
 mb	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 mem_align_4	src/rituals_memory.cpp	/^static inline isize mem_align_4(isize p)$/;"	f	file:
 member_count	src/metaprogram/metaprogram_parser.cpp	/^	isize member_count;$/;"	m	struct:Struct_Def	file:
-member_kinds	src/metaprogram/metaprogram_parser.cpp	/^	Struct_Type* member_kinds;$/;"	m	struct:Struct_Def	file:
+member_kinds	src/metaprogram/metaprogram_parser.cpp	/^	Struct_Kind* member_kinds;$/;"	m	struct:Struct_Def	file:
 member_var	src/metaprogram/metaprogram_parser.cpp	/^	} member_var;$/;"	m	union:Struct_Member	typeref:struct:Struct_Member::__anon1	file:
 members	src/metaprogram/metaprogram_parser.cpp	/^	Struct_Member* members;$/;"	m	struct:Struct_Def	file:
 menu_state	src/rituals_main.cpp	/^Menu_State* menu_state;$/;"	v
