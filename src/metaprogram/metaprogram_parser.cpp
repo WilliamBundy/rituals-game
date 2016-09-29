@@ -865,6 +865,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			Struct_Def def = {0};
 			def.members = arena_push_array(arena, Struct_Member, StructMemberCapacity);
 			def.member_kinds = arena_push_array(arena, Struct_Kind, StructMemberCapacity);
+			def.kind = *kind;
 			do {
 				head = parse_struct_member(&def, head, arena);
 				head = head->next;
