@@ -620,16 +620,18 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 									paren_depth--;
 								}
 							} else if(sub_head->kind == Token_Identifier) {
-								char* buf = arena_push_array(arena, char, 256);
-								memcpy(buf, sub_head->start, sub_head->len);
-								int len = sub_head->len;
-								next = sub_head->next;
-								while(next->kind == Token_Asterisk) {
-									buf[len++] = '*';
-									next = next->next;
+								if(default_args_token == NULL) {
+									char* buf = arena_push_array(arena, char, 256);
+									memcpy(buf, sub_head->start, sub_head->len);
+									int len = sub_head->len;
+									next = sub_head->next;
+									while(next->kind == Token_Asterisk) {
+										buf[len++] = '*';
+										next = next->next;
+									}
+									buf[len] = '\0';
+									arg->terms[arg->count++] = buf;
 								}
-								buf[len] = '\0';
-								arg->terms[arg->count++] = buf;
 
 							} else if (sub_head->kind == Token_Equals) {
 								default_args_token = sub_head;
