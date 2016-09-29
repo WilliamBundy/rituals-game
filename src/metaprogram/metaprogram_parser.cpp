@@ -554,7 +554,7 @@ Token* parse_dollarsign_instructions(Token* t)
 void parse_sing(Token* t, int32 brace_level) 
 {
 	if(t->hash == hash_literal("sing")) { 
-		fprintf(stderr, ">>>>>>>> %d\n", brace_level);
+		fprintf(stderr, "[%d]", brace_level);
 	}
 }
 
