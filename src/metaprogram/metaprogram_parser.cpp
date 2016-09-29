@@ -796,7 +796,7 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 		print_indent(indent);
 		printf("{\n");
 	}
-
+	indent++;
 	for(isize i = 0; i < def->member_count; ++i) {
 		if(def->member_kinds[i] == StructKind_Member) {
 			auto var = &def->members[i].member_var;
@@ -825,6 +825,7 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 		}	
 
 	}
+	indent--;
 	print_indent(indent);
 	if(as_member_struct) {
 		printf("} ");
