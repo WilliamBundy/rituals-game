@@ -826,7 +826,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 					case Token_Comma:
 						//TODO(will) Support commas like with regular variables.
 						break;
-					case Token_OpenBracket:
+					case Token_OpenBracket: {						
 						head = head->next;
 						if(var->array_levels == 0) {
 							var->array_sizes = arena_push_array(arena, char*, 256);
@@ -837,7 +837,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 						next = head->next;
 						buf[len] = '\0';
 						var->array_sizes[var->array_levels++] = buf;
-						break;
+					} break;
 					default:
 						break;
 				}
