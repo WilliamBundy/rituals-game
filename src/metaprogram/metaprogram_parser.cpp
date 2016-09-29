@@ -83,8 +83,15 @@ struct Token
 
 	Lexer_Location location;
 
-	Token* prev, *next;
+	Token *prev, *next;
 };
+
+void print_token(Token* t)
+{
+	printf("%x<-[%x %.*s]->%x", t->prev, t->len, t->start, t->next);
+}
+
+
 
 struct Lexer_File
 {
