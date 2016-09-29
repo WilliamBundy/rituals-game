@@ -806,8 +806,12 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 						} else if(head->kind == Token_OpenBracket) {
 							head = head->next;
 							if(head->kind != Token_Integer) {
-								fprintf(stderr, "ERROR: expected Integer, got %d [%.*s] \n", head->kind, head->len, head->start);
-								fprintf(stderr, "File: %d, Line: %d, Col: %d", head->location.file, head->location.line, head->location.offset);
+								fprintf(stderr, "ERROR: expected Integer, got %d [%.*s] \n",
+										head->kind, head->len, head->start);
+								fprintf(stderr, "File: %d, Line: %d, Col: %d", 
+										head->location.file, 
+										head->location.line, 
+										head->location.offset);
 							}
 						}
 						break;
