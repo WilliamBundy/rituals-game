@@ -250,6 +250,8 @@ int main(int argc, char** argv)
 				printf("%s ", p->decorators[i]);
 			}
 			printf("%s(", p->name);
+
+			prinf("\n");
 			
 		} while (p = p->next);
 
