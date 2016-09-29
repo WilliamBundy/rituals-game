@@ -688,11 +688,19 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 	} while(head = head->next);
 	return proc_start;
 }
-/* struct <name> {
- *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
- *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
- *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
- *     <modifiers> <type> <asterisks...> <name> <comma> <asterisks...> <name> ... <semicolon>
+
+
+/* typedef SomeType****** SomeTypeP
+ * struct <name> {
+ *
+ *     int p;
+ *     int* q;
+ *     char *x, *y;
+ *     char** array;
+ *
+ *     unsigned short SomeType**** thinga[400], **thingb, **thingc, a, b, c, d[3], e[44][55], f[44][22][44];
+ *
+ * // Type: 
  *
  *     union {
  *	       struct {
@@ -736,12 +744,86 @@ union Struct_Member
 	Struct_Def anon_struct;
 	Struct_Def anon_union;
 	struct {
-		char** modifiers;
-		char* type;
+		char** terms;
+		isize count;
+
 		int32 asterisk_count;
 		char* name;
+
+		isize* array_sizes;
+		isize array_levels;
 	} member_var;
 };
+
+// unsigned short**** thinga[400], **thingb, **thingc, a, b, c, d[3], e[44][55], f[44][22][44];
+
+Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena)
+{
+	Hash structhash = hash_literal("struct");
+	Hash unionhash = hash_literal("union");
+	Token* head = start;
+	Token* next = head->next;
+	
+	Struct_Member* member = parent->members + parent->member_count;
+	Struct_Kind* kind = parent->member_kinds + parent->member_count;
+
+	if(head->kind == Token_Identifier) {
+		if(head->hash == structhash) {
+			*kind = StructKind_Struct;
+		} else if(head->hash == unionhash) {
+			*kind = StructKind_Union;
+		} else {
+			*kind = StructKind_Member;
+			auto var = &member->member_var;
+			var->terms = arena_push_array(arena, char*, 256);
+			var->count = 0;
+			var->asterisk_count = 0;
+			var->name = NULL;
+			var->array_sizes = NULL;
+			var->array_levels = 0;
+			int32 mode = 0;
+			bool quit = false;
+			do {
+				switch(mode) {
+					case 0:
+						if(head->kind == Token_Comma) {
+							var->name = var->terms[--var->count];
+							mode = 1;
+						} else if(head->kind == Token_Semicolon) {
+							var->name = var->terms[--var->count];
+							
+							quit = true;
+							break;
+						} else if(head->kind == Token_Identifier) {
+							char* buf = arena_push_array(arena, char, 256);
+							memcpy(buf, head->start, head->len);
+							int len = head->len;
+							next = head->next;
+							buf[len] = '\0';
+							var->terms[var->count++] = buf;
+						} else if(head->kind == Token_Asterisk) {
+							var->asterisk_count++;
+						} else if(head->kind == Token_OpenBracket) {
+							head = head->next;
+							if(head->kind != Token_Integer) {
+								fprintf(stderr, "ERROR: expected Integer, got %d [%.*s] \n", head->kind, head->len, head->start);
+								fprintf(stderr, "File: %d, Line: %d, Col: %d", head->location.file, head->location.line, head->location.offset);
+							}
+						}
+						break;
+					case 1:
+						break;
+
+				}
+				if(quit) break;
+			} while(head = head->next);
+		}
+	}
+
+	parent->member_count++;
+	return head;
+}
+
 
 Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 {
@@ -762,10 +844,28 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 		}
 
 		if(kind != StructKind_None) {
+			def = {0};
 			def.kind = kind;
+			def.members = arena_push_array(arena, Struct_Member, StructMemberCapacity);
+			def.member_kinds = arena_push_array(arena, Struct_Kind, StructMemberCapacity);
+			Token* subhead = head->next;
+			do {
+				if(subhead->kind == Token_Identifier) {
+					//this is the name
+					char* buf = arena_push_array(arena, char, subhead->len + 1);
+					memcpy(buf, subhead->start, subhead->len);
+					buf[subhead->len] = '\0';
+					def.name = buf;
+				} else if(subhead->kind = Token_OpenBrace) {
+					break;
+				}
+			} (subhead = subhead->next);
+			subhead = subhead->next;
 
-
-
+			do {
+				subhead = parse_struct_member(&def, subhead, arena);
+				subhead = subhead->next;
+			} while(subhead->kind != Token_CloseBrace);
 		}
 	} while(head = head->next);
 

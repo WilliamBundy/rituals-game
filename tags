@@ -1205,7 +1205,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	721;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	729;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -1450,6 +1450,8 @@ arena_push_array	src/rituals_memory.cpp	15;"	d	file:
 arena_push_struct	src/rituals_memory.cpp	14;"	d	file:
 args	src/metaprogram/metaprogram_parser.cpp	/^	Proc_Arg* args;$/;"	m	struct:Proc_Prototype	file:
 args_count	src/metaprogram/metaprogram_parser.cpp	/^	isize args_count;$/;"	m	struct:Proc_Prototype	file:
+array_levels	src/metaprogram/metaprogram_parser.cpp	/^		isize array_levels;$/;"	m	struct:Struct_Member::__anon1	file:
+array_sizes	src/metaprogram/metaprogram_parser.cpp	/^		isize* array_sizes;$/;"	m	struct:Struct_Member::__anon1	file:
 asset_arena	src/rituals_game.cpp	/^	Memory_Arena* asset_arena;$/;"	m	struct:Game_Main	file:
 asterisk_count	src/metaprogram/metaprogram_parser.cpp	/^		int32 asterisk_count;$/;"	m	struct:Struct_Member::__anon1	file:
 attack	src/rituals_world_area.cpp	/^	int32 attack;$/;"	m	struct:Entity	file:
@@ -1532,6 +1534,7 @@ contacts_count	src/rituals_simulation.cpp	/^	isize contacts_count, contacts_capa
 contains	src/rituals_game_info.cpp	/^		Rituals_Entity_Kinds contains;$/;"	m	struct:Rituals_Entity_Userdata::__anon1	file:
 contents	src/rituals_inventory.cpp	/^	Item_Stack** contents;$/;"	m	struct:Inventory	file:
 copy_particle_style	src/rituals_particles.cpp	/^Particle_Style copy_particle_style(Particle_Style s,$/;"	f
+count	src/metaprogram/metaprogram_parser.cpp	/^		isize count;$/;"	m	struct:Struct_Member::__anon1	file:
 count	src/metaprogram/metaprogram_parser.cpp	/^	isize count;$/;"	m	struct:Proc_Arg	file:
 count	src/rituals_game_info.cpp	/^				isize id, count;$/;"	m	struct:Rituals_Entity_Userdata::__anon8::__anon9::__anon10	file:
 counter	src/rituals_world_area.cpp	/^	int32 counter;$/;"	m	struct:Entity	file:
@@ -2315,7 +2318,6 @@ menu_state	src/rituals_main.cpp	/^Menu_State* menu_state;$/;"	v
 meta_arena	src/rituals_game.cpp	/^	Memory_Arena* meta_arena;$/;"	m	struct:Game_Main	file:
 mg	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 mode	src/rituals_game_info.cpp	/^		isize mode;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
-modifiers	src/metaprogram/metaprogram_parser.cpp	/^		char** modifiers;$/;"	m	struct:Struct_Member::__anon1	file:
 modulus	src/rituals_math.cpp	/^static inline isize modulus(isize a, isize b)$/;"	f	file:
 mouse	src/rituals_game.cpp	/^	int8* mouse;$/;"	m	struct:Game_Input	file:
 mouse_pos	src/rituals_game.cpp	/^	Vec2 mouse_pos;$/;"	m	struct:Game_Input	file:
@@ -2418,6 +2420,7 @@ parse_include_directive	src/metaprogram/metaprogram_parser.cpp	/^void parse_incl
 parse_number_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_number_tokens(Token* head)$/;"	f
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
+parse_struct_member	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena)$/;"	f
 particles	src/rituals_particles.cpp	/^	Particle* particles;$/;"	m	struct:Emitter	file:
 particles_capacity	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
 particles_count	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
@@ -2923,6 +2926,7 @@ target	src/rituals_world_area.cpp	/^	Vec2 target;$/;"	m	struct:World_Area	file:
 temp_arena	src/metaprogram/metaprogram_main.cpp	/^	Memory_Arena temp_arena;$/;"	m	struct:Metaprogram_Core	file:
 temp_arena	src/rituals_game.cpp	/^	Memory_Arena* temp_arena;$/;"	m	struct:Game_Main	file:
 temp_head	src/rituals_memory.cpp	/^	isize temp_head;$/;"	m	struct:Memory_Arena	file:
+terms	src/metaprogram/metaprogram_parser.cpp	/^		char** terms;$/;"	m	struct:Struct_Member::__anon1	file:
 terms	src/metaprogram/metaprogram_parser.cpp	/^	char** terms;$/;"	m	struct:Proc_Arg	file:
 test_init	src/rituals_main.cpp	/^void test_init()$/;"	f
 test_update	src/rituals_main.cpp	/^void test_update()$/;"	f
@@ -2974,7 +2978,6 @@ total_time	src/rituals_particles.cpp	/^	int32 total_time;$/;"	m	struct:Particle	
 tq	src/thirdparty/stb_image.h	/^      int tq;$/;"	m	struct:__anon6::__anon7
 transparent	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 tt	src/rituals_main.cpp	/^float tt = 0;$/;"	v
-type	src/metaprogram/metaprogram_parser.cpp	/^		char* type;$/;"	m	struct:Struct_Member::__anon1	file:
 type	src/thirdparty/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon11
 type	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
 u_night_amount	src/rituals_renderer.cpp	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:OpenGL_Renderer	file:
