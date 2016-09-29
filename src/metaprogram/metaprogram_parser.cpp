@@ -1028,6 +1028,11 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 			fprintf(stderr, "<%d ", brace_depth);
 		}
 
+		if(brace_depth < 0) {
+			printf("\nfile %d line %d col %d \n", head->location.file, head->location.line, head->location.offset);
+			brace_depth = 0;
+		}
+
 		if(head->hash == typedefhash) {
 			do {
 				head = head->next;
