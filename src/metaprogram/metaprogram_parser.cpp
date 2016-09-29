@@ -878,6 +878,3 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 	return NULL;
 }
 
-
-=======
->>>>>>> 738e1930bad67e4cd24b4c6e32daa602de541402

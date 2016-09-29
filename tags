@@ -1205,7 +1205,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	729;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	731;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -1644,6 +1644,7 @@ eflags	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, e
 emitter	src/rituals_world.cpp	/^	Emitter emitter;$/;"	m	struct:World	file:
 emitter_render	src/rituals_particles.cpp	/^void emitter_render(Emitter* e, Simulator* sim, real dt)$/;"	f
 emitter_spawn	src/rituals_particles.cpp	/^void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle_Style style) $/;"	f
+end	src/metaprogram/metaprogram_parser.cpp	/^	Token *start, *end;$/;"	m	struct:Proc_Prototype	file:
 end_temp_arena	src/rituals_memory.cpp	/^void end_temp_arena(Memory_Arena* arena)$/;"	f
 enemy	src/rituals_game_info.cpp	/^	} enemy;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon3	file:
 entities	src/rituals_world_area.cpp	/^	Entity* entities;$/;"	m	struct:World_Area	file:
@@ -2656,6 +2657,7 @@ sprites_capacity	src/rituals_renderer.cpp	/^	isize sprites_count, sprites_capaci
 sprites_capacity	src/wtb_sprite_renderer.h	/^	isize sprites_count, sprites_capacity;$/;"	m	struct:Render_Group
 sprites_count	src/rituals_renderer.cpp	/^	isize sprites_count, sprites_capacity;$/;"	m	struct:Render_Group	file:
 sprites_count	src/wtb_sprite_renderer.h	/^	isize sprites_count, sprites_capacity;$/;"	m	struct:Render_Group
+start	src/metaprogram/metaprogram_parser.cpp	/^	Token *start, *end;$/;"	m	struct:Proc_Prototype	file:
 start	src/metaprogram/metaprogram_parser.cpp	/^	char* start;$/;"	m	struct:Lexer_File	file:
 start	src/metaprogram/metaprogram_parser.cpp	/^	char* start;$/;"	m	struct:Token	file:
 start_play_state	src/rituals_play_state.cpp	/^void start_play_state(char* world_name_in)$/;"	f
