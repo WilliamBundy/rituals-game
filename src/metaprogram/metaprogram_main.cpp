@@ -298,11 +298,13 @@ int main(int argc, char** argv)
 
 		Struct_Def* s_head = structdef;
 		do {
+			if(s_head->name == NULL) continue;
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
 		} while(s_head = s_head->next);
 
 		s_head = structdef;
 		do {
+			if(s_head->name == NULL) continue;
 			print_struct(s_head);
 		} while(s_head = s_head->next);
 		
