@@ -756,11 +756,11 @@ union Struct_Member
 	Struct_Def anon_struct;
 	Struct_Def anon_union;
 	struct {
+		char* name;
 		char** terms;
 		isize count;
 
 		int32 asterisk_count;
-		char* name;
 
 		isize* array_sizes;
 		isize array_levels;

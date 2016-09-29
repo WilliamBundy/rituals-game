@@ -292,6 +292,15 @@ int main(int argc, char** argv)
 		} while (p = p->next);
 
 		Struct_Def* structdef = find_struct_defs(start, Work_Arena);
+
+		Struct_Def* s_head = structdef;
+		do {
+			printf("%s\n", s_head->name);
+			for(isize i = 0; i < s_head->member_count; ++i) {
+				printf("\t%s\n", s_head->members[i].member_var.name);
+			}
+
+		} while(s_head = s_head->next);
 		
 
 #if 0
