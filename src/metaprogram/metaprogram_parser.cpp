@@ -1004,6 +1004,7 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 	Struct_Def* def_head = def_start;
 
 	do {
+		head = parse_dollarsign_instructions(head);
 		if(head->kind != Token_Identifier) continue;
 
 		Struct_Kind kind = StructKind_None;
