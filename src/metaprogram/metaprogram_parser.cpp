@@ -529,7 +529,7 @@ Token* parse_dollarsign_instructions(Token* t)
 				Token* tk = next->next->next;
 				if(tk->kind == Token_Identifier) {
 					if(tk->hash == hash_literal("end")) {
-						head = next->next->next->next;
+						head = tk->next->nextt;
 						break;
 					}
 				}
