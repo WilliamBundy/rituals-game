@@ -555,6 +555,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 	Proc_Prototype* proc_head = proc_start;
 
 	do {
+		sub_head = parse_dollarsign_instructions(sub_head);
 		if (head->kind == Token_Identifier) {
 			if(head->hash != structhash && head->hash != enumhash) {
 				//pattern: 

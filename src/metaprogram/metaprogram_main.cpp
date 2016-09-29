@@ -245,6 +245,7 @@ int main(int argc, char** argv)
 		Proc_Prototype* p = find_proc_prototypes(start, Work_Arena);
 
 		do {
+			if(p->name == NULL) continue;
 
 			for(isize i = 0; i < p->decorators_count; ++i) {
 				printf("%s ", p->decorators[i]);
