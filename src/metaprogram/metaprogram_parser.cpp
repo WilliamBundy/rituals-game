@@ -871,10 +871,15 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			} while(head->kind != Token_CloseBrace);
 
  			head = head->next;
+			bool quit = false;
 			if(head->kind != Token_Identifier) {
 				if(head->kind == Token_Semicolon) {
 					def.name = "";
-
+					var->def = def;
+					var->array_levels = 0;
+					var->array_sizes = NULL;
+					parent->member_count++;
+					return head;
 				} else {
 					fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
 							head->kind, head->len, head->start);
@@ -890,7 +895,6 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 		
 			head = head->next;
 
-			bool quit = false;
 			auto var = &member->anon_struct;
 			//int32 mode = 0;
 			do { 
