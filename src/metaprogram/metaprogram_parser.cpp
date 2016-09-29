@@ -829,7 +829,10 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 	indent--;
 	print_indent(indent);
 	if(as_member_struct) {
-		printf("} ");
+		if(def->name[0] == '\0')
+			printf("}");
+		else 
+			printf("}");
 	} else {
 		printf("};\n");
 	}
