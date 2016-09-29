@@ -222,7 +222,7 @@ int main(int argc, char** argv)
 
 							if(head->prev < start || head->prev > last) {
 								printf("=======Something is very wrong======\n");
-								print_token(head);
+								print_token(head, start);
 								printf("\n===================================\n");
 							} else {
 								prevkind = head->prev->kind;
