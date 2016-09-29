@@ -39,8 +39,8 @@ AsciiPrintableStart	src/rituals_gui.cpp	15;"	d	file:
 Ascii_Printable_Count	rituals_gui.cpp	8;"	d	file:
 Ascii_Printable_End	rituals_gui.cpp	7;"	d	file:
 Ascii_Printable_Start	rituals_gui.cpp	6;"	d	file:
-Backspace	src/rituals_game.cpp	154;"	d	file:
-BackspaceStr	src/rituals_game.cpp	155;"	d	file:
+Backspace	src/rituals_game.cpp	156;"	d	file:
+BackspaceStr	src/rituals_game.cpp	157;"	d	file:
 Base_Arena	src/metaprogram/metaprogram_main.cpp	/^Memory_Arena* Base_Arena;$/;"	v
 Body_Flag_Always_Contact	src/rituals_simulation.cpp	/^	Body_Flag_Always_Contact = Flag(4),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_No_Friction	src/rituals_simulation.cpp	/^	Body_Flag_No_Friction = Flag(2),$/;"	e	enum:Sim_Body_Flags	file:
@@ -1017,7 +1017,7 @@ Hash	src/metaprogram/metaprogram_parser.cpp	/^typedef uint64 Hash;$/;"	t	file:
 Hitbox	src/rituals_world_area.cpp	/^struct Hitbox$/;"	s	file:
 Hitbox_Contact	src/rituals_world_area.cpp	/^struct Hitbox_Contact$/;"	s	file:
 Input	src/rituals_game.cpp	/^Game_Input* Input;$/;"	v
-InputTextCapacity	src/rituals_game.cpp	42;"	d	file:
+InputTextCapacity	src/rituals_game.cpp	44;"	d	file:
 Inventory	src/rituals_inventory.cpp	/^struct Inventory$/;"	s	file:
 Item_Book	src/rituals_game_info.cpp	/^	Item_Book,$/;"	e	enum:Item_Info_Types	file:
 Item_Hooknife	src/rituals_game_info.cpp	/^	Item_Hooknife,$/;"	e	enum:Item_Info_Types	file:
@@ -2391,6 +2391,7 @@ out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ out
 overlap	src/rituals_simulation.cpp	/^	Vec2 overlap;$/;"	m	struct:Sim_Contact	file:
 pal	src/thirdparty/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon17
 parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
+parse_dollarsign_instructions	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_dollarsign_instructions(Token* t) $/;"	f
 parse_include_directive	src/metaprogram/metaprogram_parser.cpp	/^void parse_include_directive(Lexer* lex, Token* directive)$/;"	f
 parse_number_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_number_tokens(Token* head)$/;"	f
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f

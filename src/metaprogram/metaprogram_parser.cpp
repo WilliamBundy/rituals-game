@@ -507,6 +507,30 @@ struct Proc_Prototype
 	Proc_Prototype* next;
 };
 
+Token* parse_dollarsign_instructions(Token* t) 
+{
+	if(t->kind != Token_DollarSign) return t;
+	Token* next = t->next->next;
+	Token* head = t;
+	if(next->hash == hash_literal("exclude")) {
+		do {
+			if(next->kind == Token_DollarSign) {
+				Token* tk = next->next->next;
+				if(tk->kind == Token_Identifier) {
+					if(tk->hash == hash_literal("end")) {
+						head = next->next;
+						break;
+					}
+				}
+			}
+		} while(next = next->next);
+	}
+	return head;
+
+}
+
+
+
 Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 {
 	//NOTE(will) will not find C-style "struct Type function() {"
@@ -542,6 +566,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 				do {
 					switch(mode) {
 						case 0:
+							sub_head = parse_dollarsign_instructions(sub_head);
 							if (sub_head->kind == Token_Identifier) {
 								char* buf = arena_push_array(arena, char, 256);
 								memcpy(buf, sub_head->start, sub_head->len);
