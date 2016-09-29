@@ -798,7 +798,7 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 	}
 
 	for(isize i = 0; i < def->member_count; ++i) {
-		if(def->member_kinds == StructKind_Member) {
+		if(def->member_kinds[i] == StructKind_Member) {
 			auto var = &def->members[i].member_var;
 			print_indent(indent);
 			for(isize a = 0; a < var->count; ++a) {
