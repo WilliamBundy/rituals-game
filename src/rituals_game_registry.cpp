@@ -41,11 +41,13 @@ Game_Registry* Registry;
 #define MaxRegistryInfoEntries (256)
 void init_game_registry(Game_Registry* registry, Memory_Arena* arena)
 {
+	$(exclude)
 #define _set_registry_arrays(type, base_name) do { \
 	registry->base_name = arena_push_array(arena, type, MaxRegistryInfoEntries); \
 	registry->base_name##_hash = arena_push_array(arena, usize, MaxRegistryInfoEntries); \
 	registry->base_name##_count = 0; \
 	} while(0)
+$(end)
 
 	_set_registry_arrays(Tile_Info, tiles);
 	_set_registry_arrays(Item_Info, items);
