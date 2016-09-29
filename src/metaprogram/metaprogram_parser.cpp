@@ -998,7 +998,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 }
 
 
-Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
+Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 {
 	Token* head = start;
 	Token* next = NULL;
@@ -1029,7 +1029,7 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 		}
 
 		if(brace_depth < 0) {
-			fprintf(stderr, "\nfile %d line %d col %d \n", head->location.file, head->location.line, head->location.offset);
+			fprintf(stderr, "\n %s line %d col %d \n", lex->files[head->location.file].filename, head->location.line, head->location.offset);
 			brace_depth = 0;
 		}
 

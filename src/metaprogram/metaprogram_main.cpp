@@ -294,7 +294,7 @@ int main(int argc, char** argv)
 
 #endif 
 
-		Struct_Def* structdef = find_struct_defs(start, Work_Arena);
+		Struct_Def* structdef = find_struct_defs(&lex, start, Work_Arena);
 
 		Struct_Def* s_head = structdef;
 		do {
