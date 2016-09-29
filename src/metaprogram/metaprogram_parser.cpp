@@ -871,7 +871,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			} while(head->kind != Token_CloseBrace);
 
  			head = head->next;
-			bool quit = false;
+			auto var = &member->anon_struct;
 			if(head->kind != Token_Identifier) {
 				if(head->kind == Token_Semicolon) {
 					def.name = "";
@@ -892,11 +892,9 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 				buf[len] = '\0';
 				def.name = buf;
 			}
-		
 			head = head->next;
 
-			auto var = &member->anon_struct;
-			//int32 mode = 0;
+			bool quit = false;
 			do { 
 				switch(head->kind) {
 					case Token_Semicolon:
