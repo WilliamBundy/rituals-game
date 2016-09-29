@@ -789,17 +789,17 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 		}
 	} else {
 		if(def->kind == StructKind_Struct) {
-			printf("struct %s\n", s_head->name);
+			printf("struct %s\n", def->name);
 		} else if(def->kind == StructKind_Union) {
-			printf("union %s\n", s_head->name);
+			printf("union %s\n", def->name);
 		}
 		print_indent(indent);
 		printf("{\n");
 	}
 
-	for(isize i = 0; i < s_head->member_count; ++i) {
-		if(s_head->member_kinds == StructKind_Member) {
-			auto var = &s_head->members[i].member_var;
+	for(isize i = 0; i < def->member_count; ++i) {
+		if(def->member_kinds == StructKind_Member) {
+			auto var = &def->members[i].member_var;
 			print_indent(indent);
 			for(isize a = 0; a < var->count; ++a) {
 				printf("%s ", var->terms[a]);
@@ -807,15 +807,15 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 			for(isize a = 0; a < var->asterisk_count; ++a) {
 				printf("*");
 			}
-			printf("%s", s_head->members[i].member_var.name);
+			printf("%s", def->members[i].member_var.name);
 			for(isize a = 0; a < var->array_levels; ++a) {
 				printf("[%s]", var->array_sizes[a]);
 			}
 			printf(";\n");
 		} else {
-			auto var = &s_head->members[i].anon_struct;
+			auto var = &def->members[i].anon_struct;
 			print_struct(&var->def, true, indent + 1);
-			printf("%s", s_head->members[i].member_var.name);
+			printf("%s", def->members[i].member_var.name);
 			
 			for(isize a = 0; a < var->array_levels; ++a) {
 				printf("[%s]", var->array_sizes[a]);
