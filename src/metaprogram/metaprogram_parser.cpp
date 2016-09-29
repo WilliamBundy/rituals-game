@@ -998,10 +998,12 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 
 	Hash structhash = hash_literal("struct");
 	Hash unionhash = hash_literal("union");
+	Hash typedefhash = hash_literal("typedef");
 	Struct_Def def = {0};
 
 	Struct_Def* def_start = arena_push_struct(arena, Struct_Def);
 	Struct_Def* def_head = def_start;
+
 
 	int32 brace_depth = 0;
 	do {
@@ -1011,6 +1013,12 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 			brace_depth++;
 		} else if(head->kind == Token_CloseBrace) {
 			brace_depth--;
+		}
+
+		if(head->hash == typedefhash) {
+			do {
+				head = head->next;
+			} while(head != Token_Semicolon);
 		}
 
 		if(brace_depth > 0 || head->kind != Token_Identifier) continue;
