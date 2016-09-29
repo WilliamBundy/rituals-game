@@ -257,7 +257,7 @@ int main(int argc, char** argv)
 					printf("%s", a->terms[j]);
 					if(j == a->count - 1) {
 						if(a->defaults == NULL) {
-							printf(",");
+							if(i != p->args_count - 1) printf(", ");
 						} else {
 							printf(" %s,", a->defaults);
 						}
@@ -265,7 +265,8 @@ int main(int argc, char** argv)
 						printf(" ");
 					}
 				}
-			}
+			} 
+			printf(");");
 
 			printf("\n");
 			
