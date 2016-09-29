@@ -856,10 +856,10 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 					memcpy(buf, subhead->start, subhead->len);
 					buf[subhead->len] = '\0';
 					def.name = buf;
-				} else if(subhead->kind = Token_OpenBrace) {
+				} else if(subhead->kind == Token_OpenBrace) {
 					break;
 				}
-			} (subhead = subhead->next);
+			} while (subhead = subhead->next);
 			subhead = subhead->next;
 
 			do {
