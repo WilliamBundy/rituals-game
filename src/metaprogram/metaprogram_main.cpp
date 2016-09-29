@@ -298,6 +298,7 @@ int main(int argc, char** argv)
 
 		Struct_Def* s_head = structdef;
 		do {
+			SDL_Assert(0);
 			print_struct(s_head);
 		} while(s_head = s_head->next);
 		
