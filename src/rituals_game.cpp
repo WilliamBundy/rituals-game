@@ -70,10 +70,13 @@ enum Game_State
 
 // Game struct
 //typedef struct Debug_Log Debug_Log;
+$(exclude)
 typedef struct Spritefont Spritefont;
 typedef struct OpenGL_Renderer OpenGL_Renderer;
 typedef struct Render_Group Renderer_Group;
 typedef struct Game_Registry Game_Registry;
+$(end)
+
 struct Game_Main
 {
 	SDL_Window* window;

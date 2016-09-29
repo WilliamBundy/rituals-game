@@ -39,8 +39,8 @@ AsciiPrintableStart	src/rituals_gui.cpp	15;"	d	file:
 Ascii_Printable_Count	rituals_gui.cpp	8;"	d	file:
 Ascii_Printable_End	rituals_gui.cpp	7;"	d	file:
 Ascii_Printable_Start	rituals_gui.cpp	6;"	d	file:
-Backspace	src/rituals_game.cpp	156;"	d	file:
-BackspaceStr	src/rituals_game.cpp	157;"	d	file:
+Backspace	src/rituals_game.cpp	159;"	d	file:
+BackspaceStr	src/rituals_game.cpp	160;"	d	file:
 Base_Arena	src/metaprogram/metaprogram_main.cpp	/^Memory_Arena* Base_Arena;$/;"	v
 Body_Flag_Always_Contact	src/rituals_simulation.cpp	/^	Body_Flag_Always_Contact = Flag(4),$/;"	e	enum:Sim_Body_Flags	file:
 Body_Flag_No_Friction	src/rituals_simulation.cpp	/^	Body_Flag_No_Friction = Flag(2),$/;"	e	enum:Sim_Body_Flags	file:
