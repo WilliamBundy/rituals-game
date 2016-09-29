@@ -1205,7 +1205,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	731;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	741;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -1604,6 +1604,7 @@ dct_wsub	src/thirdparty/stb_image.h	2200;"	d
 dct_wsub	src/thirdparty/stb_image.h	2248;"	d
 dct_wsub	src/thirdparty/stb_image.h	2410;"	d
 dec_str_to_int	rituals_gui.cpp	/^static inline int32 dec_str_to_int(char* str, isize len)$/;"	f	file:
+dec_str_to_int	src/metaprogram/metaprogram_parser.cpp	/^static inline int32 dec_str_to_int(char* str, isize len)$/;"	f	file:
 dec_str_to_int	src/rituals_gui.cpp	/^static inline int32 dec_str_to_int(char* str, isize len)$/;"	f	file:
 decorators	src/metaprogram/metaprogram_parser.cpp	/^	char** decorators;$/;"	m	struct:Proc_Prototype	file:
 decorators_count	src/metaprogram/metaprogram_parser.cpp	/^	isize decorators_count;$/;"	m	struct:Proc_Prototype	file:
@@ -2090,7 +2091,7 @@ hash	src/metaprogram/metaprogram_parser.cpp	/^	Hash hash;$/;"	m	struct:Token	fil
 hash	src/rituals_game_info.cpp	/^	usize hash;$/;"	m	struct:Item_Info	file:
 hash	src/rituals_game_info.cpp	/^	usize hash;$/;"	m	struct:Tile_Info	file:
 hash_index	helping_gb.cpp	/^	isize hash_index;$/;"	m	struct:MapFindResult	file:
-hash_literal	src/metaprogram/metaprogram_parser.cpp	12;"	d	file:
+hash_literal	src/metaprogram/metaprogram_parser.cpp	22;"	d	file:
 hash_str	src/rituals_game_registry.cpp	/^usize hash_str(const char* str)$/;"	f
 hash_string	src/metaprogram/metaprogram_parser.cpp	/^Hash hash_string(char* c, int len)$/;"	f
 hashes	helping_gb.cpp	/^	gbArray(isize) hashes;$/;"	m	struct:Map	file:
@@ -2353,8 +2354,8 @@ next_random_double	src/rituals_random.cpp	/^real64 next_random_double(Random* r)
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float()$/;"	f
 next_random_float	src/rituals_random.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_random.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
-nextchar	src/metaprogram/metaprogram_parser.cpp	185;"	d	file:
-nextchar	src/metaprogram/metaprogram_parser.cpp	411;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	195;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	421;"	d	file:
 night_amount	src/rituals_renderer.cpp	/^	real night_amount;$/;"	m	struct:Render_Group	file:
 night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Render_Group
 night_cutoff	src/rituals_renderer.cpp	/^	real night_cutoff;$/;"	m	struct:Render_Group	file:
@@ -3041,8 +3042,8 @@ v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
 v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
-valid	src/metaprogram/metaprogram_parser.cpp	195;"	d	file:
-valid	src/metaprogram/metaprogram_parser.cpp	412;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	205;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	422;"	d	file:
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
 value	src/thirdparty/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon9

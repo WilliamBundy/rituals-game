@@ -9,6 +9,16 @@ Hash hash_string(char* c, int len)
 	return hash;
 }
 
+static inline int32 dec_str_to_int(char* str, isize len)
+{
+	int32 result = 0;
+	for(isize i = 0; i < len; ++i) {
+		result = result * 10 + str[i] - '0';
+	}
+	return result;
+}
+
+
 #define hash_literal(c) hash_string(c, sizeof(c) - 1)
 
 enum Token_Kind
@@ -786,42 +796,55 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			int32 mode = 0;
 			bool quit = false;
 			do {
-				switch(mode) {
-					case 0:
-						if(head->kind == Token_Comma) {
-							var->name = var->terms[--var->count];
-							mode = 1;
-						} else if(head->kind == Token_Semicolon) {
-							var->name = var->terms[--var->count];
-							
-							quit = true;
-							break;
-						} else if(head->kind == Token_Identifier) {
-							char* buf = arena_push_array(arena, char, 256);
-							memcpy(buf, head->start, head->len);
-							int len = head->len;
-							next = head->next;
-							buf[len] = '\0';
-							var->terms[var->count++] = buf;
-						} else if(head->kind == Token_Asterisk) {
-							var->asterisk_count++;
-						} else if(head->kind == Token_OpenBracket) {
-							head = head->next;
-							if(head->kind != Token_Integer) {
-								fprintf(stderr, "ERROR: expected Integer, got %d [%.*s] \n",
-										head->kind, head->len, head->start);
-								fprintf(stderr, "File: %d, Line: %d, Col: %d", 
-										head->location.file, 
-										head->location.line, 
-										head->location.offset);
-							}
+				if(head->kind == Token_Comma) {
+					var->name = var->terms[--var->count];
+					parent->member_count++;
+					Struct_Kind oldkind = *kind;
+					member = parent->members + parent->member_count;
+					kind = parent->member_kinds + parent->member_count;
+					*kind = oldkind;
+					member->member_var = *var;
+					var = &member->member_var;
+					var->asterisk_count = 0;
+					var->array_levels = 0;
+					var->array_sizes = NULL;
+					var->name = NULL;
+					mode = 1;
+				} else if(head->kind == Token_Semicolon) {
+					if(mode == 0) {
+						var->name = var->terms[--var->count];
+					}
+					break;
+				} else if(head->kind == Token_Identifier) {
+					char* buf = arena_push_array(arena, char, 256);
+					memcpy(buf, head->start, head->len);
+					int len = head->len;
+					next = head->next;
+					buf[len] = '\0';
+					if(mode == 0) {
+						var->terms[var->count++] = buf;
+					} else if(mode == 1) {
+						var->name = buf;
+					}
+				} else if(head->kind == Token_Asterisk) {
+					var->asterisk_count++;
+				} else if(head->kind == Token_OpenBracket) {
+					head = head->next;
+					if(head->kind != Token_Integer) {
+						fprintf(stderr, "ERROR: expected Integer, got %d [%.*s] \n",
+								head->kind, head->len, head->start);
+						fprintf(stderr, "File: %d, Line: %d, Col: %d", 
+								head->location.file, 
+								head->location.line, 
+								head->location.offset);
+					} else {
+						int32 value = dec_str_to_int(head->start, head->len);
+						if(var->array_levels == 0) {
+							var->array_sizes = arena_push_array(arena, int32, 256);
 						}
-						break;
-					case 1:
-						break;
-
+						var->array_sizes[var->array_levels++] = value;
+					}
 				}
-				if(quit) break;
 			} while(head = head->next);
 		}
 	}
@@ -839,6 +862,10 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 	Hash structhash = hash_literal("struct");
 	Hash unionhash = hash_literal("union");
 	Struct_Def def = {0};
+
+	Struct_Def* def_start = arena_push_struct(arena, Struct_Def);
+	Struct_Def* def_head = def_start;
+
 	do {
 		if(head->kind != Token_Identifier) continue;
 
@@ -872,9 +899,13 @@ Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 				subhead = parse_struct_member(&def, subhead, arena);
 				subhead = subhead->next;
 			} while(subhead->kind != Token_CloseBrace);
+
+			*def_head = def;
+			def_head->next = arena_push_struct(arena, Struct_Def); 
+			def_head = def_head->next;
 		}
 	} while(head = head->next);
 
-	return NULL;
+	return def_start;
 }
 
