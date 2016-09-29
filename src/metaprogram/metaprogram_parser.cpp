@@ -745,7 +745,7 @@ union Struct_Member
 
 Struct_Def* find_struct_defs(Token* start, Memory_Arena* arena)
 {
-	Token* head;
+	Token* head = start;
 	Token* next = NULL;
 
 	Hash structhash = hash_literal("struct");
