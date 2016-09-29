@@ -1,290 +1,290 @@
-inline real clamp(
+inline real clamp(realmin,realmax,
 real clamp_01(
-real lerp(
+real lerp(realb,realt,
 static inline Vec2 operator(
-static inline Vec2 operator(
-static inline Vec2 operator(
-static inline Vec2 operator*(
-static inline Vec2 operator(
-static inline Vec2 operator(
-static inline Vec2 operator*(
-static inline Vec2 operator*(
-static inline Vec2 operator(
-static inline Vec2 operator(
-static inline Vec2 operator*(
+static inline Vec2 operator(Vec2b,
+static inline Vec2 operator(Vec2b,
+static inline Vec2 operator*(reals,
+static inline Vec2 operator(Vec2a,
+static inline Vec2 operator(reals,
+static inline Vec2 operator*(Vec2a,
+static inline Vec2 operator*(Vec2b,
+static inline Vec2 operator(Vec2b,
+static inline Vec2 operator(Vec2b,
+static inline Vec2 operator*(realb,
+static inline Vec3 v3(realy,realz,
+static inline Vec3 v3(realz,
 static inline Vec3 v3(
-static inline Vec3 v3(
-static inline Vec3 v3(
 static inline Vec3 operator(
-static inline Vec3 operator(
-static inline Vec3 operator(
-static inline Vec3 operator*(
-static inline Vec3 operator(
-static inline Vec3 operator(
-static inline Vec3 operator*(
-static inline Vec3 operator*(
-static inline Vec3 operator(
-static inline Vec3 operator(
-static inline Vec3 operator*(
-static inline Vec4 operator*(
-static inline Vec4 operator*(
-static inline Vec4 operator*(
-static inline Vec4 operator(
-static inline Vec4 operator*(
-static inline Vec4 operator*(
-static inline Vec4 v4(
+static inline Vec3 operator(Vec3b,
+static inline Vec3 operator(Vec3b,
+static inline Vec3 operator*(reals,
+static inline Vec3 operator(Vec3a,
+static inline Vec3 operator(reals,
+static inline Vec3 operator*(Vec3a,
+static inline Vec3 operator*(Vec3b,
+static inline Vec3 operator(Vec3b,
+static inline Vec3 operator(Vec3b,
+static inline Vec3 operator*(realb,
+static inline Vec4 operator*(Vec4b,
+static inline Vec4 operator*(realb,
+static inline Vec4 operator*(Vec4a,
+static inline Vec4 operator(realb,
+static inline Vec4 operator*(realb,
+static inline Vec4 operator*(Vec4b,
+static inline Vec4 v4(realy,realz,realw,
 Vec4 hex_to_v4(
+static inline Vec2 v2(realy,
 static inline Vec2 v2(
 static inline Vec2 v2(
-static inline Vec2 v2(
-static inline Vec2i v2i(
+static inline Vec2i v2i(int32y,
 inline Vec2 v2_perpendicular(
-inline real v2_dot(
-inline real v2_cross(
+inline real v2_dot(Vec2b,
+inline real v2_cross(Vec2b,
 inline Vec2 v2_from_angle(
 inline real v2_to_angle(
 inline Vec2 v2_normalize(
-static inline bool operator(
-static inline Rect2_Clip_Info rect2_clip(
-static inline Rect2i rect2i(
-static inline bool aabb_intersect(
-static inline bool aabb_intersect(
-static inline void aabb_overlap(
-static inline AABB aabb(
-static inline AABB aabb(
-static inline Rect2 rect2(
+static inline bool operator(Rect2b,
+static inline Rect2_Clip_Info rect2_clip(Rect2clip,
+static inline Rect2i rect2i(int32y,int32w,int32h,
+static inline bool aabb_intersect(AABB*b,
+static inline bool aabb_intersect(AABBb,
+static inline void aabb_overlap(AABB*b,Vec2*s,
+static inline AABB aabb(realhw,realhh,
+static inline AABB aabb(realy,realhw,realhh,
+static inline Rect2 rect2(realy,realw,realh,
 static inline Rect2 intrect_to_rect(
 static inline Rect2i rect_to_intrect(
 static inline AABB rect_to_aabb(
 static inline AABB intrect_to_aabb(
 static inline Rect2 aabb_to_rect(
 static inline Rect2i aabb_to_intrect(
-static inline isize modulus(
+static inline isize modulus(isizeb,
 exclude(
 static inline isize mem_align_4(
-void init_memory_arena(
-uint8* arena_push(
+void init_memory_arena(usizesize,
+uint8* arena_push(isizesize,
 void start_temp_arena(
 void end_temp_arena(
 void clear_arena(
-Memory_Arena* new_memory_arena(
+Memory_Arena* new_memory_arena(Memory_Arena*src,
 static inline uint64 _splitmix64(
-static inline uint64 _rotate_left(
+static inline uint64 _rotate_left(int64k,
 uint64 next_random_uint64(
-void init_random(
+void init_random(uint64seed,
 real64 next_random_double(
 real32 next_random_float(
 real next_random(
-real rand_range(
-int32 rand_range_int(
+real rand_range(realmin,realmax,
+int32 rand_range_int(realmin,realmax,
 real64 next_random_double(
 real32 next_random_float(
 real next_random(
-real rand_range(
-int32 rand_range_int(
+real rand_range(realmax,
+int32 rand_range_int(realmax,
 void game_set_scale(
 void game_calc_mouse_pos(
 void input_text_append_char(
 bool is_valid_filename_char(
-char replace_filename_char(
-isize replace_invalid_filename_chars(
-isize append_input_text(
-GenerateIntrosortForType(
-void init_group(
-void init_renderer(
-Render_Group* render_group(
+char replace_filename_char(charreplace,
+isize replace_invalid_filename_chars(isizelen,charreplace,
+isize append_input_text(isizestr_cap,isizestr_len,isizeinsert_from_end=0),
+GenerateIntrosortForType(Sprite,_get_sprite_y_base,
+void init_group(isizesprites_capacity,Memory_Arena*arena,
+void init_renderer(isizegroup_count,isizegroup_size,char*vertex_source,char*frag_source,Memory_Arena*arena,
+Render_Group* render_group(isizeindex,
 void render_start(
 bool render_has_clip_rect(
-void render_set_clip_rect(
-void render_sort(
-void render_add(
-void render_add_unclipped(
-void render_add(
-void render_calculate_ortho_matrix(
-void render_draw(
+void render_set_clip_rect(realx,realy,realw,realh,
+void render_sort(isizeoffset,
+void render_add(Sprite*sprite,
+void render_add_unclipped(Sprite*sprite,
+void render_add(Sprite4*s4,
+void render_calculate_ortho_matrix(Vec4screen,realnearplane,realfarplane,
+void render_draw(Render_Group*group,Vec2size,realscale,
 void render_set_current_group(
 void render_start(
 bool render_has_clip_rect(
-void render_set_clip_rect(
+void render_set_clip_rect(realy,realw,realh,
 void render_sort(
 void render_add(
 void render_add_unclipped(
 void render_add(
-void render_draw(
-GLuint ogl_add_texture(
-GLuint ogl_load_texture(
-Sprite create_box_primitive(
-void render_box_primitive(
-Sprite create_line_primitive(
-void render_line_primitive(
-Sprite4 create_box_outline_primitive(
-void render_box_outline_primitive(
-Sprite4 create_box_outline_primitive(
-void render_box_outline_primitive(
-void render_box_primitive(
-void render_line_primitive(
-void render_box_outline_primitive(
-void render_box_outline_primitive(
+void render_draw(realscale,
+GLuint ogl_add_texture(isizew,isizeh,
+GLuint ogl_load_texture(isize*w_o,isize*h_o,
+Sprite create_box_primitive(Vec2size,Vec4color,
+void render_box_primitive(Vec2pos,Vec2size,Vec4color,
+Sprite create_line_primitive(Vec2end,Vec4color,int32thickness,
+void render_line_primitive(Vec2start,Vec2end,Vec4color,int32thickness,
+Sprite4 create_box_outline_primitive(Vec2size,Vec4color,int32thickness,
+void render_box_outline_primitive(Vec2center,Vec2size,Vec4color,int32thickness,
+Sprite4 create_box_outline_primitive(Vec2size,Vec4color,int32thickness,
+void render_box_outline_primitive(Vec2center,Vec2size,Vec4color,int32thickness,
+void render_box_primitive(Vec2size,Vec4color,
+void render_line_primitive(Vec2end,Vec4color,int32thickness,
+void render_box_outline_primitive(Vec2size,Vec4color,int32thickness,
+void render_box_outline_primitive(Vec2size,Vec4color,int32thickness,
 void init_animation_frame(
-void init_animation(
-Animation* make_animaiton_from_strip(
-void init_animated_sprite(
-void animated_sprite_update(
-isize add_animation(
-isize play_animation(
+void init_animation(realfps,isizecapacity,Memory_Arena*arena,
+Animation* make_animaiton_from_strip(realfps,Rect2frame,isizecount,
+void init_animated_sprite(isizecapacity,Memory_Arena*arena,
+void animated_sprite_update(realtimestep,
+isize add_animation(Animation*a,
+isize play_animation(isizeanim_index,
 void init_spritefont(
-static inline int32 dec_str_to_int(
+static inline int32 dec_str_to_int(isizelen,
 static inline bool _isnt_spritefont_separator(
-Rect2* parse_spritefont_rectangles(
-void load_spritefont(
-Spritefont* load_spritefont(
-Vec2 spritefont_size_text(
-Vec2 spritefont_size_text(
-void spritefont_render_text(
-void spritefont_render_text_ex(
-void spritefont_render_text(
-void spritefont_render_text_background(
-void render_body_text(
-void render_title_text(
-bool gui_query_mouse(
-bool gui_add_button(
-bool gui_add_button(
-bool gui_add_checkbox(
-void gui_add_slider(
-void init_text_input_handle(
-void init_text_input_handle(
-void gui_add_text_input(
-void init_tile_state(
+Rect2* parse_spritefont_rectangles(Memory_Arena*arena,int32offsetx,int32offsety,int32*w,int32*h,
+void load_spritefont(char*file_path_in,Vec2ioffset,
+Spritefont* load_spritefont(Vec2ioffset,
+Vec2 spritefont_size_text(char*text,isizelen,
+Vec2 spritefont_size_text(char*text,
+void spritefont_render_text(char*text,isizelen,Vec2position,int32max_width= -1,,Sprite_AnchoranchorAnchor_Top_Left= Anchor_Top_Left,,realscalef= 1.0f,,Vec2*regionNULL= NULL),
+void spritefont_render_text_ex(char*text,isizelen,Vec2position,int32max_width= -1,,Sprite_AnchoranchorAnchor_Top_Left= Anchor_Top_Left,,realscalef= 1.0f,,Vec2*regionNULL= NULL),
+void spritefont_render_text(char*text,Vec2position,Sprite_AnchoranchorAnchor_Top_Left= Anchor_Top_Left,,realscalef= 1.0f),
+void spritefont_render_text_background(char*text,Vec2position,realscale,Vec4background,
+void render_body_text(Vec2position,boolbackgroundfalse=false,,realscalef= 1.0f),
+void render_title_text(Vec2position,
+bool gui_query_mouse(Vec2parent,
+bool gui_add_button(char*text,Vec2minimum_size,
+bool gui_add_button(char*text,
+bool gui_add_checkbox(char*text,bool*value,
+void gui_add_slider(Vec2size,char*label,realmin,realmax,intprecision,real*in_value,bool*active,boolshow_boundsfalse= false),
+void init_text_input_handle(char*buf,isizecapacity,isizelength,
+void init_text_input_handle(realwidth,Memory_Arena*arena,
+void gui_add_text_input(Vec2position,Vec2size,char*default_textNULL=NULL),
+void init_tile_state(isizeid,
 usize hash_str(
-void init_game_registry(
+void init_game_registry(Memory_Arena*arena,
 return_type* lookup_func_name(
 _game_registry__ void sort_func_name(
 void finalize_game_registry(
-Tile_Info* add_tile_info(
+Tile_Info* add_tile_info(realmovement_modifier,realfriction,Rect2texture,boolsolid,char*break_to_name,
 void register_all_rituals_tile_info(
-Item_Info* add_item_type(
+Item_Info* add_item_type(int32max_stack,Rect2texture,
 void register_all_rituals_item_info(
 void register_everything_in_rituals(
-void init_item_stack(
-Item_Stack* new_item_stack(
-void init_inventory(
-bool inventory_add_item(
-void render_inventory(
-void init_tilemap(
-void generate_tilemap(
-Tile tilemap_get_at(
-Tile tilemap_get_at(
-Tile_State* tilemap_get_state_at(
-Tile_State* tilemap_get_state_at(
-bool tilemap_set_at(
-bool tilemap_set_at(
-void update_tile_state_at(
-void update_tile_state_at(
-void render_tilemap(
-isize render_tilemap(
-GenerateIntrosortForType(
-void init_static_grid(
+void init_item_stack(Item_Info*info,
+Item_Stack* new_item_stack(Memory_Arena*arena,
+void init_inventory(isizew,isizeh,Memory_Arena*arena,
+bool inventory_add_item(Item_Stack**origin_slot,
+void render_inventory(Vec2position,
+void init_tilemap(isizew,isizeh,Memory_Arena*arena,
+void generate_tilemap(uint64seed,
+Tile tilemap_get_at(isizex,isizey,
+Tile tilemap_get_at(Vec2pos,
+Tile_State* tilemap_get_state_at(isizex,isizey,
+Tile_State* tilemap_get_state_at(Vec2pos,
+bool tilemap_set_at(isizex,isizey,Tilevalue,
+bool tilemap_set_at(Vec2pos,Tilevalue,
+void update_tile_state_at(isizex,isizey,
+void update_tile_state_at(Vec2pos,
+void render_tilemap(Vec2pos,
+isize render_tilemap(Vec2pos,Rect2area,
+GenerateIntrosortForType(Sim_Body,_body_get_min_x,
+void init_static_grid(Vec2isize,isizecapacity,Memory_Arena*arena,
 Sim_Grid_Cell* get_next_grid_cell(
-void build_static_grid(
+void build_static_grid(Sim_Body*bodies,isizecount,
 Sim_Body* sim_get_next_static_body(
 Sim_Body* sim_get_next_body(
-void init_simulator(
-Sim_Body* sim_find_body(
+void init_simulator(isizecap,Memory_Arena*arena,
+Sim_Body* sim_find_body(isizeid,
 void sim_sort_bodies_on_id(
-void sim_remove_body(
-void sim_remove_body(
-Sim_Body* sim_query_aabb(
-int32 _do_collide_bodies(
-void _separate_bodies(
-void sim_update(
-Tile_Info* _get_at(
-void generate_statics_for_tilemap(
-Particle_Style copy_particle_style(
-Particle_Style make_particle_style(
-void init_particle(
-void init_emitter(
-void emitter_spawn(
-void emitter_render(
-GenerateIntrosortForType(
-void init_world_area(
+void sim_remove_body(isizebody,
+void sim_remove_body(Sim_Body*body,
+Sim_Body* sim_query_aabb(AABBquery,
+int32 _do_collide_bodies(Sim_Body*b,Simulator*sim,booldo_sweep,
+void _separate_bodies(Sim_Body*b,boolcapture_contacts,int32times,Simulator*sim,
+void sim_update(Tilemap*map,realdt,boolcapture_contactstrue= true),
+Tile_Info* _get_at(isizey,
+void generate_statics_for_tilemap(Tilemap*tilemap,
+Particle_Style copy_particle_style(Vec2impulse_range,Vec2itime_range,
+Particle_Style make_particle_style(Vec2size,Vec4color,Vec4shadow_color,Vec3acl,Vec2impulse_range,Vec2angle_range,Vec2angle_vel_range,Vec2scale_range,Vec2iframe_range,int32max_frames,int32framerate,Vec2itime_range,booltime_scaling,realground_restitution,Vec2skid_on_bounce_range,realjitter_on_bounce_mag,
+void init_particle(Vec3pos,Vec3vel,realscale,realangle,realanglev,int32frame,int32time,int32style_index,
+void init_emitter(isizemax_particles,Memory_Arena*arena,
+void emitter_spawn(Vec3pos,Vec2angle_range,isizecount,Particle_Stylestyle,
+void emitter_render(Simulator*sim,realdt,
+GenerateIntrosortForType(Hitbox,_hitbox_get_x1,
+void init_world_area(Memory_Arena*arena,
 void init_entity(
 Entity* world_area_get_next_entity(
-Entity* world_area_find_entity(
+Entity* world_area_find_entity(isizeid,
 void world_area_sort_entities_on_id(
 void world_area_synchronize_entities_and_bodies(
-bool world_area_remove_entity(
-void world_area_remove_entity_internal(
+bool world_area_remove_entity(Entity*entity,
+void world_area_remove_entity_internal(isizeid,
 void world_area_process_removed_entities(
 void world_area_build_hitboxes(
 void world_area_process_hitboxes(
-void init_world(
-void world_area_init_player(
-void world_area_deinit_player(
-World_Area* world_load_area(
-void generate_world_area(
-void world_switch_current_area(
-void world_start_in_area(
+void init_world(isizewidth,isizeheight,usizeseed,Memory_Arena*arena,
+void world_area_init_player(Vec2itile_pos,boolmove_playertrue=true),
+void world_area_deinit_player(boolmove_playertrue=true),
+World_Area* world_load_area(isizeid,Memory_Arena*arena,
+void generate_world_area(World_Area*area,World_Area_Stub*stub,
+void world_switch_current_area(Area_Linklink,Memory_Arena*arena,
+void world_start_in_area(World_Area_Stub*area,Memory_Arena*arena,
 void world_delete_self(
-void generate_world(
-void world_area_walk_entities(
-void world_area_animate_entities(
-bool world_area_frametick_entities(
-void world_area_slowtick_entities(
-void world_area_on_destroy_entity(
-void world_area_on_activate_entity(
-void world_area_hit_entities(
-void world_area_contact_entities(
-void world_area_interact(
-void world_area_render(
-void world_area_update(
-void rituals_prop_drop_on_break(
-Entity* rituals_spawn_enemy(
-void rituals_on_activate_entity(
-void rituals_on_destroy_entity(
-bool rituals_frametick_entities(
-void rituals_slowtick_entities(
-void rituals_walk_entities(
-void rituals_animate_entities(
-void rituals_interact_entities(
-void rituals_hit_entities(
-void rituals_entity_on_contact_terrain(
-void rituals_contact_entities(
+void generate_world(World*world,
+void world_area_walk_entities(World*world,
+void world_area_animate_entities(World*world,
+bool world_area_frametick_entities(World*world,
+void world_area_slowtick_entities(World*world,
+void world_area_on_destroy_entity(World_Area*area,World*world,
+void world_area_on_activate_entity(World_Area*area,World*world,
+void world_area_hit_entities(World*world,
+void world_area_contact_entities(World*world,
+void world_area_interact(World*world,
+void world_area_render(World*world,
+void world_area_update(World*world,
+void rituals_prop_drop_on_break(Entity*a,
+Entity* rituals_spawn_enemy(isizeenemykind,Vec2position,
+void rituals_on_activate_entity(World_Area*area,World*world,
+void rituals_on_destroy_entity(World_Area*area,World*world,
+bool rituals_frametick_entities(isizecount,World_Area*area,World*world,
+void rituals_slowtick_entities(isizecount,World_Area*area,World*world,
+void rituals_walk_entities(isizecount,World_Area*area,World*world,
+void rituals_animate_entities(isizecount,World_Area*area,World*world,
+void rituals_interact_entities(isizecount,World_Area*area,World*world,
+void rituals_hit_entities(isizecount,World_Area*area,World*world,
+void rituals_entity_on_contact_terrain(World_Area*area,World*world,
+void rituals_contact_entities(isizecount,World_Area*area,World*world,
 void init_play_state(
 void start_play_state(
 void play_state_update(
 void play_state_stop(
-int delete_file(
-int delete_folder(
-int _recursive_delete(
-int recursively_delete_folder(
+int delete_file(isizepath_length,char*file,
+int delete_folder(isizepath_length,
+int _recursive_delete(isizelast_path_len,char*path,
+int recursively_delete_folder(boolappend_base_pathfalse= false),
 int check_path(
 void check_dir(
-void serialize_tile_state(
-void deserialize_tile_state(
-void deserialize_tilemap(
-void serialize_tilemap(
-void serialize_sim_body(
-void deserialize_sim_body(
-void serialize_simulator(
-void deserialize_simulator(
-void serialize_sprite(
-void deserialize_sprite(
-void deserialize_rituals_entity_userdata(
-void deserialize_hitbox(
-void deserialize_entity(
-void deserialize_area(
-void serialize_rituals_entity_userdata(
-void serialize_hitbox(
-void serialize_entity(
-void serialize_area(
-void serialize_area_link(
-void deserialize_area_link(
-void serialize_world_area_stub(
-void deserialize_world_area_stub(
-FILE* get_world_file(
-FILE* get_area_file(
+void serialize_tile_state(FILE*file,
+void deserialize_tile_state(FILE*file,
+void deserialize_tilemap(FILE*file,Memory_Arena*arena,
+void serialize_tilemap(FILE*file,
+void serialize_sim_body(FILE*file,
+void deserialize_sim_body(FILE*file,
+void serialize_simulator(FILE*file,
+void deserialize_simulator(FILE*file,Memory_Arena*arena,
+void serialize_sprite(FILE*file,
+void deserialize_sprite(FILE*file,
+void deserialize_rituals_entity_userdata(FILE*file,
+void deserialize_hitbox(FILE*file,
+void deserialize_entity(FILE*file,
+void deserialize_area(FILE*area_file,Memory_Arena*arena,
+void serialize_rituals_entity_userdata(FILE*file,
+void serialize_hitbox(FILE*file,
+void serialize_entity(FILE*file,
+void serialize_area(FILE*area_file,
+void serialize_area_link(FILE*fp,
+void deserialize_area_link(World*world,FILE*fp,
+void serialize_world_area_stub(FILE*fp,
+void deserialize_world_area_stub(World*world,FILE*fp,
+FILE* get_world_file(constchar*mode,
+FILE* get_area_file(isizeid,constchar*mode,
 void serialize_world(
-void deserialize_world(
+void deserialize_world(FILE*world_file,
 void init_menu_state(
 void stop_state(
 void start_state(
@@ -295,5 +295,5 @@ void test_update(
 void update(
 void load_assets(
 void update_screen(
-int main(
+int main(char**argv,
 (null)(
