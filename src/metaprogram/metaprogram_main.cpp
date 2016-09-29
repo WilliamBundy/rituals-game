@@ -259,8 +259,10 @@ int main(int argc, char** argv)
 						if(a->defaults == NULL) {
 							printf(",");
 						} else {
-							printf("%s,", a->defaults);
+							printf(" = %s,", a->defaults);
 						}
+					} else {
+						printf(" ");
 					}
 				}
 			}
