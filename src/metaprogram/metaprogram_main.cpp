@@ -136,8 +136,11 @@ int main(int argc, char** argv)
 
 		head = start;
 		
-		do {
+		do
 			print_token(head, start);
+			if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
+				parse_include_directive(&lex, head);
+			}
 			printf("\n");
 
 		} while(head = head->next);
@@ -150,11 +153,6 @@ int main(int argc, char** argv)
 				case Token_DollarSign:
 					head = parse_dollarsign_instructions(head);
 					break;
-				case Token_CompilerDirective: {
-					if(head->start[0] == 'i') {
-						parse_include_directive(&lex, head);
-					}
-				} break;
 				case Token_Ampersand:
 					next = head->next;
 					if(next && next->kind == Token_Ampersand) {
