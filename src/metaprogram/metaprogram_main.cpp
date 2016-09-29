@@ -138,6 +138,7 @@ int main(int argc, char** argv)
 		
 		do {
 			print_token(head, start);
+			head = parse_dollarsign_instructions(head);
 			if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
 				parse_include_directive(&lex, head);
 			}
