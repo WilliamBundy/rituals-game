@@ -88,7 +88,7 @@ struct Token
 
 void print_token(Token* t)
 {
-	printf("%x<-[%x %.*s]->%x", (isize)t->prev, (isize)t, t->len, t->start, (isize)t->next);
+	printf("%x<-[%x %d %.*s]->%x", (isize)t->prev, (isize)t, t->kind, t->len, t->start, (isize)t->next);
 }
 
 
