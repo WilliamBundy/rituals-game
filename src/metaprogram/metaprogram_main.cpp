@@ -286,6 +286,8 @@ int main(int argc, char** argv)
 
 		Struct_Def* structdef = find_struct_defs(&lex, start, Work_Arena);
 
+		fprintf(stderr, "Found %d procedures, %d structs \n", lex.procedures_count, lex.structs_count):
+
 		Struct_Def* s_head = structdef;
 		do {
 			if(s_head->name == NULL) continue;
