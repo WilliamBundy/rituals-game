@@ -952,7 +952,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	local_struct[0] = def;
 	def->meta_index = local_counter;
 	*counter = local_counter++;
-	fprintf("%d %s\n", *counter, def->name);
+	fprintf(stderr, "%d %s\n", *counter, def->name);
 	if(index == -1) {
 		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, def->name);
 	} else {

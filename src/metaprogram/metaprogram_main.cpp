@@ -152,7 +152,7 @@ int main(int argc, char** argv)
 	Work_Arena = &Metaprogram->work_arena;
 	Temp_Arena = &Metaprogram->temp_arena;
 	
-	getchar();
+	//getchar();
 
 	//argc = 2;
 	if(argc >= 2) {
