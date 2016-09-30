@@ -102,7 +102,7 @@ union MyUnion
 	struct {
 		char* p, q, r, s;
 	}
-}
+};
 
 char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 {
