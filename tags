@@ -1061,6 +1061,7 @@ Megabytes	src/rituals_win32.cpp	83;"	d	file:
 Memory_Arena	src/rituals_memory.cpp	/^struct Memory_Arena$/;"	s	file:
 Menu_State	src/rituals_main.cpp	/^struct Menu_State$/;"	s	file:
 Meta_Member	src/metaprogram/metaprogram_parser.cpp	/^struct Meta_Member$/;"	s	file:
+Meta_Type	src/metaprogram/metaprogram_parser.cpp	/^enum Meta_Type$/;"	g	file:
 Metaprogram	src/metaprogram/metaprogram_main.cpp	/^Metaprogram_Core* Metaprogram;$/;"	v
 Metaprogram_Core	src/metaprogram/metaprogram_main.cpp	/^struct Metaprogram_Core$/;"	s	file:
 Min	src/metaprogram/metaprogram_main.cpp	67;"	d	file:

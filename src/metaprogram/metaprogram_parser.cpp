@@ -1323,6 +1323,12 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
  *
  */
 
+
+enum Meta_Type
+{
+
+};
+
 struct Meta_Member
 {
 	uint64 flags;
