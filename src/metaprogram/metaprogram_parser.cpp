@@ -806,7 +806,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 					def->name);
 		}
 	}
-	chars -= 3;
+	chars -= 2;
 
 	char* new_prefix = arena_push_array(arena, char, chars + 1);
 	prefix_len = chars;
