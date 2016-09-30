@@ -785,6 +785,59 @@ void print_indent(int32 indent)
 	}
 }
 
+void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, isize* counter, Memory_Arena* arena)
+{
+	isize chars = 0;
+	def->meta_index = *counter++;
+	if(index == -1) {
+		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, s_head->name);
+	} else {
+		if(def->name[0] == '\0') {
+			//truly anonymous
+			chars = printf("\t%.*s_%s%d,\n", 
+					prefix_len, prefix,
+					def->kind == StructKind_Struct ?
+					"struct" : "union",
+					index);
+		} else {
+			//has a variable name
+			chars = printf("\t%.*s_%s,\n",
+					prefix_len, prefix,
+					s_head->name,
+					var->def.name);
+		}
+	}
+	chars -= strlen("\t,\n");
+
+	char* new_prefix = arena_push_array(arena, char, chars + 1);
+	if(index == -1) {
+		snprintf(new_prefix, chars, "%.*s_%s", prefix_len, prefix, s_head->name);
+	} else {
+		if(def->name[0] == '\0') {
+			//truly anonymous
+			snprintf(new_prefix, chars, "%.*s_%s%d", 
+					prefix_len, prefix,
+					def->kind == StructKind_Struct ?
+					"struct" : "union",
+					index);
+		} else {
+			//has a variable name
+			snprintf(new_prefix, chars, "%.*s_%s",
+					prefix_len, prefix,
+					s_head->name,
+					var->def.name);
+		}
+	}
+
+
+
+	for(isize i = 0; i < s_head->member_count; ++i) {
+		if(s_head->member_kinds[i] != StructKind_Member) {
+			auto var = &s_head->members[i].anon_struct;
+			print_struct_names(&var->def, i, new_prefix, chars, counter, arena);
+		}
+	}
+}
 
 void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)
 {

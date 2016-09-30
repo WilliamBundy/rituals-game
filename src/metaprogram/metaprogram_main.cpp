@@ -298,25 +298,9 @@ int main(int argc, char** argv)
 		isize meta_index_counter = 0;
 		do {
 			if(s_head->name == NULL) continue;
-			printf("\tMetaType_%s,\n", s_head->name);
-			for(isize i = 0; i < s_head->member_count; ++i) {
-				if(s_head->member_kinds[i] != StructKind_Member) {
-					auto var = &s_head->members[i].anon_struct;
-					if(s_head->name[0] == '\0') {
-						//truly anonymous
-						printf("\tMetaType_%s_%s%d,\n", 
-								s_head->name,
-								s_head->member_kinds[i] == StructKind_Struct ?
-									"struct" : "union",
-									i);
-					} else {
-						//has a variable name
-						printf("\tMetaType_%s_%s,\n", s_head->name,
-								var->def.name);
-					}
-				}
-			}
-			s_head->meta_index = meta_index_counter++;
+			start_temp_arena(Temp_Arena);
+			print_struct_names(s_head, -1, "Meta_Type", strlen("Meta_Type"), &meta_index_counter, Temp_Arena);
+			end_temp_arena(Temp_Arena);
 		} while(s_head = s_head->next);
 		printf("};\n");
 
