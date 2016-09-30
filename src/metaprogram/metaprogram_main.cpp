@@ -171,7 +171,7 @@ int main(int argc, char** argv)
 			if(type_head == NULL) {
 				type_head = get_types_in_struct(s_head, type_start, Work_Arena);
 			} else {
-				type_head = get_types_in_struct(s_head, type_head->next, Work_Arena); 
+				type_head = get_types_in_struct(s_head, type_head, Work_Arena); 
 			}
 		} while(s_head = s_head->next);
 
