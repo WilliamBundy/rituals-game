@@ -77,6 +77,7 @@ def main(tracking_file):
         ff.write("git add --all\n")
         ff.write("git commit -m \"rituals build {0}\" \n".format(rev))
         ff.write("git push \n")
+        ff.write("git push github\n")
         ff.close()
     except IOError as err:
         print("Could not write to batch file streaming_auto_git.bat")
