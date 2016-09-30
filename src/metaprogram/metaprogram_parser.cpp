@@ -947,7 +947,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	isize chars = 0;
 	
 	isize local_counter = *counter;
-	Struct_Def** local_struct = all_structs + counter;
+	Struct_Def** local_struct = all_structs + local_counter;
 
 	local_struct[0] = def;
 	def->meta_index = *counter++
