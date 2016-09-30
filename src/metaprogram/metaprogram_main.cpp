@@ -147,7 +147,7 @@ int main(int argc, char** argv)
 	Metaprogram = arena_push_struct(&base, Metaprogram_Core);
 	Metaprogram->base_arena = base;
 	init_memory_arena(&Metaprogram->work_arena, Gigabytes(1));
-	init_memory_arena(&Metaprogram->temp_arena, Gigabytes(1));
+	init_memory_arena(&Metaprogram->temp_arena, Megabytes(256));
 	Base_Arena = &Metaprogram->base_arena;
 	Work_Arena = &Metaprogram->work_arena;
 	Temp_Arena = &Metaprogram->temp_arena;
@@ -195,12 +195,12 @@ int main(int argc, char** argv)
 		isize meta_index_counter = 0;
 		do {
 			if(s_head->name == NULL) continue;
-			start_temp_arena(Temp_Arena);
+			//start_temp_arena(Temp_Arena);
 			print_struct_names(s_head, -1, 
 					"Meta_Type", strlen("Meta_Type"), 
 					all_structs, &meta_index_counter, 
 					Temp_Arena);
-			end_temp_arena(Temp_Arena);
+			//end_temp_arena(Temp_Arena);
 		} while(s_head = s_head->next);
 		printf("};\n");
 
