@@ -162,13 +162,42 @@ int main(int argc, char** argv)
 
 		//Print struct typedefs
 		Struct_Def* s_head = structdef;
+		Meta_Type* type_start = arena_push_struct(arena, Meta_Type);
+		Meta_Type* type_head = type_start;
 		do {
 			if(s_head->name == NULL) continue;
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
 
-
-
+			if(type_head == NULL) {
+				type_head = get_types_in_struct(s_head, type_start, Work_Arena);
+			} else {
+				type_head = get_types_in_struct(s_head, type_head, Work_Arena); 
+			}
 		} while(s_head = s_head->next);
+
+		type_head = type_start;
+		Meta_Type* unique_type_start = arena_push_struct(Work_Arena, Meta_Type);
+		*unique_type_start = *type_start;
+		unique_type_start->next = NULL;
+		Meta_Type* unique_type_head = unique_type_start;
+		do {
+			bool eq = true;
+			unique_type_head = unique_type_start;
+			do {
+				if(meta_type_equals(type_head, unique_type_head)) {
+					eq = false;
+					break;
+				}
+			} while(unique_type_head = unique_type_head->next);
+			if(eq) {
+				unique_type_head->next = arena_push_struct(Work_Arena, Meta_Type);
+				unique_type_head = unique_type_head->next;
+				*unique_type_head = *type_head;
+			}
+
+		} while(type_head = type_head->next);
+		
+
 
 		//Print Meta_Types for structs
 		Struct_Def** all_structs = arena_push_array(Work_Arena, 

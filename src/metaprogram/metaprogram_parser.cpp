@@ -1347,22 +1347,15 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 	}
 }
 
-void _get_types_in_struct(Struct_Def* def, Meta_Type* head, Memory_Arena* arena)
+Meta_Type* get_types_in_struct(Struct_Def* def, Meta_Type* head, Memory_Arena* arena)
 {
 	for(isize i = 0; i < def->member_count; ++i) {
 		populate_meta_type(def->members + i, def->member_kinds[i], def, head);
 		head->next = arena_push_struct(arena, Meta_Type); 
 		head = head->next;
 	}
+	return head;
 }
-
-Meta_Type* get_types_in_struct(Struct_Def* def, Memory_Arena* arena)
-{
-	Meta_Type* start = arena_push_struct(arena, Meta_Type);
-	_get_types_in_struct(def, start, arena);
-	return start;
-}
-
 
 enum Meta_Flags
 {

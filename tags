@@ -1358,7 +1358,6 @@ _get_member_address	src/rituals_renderer.cpp	131;"	d	file:
 _get_member_address	src/wtb_sprite_renderer.h	123;"	d
 _get_sprite_y_base	src/rituals_renderer.cpp	80;"	d	file:
 _get_sprite_y_base	src/wtb_sprite_renderer.h	72;"	d
-_get_types_in_struct	src/metaprogram/metaprogram_parser.cpp	/^void _get_types_in_struct(Struct_Def* def, Meta_Type* head, Memory_Arena* arena)$/;"	f
 _gl_offset	src/rituals_renderer.cpp	132;"	d	file:
 _gl_offset	src/wtb_sprite_renderer.h	124;"	d
 _h	src/thirdparty/tinydir.h	/^	HANDLE _h;$/;"	m	struct:tinydir_dir
@@ -1725,7 +1724,7 @@ generate_world_area	src/rituals_world.cpp	/^void generate_world_area(World* worl
 get_area_file	src/rituals_serialization.cpp	/^FILE* get_area_file(const char* name, isize id, const char* mode)$/;"	f
 get_next_file	src/metaprogram/metaprogram_parser.cpp	/^Lexer_File* get_next_file(Lexer* lex)$/;"	f
 get_next_grid_cell	src/rituals_simulation.cpp	/^Sim_Grid_Cell* get_next_grid_cell(Sim_Static_Grid* grid)$/;"	f
-get_types_in_struct	src/metaprogram/metaprogram_parser.cpp	/^Meta_Type* get_types_in_struct(Struct_Def* def, Memory_Arena* arena)$/;"	f
+get_types_in_struct	src/metaprogram/metaprogram_parser.cpp	/^Meta_Type* get_types_in_struct(Struct_Def* def, Meta_Type* head, Memory_Arena* arena)$/;"	f
 get_world_file	src/rituals_serialization.cpp	/^FILE* get_world_file(const char* name, const char* mode)$/;"	f
 glActiveTexture	src/thirdparty/gl_core_3_3.h	1118;"	d
 glAttachShader	src/thirdparty/gl_core_3_3.h	1195;"	d
