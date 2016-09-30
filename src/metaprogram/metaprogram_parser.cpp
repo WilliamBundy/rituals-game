@@ -790,7 +790,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	isize chars = 0;
 	def->meta_index = *counter++;
 	if(index == -1) {
-		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, s_head->name);
+		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, def->name);
 	} else {
 		if(def->name[0] == '\0') {
 			//truly anonymous
