@@ -1207,7 +1207,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	755;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	867;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -2440,6 +2440,7 @@ parse_sing	src/metaprogram/metaprogram_parser.cpp	/^void parse_sing(Token* t, in
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_struct_member	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_Arena* arena)$/;"	f
+parse_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_tokens(Token* start)$/;"	f
 particles	src/rituals_particles.cpp	/^	Particle* particles;$/;"	m	struct:Emitter	file:
 particles_capacity	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
 particles_count	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:

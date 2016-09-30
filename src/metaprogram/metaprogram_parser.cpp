@@ -507,6 +507,118 @@ void parse_include_directive(Lexer* lex, Token* directive)
 	end_temp_arena(Temp_Arena);
 }
 
+void parse_tokens(Token* start)
+{
+	Token* head = start;
+
+	do {
+		head = parse_dollarsign_instructions(head);
+		if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
+			parse_include_directive(&lex, head);
+		}
+	} while(head = head->next);
+
+	head = start;
+
+	do {
+		Token* next;
+		switch(head->kind) {
+			case Token_DollarSign:
+				head = parse_dollarsign_instructions(head);
+				break;
+			case Token_Ampersand:
+				next = head->next;
+				if(next && next->kind == Token_Ampersand) {
+					head->kind = Operator_LogicalAnd;
+					head->len++;
+					head->next = next->next;
+				}
+				break;
+			case Token_Pipe:
+				next = head->next;
+				if(next && next->kind == Token_Pipe) {
+					head->kind = Operator_LogicalOr;
+					head->len++;
+					head->next = next->next;
+				}
+				break;
+			case Token_Equals:
+				next = head->next;
+				if(next && next->kind == Token_Equals) {
+					head->kind = Operator_BooleanEquals;
+					head->len++;
+					head->next = next->next;
+				}
+				break;
+			case Token_ExclamationMark:
+				next = head->next;
+				if(next && next->kind == Token_Equals) {
+					head->kind = Operator_BooleanNotEquals;
+					head->len++;
+					head->next = next->next;
+				}
+				break;
+			case Token_GreaterThan:
+				next = head->next;
+				if(next && next->kind == Token_Equals) {
+					head->kind = Operator_BooleanGreaterEquals;
+					head->len++;
+					head->next = next->next;
+				}
+				break;
+			case Token_LessThan:
+				next = head->next;
+				if(next && next->kind == Token_Equals) {
+					head->kind = Operator_BooleanLessEquals;
+					head->len++;
+					head->next = next->next;
+				}
+				break;
+			case Token_Number:
+				parse_number_tokens(head);
+				break;
+			case Token_Minus:
+				next = head->next;
+				if(next && next->kind == Token_GreaterThan) {
+					head->kind = Operator_PtrMemberAccess;
+					head->len++;
+					head->next = next->next;
+				} else if(next && next->kind == Token_Minus) {
+					head->kind = Operator_Decrement;
+					head->len++;
+					head->next = next->next;
+				} else if(next && next->kind == Token_Number) {
+					Token_Kind prevkind = Token_Unknown;
+					if(head->prev != NULL) {
+						prevkind = head->prev->kind;
+					}
+					if(prevkind != Token_Number &&
+							prevkind != Token_Integer && 
+							prevkind != Token_Float && 
+							prevkind != Token_Identifier ) {
+						head->kind = Token_Number;
+						head->len += next->len;
+						head->next = next->next;
+						next = head->next;
+						parse_number_tokens(head);
+					}
+				}
+				break;
+			case Token_Plus:
+				next = head->next;
+				if(next && next->kind == Token_Plus) {
+					head->kind = Operator_Increment;
+					head->len++;
+					head->next = next->next;
+				}
+			default:
+				break;
+		}
+	} while(head = head->next);
+
+}
+
+
 
 struct Proc_Arg
 {
