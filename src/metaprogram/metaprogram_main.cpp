@@ -208,7 +208,7 @@ int main(int argc, char** argv)
 		printf("enum Meta_Type\n {\n");
 		isize meta_index_counter = 0;
 
-		type_start = unique_type_start;
+		//type_start = unique_type_start;
 		type_head = type_start;
 		do {
 			if(type_head->name == NULL) continue;
