@@ -1207,7 +1207,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	752;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	755;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -2368,8 +2368,8 @@ next_random_double	src/rituals_random.cpp	/^real64 next_random_double(Random* r)
 next_random_float	src/rituals_game.cpp	/^real32 next_random_float()$/;"	f
 next_random_float	src/rituals_random.cpp	/^real32 next_random_float(Random* r)$/;"	f
 next_random_uint64	src/rituals_random.cpp	/^uint64 next_random_uint64(Random* r)$/;"	f
-nextchar	src/metaprogram/metaprogram_parser.cpp	198;"	d	file:
-nextchar	src/metaprogram/metaprogram_parser.cpp	424;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	201;"	d	file:
+nextchar	src/metaprogram/metaprogram_parser.cpp	427;"	d	file:
 night_amount	src/rituals_renderer.cpp	/^	real night_amount;$/;"	m	struct:Render_Group	file:
 night_amount	src/wtb_sprite_renderer.h	/^	real night_amount;$/;"	m	struct:Render_Group
 night_cutoff	src/rituals_renderer.cpp	/^	real night_cutoff;$/;"	m	struct:Render_Group	file:
@@ -2473,7 +2473,7 @@ print_reflection_data	src/metaprogram/metaprogram_parser.cpp	/^void print_reflec
 print_struct	src/metaprogram/metaprogram_parser.cpp	/^void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)$/;"	f
 print_struct_names	src/metaprogram/metaprogram_parser.cpp	/^void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, isize* counter, Memory_Arena* arena)$/;"	f
 print_token	src/metaprogram/metaprogram_parser.cpp	/^void print_token(Token* t, Token* start)$/;"	f
-procedures_count	src/metaprogram/metaprogram_parser.cpp	/^	isize procedures_count;$/;"	m	struct:Lexer_File	file:
+procedures_count	src/metaprogram/metaprogram_parser.cpp	/^	isize procedures_count;$/;"	m	struct:Lexer	file:
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
 prop	src/rituals_game_info.cpp	/^	} prop;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon1	file:
 ptr	src/rituals_game_info.cpp	/^		void* ptr;$/;"	m	struct:Rituals_Entity_Userdata::__anon12	file:
@@ -2941,7 +2941,7 @@ stbi_zlib_decode_noheader_buffer	src/thirdparty/stb_image.h	/^STBIDEF int stbi_z
 stbi_zlib_decode_noheader_malloc	src/thirdparty/stb_image.h	/^STBIDEF char *stbi_zlib_decode_noheader_malloc(char const *buffer, int len, int *outlen)$/;"	f
 step	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
 stop_state	src/rituals_main.cpp	/^void stop_state()$/;"	f
-structs_count	src/metaprogram/metaprogram_parser.cpp	/^	isize structs_count;$/;"	m	struct:Lexer_File	file:
+structs_count	src/metaprogram/metaprogram_parser.cpp	/^	isize structs_count;$/;"	m	struct:Lexer	file:
 stub	src/rituals_world_area.cpp	/^	World_Area_Stub* stub;$/;"	m	struct:World_Area	file:
 style_index	src/rituals_particles.cpp	/^	int32 style_index;$/;"	m	struct:Particle	file:
 styles	src/rituals_particles.cpp	/^	Particle_Style* styles;$/;"	m	struct:Emitter	file:
@@ -3071,8 +3071,8 @@ v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(Vec2 a, real z)$/;"	f	file:
 v3	src/rituals_math.cpp	/^static inline Vec3 v3(real x, real y, real z)$/;"	f	file:
 v4	src/rituals_math.cpp	/^static inline Vec4 v4(real x, real y, real z, real w)$/;"	f	file:
-valid	src/metaprogram/metaprogram_parser.cpp	208;"	d	file:
-valid	src/metaprogram/metaprogram_parser.cpp	425;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	211;"	d	file:
+valid	src/metaprogram/metaprogram_parser.cpp	428;"	d	file:
 validate_uint32	src/thirdparty/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	helping_gb.cpp	/^	T value;$/;"	m	struct:MapEntry	file:
 value	src/thirdparty/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon9

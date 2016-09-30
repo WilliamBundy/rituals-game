@@ -112,9 +112,6 @@ struct Lexer_File
 	char* start;
 	char* head;
 
-
-	isize structs_count;
-	isize procedures_count;
 };
 
 void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize prev_path_len, Memory_Arena* arena)
@@ -159,6 +156,9 @@ struct Lexer
 
 	Lexer_File* files;
 	isize files_count, files_capacity;
+
+	isize structs_count;
+	isize procedures_count;
 };
 
 void init_lexer(Lexer* lex, isize file_capacity, Memory_Arena* arena)
@@ -168,6 +168,9 @@ void init_lexer(Lexer* lex, isize file_capacity, Memory_Arena* arena)
 	lex->files_capacity = file_capacity;
 	lex->main_file = lex->files;
 	lex->main_file->index = 0;
+
+	lex->structs_count = 0;
+	lex->procedures_count = 0;
 }
 
 Lexer_File* get_next_file(Lexer* lex)
