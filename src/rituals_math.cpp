@@ -307,6 +307,7 @@ inline Vec2 v2_normalize(Vec2 v)
 
 union AABB
 {
+	real e[4];
 	struct {
 		Vec2 center;
 		union {
@@ -318,7 +319,6 @@ union AABB
 			};
 		};
 	};
-	real e[4];
 };
 
 #define AABB_x1(b) (b.center.x - b.hw)
