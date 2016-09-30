@@ -830,10 +830,11 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 
 
 
+	isize subcount = 0;
 	for(isize i = 0; i < def->member_count; ++i) {
 		if(def->member_kinds[i] != StructKind_Member) {
 			auto var = &def->members[i].anon_struct;
-			print_struct_names(&var->def, i, new_prefix, chars, counter, arena);
+			print_struct_names(&var->def, subcount++, new_prefix, chars, counter, arena);
 		}
 	}
 }
