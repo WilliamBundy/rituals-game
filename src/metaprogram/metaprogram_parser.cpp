@@ -803,7 +803,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 			//has a variable name
 			chars = printf("\t%.*s_%s,\n",
 					prefix_len, prefix,
-					s_head->name,
+					def->name,
 					var->def.name);
 		}
 	}
