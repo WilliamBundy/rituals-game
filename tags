@@ -1207,7 +1207,7 @@ StructKind_Member	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Member$/;
 StructKind_None	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_None,$/;"	e	enum:Struct_Kind	file:
 StructKind_Struct	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Struct,$/;"	e	enum:Struct_Kind	file:
 StructKind_Union	src/metaprogram/metaprogram_parser.cpp	/^	StructKind_Union,$/;"	e	enum:Struct_Kind	file:
-StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	867;"	d	file:
+StructMemberCapacity	src/metaprogram/metaprogram_parser.cpp	904;"	d	file:
 Struct_Def	src/metaprogram/metaprogram_parser.cpp	/^struct Struct_Def$/;"	s	file:
 Struct_Kind	src/metaprogram/metaprogram_parser.cpp	/^enum Struct_Kind$/;"	g	file:
 Struct_Member	src/metaprogram/metaprogram_parser.cpp	/^typedef union Struct_Member Struct_Member;$/;"	t	typeref:union:Struct_Member	file:
@@ -2470,6 +2470,7 @@ prev	src/metaprogram/metaprogram_parser.cpp	/^	Token *prev, *next;$/;"	m	struct:
 prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	struct:Play_State	file:
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 print_indent	src/metaprogram/metaprogram_parser.cpp	/^void print_indent(int32 indent)$/;"	f
+print_proc_prototype	src/metaprogram/metaprogram_parser.cpp	/^void print_proc_prototype(Proc_Prototype* p)$/;"	f
 print_reflection_data	src/metaprogram/metaprogram_parser.cpp	/^void print_reflection_data(Struct_Def* def)$/;"	f
 print_struct	src/metaprogram/metaprogram_parser.cpp	/^void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)$/;"	f
 print_struct_names	src/metaprogram/metaprogram_parser.cpp	/^void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, Struct_Def** all_structs, isize* counter, Memory_Arena* arena)$/;"	f

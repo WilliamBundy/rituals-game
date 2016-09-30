@@ -640,6 +640,12 @@ void parse_tokens(Lexer* lex, Token* start)
 
 }
 
+void parse_sing(Token* t, int32 brace_level) 
+{
+	if(t->hash == hash_literal("sing")) { 
+		fprintf(stderr, "[%d]", brace_level);
+	}
+}
 
 
 struct Proc_Arg
@@ -669,11 +675,42 @@ struct Proc_Prototype
 	Proc_Prototype* next;
 };
 
-void parse_sing(Token* t, int32 brace_level) 
+void print_proc_prototype(Proc_Prototype* p)
 {
-	if(t->hash == hash_literal("sing")) { 
-		fprintf(stderr, "[%d]", brace_level);
+	if(p->name == NULL) continue;
+
+	for(isize i = 0; i < p->decorators_count; ++i) {
+		printf("%s ", p->decorators[i]);
 	}
+	printf("%s(", p->name);
+
+	for(isize i = 0; i < p->args_count; ++i) {
+		Proc_Arg* a = p->args + i;
+		for(isize j = 0; j < a->count; ++j) {
+			printf("%s", a->terms[j]);
+			if(j == a->count - 1) {
+				if(a->defaults == NULL) {
+					if(i != p->args_count - 1) printf(", ");
+				} else {
+					printf(" %s", a->defaults);
+					if(i != p->args_count - 1) printf(" ");
+				}
+			} else {
+				printf(" ");
+			}
+		}
+	} 
+
+	if(p->args_count != 0) {
+		if(p->args[p->args_count - 1].defaults == NULL) 
+			printf(");");
+		else 
+			printf(";");
+	}
+
+	printf("\n");
+
+
 }
 
 Proc_Prototype* find_proc_prototypes(Lexer* lex, Token* start, Memory_Arena* arena)

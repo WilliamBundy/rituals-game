@@ -174,119 +174,12 @@ int main(int argc, char** argv)
 		}
 		head->prev = last;
 
-		head = start;
-		
-		do {
-			head = parse_dollarsign_instructions(head);
-			if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
-				parse_include_directive(&lex, head);
-			}
-
-		} while(head = head->next);
-
-		head = start;
-
-		do {
-			Token* next;
-			switch(head->kind) {
-				case Token_DollarSign:
-					head = parse_dollarsign_instructions(head);
-					break;
-				case Token_Ampersand:
-					next = head->next;
-					if(next && next->kind == Token_Ampersand) {
-						head->kind = Operator_LogicalAnd;
-						head->len++;
-						head->next = next->next;
-					}
-					break;
-				case Token_Pipe:
-					next = head->next;
-					if(next && next->kind == Token_Pipe) {
-						head->kind = Operator_LogicalOr;
-						head->len++;
-						head->next = next->next;
-					}
-					break;
-				case Token_Equals:
-					next = head->next;
-					if(next && next->kind == Token_Equals) {
-						head->kind = Operator_BooleanEquals;
-						head->len++;
-						head->next = next->next;
-					}
-					break;
-				case Token_ExclamationMark:
-					next = head->next;
-					if(next && next->kind == Token_Equals) {
-						head->kind = Operator_BooleanNotEquals;
-						head->len++;
-						head->next = next->next;
-					}
-					break;
-				case Token_GreaterThan:
-					next = head->next;
-					if(next && next->kind == Token_Equals) {
-						head->kind = Operator_BooleanGreaterEquals;
-						head->len++;
-						head->next = next->next;
-					}
-					break;
-				case Token_LessThan:
-					next = head->next;
-					if(next && next->kind == Token_Equals) {
-						head->kind = Operator_BooleanLessEquals;
-						head->len++;
-						head->next = next->next;
-					}
-					break;
-				case Token_Number:
-					parse_number_tokens(head);
-					break;
-				case Token_Minus:
-					next = head->next;
-					if(next && next->kind == Token_GreaterThan) {
-						head->kind = Operator_PtrMemberAccess;
-						head->len++;
-						head->next = next->next;
-					} else if(next && next->kind == Token_Minus) {
-						head->kind = Operator_Decrement;
-						head->len++;
-						head->next = next->next;
-					} else if(next && next->kind == Token_Number) {
-						Token_Kind prevkind = Token_Unknown;
-						if(head->prev != NULL) {
-							prevkind = head->prev->kind;
-						}
-						if(prevkind != Token_Number &&
-								prevkind != Token_Integer && 
-								prevkind != Token_Float && 
-								prevkind != Token_Identifier ) {
-							head->kind = Token_Number;
-							head->len += next->len;
-							head->next = next->next;
-							next = head->next;
-							parse_number_tokens(head);
-						}
-					}
-					break;
-				case Token_Plus:
-					next = head->next;
-					if(next && next->kind == Token_Plus) {
-						head->kind = Operator_Increment;
-						head->len++;
-						head->next = next->next;
-					}
-				default:
-					break;
-			}
-		} while(head = head->next);
-
+		parse_tokens(&lex, start);
 		Proc_Prototype* p = find_proc_prototypes(&lex, start, Work_Arena);
-
 		Struct_Def* structdef = find_struct_defs(&lex, start, Work_Arena);
 
-		fprintf(stderr, "Found %d procedures, %d structs \n", lex.procedures_count, lex.structs_count);
+		fprintf(stderr, "Found %d procedures, %d structs \n",
+				lex.procedures_count, lex.structs_count);
 
 		Struct_Def* s_head = structdef;
 		do {
@@ -294,7 +187,8 @@ int main(int argc, char** argv)
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
 		} while(s_head = s_head->next);
 
-		Struct_Def** all_structs = arena_push_array(Work_Arena, Struct_Def*, lex.structs_count + 16);
+		Struct_Def** all_structs = arena_push_array(Work_Arena, 
+				Struct_Def*, lex.structs_count + 16);
 
 		s_head = structdef;
 		printf("enum Meta_Type\n {\n");
@@ -302,7 +196,10 @@ int main(int argc, char** argv)
 		do {
 			if(s_head->name == NULL) continue;
 			start_temp_arena(Temp_Arena);
-			print_struct_names(s_head, -1, "Meta_Type", strlen("Meta_Type"), all_structs, &meta_index_counter, Temp_Arena);
+			print_struct_names(s_head, -1, 
+					"Meta_Type", strlen("Meta_Type"), 
+					all_structs, &meta_index_counter, 
+					Temp_Arena);
 			end_temp_arena(Temp_Arena);
 		} while(s_head = s_head->next);
 		printf("};\n");
@@ -315,39 +212,7 @@ int main(int argc, char** argv)
 		
 #if 1
 		do {
-			if(p->name == NULL) continue;
-
-			for(isize i = 0; i < p->decorators_count; ++i) {
-				printf("%s ", p->decorators[i]);
-			}
-			printf("%s(", p->name);
-
-			for(isize i = 0; i < p->args_count; ++i) {
-				Proc_Arg* a = p->args + i;
-				for(isize j = 0; j < a->count; ++j) {
-					printf("%s", a->terms[j]);
-					if(j == a->count - 1) {
-						if(a->defaults == NULL) {
-							if(i != p->args_count - 1) printf(", ");
-						} else {
-							printf(" %s", a->defaults);
-							if(i != p->args_count - 1) printf(" ");
-						}
-					} else {
-						printf(" ");
-					}
-				}
-			} 
-
-			if(p->args_count != 0) {
-				if(p->args[p->args_count - 1].defaults == NULL) 
-					printf(");");
-				else 
-					printf(";");
-			}
-
-			printf("\n");
-			
+			print_proc_prototype(p);
 		} while (p = p->next);
 
 #endif 
