@@ -750,6 +750,8 @@ struct Struct_Def
 	char* name;
 	Struct_Kind kind;
 
+	isize meta_index;
+
 	Struct_Member* members;
 	Struct_Kind* member_kinds;
 	isize member_count;
@@ -822,7 +824,7 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 		} else {
 			auto var = &def->members[i].anon_struct;
 			print_struct(&var->def, true, indent);
-			printf("%s", def->members[i].member_var.name);
+			printf("%s", var->def.name);
 			
 			for(isize a = 0; a < var->array_levels; ++a) {
 				printf("[%s]", var->array_sizes[a]);

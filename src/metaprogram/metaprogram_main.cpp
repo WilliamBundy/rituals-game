@@ -272,9 +272,11 @@ int main(int argc, char** argv)
 
 		s_head = structdef;
 		printf("enum Meta_Type\n {\n");
+		isize meta_index_counter = 0;
 		do {
 			if(s_head->name == NULL) continue;
 			printf("\tMetaType_%s,\n", s_head->name);
+			s_head->meta_index = meta_index_counter++;
 		} while(s_head = s_head->next);
 		printf("};\n");
 

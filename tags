@@ -2320,6 +2320,7 @@ member_var	src/metaprogram/metaprogram_parser.cpp	/^	} member_var;$/;"	m	union:S
 members	src/metaprogram/metaprogram_parser.cpp	/^	Struct_Member* members;$/;"	m	struct:Struct_Def	file:
 menu_state	src/rituals_main.cpp	/^Menu_State* menu_state;$/;"	v
 meta_arena	src/rituals_game.cpp	/^	Memory_Arena* meta_arena;$/;"	m	struct:Game_Main	file:
+meta_index	src/metaprogram/metaprogram_parser.cpp	/^	isize meta_index;$/;"	m	struct:Struct_Def	file:
 mg	src/thirdparty/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon14
 mode	src/rituals_game_info.cpp	/^		isize mode;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
 modulus	src/rituals_math.cpp	/^static inline isize modulus(isize a, isize b)$/;"	f	file:
