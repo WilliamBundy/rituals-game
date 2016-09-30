@@ -109,7 +109,7 @@ void foo()
 	MyUnion u;
 	u.x = 44;
 	printf("%d \n", u.aa);
-	u.s = (char*)malloc(44);
+	u.s = (char*)"Hello, world!";
 }
 
 
