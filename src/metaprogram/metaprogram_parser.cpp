@@ -677,7 +677,7 @@ struct Proc_Prototype
 
 void print_proc_prototype(Proc_Prototype* p)
 {
-	if(p->name == NULL) continue;
+	if(p->name == NULL) return;
 
 	for(isize i = 0; i < p->decorators_count; ++i) {
 		printf("%s ", p->decorators[i]);
