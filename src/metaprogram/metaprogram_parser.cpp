@@ -793,9 +793,10 @@ void print_indent(int32 indent)
 	}
 }
 
-void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, isize* counter, Memory_Arena* arena)
+void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, Struct_Def** all_structs, isize* counter, Memory_Arena* arena)
 {
 	isize chars = 0;
+	all_structs[*counter] = def;
 	def->meta_index = *counter++;
 	if(index == -1) {
 		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, def->name);

@@ -2471,7 +2471,7 @@ prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 print_indent	src/metaprogram/metaprogram_parser.cpp	/^void print_indent(int32 indent)$/;"	f
 print_reflection_data	src/metaprogram/metaprogram_parser.cpp	/^void print_reflection_data(Struct_Def* def)$/;"	f
 print_struct	src/metaprogram/metaprogram_parser.cpp	/^void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)$/;"	f
-print_struct_names	src/metaprogram/metaprogram_parser.cpp	/^void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, isize* counter, Memory_Arena* arena)$/;"	f
+print_struct_names	src/metaprogram/metaprogram_parser.cpp	/^void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, Struct_Def** all_structs, isize* counter, Memory_Arena* arena)$/;"	f
 print_token	src/metaprogram/metaprogram_parser.cpp	/^void print_token(Token* t, Token* start)$/;"	f
 procedures_count	src/metaprogram/metaprogram_parser.cpp	/^	isize procedures_count;$/;"	m	struct:Lexer	file:
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
