@@ -91,12 +91,6 @@ Memory_Arena* Work_Arena;
 Memory_Arena* Temp_Arena;
 
 
-struct foobar
-{
-	int **((*v[8])[32]);
-};
-
-
 char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 {
 	char* str = NULL;

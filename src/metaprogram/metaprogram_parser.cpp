@@ -1332,14 +1332,18 @@ enum Meta_Type
 struct Meta_Member
 {
 	uint64 flags;
-	Meta_Type type;
+	isize type_index;
 	uint32 pointer_depth;
 	char* name;
 	uint64 offset;
 };
 
+void print_meta_member(Struct_Def* parent, Struct_Member* member)
+{
+	
+}
+
 void print_reflection_data(Struct_Def* def)
 {
-	//print meta type declaration
-	//print array of members in arr
+	
 }

@@ -1696,7 +1696,6 @@ flags	src/wtb_sprite_renderer.h	/^	uint32 flags;$/;"	m	struct:Sprite
 float2fixed	src/thirdparty/stb_image.h	3072;"	d
 float2fixed	src/thirdparty/stb_image.h	3100;"	d
 follow_dist	src/rituals_game_info.cpp	/^		real follow_dist;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
-foobar	src/metaprogram/metaprogram_main.cpp	/^struct foobar$/;"	s	file:
 force	src/rituals_simulation.cpp	/^	Vec2 velocity, force, collision_vel;$/;"	m	struct:Sim_Body	file:
 fps	src/rituals_animations.cpp	/^	real fps;$/;"	m	struct:Animation	file:
 frame	src/rituals_particles.cpp	/^	int32 frame;$/;"	m	struct:Particle	file:
@@ -2470,6 +2469,7 @@ prev	src/metaprogram/metaprogram_parser.cpp	/^	Token *prev, *next;$/;"	m	struct:
 prev_time	src/rituals_main.cpp	/^	usize current_time = 0, prev_time = 0;$/;"	m	struct:Play_State	file:
 prev_time	src/rituals_win32.cpp	/^usize current_time = 0, prev_time = 0;$/;"	v
 print_indent	src/metaprogram/metaprogram_parser.cpp	/^void print_indent(int32 indent)$/;"	f
+print_meta_member	src/metaprogram/metaprogram_parser.cpp	/^void print_meta_member(Struct_Def* parent, Struct_Member* member)$/;"	f
 print_proc_prototype	src/metaprogram/metaprogram_parser.cpp	/^void print_proc_prototype(Proc_Prototype* p)$/;"	f
 print_reflection_data	src/metaprogram/metaprogram_parser.cpp	/^void print_reflection_data(Struct_Def* def)$/;"	f
 print_struct	src/metaprogram/metaprogram_parser.cpp	/^void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent = 0)$/;"	f
@@ -3009,9 +3009,9 @@ total_time	src/rituals_particles.cpp	/^	int32 total_time;$/;"	m	struct:Particle	
 tq	src/thirdparty/stb_image.h	/^      int tq;$/;"	m	struct:__anon6::__anon7
 transparent	src/thirdparty/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon17
 tt	src/rituals_main.cpp	/^float tt = 0;$/;"	v
-type	src/metaprogram/metaprogram_parser.cpp	/^	Meta_Type type;$/;"	m	struct:Meta_Member	file:
 type	src/thirdparty/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon11
 type	src/thirdparty/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon15
+type_index	src/metaprogram/metaprogram_parser.cpp	/^	isize type_index;$/;"	m	struct:Meta_Member	file:
 u_night_amount	src/rituals_renderer.cpp	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:OpenGL_Renderer	file:
 u_night_amount	src/wtb_sprite_renderer.h	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:OpenGL_Renderer
 u_night_cutoff	src/rituals_renderer.cpp	/^	isize u_texturesize, u_orthomat, u_night_amount, u_night_cutoff;$/;"	m	struct:OpenGL_Renderer	file:
