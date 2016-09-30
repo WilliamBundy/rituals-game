@@ -809,6 +809,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	chars -= 3;
 
 	char* new_prefix = arena_push_array(arena, char, chars + 1);
+	prefix_len = chars;
 	if(index == -1) {
 		snprintf(new_prefix, chars, "%.*s_%s", prefix_len, prefix, def->name);
 	} else {
