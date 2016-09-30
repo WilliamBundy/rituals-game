@@ -111,6 +111,10 @@ struct Lexer_File
 	Lexer_Location location;
 	char* start;
 	char* head;
+
+
+	isize structs_count;
+	isize procedures_count;
 };
 
 void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize prev_path_len, Memory_Arena* arena)
@@ -557,7 +561,7 @@ void parse_sing(Token* t, int32 brace_level)
 	}
 }
 
-Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
+Proc_Prototype* find_proc_prototypes(Lexer* lex, Token* start, Memory_Arena* arena)
 {
 	//NOTE(will) will not find C-style "struct Type function() {"
 	Token* head = start;
@@ -696,6 +700,7 @@ Proc_Prototype* find_proc_prototypes(Token* start, Memory_Arena* arena)
 						proc.end = head;
 						*proc_head = proc;
 						proc_head->next = arena_push_struct(arena, Proc_Prototype);
+						lex->procedures_count++;
 						proc_head = proc_head->next;
 						break;
 					}
@@ -903,7 +908,7 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 
 // unsigned short**** thinga[400], **thingb, **thingc, a, b, c, d[3], e[44][55], f[44][22][44];
 
-Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena)
+Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_Arena* arena)
 {
 	Hash structhash = hash_literal("struct");
 	Hash unionhash = hash_literal("union");
@@ -915,6 +920,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 
 	if(head->kind == Token_Identifier) {
 		if(head->hash == structhash || head->hash == unionhash) {
+			lex->structs_count++;
 			if(head->hash == unionhash) {
 				*kind = StructKind_Union;
 			} else {
@@ -930,7 +936,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 			def.member_kinds = arena_push_array(arena, Struct_Kind, StructMemberCapacity);
 			def.kind = *kind;
 			do {
-				head = parse_struct_member(&def, head, arena);
+				head = parse_struct_member(lex, &def, head, arena);
 				head = head->next;
 			} while(head->kind != Token_CloseBrace);
 
@@ -943,6 +949,7 @@ Token* parse_struct_member(Struct_Def* parent, Token* start, Memory_Arena* arena
 					var->array_levels = 0;
 					var->array_sizes = NULL;
 					parent->member_count++;
+
 					return head;
 				} else {
 					fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
@@ -1120,9 +1127,11 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 			subhead = subhead->next;
 
 			do {
-				subhead = parse_struct_member(&def, subhead, arena);
+				subhead = parse_struct_member(lex, &def, subhead, arena);
 				subhead = subhead->next;
 			} while(subhead->kind != Token_CloseBrace);
+
+			lex->structs_count++;
 
 			*def_head = def;
 			def_head->next = arena_push_struct(arena, Struct_Def); 
@@ -1135,7 +1144,28 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 
 
 
-
+/* Serialization "what is this thing" rules
+ * 	- If something is a pointer
+ * 		- if this is the only pointer in the 'class'
+ * 			- assume any member named count, len, length, capacity, size 
+ * 			 could be the number.
+ * 		- when initializing, if something has the name
+ * 			"pointer(s)_{capacity, size}
+ * 			- Assume this is the size to allocate
+ * 		- if something has the name
+ * 			"pointer(s)_{count, length}" 
+ * 			- Assume this is the number of things to (de)serialize
+ * 		- if $(tag, pointername:length) is present, use that, ignore
+ * 			heuristic rules
+ * 	- If something is a union
+ * 		- if something matches the name
+ * 			"unionname_{kind,type}"
+ * 			use this to index sub-structs in the union
+ * 		- If a union has a base-level array that is the same size 
+ * 			as the union, and no kind/type variable is present, 
+ * 			(de)serialize that
+ *
+ */
 
 /*
 struct Meta_Member_Definition
