@@ -2440,7 +2440,7 @@ parse_sing	src/metaprogram/metaprogram_parser.cpp	/^void parse_sing(Token* t, in
 parse_spritefont_rectangles	rituals_gui.cpp	/^Rect* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_spritefont_rectangles	src/rituals_gui.cpp	/^Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)$/;"	f
 parse_struct_member	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_Arena* arena)$/;"	f
-parse_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_tokens(Token* start)$/;"	f
+parse_tokens	src/metaprogram/metaprogram_parser.cpp	/^void parse_tokens(Lexer* lex, Token* start)$/;"	f
 particles	src/rituals_particles.cpp	/^	Particle* particles;$/;"	m	struct:Emitter	file:
 particles_capacity	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:
 particles_count	src/rituals_particles.cpp	/^	isize particles_count, particles_capacity;$/;"	m	struct:Emitter	file:

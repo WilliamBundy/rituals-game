@@ -529,14 +529,14 @@ Token* parse_dollarsign_instructions(Token* t)
 	return head;
 }
 
-void parse_tokens(Token* start)
+void parse_tokens(Lexer* lex, Token* start)
 {
 	Token* head = start;
 
 	do {
 		head = parse_dollarsign_instructions(head);
 		if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
-			parse_include_directive(&lex, head);
+			parse_include_directive(lex, head);
 		}
 	} while(head = head->next);
 
