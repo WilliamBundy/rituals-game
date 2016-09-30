@@ -90,7 +90,6 @@ Memory_Arena* Base_Arena;
 Memory_Arena* Work_Arena;
 Memory_Arena* Temp_Arena;
 
-
 union MyUnion
 {
 	struct {
@@ -300,6 +299,23 @@ int main(int argc, char** argv)
 		do {
 			if(s_head->name == NULL) continue;
 			printf("\tMetaType_%s,\n", s_head->name);
+			for(isize i = 0; i < def->member_count; ++i) {
+				if(def->member_kinds[i] != StructKind_Member) {
+					auto var = &def->members[i].anon_struct;
+					if(def->name[0] == '\0') {
+						//truly anonymous
+						printf("\tMetaType_%s_%s%d,\n", 
+								s_head->name,
+								def->member_kinds[i] == StructKind_Struct ?
+									"struct" : "union",
+									i);
+					} else {
+						//has a variable name
+						printf("\tMetaType_%s_%s,\n", s_head->name,
+								var->name);
+					}
+				}
+			}
 			s_head->meta_index = meta_index_counter++;
 		} while(s_head = s_head->next);
 		printf("};\n");
