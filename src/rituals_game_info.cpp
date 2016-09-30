@@ -182,3 +182,15 @@ union Rituals_Entity_Userdata
 };
 
 
+union MyUnion
+{
+	struct {
+		real x, y, z, w;
+	};
+	struct {
+		uint32 aa, bb, cc, dd;
+	};
+	struct {
+		char* p, *q, *r, *s;
+	};
+};

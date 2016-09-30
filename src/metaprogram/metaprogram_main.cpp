@@ -90,18 +90,6 @@ Memory_Arena* Base_Arena;
 Memory_Arena* Work_Arena;
 Memory_Arena* Temp_Arena;
 
-union MyUnion
-{
-	struct {
-		real x, y, z, w;
-	};
-	struct {
-		uint32 aa, bb, cc, dd;
-	};
-	struct {
-		char* p, *q, *r, *s;
-	};
-};
 
 void foo()
 {
