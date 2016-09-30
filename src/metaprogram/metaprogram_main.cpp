@@ -8,6 +8,22 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/* TODO(will) Things for metaprogramming tool
+ *	- Finish up main features:
+ *		- Reflection data generator
+ *		- Serializer generator
+ *		- These rely on structs
+ *		- Header to be included in project being introspected
+ *	- Code cleanup pass
+ *		- Merge duplicated code
+ *		- Possibly split into a few files
+ *	- Optimization/Bug fixing pass
+ *		- Already pretty fast
+ *		- Figure out why it crashes on stb_image.c
+ *		- Improve the robustness of system
+ */ 
+
+
 #if RITUALS_WINDOWS == 1
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <windows.h>
@@ -90,7 +106,7 @@ char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 			*size_out = size;
 		}
 	} else {
-		printf("\n=========================\nCould not open file %s\n=========================\n", filename);
+		printf("Could not open file %s\n", filename);
 	}
 	return str;
 }
@@ -252,6 +268,16 @@ int main(int argc, char** argv)
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
 		} while(s_head = s_head->next);
 
+	
+
+		s_head = structdef;
+		printf("enum Meta_Type\n {\n");
+		do {
+			if(s_head->name == NULL) continue;
+			printf("\tMetaType_%s,\n", s_head->name);
+		} while(s_head = s_head->next);
+		printf("};\n");
+
 		s_head = structdef;
 		do {
 			if(s_head->name == NULL) continue;
@@ -262,17 +288,6 @@ int main(int argc, char** argv)
 		do {
 			if(p->name == NULL) continue;
 
-			if(hash_string(p->name, strlen(p->name)) == hash_literal("exclude")) {
-					printf("\n");
-					printf("\n");
-				Token* tt = p->start;
-				do {
-					print_token(tt, start);
-					printf("\n");
-				} while(tt != p->end);
-					printf("\n");
-					printf("\n");
-			}
 			for(isize i = 0; i < p->decorators_count; ++i) {
 				printf("%s ", p->decorators[i]);
 			}

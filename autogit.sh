@@ -1,4 +1,4 @@
 git add --all
-git commit -m "rituals build 68" 
+git commit -m "rituals build 69" 
 git push 
 git push github

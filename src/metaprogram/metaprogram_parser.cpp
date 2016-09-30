@@ -76,7 +76,6 @@ enum Token_Kind
 	
 };
 
-
 struct Lexer_Location
 {
 	isize file;
@@ -1080,3 +1079,58 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 }
 
 
+
+
+
+/*
+struct Meta_Member_Definition
+{
+	uint64 flags;
+	Meta_Type type;
+	char* name;
+	isize offset;
+};
+
+Meta_Member_Definition MembersOf_Rect2[] = {
+	{
+		0, "x", (isize)&((Rect2*)NULL)->x
+	},
+	{
+	
+	}
+};
+
+
+struct Meta_Type
+{
+	
+};
+
+Meta_Type Reflected_Types[...] = {
+	Meta_Type{
+		"Point",
+		3,
+		
+	},
+}
+
+Meta_Type_Member Reflected_Type_Members[][] = {
+
+}
+
+/*
+ * Entity_Meta->
+ *
+ *
+ *
+ *
+ */
+
+
+
+
+void print_reflection_data(Struct_Def* def)
+{
+	//print meta type declaration
+	//print array of members in arr
+}
