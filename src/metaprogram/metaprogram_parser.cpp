@@ -1399,7 +1399,7 @@ void print_reflection_data(Struct_Def* def)
 	printf("Meta_Member %s_Members[] = {\n", def->name);
 	for(isize i = 0; i < def->member_count; ++i) {
 		Meta_Member m;
-		m->parentname = def->name;
+		m.parentname = def->name;
 
 	}
 	printf("};\n\n");
