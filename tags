@@ -3056,7 +3056,7 @@ usize	src/rituals_main.cpp	/^typedef size_t usize;$/;"	t	file:
 usize	src/rituals_sort_generator.cpp	/^_generate_sort_and_search_for_numeric_type(usize);$/;"	v
 usize	src/rituals_sort_macros.cpp	/^_generate_sort_and_search_for_numeric_type(usize);$/;"	v
 usize	src/rituals_win32.cpp	/^typedef size_t usize;$/;"	t	file:
-v	src/metaprogram/metaprogram_main.cpp	/^	int **v[32];$/;"	m	struct:foobar	file:
+v	src/metaprogram/metaprogram_main.cpp	/^	int **(v[32]);$/;"	m	struct:foobar	file:
 v	src/thirdparty/stb_image.h	/^      int h,v;$/;"	m	struct:__anon6::__anon7
 v2	src/rituals_math.cpp	/^static inline Vec2 v2(Vec2i vi)$/;"	f	file:
 v2	src/rituals_math.cpp	/^static inline Vec2 v2(Vec3 v)$/;"	f	file:

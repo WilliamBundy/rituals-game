@@ -93,7 +93,7 @@ Memory_Arena* Temp_Arena;
 
 struct foobar
 {
-	int **v[32];
+	int **(v[32]);
 };
 
 
