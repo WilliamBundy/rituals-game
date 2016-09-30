@@ -2424,7 +2424,7 @@ ortho	src/wtb_sprite_renderer.h	/^	real ortho[16];$/;"	m	struct:Render_Group
 out	src/thirdparty/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon12
 out	src/thirdparty/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ output buffer (always 4 components)$/;"	m	struct:__anon17
 overlap	src/rituals_simulation.cpp	/^	Vec2 overlap;$/;"	m	struct:Sim_Contact	file:
-p	src/metaprogram/metaprogram_main.cpp	/^		char* p, q, r, s;$/;"	m	struct:MyUnion::__anon3	file:
+p	src/metaprogram/metaprogram_main.cpp	/^		char* p, *q, *r, *s;$/;"	m	struct:MyUnion::__anon3	file:
 pal	src/thirdparty/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon17
 parse	src/thirdparty/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon17
 parse_dollarsign_instructions	src/metaprogram/metaprogram_parser.cpp	/^Token* parse_dollarsign_instructions(Token* t) $/;"	f
@@ -2469,9 +2469,9 @@ print_token	src/metaprogram/metaprogram_parser.cpp	/^void print_token(Token* t, 
 progressive	src/thirdparty/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6
 prop	src/rituals_game_info.cpp	/^	} prop;$/;"	m	union:Rituals_Entity_Userdata	typeref:struct:Rituals_Entity_Userdata::__anon1	file:
 ptr	src/rituals_game_info.cpp	/^		void* ptr;$/;"	m	struct:Rituals_Entity_Userdata::__anon12	file:
-q	src/metaprogram/metaprogram_main.cpp	/^		char* p, q, r, s;$/;"	m	struct:MyUnion::__anon3	file:
+q	src/metaprogram/metaprogram_main.cpp	/^		char* p, *q, *r, *s;$/;"	m	struct:MyUnion::__anon3	file:
 quality	src/rituals_game_info.cpp	/^		isize quality;$/;"	m	struct:Rituals_Entity_Userdata::__anon1	file:
-r	src/metaprogram/metaprogram_main.cpp	/^		char* p, q, r, s;$/;"	m	struct:MyUnion::__anon3	file:
+r	src/metaprogram/metaprogram_main.cpp	/^		char* p, *q, *r, *s;$/;"	m	struct:MyUnion::__anon3	file:
 r	src/rituals_game.cpp	/^	Random r;$/;"	m	struct:Game_Main	file:
 r	src/rituals_main.cpp	/^real r = 0;$/;"	v
 rand_range	src/rituals_game.cpp	/^real rand_range(real min, real max)$/;"	f
@@ -2588,7 +2588,7 @@ rp1	src/rituals_math.cpp	/^	Vec2 rp1;$/;"	m	struct:Rect2_Clip_Info	file:
 rp2	src/rituals_math.cpp	/^	Vec2 rp2;$/;"	m	struct:Rect2_Clip_Info	file:
 running	src/rituals_animations.cpp	/^	bool running;$/;"	m	struct:Animated_Sprite	file:
 running	src/rituals_main.cpp	/^	bool running;$/;"	m	struct:Play_State	file:
-s	src/metaprogram/metaprogram_main.cpp	/^		char* p, q, r, s;$/;"	m	struct:MyUnion::__anon3	file:
+s	src/metaprogram/metaprogram_main.cpp	/^		char* p, *q, *r, *s;$/;"	m	struct:MyUnion::__anon3	file:
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon12
 s	src/thirdparty/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon6
 save_dir	src/rituals_main.cpp	/^	char save_dir[FilePathMaxLength];$/;"	m	struct:Menu_State	file:

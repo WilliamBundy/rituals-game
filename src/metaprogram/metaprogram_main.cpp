@@ -100,7 +100,7 @@ union MyUnion
 		uint32 aa, bb, cc, dd;
 	};
 	struct {
-		char* p, q, r, s;
+		char* p, *q, *r, *s;
 	};
 };
 
