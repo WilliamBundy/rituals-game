@@ -176,7 +176,7 @@ int main(int argc, char** argv)
 		} while(s_head = s_head->next);
 
 		type_head = type_start;
-		/*
+		
 		Meta_Type* unique_type_start = arena_push_struct(Work_Arena, Meta_Type);
 		*unique_type_start = *type_start;
 		unique_type_start->next = NULL;
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
 				*unique_type_head = *type_head;
 			}
 		} while(type_head = type_head->next);
-		*/
+	
 		
 
 
