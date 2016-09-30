@@ -810,7 +810,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 
 	char* new_prefix = arena_push_array(arena, char, chars + 1);
 	if(index == -1) {
-		snprintf(new_prefix, chars, "%.*s_%s", prefix_len, prefix, s_head->name);
+		snprintf(new_prefix, chars, "%.*s_%s", prefix_len, prefix, def->name);
 	} else {
 		if(def->name[0] == '\0') {
 			//truly anonymous
@@ -823,8 +823,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 			//has a variable name
 			snprintf(new_prefix, chars, "%.*s_%s",
 					prefix_len, prefix,
-					s_head->name,
-					var->def.name);
+					def->name);
 		}
 	}
 
