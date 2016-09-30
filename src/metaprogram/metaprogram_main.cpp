@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 
 		//Print struct typedefs
 		Struct_Def* s_head = structdef;
-		Meta_Type* type_start = arena_push_struct(arena, Meta_Type);
+		Meta_Type* type_start = arena_push_struct(Work_Arena, Meta_Type);
 		Meta_Type* type_head = type_start;
 		do {
 			if(s_head->name == NULL) continue;
