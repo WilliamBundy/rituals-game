@@ -507,6 +507,28 @@ void parse_include_directive(Lexer* lex, Token* directive)
 	end_temp_arena(Temp_Arena);
 }
 
+
+Token* parse_dollarsign_instructions(Token* t) 
+{
+	if(t->kind != Token_DollarSign) return t;
+	Token* next = t->next->next;
+	Token* head = t;
+	if(next->hash == hash_literal("exclude")) {
+		do {
+			if(next->kind == Token_DollarSign) {
+				Token* tk = next->next->next;
+				if(tk->kind == Token_Identifier) {
+					if(tk->hash == hash_literal("end")) {
+						head = tk->next->next;
+						break;
+					}
+				}
+			}
+		} while(next = next->next);
+	} 
+	return head;
+}
+
 void parse_tokens(Token* start)
 {
 	Token* head = start;
@@ -646,28 +668,6 @@ struct Proc_Prototype
 
 	Proc_Prototype* next;
 };
-
-Token* parse_dollarsign_instructions(Token* t) 
-{
-	if(t->kind != Token_DollarSign) return t;
-	Token* next = t->next->next;
-	Token* head = t;
-	if(next->hash == hash_literal("exclude")) {
-		do {
-			if(next->kind == Token_DollarSign) {
-				Token* tk = next->next->next;
-				if(tk->kind == Token_Identifier) {
-					if(tk->hash == hash_literal("end")) {
-						head = tk->next->next;
-						break;
-					}
-				}
-			}
-		} while(next = next->next);
-	} 
-	return head;
-
-}
 
 void parse_sing(Token* t, int32 brace_level) 
 {
