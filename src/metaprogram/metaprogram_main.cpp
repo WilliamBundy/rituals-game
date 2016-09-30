@@ -294,7 +294,7 @@ int main(int argc, char** argv)
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
 		} while(s_head = s_head->next);
 
-		Struct_Def** all_structs = arena_push_array(Work_Arena, Struct_Def, lex.structs_count + 16);
+		Struct_Def** all_structs = arena_push_array(Work_Arena, Struct_Def*, lex.structs_count + 16);
 
 		s_head = structdef;
 		printf("enum Meta_Type\n {\n");
