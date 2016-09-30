@@ -952,7 +952,6 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	local_struct[0] = def;
 	def->meta_index = local_counter;
 	*counter = local_counter + 1;
-	fprintf(stderr, "%d %s\n", *counter, def->name);
 	if(index == -1) {
 		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, def->name);
 	} else {
@@ -991,8 +990,6 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 					def->name);
 		}
 	}
-
-
 
 	isize subcount = 0;
 	for(isize i = 0; i < def->member_count; ++i) {
@@ -1326,52 +1323,14 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
  *
  */
 
-/*
-struct Meta_Member_Definition
+struct Meta_Member
 {
 	uint64 flags;
 	Meta_Type type;
+	uint32 pointer_depth;
 	char* name;
-	isize offset;
+	uint64 offset;
 };
-
-Meta_Member_Definition MembersOf_Rect2[] = {
-	{
-		0, "x", (isize)&((Rect2*)NULL)->x
-	},
-	{
-	
-	}
-};
-
-
-struct Meta_Type
-{
-	
-};
-
-Meta_Type Reflected_Types[...] = {
-	Meta_Type{
-		"Point",
-		3,
-		
-	},
-}
-
-Meta_Type_Member Reflected_Type_Members[][] = {
-
-}
-
-/*
- * Entity_Meta->
- *
- *
- *
- *
- */
-
-
-
 
 void print_reflection_data(Struct_Def* def)
 {

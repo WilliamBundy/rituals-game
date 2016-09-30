@@ -91,27 +91,10 @@ Memory_Arena* Work_Arena;
 Memory_Arena* Temp_Arena;
 
 
-
-union MyUnion
+struct foobar
 {
-	struct {
-		real x, y, z, w;
-	};
-	struct {
-		uint32 aa, bb, cc, dd;
-	};
-	struct {
-		char* p, *q, *r, *s;
-	};
+	int **v[32];
 };
-void foo()
-{
-	MyUnion u;
-	u.x = 44;
-	printf("%d \n", u.aa);
-	u.s = (char*)"Hello, world!";
-}
-
 
 
 char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
@@ -183,12 +166,14 @@ int main(int argc, char** argv)
 		fprintf(stderr, "Found %d procedures, %d structs \n",
 				lex.procedures_count, lex.structs_count);
 
+		//Print struct typedefs
 		Struct_Def* s_head = structdef;
 		do {
 			if(s_head->name == NULL) continue;
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
 		} while(s_head = s_head->next);
 
+		//Print Meta_Types for structs
 		Struct_Def** all_structs = arena_push_array(Work_Arena, 
 				Struct_Def*, lex.structs_count + 16);
 
@@ -206,11 +191,15 @@ int main(int argc, char** argv)
 		} while(s_head = s_head->next);
 		printf("};\n");
 
+		// Print structs
 		s_head = structdef;
 		do {
 			if(s_head->name == NULL) continue;
 			print_struct(s_head);
 		} while(s_head = s_head->next);
+
+		// Print metadata
+		
 		
 #if 1
 		do {
