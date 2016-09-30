@@ -1330,7 +1330,6 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 		auto var = &member->member_var;
 		for(isize i = 0; i < var->count; ++i) {
 			char* term = var->terms[i];
-			meta->name = var->name;
 
 			Hash termhash = hash_string(term, strlen(term));
 			if(termhash == consthash) {
@@ -1339,6 +1338,9 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 				meta->isvolatile = true;
 			} else if(termhash == unsignedhash) {
 				meta->isunsigned = true;
+			} else {
+				meta->name = term;
+
 			}
 			meta->ispointer = var->asterisk_count > 0;
 			meta->pointer_depth = var->asterisk_count;
