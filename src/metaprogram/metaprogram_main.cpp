@@ -151,6 +151,8 @@ int main(int argc, char** argv)
 	Base_Arena = &Metaprogram->base_arena;
 	Work_Arena = &Metaprogram->work_arena;
 	Temp_Arena = &Metaprogram->temp_arena;
+	
+	getchar();
 
 	//argc = 2;
 	if(argc >= 2) {
