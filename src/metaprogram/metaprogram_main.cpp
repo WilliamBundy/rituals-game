@@ -299,14 +299,14 @@ int main(int argc, char** argv)
 		do {
 			if(s_head->name == NULL) continue;
 			printf("\tMetaType_%s,\n", s_head->name);
-			for(isize i = 0; i < def->member_count; ++i) {
-				if(def->member_kinds[i] != StructKind_Member) {
-					auto var = &def->members[i].anon_struct;
-					if(def->name[0] == '\0') {
+			for(isize i = 0; i < s_head->member_count; ++i) {
+				if(s_head->member_kinds[i] != StructKind_Member) {
+					auto var = &s_head->members[i].anon_struct;
+					if(s_head->name[0] == '\0') {
 						//truly anonymous
 						printf("\tMetaType_%s_%s%d,\n", 
 								s_head->name,
-								def->member_kinds[i] == StructKind_Struct ?
+								s_head->member_kinds[i] == StructKind_Struct ?
 									"struct" : "union",
 									i);
 					} else {
