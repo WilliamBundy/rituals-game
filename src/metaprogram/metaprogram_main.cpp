@@ -312,7 +312,7 @@ int main(int argc, char** argv)
 					} else {
 						//has a variable name
 						printf("\tMetaType_%s_%s,\n", s_head->name,
-								var->name);
+								var->def.name);
 					}
 				}
 			}
