@@ -194,7 +194,6 @@ int main(int argc, char** argv)
 				unique_type_head = unique_type_head->next;
 				*unique_type_head = *type_head;
 			}
-
 		} while(type_head = type_head->next);
 		
 
@@ -206,6 +205,14 @@ int main(int argc, char** argv)
 		s_head = structdef;
 		printf("enum Meta_Type\n {\n");
 		isize meta_index_counter = 0;
+
+		type_start = unique_type_start;
+		type_head = type_start;
+		do {
+			if(type_head->name == NULL) continue;
+			printf("\tMeta_Type_%s,\n", type_head->name);
+		} while(type_head = type_head->next);
+
 		do {
 			if(s_head->name == NULL) continue;
 			//start_temp_arena(Temp_Arena);
