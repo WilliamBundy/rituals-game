@@ -1693,6 +1693,7 @@ flags	src/wtb_sprite_renderer.h	/^	uint32 flags;$/;"	m	struct:Sprite
 float2fixed	src/thirdparty/stb_image.h	3072;"	d
 float2fixed	src/thirdparty/stb_image.h	3100;"	d
 follow_dist	src/rituals_game_info.cpp	/^		real follow_dist;$/;"	m	struct:Rituals_Entity_Userdata::__anon3	file:
+foo	src/metaprogram/metaprogram_main.cpp	/^void foo()$/;"	f
 force	src/rituals_simulation.cpp	/^	Vec2 velocity, force, collision_vel;$/;"	m	struct:Sim_Body	file:
 fps	src/rituals_animations.cpp	/^	real fps;$/;"	m	struct:Animation	file:
 frame	src/rituals_particles.cpp	/^	int32 frame;$/;"	m	struct:Particle	file:

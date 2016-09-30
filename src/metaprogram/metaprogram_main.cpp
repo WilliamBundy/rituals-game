@@ -104,6 +104,16 @@ union MyUnion
 	};
 };
 
+void foo()
+{
+	MyUnion u;
+	u.x = 44;
+	printf("%d \n", u.aa);
+	u.s = "Hello, World!";
+}
+
+
+
 char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 {
 	char* str = NULL;
