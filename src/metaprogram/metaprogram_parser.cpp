@@ -865,31 +865,6 @@ Proc_Prototype* find_proc_prototypes(Lexer* lex, Token* start, Memory_Arena* are
 	return proc_start;
 }
 
-/* typedef SomeType****** SomeTypeP
- * struct <name> {
- *
- *     int p;
- *     int* q;
- *     char *x, *y;
- *     char** array;
- *
- *     unsigned short SomeType**** thinga[400], **thingb, **thingc, a, b, c, d[3], e[44][55], f[44][22][44];
- *
- * // Type: 
- *
- *     union {
- *	       struct {
- *
- *	       } <name>;
- *	       union {
- *
- *	       } <name>;
- *     } <name>;
- * };
- *
- *
- *
- */
 
 enum Struct_Kind
 {
@@ -898,7 +873,6 @@ enum Struct_Kind
 	StructKind_Union,
 	StructKind_Member
 };
-
 
 typedef union Struct_Member Struct_Member;
 #define StructMemberCapacity (256)
@@ -924,6 +898,7 @@ union Struct_Member
 		isize array_levels;
 	} anon_struct;
 	struct {
+		Hash namehash;
 		char* name;
 		char** terms;
 		isize count;
@@ -1162,6 +1137,7 @@ Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_
 			do {
 				if(head->kind == Token_Comma) {
 					if(mode == 0) {
+						var->namehash = head->prev->hash;
 						var->name = var->terms[--var->count];
 					}
 					parent->member_count++;
@@ -1190,6 +1166,7 @@ Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_
 					if(mode == 0) {
 						var->terms[var->count++] = buf;
 					} else if(mode == 1) {
+						var->namehash = head->hash;
 						var->name = buf;
 					}
 				} else if(head->kind == Token_Asterisk) {
@@ -1227,7 +1204,6 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 
 	Struct_Def* def_start = arena_push_struct(arena, Struct_Def);
 	Struct_Def* def_head = def_start;
-
 
 	int32 brace_depth = 0;
 	do {
@@ -1324,9 +1300,77 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
  */
 
 
-enum Meta_Type
-{
 
+struct Meta_Type
+{
+	Hash hash;
+	char* name;
+	bool ispointer;
+	bool isunsigned;
+	bool isvolatile;
+	bool isconst;
+	bool isarray;
+	uint32 pointer_depth;
+
+	Meta_Type* next;
+};
+
+bool meta_type_equals(Meta_Type* a, Meta_Type* b)
+{
+	return a->hash == b->hash;
+}
+
+void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* parent, Meta_Type* meta)
+{
+#define defhash(v) Hash v##hash = hash_literal(#v)
+	defhash(const);
+	defhash(volatile);
+	defhash(unsigned);
+	if(kind == StructKind_Member) {
+		auto var = &member->member_var;
+		for(isize i = 0; i < var->count; ++i) {
+			char* term = var->terms[i];
+			meta->name = var->name;
+
+			Hash termhash = hash_string(term, strlen(term));
+			if(termhash == consthash) {
+				meta->isconst = true;
+			} else if(termhash == volatilehash) {
+				meta->isvolatile = true;
+			} else if(termhash == unsignedhash) {
+				meta->isunsigned = true;
+			}
+			meta->ispointer = var->asterisk_count > 0;
+			meta->pointer_depth = var->asterisk_count;
+			meta->isarray = var->array_levels > 0;
+	 	}
+	}
+}
+
+void _get_types_in_struct(Struct_Def* def, Meta_Type* head, Memory_Arena* arena)
+{
+	for(isize i = 0; i < def->member_count; ++i) {
+		populate_meta_type(def->members + i, def->member_kinds[i], def, head);
+		head->next = arena_push_struct(arena, Meta_Type); 
+		head = head->next;
+	}
+}
+
+Meta_Type* get_types_in_struct(Struct_Def* def, Memory_Arena* arena)
+{
+	Meta_Type* start = arena_push_struct(arena, Meta_Type);
+	_get_types_in_struct(def, start, arena);
+	return start;
+}
+
+
+enum Meta_Flags
+{
+	MetaFlag_IsPointer = Flag(0),
+	MetaFlag_IsUnsigned = Flag(1),
+	MetaFlag_IsVolatile = Flag(2),
+	MetaFlag_IsConst = Flag(3),
+	MetaFlag_IsArray = Flag(4),
 };
 
 struct Meta_Member
@@ -1334,16 +1378,29 @@ struct Meta_Member
 	uint64 flags;
 	isize type_index;
 	uint32 pointer_depth;
+	char* parentname;
 	char* name;
 	uint64 offset;
 };
 
-void print_meta_member(Struct_Def* parent, Struct_Member* member)
+void print_meta_member(Meta_Member* member)
 {
-	
+	printf("Meta_Member{%d, %d, %d, \"%s\", (uint64)&((%s*)NULL)->%s},",
+			member->flags, 
+			member->type_index,
+			member->pointer_depth,
+			member->name,
+			member->parentname,
+			member->name);
 }
 
 void print_reflection_data(Struct_Def* def)
 {
-	
+	printf("Meta_Member %s_Members[] = {\n", def->name);
+	for(isize i = 0; i < def->member_count; ++i) {
+		Meta_Member m;
+		m->parentname = def->name;
+
+	}
+	printf("};\n\n");
 }

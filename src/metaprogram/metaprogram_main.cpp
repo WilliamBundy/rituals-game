@@ -165,6 +165,9 @@ int main(int argc, char** argv)
 		do {
 			if(s_head->name == NULL) continue;
 			printf("typedef struct %s %s;\n", s_head->name, s_head->name);
+
+
+
 		} while(s_head = s_head->next);
 
 		//Print Meta_Types for structs
