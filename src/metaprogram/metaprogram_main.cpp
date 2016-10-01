@@ -190,13 +190,13 @@ int main(int argc, char** argv)
 					break;
 				}
 				if(unique_type_head->next == NULL) break;
-				Meta_Type* last = unique_type_head;
 				unique_type_head = unique_type_head->next;
 			} while(1);
 			if(eq) {
 				unique_type_head->next = arena_push_struct(Work_Arena, Meta_Type);
 				unique_type_head = unique_type_head->next;
 				*unique_type_head = *type_head;
+				unique_type_head->next = NULL;
 			}
 		} while(type_head = type_head->next);
 	
