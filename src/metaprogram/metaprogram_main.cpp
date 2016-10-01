@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 				Struct_Def*, lex.structs_count + 16);
 
 		s_head = structdef;
-		printf("enum Meta_Type\n {\n");
+		printf("enum Meta_Type\n{\n");
 		isize meta_index_counter = 0;
 
 		type_start = unique_type_start;
