@@ -1317,8 +1317,6 @@ struct Meta_Type
 
 bool meta_type_equals(Meta_Type* a, Meta_Type* b)
 {
-	if (a == NULL) return false;
-	if (b == NULL) return false;
 	return a->hash == b->hash;
 }
 
