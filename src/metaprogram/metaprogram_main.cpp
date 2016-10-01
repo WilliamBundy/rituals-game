@@ -189,7 +189,9 @@ int main(int argc, char** argv)
 					eq = false;
 					break;
 				}
-			} while(unique_type_head = unique_type_head->next);
+				if(unique_type_head->next = NULL) break;
+				unique_type_head = unique_type_head->next;
+			} while(1);
 			if(eq) {
 				unique_type_head->next = arena_push_struct(Work_Arena, Meta_Type);
 				unique_type_head = unique_type_head->next;
