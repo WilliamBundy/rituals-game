@@ -882,6 +882,7 @@ struct Struct_Def
 	Struct_Kind kind;
 
 	isize meta_index;
+	Hash namehash;
 
 	Struct_Member* members;
 	Struct_Kind* member_kinds;
@@ -1093,6 +1094,7 @@ Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_
 				next = head->next;
 				buf[len] = '\0';
 				def.name = buf;
+				def.namehash = head->hash;
 			}
 			head = head->next;
 
@@ -1252,6 +1254,7 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 					memcpy(buf, subhead->start, subhead->len);
 					buf[subhead->len] = '\0';
 					def.name = buf;
+					def.namehash = subhead->hash;
 				} else if(subhead->kind == Token_OpenBrace) {
 					break;
 				}

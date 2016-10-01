@@ -181,6 +181,7 @@ int main(int argc, char** argv)
 		*unique_type_start = *type_start;
 		unique_type_start->next = NULL;
 		Meta_Type* unique_type_head = unique_type_start;
+		Struct_Def* s_head = structdef;
 		do {
 			bool eq = true;
 			unique_type_head = unique_type_start;
@@ -193,6 +194,14 @@ int main(int argc, char** argv)
 				unique_type_head = unique_type_head->next;
 			} while(1);
 			if(eq) {
+				s_head = structdef;
+				do {
+					if(unique_type_head->hash == s_head->namehash) {
+						eq = false; 
+						break;
+					}
+				} while(s_head = s_head->next);
+				if(!eq) continue;
 				unique_type_head->next = arena_push_struct(Work_Arena, Meta_Type);
 				unique_type_head = unique_type_head->next;
 				*unique_type_head = *type_head;
