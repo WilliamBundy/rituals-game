@@ -181,7 +181,7 @@ int main(int argc, char** argv)
 		*unique_type_start = *type_start;
 		unique_type_start->next = NULL;
 		Meta_Type* unique_type_head = unique_type_start;
-		Struct_Def* s_head = structdef;
+		 s_head = structdef;
 		do {
 			bool eq = true;
 			unique_type_head = unique_type_start;
