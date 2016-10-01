@@ -1331,6 +1331,7 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 		for(isize i = 0; i < var->count; ++i) {
 			char* term = var->terms[i];
 
+			Hash termhash = hash_string(term, strlen(term));
 			if(termhash == consthash) {
 				meta->isconst = true;
 			} else if(termhash == volatilehash) {
@@ -1338,7 +1339,6 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 			} else if(termhash == unsignedhash) {
 				meta->isunsigned = true;
 			} else {
-				Hash termhash = hash_string(term, strlen(term));
 				meta->name = term;
 				meta->hash = termhash;
 
