@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 				s_head = structdef;
 				do {
 					if(unique_type_head->hash == s_head->namehash) {
-						printf("%s %s \n", unique_type_head->name, s_head->name);
+						fprintf(stderr, "%s %s \n", unique_type_head->name, s_head->name);
 						eq = false; 
 						break;
 					}
