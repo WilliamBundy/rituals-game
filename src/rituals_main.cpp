@@ -165,7 +165,9 @@ typedef double real64;
 #ifdef RITUALS_USE_FLOAT32
 typedef real32 real;
 #else
+$(exclude)
 typedef real64 real;
+$(end)
 #endif
 
 typedef ptrdiff_t isize;
@@ -203,6 +205,8 @@ typedef size_t usize;
 #define Kilobytes(b) (b * UINT64_C(1024))
 #define Megabytes(b) (Kilobytes(b) * UINT64_C(1024))
 #define Gigabytes(b) (Megabytes(b) * UINT64_C(1024))
+
+#include "../meta_out.h"
 
 //local imports
 #include "rituals_math.cpp"

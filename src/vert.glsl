@@ -56,8 +56,8 @@ void main()
 	vertex_x += uint(4) * v_anchor;
 	vertex_y += uint(4) * v_anchor;
 
-	uint v_fliphoriz = v_flags & (1<<4);
-	uint v_flipvert = v_flags & (1<<5);
+	uint v_fliphoriz = v_flags & uint(1<<4);
+	uint v_flipvert = v_flags & uint(1<<5);
 
 
 	vec2 coords = vec2(

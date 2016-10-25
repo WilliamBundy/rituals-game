@@ -108,6 +108,7 @@ struct Lexer_File
 	char* filename;
 	isize pathlen;
 	isize index;
+	isize length;
 	Lexer_Location location;
 	char* start;
 	char* head;
@@ -135,8 +136,8 @@ void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize pr
 		}
 	}
 	Hash exthash = hash_string(filename_copy + extlen, len - extlen);
-	if(exthash != hash_literal(".c") && exthash != hash_literal(".cpp") && exthash != hash_literal(".h")) {
-		//printf("Hit invalid file suffix: %d %d %d %.*s", len, extlen, len - extlen, len - extlen, filename_copy + extlen);
+	if(exthash != hash_literal(".i") && exthash != hash_literal(".c") && exthash != hash_literal(".cpp") && exthash != hash_literal(".h")) {
+		fprintf(stderr, "Hit invalid file suffix: %d %d %d %.*s\n", len, extlen, len - extlen, len - extlen, filename_copy + extlen);
 		file->pathlen = pathlen;
 		file->filename = filename_copy;
 		file->start = NULL;
@@ -145,7 +146,7 @@ void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize pr
 	}
 	file->pathlen = pathlen;
 	file->filename = filename_copy;
-	file->start = load_file(filename_copy, NULL, arena);
+	file->start = load_file(filename_copy, &file->length, arena);
 	file->head = file->start;
 }
 
@@ -228,6 +229,9 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 			} else if(f->head[1] == '/') {
 				nextchar;
 				nextchar;
+				if(f->head[0] == '\\') {
+					nextchar;
+				}
 				while(valid && (f->head[0] != '\n')) {
 					nextchar;	
 				}
@@ -286,6 +290,20 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 			t->start++;
 			nextchar;
 			while(valid && (f->head[0] != '\n')) {
+				if(f->head[0] == '/') {
+					if(f->head[1] == '/') {
+						break;
+					} else if(f->head[1] == '*') {
+						while(valid) {
+							if(f->head[0] == '*' && f->head[1] == '/') {
+								break;
+							}
+							nextchar;
+						}
+					}
+				} else if(f->head[0] == '\\') {
+					nextchar;
+				}
 				nextchar;
 			}
 			t->len = f->head - t->start;
@@ -379,11 +397,13 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 				}
 				nextchar;
 
-				if(f->head[0] == '\n') {
-					printf(">>> Error, encountered newline in string literal\n");
-					printf(">>> line %d, char %d\n", f->location.line, f->location.offset);
+				/*if(f->head[0] == '\n') {
+					
+					fprintf(stderr, ">>> Error, encountered newline in string literal\n");
+					fprintf(stderr, ">>> line %d, char %d\n", f->location.line, f->location.offset);
+					fprintf(stderr, ">>> %.*s \n", f->head - t->start, t->start);
 					break;
-				}
+				}*/
 			}
 			t->len = f->head - t->start;
 			nextchar;
@@ -678,6 +698,10 @@ struct Proc_Prototype
 void print_proc_prototype(Proc_Prototype* p)
 {
 	if(p->name == NULL) return;
+	//TODO(will) figure out how to prototype generated functions, maybe?
+	// Gotta parse #define stuff.
+	if(p->decorators_count <= 0) return;
+
 
 	for(isize i = 0; i < p->decorators_count; ++i) {
 		printf("%s ", p->decorators[i]);
@@ -689,6 +713,9 @@ void print_proc_prototype(Proc_Prototype* p)
 		for(isize j = 0; j < a->count; ++j) {
 			printf("%s", a->terms[j]);
 			if(j == a->count - 1) {
+				//TODO(will): there's something dumb with the way C++ handles default arguments
+				// so, we don't. 
+				a->defaults = NULL;
 				if(a->defaults == NULL) {
 					if(i != p->args_count - 1) printf(", ");
 				} else {
@@ -882,7 +909,10 @@ struct Struct_Def
 	Struct_Kind kind;
 
 	isize meta_index;
+	char* meta_type_name;
 	Hash namehash;
+
+	bool is_anon_member;
 
 	Struct_Member* members;
 	Struct_Kind* member_kinds;
@@ -891,6 +921,7 @@ struct Struct_Def
 	Struct_Def* next;
 }; 
 
+typedef struct Meta_Type Meta_Type;
 union Struct_Member
 {
 	struct {
@@ -904,6 +935,7 @@ union Struct_Member
 		char** terms;
 		isize count;
 
+		Meta_Type* type;
 		int32 asterisk_count;
 
 		char** array_sizes;
@@ -918,50 +950,61 @@ void print_indent(int32 indent)
 	}
 }
 
-void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, Struct_Def** all_structs, isize* counter, Memory_Arena* arena)
+void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix_len, char* suffix, Struct_Def** all_structs, isize* counter, Memory_Arena* arena)
 {
+	if(def->kind == StructKind_None) return;
 	isize chars = 0;
 	
-	isize local_counter = *counter;
-	Struct_Def** local_struct = all_structs + local_counter;
+	if(counter != NULL) {
+		isize local_counter = *counter;
+		Struct_Def** local_struct = all_structs + local_counter;
 
-	local_struct[0] = def;
-	def->meta_index = local_counter;
-	*counter = local_counter + 1;
+		local_struct[0] = def;
+		def->meta_index = local_counter;
+		*counter = local_counter + 1;
+	}
+
+	char* buf = arena_push_array(Work_Arena, char, 256);
 	if(index == -1) {
-		chars = printf("\t%.*s_%s,\n", prefix_len, prefix, def->name);
+		chars = snprintf(buf, 256, "%.*s%s", prefix_len, prefix, def->name);
 	} else {
 		if(def->name[0] == '\0') {
 			//truly anonymous
-			chars = printf("\t%.*s_%s%d,\n", 
+			chars = snprintf(buf, 256, "%.*s%s%d", 
 					prefix_len, prefix,
 					def->kind == StructKind_Struct ?
 					"struct" : "union",
 					index);
+			def->is_anon_member = true;
 		} else {
 			//has a variable name
-			chars = printf("\t%.*s_%s,\n",
+			chars = snprintf(buf, 256, "%.*s%s",
 					prefix_len, prefix,
 					def->name);
+			def->is_anon_member = true;
 		}
 	}
-	chars -= 2;
-
+	chars++;
+	chars++;
+	if(all_structs != NULL) {
+		def->meta_type_name = buf;
+	}
+	printf("\t%s%s", buf, suffix);
 	char* new_prefix = arena_push_array(arena, char, chars + 256);
 	prefix_len = chars;
 	if(index == -1) {
-		snprintf(new_prefix, chars, "%.*s_%s", prefix_len, prefix, def->name);
+		snprintf(new_prefix, chars, "%.*s%s_", prefix_len, prefix, def->name);
 	} else {
 		if(def->name[0] == '\0') {
 			//truly anonymous
-			snprintf(new_prefix, chars, "%.*s_%s%d", 
+			snprintf(new_prefix, chars, "%.*s%s%d_", 
 					prefix_len, prefix,
 					def->kind == StructKind_Struct ?
 					"struct" : "union",
 					index);
 		} else {
 			//has a variable name
-			snprintf(new_prefix, chars, "%.*s_%s",
+			snprintf(new_prefix, chars, "%.*s%s_",
 					prefix_len, prefix,
 					def->name);
 		}
@@ -971,7 +1014,7 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	for(isize i = 0; i < def->member_count; ++i) {
 		if(def->member_kinds[i] != StructKind_Member) {
 			auto var = &def->members[i].anon_struct;
-			print_struct_names(&var->def, subcount++, new_prefix, chars, all_structs, counter, arena);
+			print_struct_names(&var->def, subcount++, new_prefix, chars, suffix, all_structs, counter, arena);
 		}
 	}
 }
@@ -1208,22 +1251,56 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 	Struct_Def* def_head = def_start;
 
 	int32 brace_depth = 0;
+	Token* last_open, *last_closed;
+	last_open = last_closed = NULL;
+	//fprintf(stderr, "\n");
 	do {
 		if(head->kind == Token_DollarSign) {
 			next = head->next->next;
 			parse_sing(next, brace_depth);
 		}
-		head = parse_dollarsign_instructions(head);
+		//head = parse_dollarsign_instructions(head);
 
 		if(head->kind == Token_OpenBrace) {
 			brace_depth++;
+			last_open = head;
+#if 0
+			fprintf(stderr, "\n");
+			for(isize qq = 0; qq < brace_depth; ++qq) {
+				fprintf(stderr, ".");
+			}
+
+			fprintf(stderr, "{");
+#endif
 		} else if(head->kind == Token_CloseBrace) {
 			brace_depth--;
+			last_closed = head;
+#if 0 
+			fprintf(stderr, "}");
+#endif
 		}
 
 		if(brace_depth < 0) {
-			fprintf(stderr, "\n %s line %d col %d \n", lex->files[head->location.file].filename, head->location.line, head->location.offset);
+//j			fprintf(stderr, " %d ", brace_depth);
+#if 1
+			fprintf(stderr, ">>> Brace Depth went negative at: %s line %d col %d \n", lex->files[head->location.file].filename, head->location.line, head->location.offset);
+			if(last_open == NULL) {
+				fprintf(stderr, ">>> No previous opening brace");
+			} else {
+			fprintf(stderr, ">>> Last Open Brace: %s line %d col %d \n", lex->files[last_open->location.file].filename, last_open->location.line, last_open->location.offset);
+				fprintf(stderr, ">>> %.*s \n", last_open->len + 32, last_open->start);
+			}
+
+			if(last_closed == NULL) {
+				fprintf(stderr, ">>> No previous closing brace");
+			} else {
+				fprintf(stderr, ">>> Last Closing Brace: %s line %d col %d \n", lex->files[last_closed->location.file].filename, last_closed->location.line, last_closed->location.offset);
+				fprintf(stderr, ">>> %.*s \n", last_open->len + 32, last_open->start - 32);
+
+			}
+
 			brace_depth = 0;
+#endif
 		}
 
 		if(head->hash == typedefhash) {
@@ -1273,6 +1350,7 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 			def_head = def_head->next;
 		}
 	} while(head = head->next);
+	fprintf(stderr, "\n");
 
 	return def_start;
 }
@@ -1315,6 +1393,8 @@ struct Meta_Type
 	bool isarray;
 	uint32 pointer_depth;
 
+	isize type_index;
+
 	Meta_Type* next;
 };
 
@@ -1346,11 +1426,11 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 			} else {
 				meta->name = term;
 				meta->hash = termhash;
-
 			}
 			meta->ispointer = var->asterisk_count > 0;
 			meta->pointer_depth = var->asterisk_count;
 			meta->isarray = var->array_levels > 0;
+			var->type = meta;
 	 	}
 	}
 }
@@ -1358,7 +1438,11 @@ void populate_meta_type(Struct_Member* member, Struct_Kind kind, Struct_Def* par
 Meta_Type* get_types_in_struct(Struct_Def* def, Meta_Type* head, Memory_Arena* arena)
 {
 	for(isize i = 0; i < def->member_count; ++i) {
-		populate_meta_type(def->members + i, def->member_kinds[i], def, head);
+		if(def->member_kinds[i] == StructKind_Member) {
+			populate_meta_type(def->members + i, def->member_kinds[i], def, head);
+		} else {
+			get_types_in_struct(&def->members[i].anon_struct.def, head, arena);
+		}
 		head->next = arena_push_struct(arena, Meta_Type); 
 		head = head->next;
 	}
@@ -1377,31 +1461,111 @@ enum Meta_Flags
 struct Meta_Member
 {
 	uint64 flags;
-	isize type_index;
+	char* type_name;
 	uint32 pointer_depth;
 	char* parentname;
 	char* name;
-	uint64 offset;
 };
 
-void print_meta_member(Meta_Member* member)
+void print_meta_member(Meta_Member* member, char* prefix, char* suffix)
 {
-	printf("Meta_Member{%d, %d, %d, \"%s\", (uint64)&((%s*)NULL)->%s},",
+	printf("%sMeta_Member{%d, Meta_Type_%s, %d, \"%s\", (uint64)&((%s*)NULL)->%s}%s",
+			prefix,
 			member->flags, 
-			member->type_index,
+			member->type_name,
 			member->pointer_depth,
 			member->name,
 			member->parentname,
-			member->name);
+			member->name,
+			suffix);
+}
+
+void print_struct_info(Struct_Def* def, char* prefix, char* suffix) 
+{
+	printf("%sMeta_Struct_Info {\n\t\t\"%s\", \n\t\t\"%s\", \n\t\t%s, \n\t\t%s_Members, \n\t\t%d}%s", 
+			prefix,
+			def->name,
+			def->meta_type_name,
+			def->meta_type_name,
+			def->meta_type_name,
+			def->member_count,
+			suffix);
+
 }
 
 void print_reflection_data(Struct_Def* def)
 {
-	printf("Meta_Member %s_Members[] = {\n", def->name);
+	printf("const Meta_Member %s_Members[] = {\n", def->meta_type_name);
 	for(isize i = 0; i < def->member_count; ++i) {
-		Meta_Member m;
+		Meta_Member m = {
+			0
+		};
 		m.parentname = def->name;
+		if(def->member_kinds[i] == StructKind_Member) {
+			auto var = &def->members[i].member_var;
+			Meta_Type* meta = var->type;
+			if(meta == NULL) {
+				fprintf(stderr, "Meta type was null on %s::%s\n", def->name, var->name);
+				continue;
+			}
+	 		m.name = var->name;
+			m.type_name = meta->name;
+			if(meta->isarray) {
+				m.pointer_depth = var->array_levels;
+			} else {
+				m.pointer_depth = var->asterisk_count;
+			}
 
+			if(meta->ispointer) Enable_Flag(m.flags, MetaFlag_IsPointer);
+			if(meta->isunsigned) Enable_Flag(m.flags, MetaFlag_IsUnsigned);
+			if(meta->isvolatile) Enable_Flag(m.flags, MetaFlag_IsVolatile);
+			if(meta->isconst) Enable_Flag(m.flags, MetaFlag_IsConst);
+			if(meta->isarray) Enable_Flag(m.flags, MetaFlag_IsArray);
+		} else {
+			auto var = &def->members[i].anon_struct;
+	 		m.name = var->def.name;
+			m.type_name = var->def.meta_type_name;
+			m.pointer_depth = var->array_levels;
+			if(var->array_levels > 0) {
+				m.flags = MetaFlag_IsArray;
+			}
+		}
+		print_meta_member(&m, "\t", ",\n");
 	}
 	printf("};\n\n");
+}
+
+void print_metaprogram_types()
+{
+		printf(R"foo(
+struct Meta_Member
+{
+	uint64 flags;
+	Meta_Type type;
+	int32 pointer_depth;
+	char* name;
+	uint64 offset;
+};
+
+struct Meta_Struct_Info
+{
+	char* name;
+	char* meta_name;
+	isize index;
+	const Meta_Member* members;
+	isize count;
+};
+
+)foo");
+}
+
+void print_metaprogram_get_struct_info_proc()
+{
+		printf(R"foo(
+static inline const Meta_Struct_Info* get_struct_info(Meta_Type t) 
+{
+	return All_Meta_Struct_Info + t;
+}
+)foo");
+
 }
