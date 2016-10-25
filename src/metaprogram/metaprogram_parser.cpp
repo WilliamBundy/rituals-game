@@ -53,6 +53,7 @@ enum Token_Kind
 	Token_LessThan,
 	
 	Token_CompilerDirective,
+	Token_MetaprogramDirective,
 	Token_Char,
 	Token_String,
 	Token_Number,
@@ -137,7 +138,7 @@ void init_lexer_file(Lexer_File* file, char* filename, char* prev_path, isize pr
 	}
 	Hash exthash = hash_string(filename_copy + extlen, len - extlen);
 	if(exthash != hash_literal(".i") && exthash != hash_literal(".c") && exthash != hash_literal(".cpp") && exthash != hash_literal(".h")) {
-		fprintf(stderr, "Hit invalid file suffix: %d %d %d %.*s\n", len, extlen, len - extlen, len - extlen, filename_copy + extlen);
+		if(Metaprogram->verbose) fprintf(stderr, "Skipping %s\n", filename_copy);
 		file->pathlen = pathlen;
 		file->filename = filename_copy;
 		file->start = NULL;
@@ -308,9 +309,63 @@ bool lexer_get_token(Lexer* lexer, Lexer_File* f, Token* t)
 			}
 			t->len = f->head - t->start;
 			break;
-		case '$':
-			t->kind = Token_DollarSign;
-			break;
+		case '$': {
+			char* oldhead = f->head;
+			nextchar;
+			while(valid) {
+				if(is_space(f->head[0])) {
+					nextchar;
+				} else if(f->head[0] == '/') {
+					if(f->head[1] == '*') {
+						nextchar;
+						nextchar;
+						while(valid && !(f->head[0] == '*' &&
+									f->head[1] == '/')) {
+							nextchar;
+						}
+						nextchar;
+						nextchar;
+					} else if(f->head[1] == '/') {
+						nextchar;
+						nextchar;
+						if(f->head[0] == '\\') {
+							nextchar;
+						}
+						while(valid && (f->head[0] != '\n')) {
+							nextchar;	
+						}
+						nextchar;
+					} else {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			if(f->head[0] == '(') {
+				t->kind = Token_MetaprogramDirective;
+				nextchar;
+				t->start = f->head;
+				t->location = f->location;
+				int brace_depth = 0;
+				while(brace_depth >= 0) {
+					nextchar;
+					if(f->head[0] == '(') {
+						brace_depth++;
+					} else if (f->head[0] == ')') {
+						brace_depth--;
+					}
+					if(!valid) {
+						break;
+					}
+				}
+				t->len = f->head - t->start;
+			} else {
+				t->kind = Token_DollarSign;
+			}
+
+
+		} break;
 		case '%':
 			t->kind = Token_Modulo;
 			break;
@@ -528,8 +583,29 @@ void parse_include_directive(Lexer* lex, Token* directive)
 }
 
 
-Token* parse_dollarsign_instructions(Token* t) 
+Token* parse_metaprogram_directive(Token* t) 
 {
+	if(t->kind != Token_MetaprogramDirective) return t;
+	Token* head = t;
+	
+	Hash excludehash = hash_literal("exclude");
+	Hash endhash = hash_literal("end");
+
+	if(t->hash == excludehash) {
+		do {
+			if(head->kind == Token_MetaprogramDirective) {
+				if(head->hash == endhash) {
+					head = head->next;
+					break;
+				}
+			}
+		} while(head = head->next);
+	}
+
+
+	
+
+	/*
 	if(t->kind != Token_DollarSign) return t;
 	Token* next = t->next->next;
 	Token* head = t;
@@ -546,6 +622,7 @@ Token* parse_dollarsign_instructions(Token* t)
 			}
 		} while(next = next->next);
 	} 
+	*/
 	return head;
 }
 
@@ -554,7 +631,7 @@ void parse_tokens(Lexer* lex, Token* start)
 	Token* head = start;
 
 	do {
-		head = parse_dollarsign_instructions(head);
+		head = parse_metaprogram_directive(head);
 		if(head->kind == Token_CompilerDirective && head->start[0] == 'i') {
 			parse_include_directive(lex, head);
 		}
@@ -566,7 +643,7 @@ void parse_tokens(Lexer* lex, Token* start)
 		Token* next;
 		switch(head->kind) {
 			case Token_DollarSign:
-				head = parse_dollarsign_instructions(head);
+				head = parse_metaprogram_directive(head);
 				break;
 			case Token_Ampersand:
 				next = head->next;
@@ -660,14 +737,6 @@ void parse_tokens(Lexer* lex, Token* start)
 
 }
 
-void parse_sing(Token* t, int32 brace_level) 
-{
-	if(t->hash == hash_literal("sing")) { 
-		fprintf(stderr, "[%d]", brace_level);
-	}
-}
-
-
 struct Proc_Arg
 {
 	char** terms;
@@ -753,7 +822,7 @@ Proc_Prototype* find_proc_prototypes(Lexer* lex, Token* start, Memory_Arena* are
 	Proc_Prototype* proc_head = proc_start;
 
 	do {
-		head = parse_dollarsign_instructions(head);
+		head = parse_metaprogram_directive(head);
 		if (head->kind == Token_Identifier) {
 			if(head->hash != structhash && head->hash != enumhash) {
 				//pattern: 
@@ -780,7 +849,7 @@ Proc_Prototype* find_proc_prototypes(Lexer* lex, Token* start, Memory_Arena* are
 						mode = -1;
 						break;
 					}
-					sub_head = parse_dollarsign_instructions(sub_head);
+					sub_head = parse_metaprogram_directive(sub_head);
 					switch(mode) {
 						case 0:
 							if (sub_head->kind == Token_Identifier) {
@@ -1127,7 +1196,7 @@ Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_
 
 					return head;
 				} else {
-					fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
+					if(Metaprogram->verbose) fprintf(stderr, "ERROR: wanted identifier, got %d:[%.*s] \n", 
 							head->kind, head->len, head->start);
 				}
 			} else {
@@ -1253,54 +1322,36 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 	int32 brace_depth = 0;
 	Token* last_open, *last_closed;
 	last_open = last_closed = NULL;
-	//fprintf(stderr, "\n");
 	do {
-		if(head->kind == Token_DollarSign) {
-			next = head->next->next;
-			parse_sing(next, brace_depth);
-		}
-		//head = parse_dollarsign_instructions(head);
-
+		parse_metaprogram_directive(head);
 		if(head->kind == Token_OpenBrace) {
 			brace_depth++;
 			last_open = head;
-#if 0
-			fprintf(stderr, "\n");
-			for(isize qq = 0; qq < brace_depth; ++qq) {
-				fprintf(stderr, ".");
-			}
-
-			fprintf(stderr, "{");
-#endif
 		} else if(head->kind == Token_CloseBrace) {
 			brace_depth--;
 			last_closed = head;
-#if 0 
-			fprintf(stderr, "}");
-#endif
 		}
 
 		if(brace_depth < 0) {
-//j			fprintf(stderr, " %d ", brace_depth);
-#if 1
-			fprintf(stderr, ">>> Brace Depth went negative at: %s line %d col %d \n", lex->files[head->location.file].filename, head->location.line, head->location.offset);
-			if(last_open == NULL) {
-				fprintf(stderr, ">>> No previous opening brace");
-			} else {
-			fprintf(stderr, ">>> Last Open Brace: %s line %d col %d \n", lex->files[last_open->location.file].filename, last_open->location.line, last_open->location.offset);
-				fprintf(stderr, ">>> %.*s \n", last_open->len + 32, last_open->start);
-			}
+			if(Metaprogram->verbose) {
+				fprintf(stderr, ">>> Brace Depth went negative at: %s line %d col %d \n", lex->files[head->location.file].filename, head->location.line, head->location.offset);
+				if(last_open == NULL) {
+					fprintf(stderr, ">>> No previous opening brace");
+				} else {
+					fprintf(stderr, ">>> Last Open Brace: %s line %d col %d \n", lex->files[last_open->location.file].filename, last_open->location.line, last_open->location.offset);
+					fprintf(stderr, ">>> %.*s \n", last_open->len + 32, last_open->start);
+				}
 
-			if(last_closed == NULL) {
-				fprintf(stderr, ">>> No previous closing brace");
-			} else {
-				fprintf(stderr, ">>> Last Closing Brace: %s line %d col %d \n", lex->files[last_closed->location.file].filename, last_closed->location.line, last_closed->location.offset);
-				fprintf(stderr, ">>> %.*s \n", last_open->len + 32, last_open->start - 32);
+				if(last_closed == NULL) {
+					fprintf(stderr, ">>> No previous closing brace");
+				} else {
+					fprintf(stderr, ">>> Last Closing Brace: %s line %d col %d \n", lex->files[last_closed->location.file].filename, last_closed->location.line, last_closed->location.offset);
+					fprintf(stderr, ">>> %.*s \n", last_open->len + 32, last_open->start - 32);
 
+				}
 			}
 
 			brace_depth = 0;
-#endif
 		}
 
 		if(head->hash == typedefhash) {
@@ -1350,7 +1401,7 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 			def_head = def_head->next;
 		}
 	} while(head = head->next);
-	fprintf(stderr, "\n");
+	if(Metaprogram->verbose)fprintf(stderr, "\n");
 
 	return def_start;
 }

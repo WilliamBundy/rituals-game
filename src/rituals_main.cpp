@@ -12,108 +12,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_main.cpp
  */ 
 
-/* TODO(will) features
- * 	- Big Projects
- * 		- Massive refactoring
- * 		- Programmable ini replacement
- * 		- Memory dumps, logging
- * 		- Reflection/introspection metaprogramming system
- * 			- For use with serialization
- * 			- Can save versioned type layouts, then do its best to load from/to 
- * 		- Modding with packages
- * 			- requires a lot of sorting per package id.
- * 	- Graphics
- *		- Texture atlas stitching
- *			- able to combine pow2 squares into one big atlas
- *		- Release as lightweight spriting library
- *  - Physics
- *  	- Static and dynamic friction
- *  	- Multithreading/SIMD body processing?
- * 		- More sophisticated spacial partitioning?
- * 			- Hierarchical grids, quadtrees, k-d trees
- * 			- Current grid system works, but rather inflexible and memory-hungry
- * 	- UI
- * 		- Needs to be reworked
- *  - Play
- *  	- Entity inspector
- *  	- Another art pass
- * TODO(will) Refactoring
- * 	- rituals_animations.cpp
- * 		- To store animations in the registry?
- * 		- Have a way to pre-build animaition dictionaries
- * 		- Animated_Sprite isn't a sprite.
- * 	- rituals_entity_events.cpp
- * 		- Possibly a more sophisticated sorting method for entities? 
- * 		- Better typing support for entity userdata
- * 	- rituals_game.cpp
- * 		- Use generated structs/procedures for Game_States
- * 	- rituals_game_info.cpp & rituals_game_registry.cpp
- * 		- No meaningful distinction right now between these files?
- * 		- Supposedly the "types" of things go in info and the registry system 
- * 			belongs in registry, but due to C's declaration syntax, you can't mix them.
- * 		- All the game's definitions end up in registry when they should be in info
- * 	- rituals_gui.cpp
- * 		- Gui components need reworking.
- * 	- rituals_inventory.cpp
- * 		- This... just isn't done, and the project isn't quite ready for it.
- * 	- rituals_main.cpp
- * 		- Needs Main_Menu stuff taken out, possibly want to clean up includes/defines too.
- * 	- rituals_math.cpp
- * 		- Remove unused stuff
- * 		- Complete operator overloading for the whole type matrix
- * 	- rituals_memory.cpp
- * 		- Need more allocator types
- * 		- Free-list/Bucket Array?
- * 		- Pool allocator?
- * 		- I implement a lot of these inline, but it'd be nice to pull some out
- * 		- Maybe macro generators?
- * 	- rituals_particles.cpp
- * 		- Need to rework styles system, more types of effects? 
- * 		- Possibly needs to be included in the regsitry?
- * 		- Real-time particle editor?
- * 	- rituals_play_state.cpp
- * 		- Should be combined into a rituals_gamestates.cpp w/ generated code
- * 	- rituals_random.cpp is good!
- * 	- rituals_renderer.cpp is pretty good
- * 		- The "fancier" forms of rendering in the game rely on Sprite/render_add to work
- * 		- I'd like to standardize in-game objects vs. raw renderer Sprites
- * 		- A lot of the 3D stuff has been hardcoded (entity, particle, animation_frame)
- * 			but it's all very similar and could largely be combined.
- * 	- rituals_serialization.cpp
- * 		- Is totally broken; doesn't respect the current state of World, World_Area, Entity, etc
- * 	- rituals_simulation.cpp
- * 		- Is a bit of a mess overall
- * 		- Sim_Body is a pain to work with
- * 			- using shape.center for position sucks
- * 			- Shouldn't really have a entity pointer, right?
- * 			- I'm sure there's a slightly better way to hook up with Entity/other things?
- * 		- Question: sort array of pointers v. sort raw structs for sweep and prune?
- * 			- Ties into larger questions about cache coherency
- * 		- Need to investigate multithreading/taskpool implementation for update
- * 			- Also consider way to do some things in SIMD
- * 		- Overall, the static grid works well; maybe want grid for dynamic objects too?
- * 			- This is maybe where we look at quadtrees?
- * 	- rituals_sort_macros.cpp
- * 		- Maybe want to do speed testing vs. built in sort methods?
- *	- rituals_tilemap.cpp
- *		- Tilemap rendering needs tweaking; some tiles need more than a simple sprite
- *		- Maybe we need better representation of tiles w/ height?
- *	- rituals_world.cpp & rituals_world_area.cpp
- *		- Another mixed-up situation: world_area_update relies on world, so it ends up in world.cpp, 
- *		rather than closer to struct World_Area
- *		- Forward declarations and all the world_area_<handle_event> procedures clutter World.cpp
- *		- Entity/in-game object rendering needs to be reworked/standardized
- * 		
- *
- *
- * TODO(will) bugs???
- *	- All of serialization is broken
- *	- Current animation implementation is not serializable
- *		
- ***/
 
+//NOTE(will): moved TODO to its own file.
+
+#ifdef PREPROCESSOR
+#define $(...) $(__VA_ARGS__)
+#else
 #define $(...)
+#define REFLECTED
+#endif
+
  //platform imports
+#ifndef PREPROCESSOR
+
 #if RITUALS_WINDOWS == 1
 #include <windows.h>
 #include <Shlwapi.h>
@@ -145,6 +56,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <SDL2/SDL.h>
 #endif
 #include "thirdparty.h"
+
+#endif
 
 //Some defines
 typedef int8_t int8;
@@ -187,9 +100,9 @@ typedef size_t usize;
 #define isizeof(t) ((isize)sizeof(t))
 #define isz(t) (isizeof(t))
 
-#define MixerNumberOfChannels (64)
+#define MixerNumberOfChannels 64
 
-#define FilePathMaxLength (4096)
+#define FilePathMaxLength 4096
 
 #define PathSeparator ("\\")
 #define PathSeparatorChar ('\\')
@@ -206,7 +119,10 @@ typedef size_t usize;
 #define Megabytes(b) (Kilobytes(b) * UINT64_C(1024))
 #define Gigabytes(b) (Megabytes(b) * UINT64_C(1024))
 
-#include "../meta_out.h"
+#ifdef REFLECTED
+#include "rituals_types.cpp"
+//#include "rituals_reflection.cpp"
+#endif
 
 //local imports
 #include "rituals_math.cpp"
@@ -382,12 +298,6 @@ void main_menu_update()
 }
 
 
-Sprite* boxes;
-
-
-void test_init()
-{
-}
 
 void test_update()
 {
@@ -426,14 +336,7 @@ void load_assets()
 	Renderer->groups[1].texture_size = Renderer->groups[0].texture_size;
 
 	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
-	init_spritefont(Game->body_font);
-	Game->body_font->glyphs = parse_spritefont_rectangles(
-#include "font.glyphs"
-			,
-			Game->asset_arena,
-			2048 - 1142, 0, 
-			&Game->body_font->glyph_width,
-			&Game->body_font->glyph_height);
+	init_spritefont(Game->body_font, Gohufont_Glyphs);
 	Body_Font = Game->body_font;
 
 	init_game_registry(Registry, Game->registry_arena); 
@@ -512,8 +415,14 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-#if 1
-	int ret = SDL_GL_SetSwapInterval(-1);
+#if 0
+	//TODO(will) investigate why late swap tearing causes
+	// a ton of lag w/ high entity counts.
+	//
+	// For now, we'll just use regular vsync
+	
+	//int ret = SDL_GL_SetSwapInterval(-1);
+	int ret = SDL_GL_SetSwapInterval(1);
 	if(ret == -1) {
 		ret = SDL_GL_SetSwapInterval(1);
 		if(ret == -1) {
@@ -561,6 +470,7 @@ int main(int argc, char** argv)
 	// Game initializiation
 	Game = Allocate(Game_Main, 1);
 	{
+		Game->last_frame_time = 1;
 		Game->window = window;
 		Game->state = Game_State_None;
 		Game->meta_arena = Allocate(Memory_Arena, 1);
@@ -721,12 +631,16 @@ int main(int argc, char** argv)
 
 		update();
 
-		SDL_GL_SwapWindow(window);
 		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
+#if 1
 		//60hz lock?
 		if(frame_ticks < 16) {
+			//Game->last_frame_time += 17 - frame_ticks;
 			SDL_Delay(16 - frame_ticks);
 		}
+#endif
+		SDL_GL_SwapWindow(window);
+		Game->last_frame_time = SDL_GetTicks() - start_ticks;
 	}
 
 	SDL_Quit();

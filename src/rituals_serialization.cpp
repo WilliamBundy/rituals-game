@@ -13,6 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * TODO(will) Convert all isize to int64 for serializaiton!!!
  * ptrdiff_t may not equal int64
  */ 
+
 int delete_file(char* path, isize path_length, char* file)
 {
 	char buf[FilePathMaxLength];
@@ -55,7 +56,6 @@ int _recursive_delete(const char* last_path, isize last_path_len, char* path)
 	tinydir_close(&dir);
 	delete_folder(buf, len);
 		
-	
 	return 1;
 }
 

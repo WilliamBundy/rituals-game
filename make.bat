@@ -2,7 +2,9 @@
 SET msvcdir=C:\Program Files^ (x86)\Microsoft^ Visual^ Studio^ 14.0\VC\
 if not defined DevEnvDir call "%msvcdir%vcvarsall.bat" amd64
 
-SET MAINFILE=src\rituals_main.cpp
+SET MAINFILEBASE=rituals_main
+SET MAINFILE=src\%MAINFILEBASE%.cpp
+SET PPC_OUT=%MAINFILEBASE%.i
 SET BASENAME=Rituals.exe
 SET OUTPUT=bin\Rituals.exe
 SET PDBOUT=bin\Rituals.pdb
@@ -25,6 +27,16 @@ SET LIBS=SDL2.lib ^
 	Shlwapi.lib
 
 start python autogit.py
+
+
+cl ^
+	/P ^
+	/I %INCLUDES% ^
+	%MAINFILE% ^
+	/DPREPROCESSOR
+
+metaprogram -m %PPC_OUT% > src\rituals_reflection.cpp
+metaprogram -t -p %PPC_OUT% > src\rituals_types.cpp
 
 taskkill /IM %BASENAME% 
 ctime -begin rituals.ctm

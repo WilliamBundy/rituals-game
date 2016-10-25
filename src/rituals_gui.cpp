@@ -16,6 +16,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define AsciiPrintableEnd   (128)
 #define AsciiPrintableCount (128-32)
 
+#define _glyph_offset_x (2048-1142)
+#define _glyph_offset_y 0
+
+$(exclude)
+const Rect2 Gohufont_Glyphs[] = {
+#include "gohufont.glyphs"
+};
+$(end)
+
 struct Spritefont
 {
 	int32 line_padding;
@@ -23,16 +32,18 @@ struct Spritefont
 	int32 tab_size;
 
 	int32 glyph_width, glyph_height;
-	Rect2* glyphs;
+	const Rect2* glyphs;
 	Vec4 color;
 };
 
-void init_spritefont(Spritefont* font)
+void init_spritefont(Spritefont* font, const Rect2* glyphs)
 {
 	font->line_padding = 0;
 	font->character_padding = 0;
 	font->tab_size = 4; // * space width?
-	font->glyphs = NULL;
+	font->glyphs = glyphs;
+    font->glyph_width = glyphs[1].w;
+    font->glyph_height = glyphs[1].h;
 	font->color = v4(1, 1, 1, 1);
 }
 
@@ -49,86 +60,6 @@ static inline bool _isnt_spritefont_separator(char c)
 {
 	return (c != ' ') && (c != '\n') && (c != '\0');
 }
-
-Rect2* parse_spritefont_rectangles(char* glyphs_file, Memory_Arena* arena, int32 offsetx, int32 offsety, int32* w, int32* h)
-{
-	Rect2* glyphs = arena_push_array(arena, Rect2, AsciiPrintableCount);
-	isize file_len = strlen(glyphs_file);
-	isize start = 0, len = 0;
-	for(isize i = 0; i < file_len; ++i) {
-		char c = glyphs_file[i++];
-		Rect2* r;
-		if(c > AsciiPrintableStart && c <= AsciiPrintableEnd) {
-			r = &glyphs[c - AsciiPrintableStart];
-		} else {
-			while(glyphs_file[i] != '\n') i++;
-			continue;
-		}
-		i++;
-
-		start = i;
-		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
-		len = i - start;
-		r->x = dec_str_to_int(glyphs_file + start, len) + offsetx;
-		i++;
-
-		start = i;
-		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
-		len = i - start;
-		r->y = dec_str_to_int(glyphs_file + start, len) + offsety - 1;
-		i++;
-
-		start = i;
-		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
-		len = i - start;
-		r->w = dec_str_to_int(glyphs_file + start, len);
-		*w = r->w;
-		i++;
-		start = i;
-
-		while(_isnt_spritefont_separator(glyphs_file[i])) i++;
-		len = i - start;
-		r->h = dec_str_to_int(glyphs_file + start, len) + 2;
-		*h = r->h;
-		i++;
-	}
-	return glyphs;
-}
-
-void load_spritefont(Spritefont* font, char* file_path_in, Vec2i offset)
-{
-	init_spritefont(font);
-
-	char file_path[FilePathMaxLength];
-	isize len = snprintf(file_path, FilePathMaxLength, "%s%s", Game->base_path, file_path_in);
-	
-	char* str = NULL;
-	FILE* fp = fopen(file_path, "r");
-	if(fp != NULL) {
-		start_temp_arena(Game->temp_arena);
-		fseek(fp, 0L, SEEK_END);
-		isize size = ftell(fp);
-		rewind(fp);
-		str = arena_push_array(Game->temp_arena, char, size + 1);
-		fread(str, sizeof(char), size, fp);
-		str[size] = '\0';
-		fclose(fp);
-		font->glyphs = parse_spritefont_rectangles(str, Game->asset_arena, 
-			offset.x, offset.y, &font->glyph_width, &font->glyph_height);
-		end_temp_arena(Game->temp_arena);
-	} else {
-		Log_Error("Could not find font glyphs file");
-		Log_Error(file_path);
-	}
-}
-
-Spritefont* load_spritefont(char* filepath, Vec2i offset)
-{
-	Spritefont* font = arena_push_struct(Game->asset_arena, Spritefont);
-	load_spritefont(font, filepath, offset);
-	return font;
-}
-
 
 Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)
 {

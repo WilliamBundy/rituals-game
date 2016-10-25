@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_world.cpp
  */
 
+//#ifndef REFLECTED
 struct World
 {
 	char* name;
@@ -33,6 +34,7 @@ struct World
 	Particle_Style base_style;
 	Emitter emitter;
 };
+//#endif 
 
 isize Anim_Standing;
 isize Anim_Walking;
@@ -159,7 +161,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	generate_tilemap(&area->map, stub->seed);
 	area->id = stub->id;
 	//Spawn boxes
-	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth * 4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = rect2(8*32, 16, 32, 48);
@@ -185,7 +187,7 @@ void generate_world_area(World* world, World_Area* area, World_Area_Stub* stub)
 	}
 
 	//Spawn trees
-	for(isize i = 0; i < WorldAreaTilemapWidth / 4; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = rect2(0, 5*32, 96, 144);
@@ -423,7 +425,7 @@ void world_area_render(World_Area* area, World* world)
 
 	render_set_current_group(1);
 	render_start();
-	snprintf(buf, 256, "Area %d", area->id);
+	snprintf(buf, 256, "Area %d | Entities %d | Frame Time %d", area->id, area->entities_count, Game->last_frame_time);
 	render_body_text(buf, v2(16, 16), true);
 	render_draw(Game->size, Game->scale);
 #endif

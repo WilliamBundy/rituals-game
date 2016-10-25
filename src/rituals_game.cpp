@@ -108,6 +108,8 @@ struct Game_Main
 
 	//Debug_Log* log;
 	Game_Input* input;
+
+	uint64 last_frame_time;
 };
 
 Game_Main* Game;

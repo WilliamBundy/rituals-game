@@ -82,6 +82,7 @@ typedef size_t usize;
 
 struct Metaprogram_Core
 {
+	bool verbose;
 	Memory_Arena base_arena;
 	Memory_Arena work_arena;
 	Memory_Arena temp_arena;
@@ -117,6 +118,8 @@ char* load_file(char* filename, isize* size_out, Memory_Arena* arena)
 #include "metaprogram_parser.cpp"
 
 
+#define myprint(x) printf(x)
+
 int main(int argc, char** argv)
 {
 	//Core + arena initialization
@@ -138,8 +141,8 @@ int main(int argc, char** argv)
 	// -t --typedefs
 	// -s --structs
 	// -m --metadata
-	bool pflag, tflag, sflag, mflag;
-	pflag = tflag = sflag = false;
+	bool pflag, tflag, sflag, mflag, vflag;
+	pflag = tflag = sflag = mflag = vflag = false;
 	char* file = NULL;
 	for(isize i = 0; i < argc; ++i) {
 		if(argv[i][0] == '-') {
@@ -152,6 +155,9 @@ int main(int argc, char** argv)
 					break;
 				case 's':
 					sflag = true;
+					break;
+				case 'v':
+					vflag = true;
 					break;
 				case 'm':
 					mflag = true;
@@ -178,6 +184,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	Metaprogram->verbose = vflag;
 	if(file != NULL && istherework) {
 		//char* str = load_file("src/rituals_game.cpp", NULL, Work_Arena);
 		//char* file = load_file(filename, NULL, Work_Arena);
@@ -210,7 +217,7 @@ int main(int argc, char** argv)
 		Proc_Prototype* p = find_proc_prototypes(&lex, start, Work_Arena);
 		Struct_Def* structdef = find_struct_defs(&lex, start, Work_Arena);
 
-		fprintf(stderr, "Found %d procedures, %d structs \n",
+		if(Metaprogram->verbose) fprintf(stderr, "Found %d procedures, %d structs \n\n",
 				lex.procedures_count, lex.structs_count);
 
 		Struct_Def* s_head = structdef;
@@ -253,7 +260,7 @@ int main(int argc, char** argv)
 			Hash structhash = hash_literal("struct");
 			Hash unionhash = hash_literal("union");
 			do {
-				head = parse_dollarsign_instructions(head);
+				head = parse_metaprogram_directive(head);
 				if(head->hash == typedefhash) {
 					Token* tdef = head;
 					Token* end = NULL;
@@ -340,7 +347,6 @@ int main(int argc, char** argv)
 		Struct_Def** all_structs = arena_push_array(Work_Arena, 
 				Struct_Def*, lex.structs_count + meta_index_counter + 16);
 		isize num_structs = meta_index_counter;
-		fprintf(stderr, "Meta flag set: [%d] \n", mflag);
 		if(mflag) {
 			//Print Meta_Type enum
 			s_head = structdef;
@@ -393,27 +399,9 @@ int main(int argc, char** argv)
 				printf("\t\"%s\",\n", type_head->name);
 			} while(type_head = type_head->next);
 			printf("};\n");
-
-
-
-			// Print type_of overloads
-#if 1
-			s_head = structdef;
+			/*s_head = structdef;
 			type_start = unique_type_start;
-			type_head = type_start;
-			do {
-				if(type_head->name == NULL) continue;
-				printf("static inline Meta_Type type_of(const %s* object) { return Meta_Type_%s; }\n", type_head->name, type_head->name);
-			} while(type_head = type_head->next);
-
-			do {
-
-				if(s_head == NULL) break;
-				if(s_head->name == NULL) continue;
-				printf("static inline Meta_Type type_of(const %s* object) { return Meta_Type_%s; }\n", s_head->name, s_head->name);
-
-			} while(s_head = s_head->next);
-#endif 
+			type_head = type_start;*/
 		}
 
 
@@ -440,14 +428,6 @@ int main(int argc, char** argv)
 			printf("};\n\n");
 
 			print_metaprogram_get_struct_info_proc();
-
-
-			for(isize i = 0; i < num_structs; ++i) {
-				Struct_Def* def = all_structs[i];
-				if(def->is_anon_member) continue;
-				printf("static inline const Meta_Struct_Info* get_struct_info(%s* object) { return get_struct_info(%s); } \n",
-						def->name, def->meta_type_name);
-			}
 		}
 		
 

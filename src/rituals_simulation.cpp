@@ -265,13 +265,18 @@ int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep
 		}
 	}
 
-	uint64 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
-	uint64 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
-	if(a_is_static && b_is_static) return 0;
-
+	if(Has_Flag(a->flags, Body_Flag_Static)) {
+		if(Has_Flag(b->flags, Body_Flag_Static)) {
+			return 0;
+		}
+	}
 	uint64 ma = a->mask & b->group;
+	if(ma != 0) {
+		return 0;
+	}
+
 	uint64 mb = a->group & b->mask;
-	if(ma != 0 || mb != 0) {
+	if(mb != 0) {
 		return 0;		
 	}
 
@@ -449,7 +454,10 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				damping = sqrtf(a->damping * a->damping + 
 					tile->friction * tile->friction) * Math_InvSqrt2;
 			}
-			a->velocity *= powf(damping, SimIter);
+			for(isize i = 0; i < SimIter; ++i) {
+				damping *= damping;
+			}
+			a->velocity *= damping;//;powf(damping, SimIter);
 			a->velocity += a->collision_vel;
 			a->collision_vel = v2(0, 0);
 		}

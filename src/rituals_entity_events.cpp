@@ -289,9 +289,9 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 					break;
 			}
 		}
-		if(e->walk_impulse.x < 0.001f) {
+		if(e->walk_impulse.x < -1.0f) {
 			e->facing = -1;
-		} else if (e->walk_impulse.x > 0.001f) {
+		} else if (e->walk_impulse.x > 1.0f) {
 			e->facing = 1;
 		}
 
@@ -305,6 +305,8 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 	shadow.flags = Anchor_Center;
 	shadow.texture = rect2(96, 16, 32, 16);
 	shadow.color.w = 0.3f;
+	real render_distance = Game->size.x + 256;
+	render_distance *= render_distance;
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 		
@@ -333,6 +335,14 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 				}
 			}
 		}
+
+		Vec2 dv_player = area->player->sprite.position - e->sprite.position;
+		real dist_player = v2_dot(dv_player, dv_player);
+		if(dist_player > 
+			(render_distance + e->sprite.size.x * e->sprite.size.x)) {
+			continue;
+		}
+
 		shadow.position = e->sprite.position;
 
 		Sprite s = e->sprite;
