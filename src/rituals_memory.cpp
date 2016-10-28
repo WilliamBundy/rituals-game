@@ -14,6 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define arena_push_struct(arena, type) ((type*)arena_push(arena, sizeof(type)))
 #define arena_push_array(arena, type, count) ((type*)arena_push(arena, sizeof(type) * count))
 
+#ifndef REFLECTED
 struct Memory_Arena
 {
 	uint8* data;
@@ -21,6 +22,7 @@ struct Memory_Arena
 	isize temp_head;
 	Memory_Arena* next;
 };
+#endif
 
 static inline isize mem_align_4(isize p)
 {

@@ -24,10 +24,12 @@ static inline uint64 _rotate_left(const uint64 t, int64 k)
 	return (t << k) | (t >> (64 - k));
 }
 
+#ifndef REFLECTED
 struct Random
 {
 	uint64 x, y;
 };
+#endif
 
 uint64 next_random_uint64(Random* r)
 {

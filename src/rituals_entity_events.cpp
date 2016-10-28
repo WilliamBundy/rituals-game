@@ -167,9 +167,9 @@ bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area,
 			}
 
 			if(e->health <= 0) {
-				play_state->delete_world_on_stop = true;
-				play_state->save_world_on_stop = false;
-				switch_state(Game_State_Menu);
+				Game->Play->delete_world_on_stop = true;
+				Game->Play->save_world_on_stop = false;
+				game_switch_state(Game_State_Menu);
 				return true;
 			}
 		}
@@ -184,8 +184,6 @@ void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, 
 	}
 }
 
-#define _check(s1, s2, state) ((Input->scancodes[SDL_SCANCODE_##s1] == state) || (Input->scancodes[SDL_SCANCODE_##s2] == state))
-#define _scancode(s1) ((Input->scancodes[SDL_SCANCODE_##s1]))
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {

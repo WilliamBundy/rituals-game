@@ -14,6 +14,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 
+
+#ifndef REFLECTED
 struct Item_Stack
 {
 	isize id;
@@ -21,6 +23,7 @@ struct Item_Stack
 
 	int32 number;
 };
+#endif
 
 void init_item_stack(Item_Stack* stack, Item_Info* info)
 {
@@ -39,11 +42,13 @@ Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)
 	return stack;
 }
 
+#ifndef REFLECTED 
 struct Inventory
 {
 	Item_Stack** contents;
 	isize w, h, size;
 };
+#endif
 
 void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)
 {

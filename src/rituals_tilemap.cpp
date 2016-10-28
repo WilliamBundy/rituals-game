@@ -13,12 +13,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * 
  */
 
+#ifndef REFLECTED
 struct Tilemap
 {
 	isize w, h;
 	Tile* tiles;
 	Tile_State* states;
 };
+#endif
 
 #define WorldAreaTilemapWidth (256)
 #define WorldAreaTilemapHeight (256)

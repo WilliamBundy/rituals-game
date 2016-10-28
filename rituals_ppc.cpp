@@ -18,12 +18,7 @@
 
 
 
-
-
-
-#line 24 "src\\rituals_main.cpp"
-
- 
+#line 21 "src\\rituals_main.cpp"
 
 
 
@@ -60,6 +55,20 @@
 
 
 
+
+
+#line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_defines.h"
+
+
+
+
+
+
+
+
+
+
+#pragma once
 
 typedef int8_t int8;
 typedef int16_t int16;
@@ -76,13 +85,20 @@ typedef double real64;
 
 
 
-
 typedef real32 real;
 
 
 
 
-#line 85 "src\\rituals_main.cpp"
+#line 34 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_defines.h"
+
+
+
+typedef int32 integer;
+typedef real32 real;
+
+
+
 
 typedef ptrdiff_t isize;
 typedef size_t usize;
@@ -125,6 +141,17 @@ typedef size_t usize;
 
 
 
+#line 60 "src\\rituals_main.cpp"
+
+
+
+
+
+
+
+
+
+
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_math.cpp"
 
@@ -141,6 +168,7 @@ typedef size_t usize;
 
 
  
+
 
 inline real clamp(real x, real min, real max)
 {
@@ -159,6 +187,9 @@ real lerp(real a, real b, real t)
 	return (1.0f - t) * a + t * b;
 }
 
+
+
+
 union Vec2 
 {
 	struct {
@@ -166,6 +197,445 @@ union Vec2
 	};
 	real e[2];
 };
+
+union Vec3
+{
+	struct {
+		real x, y, z;
+	};
+	real e[3];
+};
+
+union Vec4
+{
+	struct {
+		real x, y, z, w;
+	};
+	real e[4];
+	
+};
+
+union Vec2i
+{
+	struct {
+		integer x, y;
+	};
+	integer e[2];
+};
+
+union Vec3i
+{
+	struct {
+		integer x, y, z;
+	};
+	integer e[3];
+};
+
+union Vec4i
+{
+	struct {
+		integer x, y, z, w;
+	};
+	integer e[4];
+	
+};
+
+#line 88 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_math.cpp"
+
+
+
+static inline Vec2 v2(real x, real y)
+{
+	return Vec2{x, y};
+}
+
+static inline Vec3 v3(real x, real y, real z)
+{
+	return Vec3{
+		x, y, z
+	};
+}
+
+static inline Vec4 v4(real x, real y, real z, real w)
+{
+	return Vec4{
+		x, y, z, w
+	};
+}
+
+static inline Vec2i v2i(integer x, integer y)
+{
+	return Vec2i {
+		x, y
+	};
+}
+
+static inline Vec3i v3i(integer x, integer y, integer z)
+{
+	return Vec3i{
+		x, y, z
+	};
+}
+
+static inline Vec4i v4i(integer x, integer y, integer z, integer w)
+{
+	return Vec4i{
+		x, y, z, w
+	};
+}
+
+
+
+static inline Vec2 v2(Vec2i vi)
+{
+	return v2(vi.x, vi.y);
+}
+
+static inline Vec2 v2(Vec3 vi)
+{
+	return v2(vi.x, vi.y);
+}
+
+static inline Vec3 v3(Vec3i vi)
+{
+    return v3(vi.x, vi.y, vi.z);
+}
+
+static inline Vec3 v3(Vec2 vi)
+{
+    return v3(vi.x, vi.y, 0);
+}
+
+static inline Vec3 v3(Vec2 vi, real z)
+{
+    return v3(vi.x, vi.y, z);
+}
+
+static inline Vec4 v4(Vec4i vi)
+{
+    return v4(vi.x, vi.y, vi.z, vi.w);
+}
+
+static inline Vec4 v4(Vec2 vi)
+{
+    return v4(vi.x, vi.y, 0, 0);
+}
+
+static inline Vec4 v4(Vec2 vi, real z, real w)
+{
+    return v4(vi.x, vi.y, z, w);
+}
+
+static inline Vec4 v4(Vec3 vi)
+{
+    return v4(vi.x, vi.y, vi.z, 0);
+}
+
+static inline Vec4 v4(Vec3 vi, real w)
+{
+    return v4(vi.x, vi.y, vi.z, w);
+}
+
+static inline Vec2i v2i(Vec2 vi)
+{
+    return v2i((integer)vi.x, (integer)vi.y);
+}
+
+static inline Vec3i v3i(Vec3 vi)
+{
+    return v3i((integer)vi.x, (integer)vi.y, (integer)vi.z);
+}
+
+static inline Vec4i v4i(Vec4 vi)
+{
+    return v4i((integer)vi.x, (integer)vi.y, (integer)vi.z, (integer)vi.w);
+}
+#line 198 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_math.cpp"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static inline Vec2 v2_negate(Vec2 a)
+{
+	return Vec2{-a.x, -a.y};
+}
+
+static inline Vec2 v2_sub(Vec2 a, Vec2 b)
+{
+	return Vec2{a.x - b.x, a.y - b.y};
+}
+
+static inline Vec2 v2_add(Vec2 a, Vec2 b)
+{
+	return Vec2{a.x + b.x, a.y + b.y};
+}
+
+static inline Vec2 v2_add_scaled(Vec2 a, Vec2 b, real scale)
+{
+	return Vec2{a.x + b.x * scale, a.y + b.y * scale};
+}
+
+
+static inline Vec2 v2_mul(Vec2 a, real s)
+{
+	return Vec2{a.x * s, a.y * s};
+}
+
+static inline Vec2 v2_div(Vec2 a, real s)
+{
+	return v2_mul(a, 1.0f / s);
+}
+
+static inline Vec2 v2_component_mul(Vec2 a, Vec2 b)
+{
+	return Vec2{a.x * b.x, a.y * b.y};
+}
+
+
+
+static inline Vec3 v3_negate(Vec3 a)
+{
+	return Vec3{-a.x, -a.y, -a.z};
+}
+
+static inline Vec3 v3_sub(Vec3 a, Vec3 b)
+{
+	return Vec3{a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+static inline Vec3 v3_add(Vec3 a, Vec3 b)
+{
+	return Vec3{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+static inline Vec3 v3_add_scaled(Vec3 a, Vec3 b, real scale)
+{
+	return Vec3{a.x + b.x * scale, a.y + b.y * scale, a.z + b.z * scale};
+}
+
+static inline Vec3 v3_mul(Vec3 a, real s)
+{
+	return Vec3{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3 v3_div(Vec3 a, real s)
+{
+	return v3_mul(a, 1.0f/s);
+}
+
+static inline Vec3 v3_component_mul(Vec3 a, Vec3 b)
+{
+	return Vec3{a.x * b.x, a.y * b.y, a.z * b.z};
+}
+
+
+
+static inline Vec4 v4_negate(Vec4 a)
+{
+    return Vec4{-a.x, -a.y, -a.z, -a.w};
+}
+
+static inline Vec4 v4_add(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
+}
+
+static inline Vec4 v4_add_scaled(Vec4 a, Vec4 b, real scale)
+{
+	return Vec4{a.x + b.x * scale, a.y + b.y * scale, a.z + b.z * scale, a.w + b.w * scale};
+}
+
+static inline Vec4 v4_sub(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+}
+
+static inline Vec4 v4_compenent_mul(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+static inline Vec4 v4_mul(Vec4 a, real b)
+{
+	return Vec4{a.x * b, a.y * b, a.z * b, a.w * b};
+}
+
+static inline Vec4 v4_div(Vec4 a, real b)
+{
+	return  v4_mul(a, 1.0f/b);
+}
+
+
+
+static inline Vec2i v2i_negate(Vec2i a)
+{
+	return Vec2i{-a.x, -a.y};
+}
+
+static inline Vec2i v2i_sub(Vec2i a, Vec2i b)
+{
+	return Vec2i{a.x - b.x, a.y - b.y};
+}
+
+static inline Vec2i v2i_add(Vec2i a, Vec2i b)
+{
+	return Vec2i{a.x + b.x, a.y + b.y};
+}
+
+static inline Vec2i v2i_add_scaled(Vec2i a, Vec2i b, real scale)
+{
+	return Vec2i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale)};
+}
+static inline Vec2i v2i_addi_scaled(Vec2i a, Vec2i b, integer scale)
+{
+	return Vec2i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale)};
+}
+
+static inline Vec2i v2i_mul(Vec2i a, real s)
+{
+	return Vec2i{(integer)(a.x * s), (integer)(a.y * s)};
+}
+
+static inline Vec2i v2i_muli(Vec2i a, integer s)
+{
+	return Vec2i{(integer)(a.x * s), (integer)(a.y * s)};
+}
+
+static inline Vec2i v2i_div(Vec2i a, real s)
+{
+	return v2i_mul(a, 1.0f / s);
+}
+
+static inline Vec2i v2i_divi(Vec2i a, integer s)
+{
+	return Vec2i{a.x / s, a.y / s};
+}
+
+
+static inline Vec2i v2i_component_mul(Vec2i a, Vec2i b)
+{
+	return Vec2i{a.x * b.x, a.y * b.y};
+}
+
+
+
+static inline Vec3i v3i_negate(Vec3i a)
+{
+	return Vec3i{-a.x, -a.y, -a.z};
+}
+
+static inline Vec3i v3i_sub(Vec3i a, Vec3i b)
+{
+	return Vec3i{a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+static inline Vec3i v3i_add(Vec3i a, Vec3i b)
+{
+	return Vec3i{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+static inline Vec3i v3i_add_scaled(Vec3i a, Vec3i b, real scale)
+{
+	return Vec3i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale)};
+}
+
+static inline Vec3i v3i_addi_scaled(Vec3i a, Vec3i b, integer scale)
+{
+	return Vec3i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale)};
+}
+
+static inline Vec3i v3i_mul(Vec3i a, real s)
+{
+	return Vec3i{(integer)(a.x * s), (integer)(a.y * s), (integer)(a.z * s)};
+}
+
+static inline Vec3i v3i_muli(Vec3i a, integer s)
+{
+	return Vec3i{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3i v3i_div(Vec3i a, real s)
+{
+	return v3i_mul(a, 1.0f/s);
+}
+
+static inline Vec3i v3i_divi(Vec3i a, integer s)
+{
+	return Vec3i{a.x / s, a.y / s, a.z / s};
+}
+
+
+static inline Vec3i v3i_component_mul(Vec3i a, Vec3i b)
+{
+	return Vec3i{a.x * b.x, a.y * b.y, a.z * b.z};
+}
+
+
+
+static inline Vec4i v4i_negate(Vec4i a)
+{
+    return Vec4i{-a.x, -a.y, -a.z, -a.w};
+}
+
+static inline Vec4i v4i_add(Vec4i a, Vec4i b)
+{
+	return Vec4i{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
+}
+
+static inline Vec4i v4i_add_scaled(Vec4i a, Vec4i b, real scale)
+{
+	return Vec4i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale), a.w + (integer)(b.w * scale)};
+}
+
+static inline Vec4i v4i_addi_scaled(Vec4i a, Vec4i b, integer scale)
+{
+	return Vec4i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale), a.w + (integer)(b.w * scale)};
+}
+
+static inline Vec4i v4i_sub(Vec4i a, Vec4i b)
+{
+	return Vec4i{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+}
+
+static inline Vec4i v4i_compenent_mul(Vec4i a, Vec4i b)
+{
+	return Vec4i{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+static inline Vec4i v4i_mul(Vec4i a, real b)
+{
+	return Vec4i{(integer)(a.x * b), (integer)(a.y * b), (integer)(a.z * b), (integer)(a.w * b)};
+}
+static inline Vec4i v4i_muli(Vec4i a, integer b)
+{
+	return Vec4i{(integer)(a.x * b), (integer)(a.y * b), (integer)(a.z * b), (integer)(a.w * b)};
+}
+
+static inline Vec4i v4i_divi(Vec4i a, real b)
+{
+	return Vec4i{(integer)(a.x / b), (integer)(a.y / b), (integer)(a.z / b), (integer)(a.w / b)};
+}
+
+static inline Vec4i v4i_div(Vec4i a, real b)
+{
+	return  v4i_mul(a, 1.0f/b);
+}
+
+
+
+
 
 
 static inline Vec2 operator-(Vec2 a)
@@ -188,18 +658,14 @@ static inline Vec2 operator*(Vec2 a, real s)
 	return Vec2{a.x * s, a.y * s};
 }
 
-static inline Vec2 operator/(real s, Vec2 a)
-{
-	return a * (1.0f / s);
-}
-static inline Vec2 operator/(Vec2 a, real s)
-{
-	return a * (1.0f / s);
-}
-
 static inline Vec2 operator*(real s, Vec2 a)
 {
 	return Vec2{a.x * s, a.y * s};
+}
+
+static inline Vec2 operator/(Vec2 a, real s)
+{
+	return a * (1.0f / s);
 }
 
 static inline Vec2 operator*(Vec2 a, Vec2 b)
@@ -225,39 +691,19 @@ static inline Vec2& operator*=(Vec2& a, real b)
 	return a;
 }
 
-union Vec2i
+static inline Vec2& operator*=(Vec2& a, Vec2 b)
 {
-	struct {
-		int32 x, y;
-	};
-	int32 e[2];
-};
-
-
-union Vec3
-{
-	struct {
-		real x, y, z;
-	};
-	real e[3];
-};
-
-static inline Vec3 v3(real x, real y, real z)
-{
-	return Vec3{
-		x, y, z
-	};
+	a = a * b;
+	return a;
 }
 
-static inline Vec3 v3(Vec2 a, real z)
+static inline Vec2& operator/=(Vec2& a, real b)
 {
-	return v3(a.x, a.y, z);
+	a = a / b;
+	return a;
 }
 
-static inline Vec3 v3(Vec2 a)
-{
-	return v3(a.x, a.y, 0);
-}
+
 
 static inline Vec3 operator-(Vec3 a)
 {
@@ -279,18 +725,14 @@ static inline Vec3 operator*(Vec3 a, real s)
 	return Vec3{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3 operator/(real s, Vec3 a)
-{
-	return a * (1.0f / s);
-}
-static inline Vec3 operator/(Vec3 a, real s)
-{
-	return a * (1.0f / s);
-}
-
 static inline Vec3 operator*(real s, Vec3 a)
 {
 	return Vec3{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3 operator/(Vec3 a, real s)
+{
+	return a * (1.0f / s);
 }
 
 static inline Vec3 operator*(Vec3 a, Vec3 b)
@@ -316,16 +758,35 @@ static inline Vec3& operator*=(Vec3& a, real b)
 	return a;
 }
 
-
-union Vec4
+static inline Vec3& operator*=(Vec3& a, Vec3 b)
 {
-	struct {
-		real x, y, z, w;
-	};
-	real e[4];
-	
-};
+	a = a * b;
+	return a;
+}
 
+static inline Vec3& operator/=(Vec3& a, real b)
+{
+	a = a / b;
+	return a;
+}
+
+
+
+
+static inline Vec4 operator-(Vec4 a)
+{
+    return Vec4{-a.x, -a.y, -a.z, -a.w};
+}
+
+static inline Vec4 operator+(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
+}
+
+static inline Vec4 operator-(Vec4 a, Vec4 b)
+{
+	return Vec4{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+}
 
 static inline Vec4 operator*(Vec4 a, Vec4 b)
 {
@@ -340,117 +801,363 @@ static inline Vec4 operator*(real b, Vec4 a)
 {
 	return a * b;
 }
-
 static inline Vec4 operator/(Vec4 a, real b)
 {
 	return a * (1.0f/b);
 }
+
+static inline Vec4 operator+=(Vec4& a, Vec4 b)
+{
+    a = a + b;
+    return a;
+}
+
+static inline Vec4 operator-=(Vec4& a, Vec4 b)
+{
+    a = a - b;
+    return a;
+}
+
 static inline Vec4 operator*=(Vec4& a, real b)
 {
 	a = a * b;
 	return a;
 }
 
+static inline Vec4 operator/=(Vec4& a, real b)
+{
+	a = a / b;
+	return a;
+}
+
+
 static inline Vec4 operator*=(Vec4& a, Vec4 b)
+{
+    a = a * b;
+    return a;
+}
+
+
+
+static inline Vec2i operator-(Vec2i a)
+{
+	return Vec2i{-a.x, -a.y};
+}
+
+static inline Vec2i operator-(Vec2i a, Vec2i b)
+{
+	return Vec2i{a.x - b.x, a.y - b.y};
+}
+
+static inline Vec2i operator+(Vec2i a, Vec2i b)
+{
+	return Vec2i{a.x + b.x, a.y + b.y};
+}
+
+static inline Vec2i operator*(Vec2i a, integer s)
+{
+	return Vec2i{a.x * s, a.y * s};
+}
+
+static inline Vec2i operator*(integer s, Vec2i a)
+{
+	return Vec2i{a.x * s, a.y * s};
+}
+
+static inline Vec2i operator/(Vec2i a, integer s)
+{
+	return a * (1.0f / s);
+}
+
+static inline Vec2i operator*(Vec2i a, Vec2i b)
+{
+	return Vec2i{a.x * b.x, a.y * b.y};
+}
+
+static inline Vec2i& operator+=(Vec2i& a, Vec2i b)
+{
+	a = a + b;
+	return a;
+}
+
+static inline Vec2i& operator-=(Vec2i& a, Vec2i b)
+{
+	a = a - b;
+	return a;
+}
+
+static inline Vec2i& operator*=(Vec2i& a, integer b)
 {
 	a = a * b;
 	return a;
 }
 
-
-static inline Vec4 v4(real x, real y, real z, real w)
+static inline Vec2i& operator*=(Vec2i& a, Vec2i b)
 {
-	return Vec4{
-		x, y, z, w
-	};
+	a = a * b;
+	return a;
 }
 
-Vec4 hex_to_v4(uint32 hex) 
+static inline Vec2i& operator/=(Vec2i& a, integer b)
 {
-	Vec4 v;
-	v.x = (hex >> 24 & 0xFF) / 255.0f;
-	v.y = (hex >> 16 & 0xFF) / 255.0f;
-	v.z = (hex >> 8 & 0xFF) / 255.0f;
-	v.w = (hex & 0xFF) / 255.0f;
-	return v;
-}
-
-
-static inline Vec2 v2(real x, real y)
-{
-	return Vec2{x, y};
-}
-static inline Vec2 v2(Vec3 v)
-{
-	return v2(v.x, v.y);
-}
-
-static inline Vec2 v2(Vec2i vi)
-{
-	return v2(vi.x, vi.y);
-}
-
-static inline Vec2i v2i(int32 x, int32 y)
-{
-	return Vec2i {
-		x, y
-	};
+	a = a / b;
+	return a;
 }
 
 
 
-inline Vec2 v2_perpendicular(Vec2 v)
+static inline Vec3i operator-(Vec3i a)
+{
+	return Vec3i{-a.x, -a.y, -a.z};
+}
+
+static inline Vec3i operator-(Vec3i a, Vec3i b)
+{
+	return Vec3i{a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+static inline Vec3i operator+(Vec3i a, Vec3i b)
+{
+	return Vec3i{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+static inline Vec3i operator*(Vec3i a, integer s)
+{
+	return Vec3i{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3i operator*(integer s, Vec3i a)
+{
+	return Vec3i{a.x * s, a.y * s, a.z * s};
+}
+
+static inline Vec3i operator/(Vec3i a, integer s)
+{
+	return a * (1.0f / s);
+}
+
+static inline Vec3i operator*(Vec3i a, Vec3i b)
+{
+	return Vec3i{a.x * b.x, a.y * b.y, a.z * b.z};
+}
+
+static inline Vec3i& operator+=(Vec3i& a, Vec3i b)
+{
+	a = a + b;
+	return a;
+}
+
+static inline Vec3i& operator-=(Vec3i& a, Vec3i b)
+{
+	a = a - b;
+	return a;
+}
+
+static inline Vec3i& operator*=(Vec3i& a, integer b)
+{
+	a = a * b;
+	return a;
+}
+
+static inline Vec3i& operator*=(Vec3i& a, Vec3i b)
+{
+	a = a * b;
+	return a;
+}
+
+static inline Vec3i& operator/=(Vec3i& a, integer b)
+{
+	a = a / b;
+	return a;
+}
+
+
+
+static inline Vec4i operator-(Vec4i a)
+{
+    return Vec4i{-a.x, -a.y, -a.z, -a.w};
+}
+
+static inline Vec4i operator+(Vec4i a, Vec4i b)
+{
+	return Vec4i{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
+}
+
+static inline Vec4i operator-(Vec4i a, Vec4i b)
+{
+	return Vec4i{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+}
+
+static inline Vec4i operator*(Vec4i a, Vec4i b)
+{
+	return Vec4i{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+static inline Vec4i operator*(Vec4i a, integer b)
+{
+	return Vec4i{a.x * b, a.y * b, a.z * b, a.w * b};
+}
+
+static inline Vec4i operator*(integer b, Vec4i a) 
+{
+	return a * b;
+}
+
+static inline Vec4i operator/(Vec4i a, integer b)
+{
+	return a * (1.0f/b);
+}
+
+static inline Vec4i operator+=(Vec4i& a, Vec4i b)
+{
+    a = a + b;
+    return a;
+}
+
+static inline Vec4i operator-=(Vec4i& a, Vec4i b)
+{
+    a = a - b;
+    return a;
+}
+
+static inline Vec4i operator*=(Vec4i& a, integer b)
+{
+	a = a * b;
+	return a;
+}
+
+static inline Vec4i operator/=(Vec4i& a, integer b)
+{
+	a = a / b;
+	return a;
+}
+
+static inline Vec4i operator*=(Vec4i& a, Vec4i b)
+{
+    a = a * b;
+    return a;
+}
+
+#line 886 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_math.cpp"
+
+
+
+static inline Vec2 v2_perpendicular(Vec2 v)
 {
 	return Vec2 {
 		-v.y, v.x
 	};
 }
 
-inline real v2_dot(Vec2 a, Vec2 b)
+static inline real v2_dot(Vec2 a, Vec2 b)
 {
 	return a.x * b.x + a.y * b.y;
 }
 
-inline real v2_cross(Vec2 a, Vec2 b)
+static inline real v2_len_sq(Vec2 a)
+{
+	return a.x * a.x + a.y * a.y;
+}
+
+static inline real v2_len(Vec2 a)
+{
+    return sqrtf(v2_len_sq(a));
+}
+
+static inline real v2_cross(Vec2 a, Vec2 b)
 {
 	return a.x * b.y - a.y * b.x;
 }
 
-inline Vec2 v2_from_angle(real normal)
+static inline Vec2 v2_from_angle(real normal)
 {
 	return Vec2 {
 		cosf(normal), sinf(normal)
 	};
 }
 
-inline real v2_to_angle(Vec2 v)
+static inline real v2_to_angle(Vec2 v)
 {
 	return atan2f(v.y, v.x);
 }
 
-inline Vec2 v2_normalize(Vec2 v)
+static inline Vec2 v2_normalize(Vec2 v)
 {
 	real mag = sqrt(v.x*v.x + v.y * v.y);
 	return v2(v.x / mag, v.y / mag);
 }
 
-union AABB
+
+static inline real v3_dot(Vec3 a, Vec3 b)
 {
-	struct {
-		Vec2 center;
-		union {
-			struct {
-				real hw, hh;
-			};
-			struct {
-				Vec2 hext;
-			};
-		};
-	};
-	real e[4];
-};
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+static inline real v3_len_sq(Vec3 a)
+{
+	return a.x * a.x + a.y * a.y + a.z * a.z;
+}
+
+static inline real v3_len(Vec3 a)
+{
+	return sqrtf(v3_len_sq(a));
+}
 
 
+static inline Vec3 v3_cross(Vec3 a, Vec3 b)
+{
+    Vec3 v;
+    v.x = (a.y * b.z - b.y * a.z);
+    v.y = (a.x * b.z - b.x * a.z);
+	v.z = (a.x * b.y - a.y * b.x);
+
+    return v;
+}
+
+static inline Vec3 v3_normalize(Vec3 v)
+{
+	real mag = v3_len(v);
+	return v3(v.x / mag, v.y / mag, v.z / mag);
+}
+
+static inline real v4_dot(Vec4 a, Vec4 b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+static inline real v4_len_sq(Vec4 a)
+{
+	return a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
+}
+
+static inline real v4_len(Vec4 a)
+{
+	return sqrtf(v4_len_sq(a));
+}
+
+static inline Vec4 v4_normalize(Vec4 v)
+{
+	real mag = v4_len(v);
+	return v4(v.x / mag, v.y / mag, v.z / mag, v.w / mag);
+}
+
+static inline Vec4 hex_to_v4(uint32 rgba)
+{
+
+	uint8 r = (uint8)((rgba >> (24)) & 0xFF);
+	uint8 g = (uint8)((rgba >> (16)) & 0xFF);
+	uint8 b = (uint8)((rgba >> (8)) & 0xFF);
+	uint8 a = (uint8)((rgba >> (0)) & 0xFF);
+
+	Vec4 color;
+
+	color.x = ((real)(r)/255.0f);
+	color.y = ((real)(g)/255.0f);
+	color.z = ((real)(b)/255.0f);
+	color.w = ((real)(a)/255.0f);
+
+	return color;
+}
 
 
 
@@ -467,14 +1174,6 @@ union Rect2
 	real e[4];
 };
 
-
-static inline bool operator==(Rect2 a, Rect2 b)
-{
-	return (a.x == b.x) && (a.y == b.y) && (a.w == b.w) && (a.h == b.h);
-}
-
-
-
 struct Rect2_Clip_Info
 {
 	Vec2 rp1;
@@ -483,7 +1182,73 @@ struct Rect2_Clip_Info
 	Vec2 diff2;
 };
 
+struct Rect2i
+{
+	integer x, y, w, h;
+};
 
+union AABB
+{
+	struct {
+		Vec2 center;
+		union {
+			struct {
+				real hw, hh;
+			};
+			struct {
+				Vec2 hext;
+			};
+		};
+	};
+	real e[4];
+};
+#line 1050 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_math.cpp"
+
+
+
+
+
+
+
+static inline bool operator==(Rect2 a, Rect2 b)
+{
+	return (a.x == b.x) && (a.y == b.y) && (a.w == b.w) && (a.h == b.h);
+}
+
+static inline AABB aabb(Vec2 c, real hw, real hh)
+{
+	return AABB{
+		c, hw, hh
+	};
+}
+
+static inline AABB aabb(real x, real y, real hw, real hh)
+{
+	return AABB{
+		v2(x, y), hw, hh
+	};
+}
+
+static inline Rect2 rect2(real x, real y, real w, real h)
+{
+	return Rect2{
+		x, y, w, h
+	};
+}
+
+static inline Rect2 rect2(Vec2 topleft, Vec2 size)
+{
+	return Rect2{
+		topleft.x, topleft.y, size.x, size.y
+	};
+}
+
+static inline Rect2i rect2i(integer x, integer y, integer w, integer h)
+{
+	return Rect2i {
+		x, y, w, h
+	};
+}
 
 static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 {
@@ -518,22 +1283,16 @@ static inline Rect2_Clip_Info rect2_clip(Rect2 r, Rect2 clip)
 	};
 }
 
-struct Rect2i
+static inline bool rect_contains_point(Rect2 r, Vec2 p)
 {
-	int32 x, y, w, h;
-};
-
-static inline Rect2i rect2i(int32 x, int32 y, int32 w, int32 h)
-{
-	return Rect2i {
-		x, y, w, h
-	};
+	return (p.x > r.x) && (p.y > r.y) &&
+		   (p.x < (r.x+r.w)) && (p.y < (r.y + r.h));
 }
 
-static inline bool aabb_intersect(AABB* a, AABB* b)
+static inline bool aabb_intersect_f(real dx, real w, real dy, real h)
 {
-	if(fabsf(b->center.x - a->center.x) > (b->hw + a->hw)) return false;
-	if(fabsf(b->center.y - a->center.y) > (b->hh + a->hh)) return false;
+	if(fabsf(dx) > (w)) return false;
+	if(fabsf(dy) > (h)) return false;
 	return true;
 }
 
@@ -544,95 +1303,62 @@ static inline bool aabb_intersect(AABB a, AABB b)
 	return true;
 }
 
-static inline void aabb_overlap(AABB* a, AABB* b, Vec2* s)
+static inline Vec2 aabb_overlap_v2(AABB a, AABB b)
 {
-	s->x = (a->hw + b->hw) - fabsf(b->center.x - a->center.x);
-	s->y = (a->hh + b->hh) - fabsf(b->center.y - a->center.y);
-	if(s->x > s->y) {
-		s->x = 0;
-		if(a->center.y > b->center.y) {
-			s->y *= -1;
+	real sx = (a.hw + b.hw) - fabsf(b.center.x - a.center.x);
+	real sy = (a.hh + b.hh) - fabsf(b.center.y - a.center.y);
+	if(sx > sy) {
+		sx = 0;
+		if(a.center.y > b.center.y) {
+			sy *= -1;
 		}
 	} else {
-		s->y = 0;
-		if(a->center.x > b->center.x) {
-			s->x *= -1;
+		sy = 0;
+		if(a.center.x > b.center.x) {
+			sx *= -1;
 		}
 	}
+    return v2(sx, sy);
 }
 
-
-static inline AABB aabb(Vec2 c, real hw, real hh)
+static inline void aabb_overlap(AABB a, AABB b, Vec2* s)
 {
-	return AABB{
-		c, hw, hh
-	};
+	real sx = (a.hw + b.hw) - fabsf(b.center.x - a.center.x);
+	real sy = (a.hh + b.hh) - fabsf(b.center.y - a.center.y);
+	if(sx > sy) {
+		sx = 0;
+		if(a.center.y > b.center.y) {
+			sy *= -1;
+		}
+	} else {
+		sy = 0;
+		if(a.center.x > b.center.x) {
+			sx *= -1;
+		}
+	}
+    s->x = sx;
+    s->y = sy;
 }
 
-static inline AABB aabb(real x, real y, real hw, real hh)
-{
-	return AABB{
-		v2(x, y), hw, hh
-	};
-}
-
-static inline Rect2 rect2(real x, real y, real w, real h)
-{
-	return Rect2{
-		x, y, w, h
-	};
-}
-
-static inline Rect2 intrect_to_rect(Rect2i* ir)
-{
-	Rect2 rr = {0};
-	rr.x = (real)ir->w;
-	rr.h = (real)ir->h;
-	rr.x = (real)ir->x;
-	rr.y = (real)ir->y;
-	return rr;
-}
-
-static inline Rect2i rect_to_intrect(Rect2* ir)
-{
-	Rect2i rr = {0};
-	rr.x = (int32)ir->w;
-	rr.h = (int32)ir->h;
-	rr.x = (int32)ir->x;
-	rr.y = (int32)ir->y;
-	return rr;
-}
-
-static inline AABB rect_to_aabb(Rect2* r)
+static inline AABB rect_to_aabb(Rect2 r)
 {
 	AABB b = {0};
-	b.hw = r->w / 2;
-	b.hh = r->h / 2;
-	b.center = v2(r->x + b.hw, r->y + b.hh);
+	b.hw = r.w / 2;
+	b.hh = r.h / 2;
+	b.center = v2(r.x + b.hw, r.y + b.hh);
 	return b;
 }
 
-static inline AABB intrect_to_aabb(Rect2i* r)
-{
-	Rect2 rr = intrect_to_rect(r);
-	return rect_to_aabb(&rr);
-} 
-
-static inline Rect2 aabb_to_rect(AABB* b)
+static inline Rect2 aabb_to_rect(AABB b)
 {
 	Rect2 r = {0};
-	r.x = b->center.x - b->hw;
-	r.y = b->center.y - b->hh;
-	r.w = b->hw * 2;
-	r.h = b->hh * 2;
+	r.x = b.center.x - b.hw;
+	r.y = b.center.y - b.hh;
+	r.w = b.hw * 2;
+	r.h = b.hh * 2;
 	return r;
 }
 
-static inline Rect2i aabb_to_intrect(AABB* b)
-{
-	Rect2 r = aabb_to_rect(b);
-	return rect_to_intrect(&r);
-}
 static inline isize modulus(isize a, isize b)
 {
 	if(b == 0) return -1;
@@ -640,7 +1366,19 @@ static inline isize modulus(isize a, isize b)
 	else if(a < 0) a = b + (a % b);
 	return a % b;
 }
-#line 129 "src\\rituals_main.cpp"
+
+static inline AABB extents_to_aabb(Vec2 tl, Vec2 br)
+{
+	AABB a;
+	a.hext = (br - tl) * 0.5f;
+	a.center = tl + a.hext;
+	return a;
+}
+static inline AABB extents_to_aabb(real left, real top, real right, real bottom)
+{
+	return extents_to_aabb(v2(left, top), v2(right, bottom));	
+}
+#line 72 "src\\rituals_main.cpp"
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game.cpp"
 
 
@@ -763,6 +1501,19 @@ $(exclude)
 
 
 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -811,6 +1562,7 @@ $(end)
 
 
 
+
 struct Memory_Arena
 {
 	uint8* data;
@@ -818,6 +1570,7 @@ struct Memory_Arena
 	isize temp_head;
 	Memory_Arena* next;
 };
+#line 26 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
 
 static inline isize mem_align_4(isize p)
 {
@@ -829,9 +1582,9 @@ void init_memory_arena(Memory_Arena* arena, usize size)
 {
 
 
-#line 36 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
-
 #line 38 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
+
+#line 40 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
 	arena->capacity = (isize)size;
 	arena->head = (isize)arena->data;
 	arena->temp_head = -1;
@@ -843,7 +1596,7 @@ uint8* arena_push(Memory_Arena* arena, isize size)
 	isize old_head = arena->head;
 	isize new_head = mem_align_4(size + arena->head);
 	if((new_head - (isize)arena->data) > arena->capacity) {
-		printf("There was an error: %s \n", "An arena was filled");;
+		fprintf(stderr, "There was an error: %s \n", "An arena was filled");;
 		return NULL;
 	}
 	arena->head = new_head;
@@ -862,9 +1615,9 @@ void end_temp_arena(Memory_Arena* arena)
 
 
 
-#line 69 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
-
 #line 71 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
+
+#line 73 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
 	arena->head = arena->temp_head;
 	arena->temp_head = -1;
 }
@@ -875,13 +1628,13 @@ void clear_arena(Memory_Arena* arena)
 
 
 
-#line 82 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
+#line 84 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
 
 
-#line 85 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
+#line 87 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_memory.cpp"
 
 	if(arena->data == NULL) {
-		printf("There was an error: %s \n", "There was an error recommitting memory");;
+		fprintf(stderr, "There was an error: %s \n", "There was an error recommitting memory");;
 	}
 	
 	arena->head = (isize)arena->data;
@@ -923,10 +1676,12 @@ static inline uint64 _rotate_left(const uint64 t, int64 k)
 	return (t << k) | (t >> (64 - k));
 }
 
+
 struct Random
 {
 	uint64 x, y;
 };
+#line 33 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_random.cpp"
 
 uint64 next_random_uint64(Random* r)
 {
@@ -987,6 +1742,7 @@ enum Button_State
 };
 
 
+
 struct Game_Input
 {
 	isize num_keys_down;
@@ -1003,22 +1759,16 @@ struct Game_Input
 	char* text;
 	isize text_count;
 };
+#line 63 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game.cpp"
+
 
 enum Game_State
 {
-	Game_State_None,
-	Game_State_Menu,
-	Game_State_Play
+	Game_State_None, Game_State_Menu, Game_State_Play,
 };
 
 
 
-
-
-typedef struct Spritefont Spritefont;
-typedef struct OpenGL_Renderer OpenGL_Renderer;
-typedef struct Render_Group Renderer_Group;
-typedef struct Game_Registry Game_Registry;
 
 struct Game_Main
 {
@@ -1051,18 +1801,362 @@ struct Game_Main
 
 	Game_Registry* registry;
 
-	
-	Game_Input* input;
-
+	Game_Input* input; 
 	uint64 last_frame_time;
+
+	None_State* None; Menu_State* Menu; Play_State* Play;
 };
+#line 110 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game.cpp"
+
 
 Game_Main* Game;
 OpenGL_Renderer* Renderer;
-Renderer_Group* CurrentGroup;
+Render_Group* CurrentGroup;
 Game_Input* Input;
 Spritefont* Body_Font;
 Spritefont* Title_Font;
+Game_Registry* Registry;
+
+
+struct Platform
+{
+	const char* window_title;
+	Vec2i window_size;
+	real game_scale;
+	int32 display_index;
+
+	bool check_gl_attributes;
+
+	const char* vertex_shader;
+	const char* frag_shader;
+
+	SDL_Window* window;
+};
+#line 136 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game.cpp"
+
+int32 platform_init(Platform* platform)
+{
+	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+		fprintf(stderr, "There was an error: %s \n", "Could not init SDL");; 
+		fprintf(stderr, "There was an error: %s \n", SDL_GetError());;
+		return 1;
+	}
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+			SDL_GL_CONTEXT_PROFILE_CORE);
+
+	SDL_Window* window = SDL_CreateWindow(platform->window_title, 
+			SDL_WINDOWPOS_CENTERED_DISPLAY(platform->display_index), 
+			SDL_WINDOWPOS_CENTERED_DISPLAY(platform->display_index),
+			platform->window_size.x, platform->window_size.y,
+			SDL_WINDOW_OPENGL | 
+			SDL_WINDOW_RESIZABLE |
+			SDL_WINDOW_MOUSE_FOCUS |
+			SDL_WINDOW_INPUT_FOCUS);
+	if(window == NULL) {
+		fprintf(stderr, "There was an error: %s \n", "Could not create window");;
+		fprintf(stderr, "There was an error: %s \n", SDL_GetError());;
+		return 1;
+	}
+	platform->window = window;
+	SDL_GLContext glctx = SDL_GL_CreateContext(window);
+	if(ogl_LoadFunctions() == ogl_LOAD_FAILED) {
+		fprintf(stderr, "There was an error: %s \n", "Could not load OpenGL 3.3 functions...");;
+		return 1;
+	}
+
+	if(platform->check_gl_attributes) {
+
+
+
+
+
+
+			 
+		
+		bool gl_checks[64];
+		char* gl_names[64];
+		int gl_vals[64];
+		int gl_exp_vals[64];
+		isize gl_check_count = 0;
+
+		int _SDL_GL_RED_SIZE_val; int _SDL_GL_RED_SIZE_success = SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &_SDL_GL_RED_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_RED_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_RED_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_RED_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
+		int _SDL_GL_GREEN_SIZE_val; int _SDL_GL_GREEN_SIZE_success = SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &_SDL_GL_GREEN_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_GREEN_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_GREEN_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_GREEN_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
+		int _SDL_GL_BLUE_SIZE_val; int _SDL_GL_BLUE_SIZE_success = SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &_SDL_GL_BLUE_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_BLUE_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_BLUE_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_BLUE_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
+		int _SDL_GL_ALPHA_SIZE_val; int _SDL_GL_ALPHA_SIZE_success = SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &_SDL_GL_ALPHA_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_ALPHA_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_ALPHA_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_ALPHA_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
+		int _SDL_GL_DOUBLEBUFFER_val; int _SDL_GL_DOUBLEBUFFER_success = SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &_SDL_GL_DOUBLEBUFFER_val); gl_checks[gl_check_count++] = _SDL_GL_DOUBLEBUFFER_val == 1; gl_names[gl_check_count - 1] = "SDL_GL_DOUBLEBUFFER"; gl_vals[gl_check_count - 1] = _SDL_GL_DOUBLEBUFFER_val; gl_exp_vals[gl_check_count - 1] = 1;;
+		int _SDL_GL_CONTEXT_MAJOR_VERSION_val; int _SDL_GL_CONTEXT_MAJOR_VERSION_success = SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &_SDL_GL_CONTEXT_MAJOR_VERSION_val); gl_checks[gl_check_count++] = _SDL_GL_CONTEXT_MAJOR_VERSION_val == 3; gl_names[gl_check_count - 1] = "SDL_GL_CONTEXT_MAJOR_VERSION"; gl_vals[gl_check_count - 1] = _SDL_GL_CONTEXT_MAJOR_VERSION_val; gl_exp_vals[gl_check_count - 1] = 3;;
+		int _SDL_GL_CONTEXT_MINOR_VERSION_val; int _SDL_GL_CONTEXT_MINOR_VERSION_success = SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &_SDL_GL_CONTEXT_MINOR_VERSION_val); gl_checks[gl_check_count++] = _SDL_GL_CONTEXT_MINOR_VERSION_val == 3; gl_names[gl_check_count - 1] = "SDL_GL_CONTEXT_MINOR_VERSION"; gl_vals[gl_check_count - 1] = _SDL_GL_CONTEXT_MINOR_VERSION_val; gl_exp_vals[gl_check_count - 1] = 3;;
+		int _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val; int _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_success = SDL_GL_GetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, &_SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val); gl_checks[gl_check_count++] = _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val == 1; gl_names[gl_check_count - 1] = "SDL_GL_FRAMEBUFFER_SRGB_CAPABLE"; gl_vals[gl_check_count - 1] = _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val; gl_exp_vals[gl_check_count - 1] = 1;;
+		int _SDL_GL_ACCELERATED_VISUAL_val; int _SDL_GL_ACCELERATED_VISUAL_success = SDL_GL_GetAttribute(SDL_GL_ACCELERATED_VISUAL, &_SDL_GL_ACCELERATED_VISUAL_val); gl_checks[gl_check_count++] = _SDL_GL_ACCELERATED_VISUAL_val == 1; gl_names[gl_check_count - 1] = "SDL_GL_ACCELERATED_VISUAL"; gl_vals[gl_check_count - 1] = _SDL_GL_ACCELERATED_VISUAL_val; gl_exp_vals[gl_check_count - 1] = 1;;
+		int _SDL_GL_CONTEXT_PROFILE_MASK_val; int _SDL_GL_CONTEXT_PROFILE_MASK_success = SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &_SDL_GL_CONTEXT_PROFILE_MASK_val); gl_checks[gl_check_count++] = _SDL_GL_CONTEXT_PROFILE_MASK_val == SDL_GL_CONTEXT_PROFILE_CORE; gl_names[gl_check_count - 1] = "SDL_GL_CONTEXT_PROFILE_MASK"; gl_vals[gl_check_count - 1] = _SDL_GL_CONTEXT_PROFILE_MASK_val; gl_exp_vals[gl_check_count - 1] = SDL_GL_CONTEXT_PROFILE_CORE;;
+
+		for(isize i = 0; i < gl_check_count; ++i) {
+			printf("%s %s: wanted %d, got %d \n", 
+					gl_names[i], 
+					gl_checks[i] ? "succeeeded" : "failed", 
+					gl_exp_vals[i], 
+					gl_vals[i]);
+		}
+	}	
+	return 0;
+}
+
+
+int32 game_init(Platform* platform)
+{
+	Game = ((Game_Main*)calloc(sizeof(Game_Main), 1));
+	Game->last_frame_time = 1;
+	Game->window = platform->window;
+	Game->state = Game_State_None;
+	Game->meta_arena = ((Memory_Arena*)calloc(sizeof(Memory_Arena), 1));
+	init_memory_arena(Game->meta_arena, (((isize)sizeof(Memory_Arena))) * 20);
+	Game->game_arena = new_memory_arena(((64 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+	Game->asset_arena = new_memory_arena(((512 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+	Game->temp_arena = new_memory_arena((((4 * UINT64_C(1024)) * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+	Game->play_arena = new_memory_arena((((4 * UINT64_C(1024)) * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+	Game->renderer_arena = new_memory_arena(((256 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+	Game->world_arena = new_memory_arena(((1024 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+	Game->registry_arena = new_memory_arena(((2 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
+
+	Game->base_path = SDL_GetBasePath();
+	Game->base_path_length = strlen(Game->base_path);
+
+	Game->input = ((Game_Input*)arena_push(Game->game_arena, sizeof(Game_Input)));
+
+	Input = Game->input;
+	Input->scancodes = ((int8*)arena_push(Game->game_arena, sizeof(int8) * SDL_NUM_SCANCODES));
+	Input->keycodes = ((int8*)arena_push(Game->game_arena, sizeof(int8) * SDL_NUM_SCANCODES));
+	Input->mouse = ((int8*)arena_push(Game->game_arena, sizeof(int8) * 16));
+	Input->mouse_pos = v2(0, 0);
+	Input->text = ((char*)arena_push(Game->game_arena, sizeof(char) * (1024)));
+	Input->text_count = 0;
+	Input->capture_newlines = false;
+	Input->capture_tabs = false;
+
+	init_random(&Game->r, time(NULL));
+	
+	Game->window_size = platform->window_size;
+	Game->scale = platform->game_scale;
+
+	Game->renderer = ((OpenGL_Renderer*)arena_push(Game->game_arena, sizeof(OpenGL_Renderer)));
+	init_renderer(Game->renderer, 
+			4, 
+			((32 * UINT64_C(1024)) * UINT64_C(1024)), 
+			platform->vertex_shader,
+			platform->frag_shader, 
+			Game->renderer_arena);
+
+	Game->registry = ((Game_Registry*)arena_push(Game->game_arena, sizeof(Game_Registry)));
+
+	Registry = Game->registry;
+	Renderer = Game->renderer;
+	CurrentGroup = Renderer->groups;
+	game_allocate_states();
+	return 0;
+}
+
+void game_update_screen()
+{
+	SDL_GetWindowSize(Game->window, &Game->window_size.x, &Game->window_size.y);
+	glViewport(0, 0, Game->window_size.x, Game->window_size.y);
+	Game->size = v2(Game->window_size) * Game->scale;
+}
+
+int32 game_start(Platform* platform)
+{
+	game_init_states();
+	game_start_state();
+	bool running = true;
+	SDL_Event event;
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	
+
+		printf("running...");
+	isize input_text_length = 0;
+	while(running) {
+		uint64 start_ticks = SDL_GetTicks();
+
+		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
+			int8* t = Game->input->scancodes + i;
+			if(*t == State_Just_Released) {
+				*t = State_Released;
+			} else if(*t == State_Just_Pressed) {
+				*t = State_Pressed;
+			}
+			t = Game->input->keycodes + i;
+			if(*t == State_Just_Released) {
+				*t = State_Released;
+			} else if(*t == State_Just_Pressed) {
+				*t = State_Pressed;
+			}
+		}
+		for(int64 i = 0; i < 16; ++i) {
+			int8* t = Game->input->mouse + i;
+			if(*t == State_Just_Released) {
+				*t = State_Released;
+			} else if(*t == State_Just_Pressed) {
+				*t = State_Pressed;
+			}
+		}
+		while(SDL_PollEvent(&event)) {
+			
+			switch(event.type) {
+				case SDL_QUIT:
+					game_stop_state();
+					running = false;
+					return 0;
+					break;
+				case SDL_WINDOWEVENT:
+					game_update_screen();
+					break;
+				case SDL_TEXTINPUT:
+					input_text_length = strlen(event.text.text);
+					if((input_text_length + Input->text_count) < (1024)) {
+						memcpy(Input->text + Input->text_count, 
+								event.text.text, 
+								input_text_length);
+						Input->text_count += input_text_length;
+						input_text_length = 0;
+					}
+					break;
+				case SDL_KEYDOWN:
+					Game->input->num_keys_down++;
+					if((event.key.keysym.sym == SDLK_BACKSPACE)) {
+						input_text_append_char(('\b'));
+						if(event.key.keysym.mod & KMOD_CTRL) {
+							input_text_append_char('\7');
+						}
+					} else if(event.key.keysym.sym == SDLK_RETURN || 
+							event.key.keysym.sym == SDLK_RETURN2) {
+						if(Input->capture_newlines) {
+							input_text_append_char('\n');
+						}
+					} else if(event.key.keysym.sym == SDLK_TAB) {
+						if(Input->capture_tabs) {
+							input_text_append_char('\t');
+						}
+					}
+
+					if(!event.key.repeat) {
+						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
+						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
+							Game->input->keycodes[event.key.keysym.sym] = State_Just_Pressed;
+						}
+					}
+					break;
+				case SDL_KEYUP:
+					Game->input->num_keys_down--;
+					if(!event.key.repeat) {
+						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
+						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
+							Game->input->keycodes[event.key.keysym.sym] = State_Just_Released;
+						}
+					}
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					Game->input->num_mouse_down++;
+					Game->input->mouse[event.button.button] = State_Just_Pressed;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					Game->input->num_mouse_down--;
+					Game->input->mouse[event.button.button] = State_Just_Released;
+					break;
+			}
+		}
+	
+		int mx, my;
+		SDL_GetMouseState(&mx, &my);
+		Input->mouse_x = mx;
+		Input->mouse_y = my;
+		Input->screen_mouse_pos = v2i(mx, my);
+		game_calc_mouse_pos(Renderer->groups[0].offset);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		game_update_state();
+
+		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
+
+		
+		if(frame_ticks < 16) {
+			SDL_Delay(16 - frame_ticks);
+		}
+#line 394 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game.cpp"
+		SDL_GL_SwapWindow(Game->window);
+		Game->last_frame_time = SDL_GetTicks() - start_ticks;
+	}
+	return 0;
+}
+
+void platform_quit()
+{
+	SDL_Quit();
+}
+
+
+
+void game_switch_state(Game_State state)
+{
+	game_stop_state();
+	Game->state = state;
+	game_start_state();
+}
+
+
+
+
+
+
+
+
+void game_allocate_states()
+{
+	Game->None = ((None_State*)arena_push(Game->game_arena, sizeof(None_State))); Game->Menu = ((Menu_State*)arena_push(Game->game_arena, sizeof(Menu_State))); Game->Play = ((Play_State*)arena_push(Game->game_arena, sizeof(Play_State)));
+}
+
+
+
+void game_init_states()
+{
+	game_init_None_state(); game_init_Menu_state(); game_init_Play_state();
+}
+
+
+
+void game_start_state()
+{
+	switch(Game->state) {
+		case Game_State_None: game_start_None_state(); break; case Game_State_Menu: game_start_Menu_state(); break; case Game_State_Play: game_start_Play_state(); break;
+	}
+}
+
+
+
+void game_update_state()
+{
+	switch(Game->state) {
+		case Game_State_None: game_update_None_state(); break; case Game_State_Menu: game_update_Menu_state(); break; case Game_State_Play: game_update_Play_state(); break;
+	}
+}
+
+
+
+void game_stop_state()
+{
+	switch(Game->state) {
+		case Game_State_None: game_stop_None_state(); break; case Game_State_Menu: game_stop_Menu_state(); break; case Game_State_Play: game_stop_Play_state(); break;
+	}
+}
+
 
 real64 next_random_double()
 {
@@ -1100,8 +2194,6 @@ void game_calc_mouse_pos(Vec2 offset)
 {
 	Input->mouse_pos = v2(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale) + offset;
 }
-
-
 
 
 void input_text_append_char(char c)
@@ -1229,8 +2321,7 @@ enum Direction
 	Direction_West
 };
 
-#line 130 "src\\rituals_main.cpp"
-void switch_state(Game_State newstate);
+#line 73 "src\\rituals_main.cpp"
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_renderer.cpp"
 
@@ -1296,6 +2387,8 @@ real SpriteAnchorY[] = {
 	0.0f
 };
 
+
+
 struct Sprite
 {
 	Vec2 position;
@@ -1312,6 +2405,8 @@ struct Sprite4
 {
 	Sprite e[4];
 };
+#line 83 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_renderer.cpp"
+
 
 void sort_sprites_on_y_base(Sprite* array, isize count) { if(count > 1) if(count > 12) { Sprite tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].position.y - array[i].center.y + array[i].sort_offset) < (array[0].position.y - array[0].center.y + array[0].sort_offset)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; sort_sprites_on_y_base(array, pivot); sort_sprites_on_y_base(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sprite x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].position.y - array[j].center.y + array[j].sort_offset) > (x.position.y - x.center.y + x.sort_offset))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
 
@@ -1326,6 +2421,8 @@ void init_sprite(Sprite* s)
 	s->flags = Anchor_Center;
 	s->sort_offset = 0;
 }
+
+
 
 struct Render_Group
 {
@@ -1350,6 +2447,7 @@ struct OpenGL_Renderer
 	Render_Group* groups;
 	isize groups_count;
 };
+#line 125 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_renderer.cpp"
 
 void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)
 {
@@ -1365,7 +2463,7 @@ void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena
 
 
 
-void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
+void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, const char* vertex_source, const char* frag_source, Memory_Arena* arena)
 {
 	r->groups = ((Render_Group*)arena_push(arena, sizeof(Render_Group) * group_count));
 	r->groups_count = group_count;
@@ -1386,7 +2484,7 @@ void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char
 	isize gl_type = GL_FLOAT;
 
 
-#line 155 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_renderer.cpp"
+#line 162 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_renderer.cpp"
 
 
 	
@@ -1830,8 +2928,10 @@ void render_box_outline_primitive(Vec2 center, Vec2 size, Vec4 color[4], int32 t
 {
 	render_box_outline_primitive(CurrentGroup, center, size, color, thickness);
 }
-#line 133 "src\\rituals_main.cpp"
+#line 75 "src\\rituals_main.cpp"
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_animations.cpp"
+
+
 
 
 
@@ -1856,6 +2956,7 @@ struct Animation_Frame
 	Rect2 texture;
 	real sort_offset;
 };
+#line 28 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_animations.cpp"
 
 void init_animation_frame(Animation_Frame* fr)
 {
@@ -1867,6 +2968,7 @@ void init_animation_frame(Animation_Frame* fr)
 	fr->sort_offset = 0;
 }
 
+
 struct Animation
 {
 	isize id;
@@ -1876,6 +2978,7 @@ struct Animation
 	real inv_fps;
 	bool looping;
 };
+#line 50 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_animations.cpp"
 
 void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
 {
@@ -1905,6 +3008,7 @@ Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame,
 	return anim;
 }
 
+
 struct Animated_Sprite
 {
 	Animation** animations;
@@ -1913,6 +3017,7 @@ struct Animated_Sprite
 	bool running;
 	real timer;
 };	
+#line 89 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_animations.cpp"
 
 void init_animated_sprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)
 {
@@ -1975,7 +3080,7 @@ isize play_animation(Animated_Sprite* s, isize anim_index)
 	return 1;
 }
 
-#line 134 "src\\rituals_main.cpp"
+#line 76 "src\\rituals_main.cpp"
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_gui.cpp"
 
 
@@ -2100,6 +3205,7 @@ const Rect2 Gohufont_Glyphs[] = {
 };
 $(end)
 
+
 struct Spritefont
 {
 	int32 line_padding;
@@ -2110,6 +3216,7 @@ struct Spritefont
 	const Rect2* glyphs;
 	Vec4 color;
 };
+#line 40 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_gui.cpp"
 
 void init_spritefont(Spritefont* font, const Rect2* glyphs)
 {
@@ -2589,6 +3696,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 }
 
 
+
 struct Gui_Window_Handle
 {
 	Vec2 position;
@@ -2606,6 +3714,7 @@ struct Gui_Text_Input_Handle
 	bool accept_newlines;
 	bool accept_tabs;
 };
+#line 538 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_gui.cpp"
 
 void init_text_input_handle(Gui_Text_Input_Handle* handle, char* buf, isize capacity, isize length)
 {
@@ -2755,18 +3864,182 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 	render_box_outline_primitive(s.position, s.size, colors, 2);
 }
 
+
 struct Gui_Context
 {
 	Vec2 last_pos;
 	Vec2 next_pos;
 	isize axis;
 };
+#line 695 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_gui.cpp"
+#line 77 "src\\rituals_main.cpp"
 
-#line 135 "src\\rituals_main.cpp"
+#line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_states.cpp"
 
-typedef struct World World;
+
+
+
+
+
+
+
+
+
+
+struct None_State
+{
+	int32 error;
+};
+#line 17 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_states.cpp"
+
+void game_init_None_state()
+{
+
+}
+
+void game_start_None_state()
+{
+
+}
+
+void game_update_None_state()
+{
+
+}
+
+void game_stop_None_state()
+{
+
+}
+
+
+void game_free_None_state()
+{
+
+}
+
+
+struct Menu_State
+{
+	int32 error;
+	char save_dir[4096];
+	isize save_dir_len;
+	tinydir_dir saves;
+	bool saves_dirty;
+	Gui_Text_Input_Handle handle;
+	isize delete_index;
+};
+#line 56 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_states.cpp"
+
+void game_init_Menu_state()
+{
+	Menu_State* menu_state = Game->Menu;
+	init_text_input_handle(&menu_state->handle, 256, Game->game_arena);
+	menu_state->delete_index = -1;
+
+	menu_state->save_dir_len = snprintf(menu_state->save_dir, 4096, "%ssave", Game->base_path);
+	check_dir(menu_state->save_dir);
+	tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+
+}
+
+void game_start_Menu_state()
+{
+
+}
+
+void game_update_Menu_state()
+{
+	Menu_State* menu_state = Game->Menu;
+	game_set_scale(2.0f);
+	Renderer->groups[0].offset = v2(0, 0);
+	render_start();
+	
+	real lasty = 32;
+	Body_Font->color = v4(1, 1, 1, 1);
+	render_body_text("Rituals", v2(32, 32), false, 4.0f);
+	lasty += 16;
+	lasty += Body_Font->glyph_height * 4;
+	gui_add_text_input(&menu_state->handle, 
+			v2(32, lasty), 
+			v2(256, Body_Font->glyph_height + 8), 
+			"Enter new world name");
+
+	if(gui_add_button(v2(256 + 32 + 16 , lasty), "Create", v2(64, 0))) {
+		menu_state->saves_dirty = true;
+	}
+	if(Input->scancodes[SDL_SCANCODE_RETURN] == State_Just_Pressed) {
+		menu_state->saves_dirty = true;
+	}
+
+	if(menu_state->saves_dirty) {
+		tinydir_close(&menu_state->saves);
+		char buf[4096];
+	 	snprintf(buf, 4096, "%ssave/%.*s",
+				Game->base_path, 
+				menu_state->handle.buffer_length, 
+				menu_state->handle.buffer);
+		check_dir(buf);
+		
+		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+		menu_state->handle.buffer_length = 0;
+		menu_state->saves_dirty = false;
+	}
+	lasty += 32 + 16;
+
+	for(usize i = 0; i < menu_state->saves.n_files; ++i) {
+		tinydir_file file;
+		tinydir_readfile_n(&menu_state->saves, &file, i);
+		if(file.is_dir && (file.name[0] != '.')) {
+			if(gui_add_button(v2(32, lasty), file.name, v2(144, 0))) {
+				recursively_delete_folder(file.path, false );
+				Game->Play->world_name_in = file.path;
+				game_switch_state(Game_State_Play);
+			}
+			if(menu_state->delete_index != i) {
+				if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(64, 0))) {
+					menu_state->delete_index = i;
+				}
+			} else {
+
+				if(gui_add_button(v2(32 + 144 + 32, lasty), "Cancel", v2(64, 0))) {
+					menu_state->delete_index = -1;
+				}
+				if(gui_add_button(v2(32 + 144 + 32 + 64 + 32, lasty), "Confirm", v2(64, 0))) {
+					printf("[%s] was deleted \n", file.path);
+					recursively_delete_folder(file.path, false);
+					menu_state->delete_index = -1;
+					menu_state->saves_dirty = true;
+				}
+			}
+			lasty += 32;
+		}
+	}
+
+	if(menu_state->saves_dirty) {
+		tinydir_close(&menu_state->saves);
+		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
+	}
+
+	render_draw(Game->size, Game->scale);
+}
+
+void game_stop_Menu_state()
+{
+
+}
+
+
+void game_free_Menu_state()
+{
+
+}
+
+
+
 struct Play_State
 {
+	int32 error;
 	usize current_time = 0, prev_time = 0;
 	real accumulator = 0;
 	World* world;
@@ -2776,20 +4049,104 @@ struct Play_State
 	Vec2i world_xy;
 	bool delete_world_on_stop;
 	bool save_world_on_stop;
+
+	const char* world_name_in;
 };
-Play_State* play_state;
+#line 179 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_states.cpp"
 
-
-struct Menu_State
+void game_init_Play_state()
 {
-	char save_dir[4096];
-	isize save_dir_len;
-	tinydir_dir saves;
-	bool saves_dirty;
-	Gui_Text_Input_Handle handle;
-	isize delete_index;
-};
-Menu_State* menu_state;
+	clear_arena(Game->play_arena);
+	clear_arena(Game->world_arena);
+
+	Game->Play = ((Play_State*)arena_push(Game->game_arena, sizeof(Play_State)));
+	Play_State* play_state = Game->Play;
+	play_state->delete_world_on_stop = false;
+	play_state->save_world_on_stop = true;
+	play_state->world = ((World*)arena_push(Game->world_arena, sizeof(World)));
+	play_state->running = true;
+
+}
+
+void game_start_Play_state()
+{
+	Play_State* play_state = Game->Play;
+
+	World* world = play_state->world;
+	isize wnl = strlen(play_state->world_name_in);
+	char* world_name = ((char*)arena_push(Game->world_arena, sizeof(char) * wnl + 1));
+	memcpy(world_name, play_state->world_name_in, wnl+1);
+	FILE* fp = get_world_file(world_name, "rb");
+
+
+
+
+
+#line 209 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_states.cpp"
+	{
+	
+		init_world(world, 4, 4, next_random_uint64(&Game->r), Game->world_arena);
+		generate_world(world_name, world);
+		world_start_in_area(
+				world,
+				world->area_stubs, 
+				Game->play_arena);
+	}
+
+}
+
+void game_update_Play_state()
+{
+	Play_State* play_state = Game->Play;
+
+	if(Game->state != Game_State_Play) return;
+	if(((Input->scancodes[SDL_SCANCODE_ESCAPE])) == State_Just_Pressed) {
+		play_state->running = !play_state->running;
+	}
+	world_area_update(play_state->world->current_area, play_state->world);
+
+
+	if(!play_state->running) {
+		Renderer->groups[0].offset = Vec2{};
+		render_start(CurrentGroup);
+		
+		Sprite s = create_box_primitive(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
+		s.flags = Anchor_Top_Left;
+		render_add(&s);
+
+		Body_Font->color = v4(1, 1, 1, 1);
+		render_body_text("Paused", v2(32, 32), false, 4.0f);
+		if(gui_add_button(v2(32, Game->size.y / 2), "Exit to main menu", v2(144, 0))) {
+			serialize_world(play_state->world);
+			game_init_Play_state();
+			Game->state = Game_State_Menu;
+		}
+		render_draw(Game->size, Game->scale);
+	}
+
+}
+
+void game_stop_Play_state()
+{
+	Play_State* play_state = Game->Play;
+
+	if(play_state->save_world_on_stop) {
+		serialize_world(play_state->world);
+	}
+	if(play_state->delete_world_on_stop) {
+		world_delete_self(play_state->world);
+	}
+	game_init_Play_state();
+}
+
+
+void game_free_Play_state()
+{
+
+}
+
+#line 79 "src\\rituals_main.cpp"
+
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_info.cpp"
 
@@ -2817,6 +4174,7 @@ typedef struct World World;
 typedef void (*Entity_On_Activate)(Entity* entity, World_Area* area);
 
 typedef int32 Tile;
+
 
 struct Tile_Info
 {
@@ -2852,6 +4210,7 @@ struct Tile_State
 	isize id;
 	int32 damage;
 };
+#line 63 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_info.cpp"
 
 void init_tile_state(Tile_State* state, isize id)
 {
@@ -2872,6 +4231,7 @@ enum Item_Info_Types
 	Item_Info_Types_Count
 };
 
+
 struct Item_Info
 {
 	isize id;
@@ -2881,6 +4241,7 @@ struct Item_Info
 
 	Rect2 texture;
 };
+#line 94 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_info.cpp"
 
 enum Entity_Event_Type
 {
@@ -2922,73 +4283,85 @@ enum Rituals_Pickup_Kind
 	PickupKind_Health
 };
 
+
+struct Rituals_Bat_Userdata
+{
+    Vec2 perch;
+};
+
+struct Rituals_Snake_Userdata
+{
+    real chase_speed_modifier;
+};
+struct Rituals_Goblin_Knight_Userdata
+{
+    Vec2 patrol_start;
+    Vec2 patrol_end;
+};
+
+struct Rituals_Enemy_Userdata
+{
+    isize kind;
+    isize mode;
+    real speed;
+    real alert_dist;
+    real follow_dist;
+
+    union {
+        Rituals_Bat_Userdata bat;
+        Rituals_Snake_Userdata snake;
+        Rituals_Goblin_Knight_Userdata goblin_knight;
+    };
+};
+
+struct Rituals_Player_Userdata {
+    isize held_entity_id;
+    real heal_cooldown;
+    real heal_timer;
+    int32 heal_rate;
+    int32 heal_to_interval;
+};
+
+struct Rituals_Prop_Userdata {
+    Rituals_Entity_Kinds contains;
+    isize subtype;
+    isize amount;
+    isize quality;
+};
+
+struct Rituals_Item_Pickup_Userdata
+{
+    isize id, count;
+};
+
+struct Rituals_Health_Pickup_Userdata
+{
+    isize amount;
+};
+
+struct Rituals_Pickup_Userdata
+{
+    isize kind;
+    Rituals_Item_Pickup_Userdata item;
+    Rituals_Health_Pickup_Userdata health;
+};
+
+struct Unknown_Userdata {
+    void* ptr;
+    isize size;
+};
+
 union Rituals_Entity_Userdata
 {
-	struct {
-		Rituals_Entity_Kinds contains;
-		isize subtype;
-		isize amount;
-		isize quality;
-	} prop;
-	struct {
-		isize held_entity_id;
-		real heal_cooldown;
-		real heal_timer;
-		int32 heal_rate;
-		int32 heal_to_interval;
-		
-	} player;
-	struct {
-		isize kind;
-		isize mode;
-		real speed;
-		real alert_dist;
-		real follow_dist;
-		
-		union {
-			struct {
-				Vec2 perch;
-			} bat;
-			struct {
-				real chase_speed_modifier;
-			} snake;
-			struct {
-				Vec2 patrol_start;
-				Vec2 patrol_end;
-			} goblin_knight;
-		};
-	} enemy;
-	struct {
-		isize kind;
-		union {
-			struct {
-				isize id, count;
-			} item;
-			struct {
-				isize amount;
-			} health;
-		};
-	} pickup;
-	struct {
-		void* ptr;
-		isize size;
-	} unknown;
+    Rituals_Prop_Userdata prop;
+    Rituals_Player_Userdata player;
+    Rituals_Enemy_Userdata enemy;
+    Rituals_Pickup_Userdata pickup;
+    Unknown_Userdata unknown;
 };
+#line 212 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_info.cpp"
 
-
-union MyUnion
-{
-	struct {
-		real x, y, z, w;
-	};
-	struct {
-		uint32 aa, bb, cc, dd;
-	};
-	struct {
-		char* p, *q, *r, *s;
-	};
-};
-#line 164 "src\\rituals_main.cpp"
+#line 82 "src\\rituals_main.cpp"
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_registry.cpp"
 
 
@@ -3015,6 +4388,9 @@ usize hash_str(const char* str)
 	return hash;
 }
 
+
+
+
 struct Game_Registry
 {
 	Tile_Info* tiles;
@@ -3024,22 +4400,17 @@ struct Game_Registry
 	Item_Info* items;
 	usize* items_hash;
 	isize items_count;
-	
-	
 };
-
-Game_Registry* Registry;
+#line 40 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_game_registry.cpp"
 
 
 void init_game_registry(Game_Registry* registry, Memory_Arena* arena)
 {
-	$(exclude)
 
 
 
 
 
-$(end)
 
 	do { registry->tiles = ((Tile_Info*)arena_push(arena, sizeof(Tile_Info) * (256))); registry->tiles_hash = ((usize*)arena_push(arena, sizeof(usize) * (256))); registry->tiles_count = 0; } while(0);
 	do { registry->items = ((Item_Info*)arena_push(arena, sizeof(Item_Info) * (256))); registry->items_hash = ((usize*)arena_push(arena, sizeof(usize) * (256))); registry->items_count = 0; } while(0);
@@ -3047,41 +4418,45 @@ $(end)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $(exclude)
 
+Tile_Info* lookup_tile(const char* name) { usize hash = hash_str(name); isize index = usize_search(hash, Registry->tiles_hash, Registry->tiles_count); return Registry->tiles + index; } struct _game_registry__Tile_Info_pair { Tile_Info v; usize k; }; void _game_registry__Tile_Info_pair_sort(_game_registry__Tile_Info_pair* array, isize count) { if(count > 1) if(count > 12) { _game_registry__Tile_Info_pair tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].k) < (array[0].k)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _game_registry__Tile_Info_pair_sort(array, pivot); _game_registry__Tile_Info_pair_sort(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { _game_registry__Tile_Info_pair x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].k) > (x.k))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } } void sort_registered_tiles() { start_temp_arena(Game->temp_arena); _game_registry__Tile_Info_pair* pairs = ((_game_registry__Tile_Info_pair*)arena_push(Game->temp_arena, sizeof(_game_registry__Tile_Info_pair) * Registry->tiles_count)); for(isize i = 0; i < Registry->tiles_count; ++i) { auto pair = pairs + i; pair->v = Registry->tiles[i]; pair->k = Registry->tiles_hash[i]; } _game_registry__Tile_Info_pair_sort(pairs, Registry->tiles_count); for(isize i = 0; i < Registry->tiles_count; ++i) { auto pair = pairs + i; Registry->tiles[i] = pair->v; Registry->tiles_hash[i] = pair->k; Registry->tiles[i].id = i; } } 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Item_Info* lookup_item(const char* name) { usize hash = hash_str(name); isize index = usize_search(hash, Registry->items_hash, Registry->items_count); return Registry->items + index; } struct _game_registry__Item_Info_pair { Item_Info v; usize k; }; void _game_registry__Item_Info_pair_sort(_game_registry__Item_Info_pair* array, isize count) { if(count > 1) if(count > 12) { _game_registry__Item_Info_pair tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].k) < (array[0].k)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _game_registry__Item_Info_pair_sort(array, pivot); _game_registry__Item_Info_pair_sort(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { _game_registry__Item_Info_pair x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].k) > (x.k))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } } void sort_registered_items() { start_temp_arena(Game->temp_arena); _game_registry__Item_Info_pair* pairs = ((_game_registry__Item_Info_pair*)arena_push(Game->temp_arena, sizeof(_game_registry__Item_Info_pair) * Registry->items_count)); for(isize i = 0; i < Registry->items_count; ++i) { auto pair = pairs + i; pair->v = Registry->items[i]; pair->k = Registry->items_hash[i]; } _game_registry__Item_Info_pair_sort(pairs, Registry->items_count); for(isize i = 0; i < Registry->items_count; ++i) { auto pair = pairs + i; Registry->items[i] = pair->v; Registry->items_hash[i] = pair->k; Registry->items[i].id = i; } }
 
 $(end)
-
-Tile_Info* lookup_tile(const char* name) { usize hash = hash_str(name); isize index = usize_search(hash, Registry->tiles_hash, Registry->tiles_count); return Registry->tiles + index; } struct _game_registry__Tile_Info_pair { Tile_Info v; usize k; }; void _game_registry__Tile_Info_pair_sort(_game_registry__Tile_Info_pair* array, isize count) { if(count > 1) if(count > 12) { _game_registry__Tile_Info_pair tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].k) < (array[0].k)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _game_registry__Tile_Info_pair_sort(array, pivot); _game_registry__Tile_Info_pair_sort(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { _game_registry__Tile_Info_pair x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].k) > (x.k))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } } void sort_registered_tiles() { start_temp_arena(Game->temp_arena); _game_registry__Tile_Info_pair* pairs = ((_game_registry__Tile_Info_pair*)arena_push(Game->temp_arena, sizeof(_game_registry__Tile_Info_pair) * Registry->tiles_count)); for(isize i = 0; i < Registry->tiles_count; ++i) { auto pair = pairs + i; pair->v = Registry->tiles[i]; pair->k = Registry->tiles_hash[i]; } _game_registry__Tile_Info_pair_sort(pairs, Registry->tiles_count); for(isize i = 0; i < Registry->tiles_count; ++i) { auto pair = pairs + i; Registry->tiles[i] = pair->v; Registry->tiles_hash[i] = pair->k; Registry->tiles[i].id = i; } } 
-Item_Info* lookup_item(const char* name) { usize hash = hash_str(name); isize index = usize_search(hash, Registry->items_hash, Registry->items_count); return Registry->items + index; } struct _game_registry__Item_Info_pair { Item_Info v; usize k; }; void _game_registry__Item_Info_pair_sort(_game_registry__Item_Info_pair* array, isize count) { if(count > 1) if(count > 12) { _game_registry__Item_Info_pair tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].k) < (array[0].k)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _game_registry__Item_Info_pair_sort(array, pivot); _game_registry__Item_Info_pair_sort(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { _game_registry__Item_Info_pair x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].k) > (x.k))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } } void sort_registered_items() { start_temp_arena(Game->temp_arena); _game_registry__Item_Info_pair* pairs = ((_game_registry__Item_Info_pair*)arena_push(Game->temp_arena, sizeof(_game_registry__Item_Info_pair) * Registry->items_count)); for(isize i = 0; i < Registry->items_count; ++i) { auto pair = pairs + i; pair->v = Registry->items[i]; pair->k = Registry->items_hash[i]; } _game_registry__Item_Info_pair_sort(pairs, Registry->items_count); for(isize i = 0; i < Registry->items_count; ++i) { auto pair = pairs + i; Registry->items[i] = pair->v; Registry->items_hash[i] = pair->k; Registry->items[i].id = i; } }
 
 isize Tile_Void = 0;
 isize Tile_Sand = 0;
@@ -3207,114 +4582,10 @@ void register_everything_in_rituals()
 	register_all_rituals_item_info();
 	register_all_rituals_tile_info();
 }
-#line 165 "src\\rituals_main.cpp"
-
-#line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_inventory.cpp"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-struct Item_Stack
-{
-	isize id;
-	Item_Info* info;
-
-	int32 number;
-};
-
-void init_item_stack(Item_Stack* stack, Item_Info* info)
-{
-	stack->id = 0;
-	stack->info = info;
-	stack->number = 1;
-}
-
-
-
-
-Item_Stack* new_item_stack(Item_Info* info, Memory_Arena* arena)
-{
-	Item_Stack* stack = ((Item_Stack*)arena_push(arena, sizeof(Item_Stack)));
-	init_item_stack(stack, info);
-	return stack;
-}
-
-struct Inventory
-{
-	Item_Stack** contents;
-	isize w, h, size;
-};
-
-void init_inventory(Inventory* inventory, isize w, isize h, Memory_Arena* arena)
-{
-	isize size = w * h;
-	inventory->w = w;
-	inventory->h = h;
-	inventory->size = size;
-	inventory->contents = ((Item_Stack**)arena_push(arena, sizeof(Item_Stack*) * size));
-}
-
-bool inventory_add_item(Inventory* inventory, Item_Stack** origin_slot)
-{
-	for(isize i = 0; i < inventory->h; ++i) {
-		for(isize j = 0; j < inventory->w; ++j) {
-			Item_Stack** slot = inventory->contents + (i * inventory->w + j);
-			
-			if (*slot == NULL || 
-				(*slot)->info == NULL || 
-				(*slot)->info->id == Item_None) {
-
-				*slot = *origin_slot;
-				*origin_slot = NULL;
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-
-
-void render_inventory(Inventory* inventory, Vec2 position)
-{
-	Sprite s;
-	for(isize i = 0; i < inventory->h; ++i) {
-		for(isize j = 0; j < inventory->w; ++j) {
-			init_sprite(&s);
-			
-			s.position = position + v2((32) * j, (32) * i);
-			s.flags = Anchor_Top_Left;
-			s.size = v2(32, 32);
-
-					
-			render_add(CurrentGroup, &s);
-
-			Item_Stack* at = inventory->contents[i * inventory->w + j];
-			if(at == NULL || at->info == NULL || at->info->id == Item_None) {
-				continue;
-			}
-
-			s.texture = at->info->texture;
-			render_add(CurrentGroup, &s);
-		}
-	}
-}
-
-#line 167 "src\\rituals_main.cpp"
+#line 83 "src\\rituals_main.cpp"
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_tilemap.cpp"
+
 
 
 
@@ -3336,6 +4607,7 @@ struct Tilemap
 	Tile* tiles;
 	Tile_State* states;
 };
+#line 24 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_tilemap.cpp"
 
 
 
@@ -3622,7 +4894,7 @@ isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area)
 	return unsorted_index;
 }
 
-#line 169 "src\\rituals_main.cpp"
+#line 85 "src\\rituals_main.cpp"
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_simulation.cpp"
 
@@ -3649,7 +4921,7 @@ enum Sim_Body_Flags
 };
 
 
-typedef struct Entity Entity;
+
 struct Sim_Body
 {
 	isize id;
@@ -3672,14 +4944,45 @@ struct Sim_Contact
 	real mag;
 	Vec2 normal;
 };
+#line 49 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_simulation.cpp"
+
+$(exclude)
 
 
+void _body_sort_on_x(Sim_Body* array, isize count) { if(count > 1) if(count > 12) { Sim_Body tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].shape.center.x - array[i].shape.hw) < (array[0].shape.center.x - array[0].shape.hw)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _body_sort_on_x(array, pivot); _body_sort_on_x(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sim_Body x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].shape.center.x - array[j].shape.hw) > (x.shape.center.x - x.shape.hw))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
+void _body_sort_on_y(Sim_Body* array, isize count) { if(count > 1) if(count > 12) { Sim_Body tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].shape.center.y - array[i].shape.hh) < (array[0].shape.center.y - array[0].shape.hh)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _body_sort_on_y(array, pivot); _body_sort_on_y(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sim_Body x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].shape.center.y - array[j].shape.hh) > (x.shape.center.y - x.shape.hh))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
 
-void body_sort_on_x(Sim_Body* array, isize count) { if(count > 1) if(count > 12) { Sim_Body tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].shape.center.x - array[i].shape.hw) < (array[0].shape.center.x - array[0].shape.hw)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; body_sort_on_x(array, pivot); body_sort_on_x(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sim_Body x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].shape.center.x - array[j].shape.hw) > (x.shape.center.x - x.shape.hw))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
-void body_sort_on_y(Sim_Body* array, isize count) { if(count > 1) if(count > 12) { Sim_Body tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].shape.center.y - array[i].shape.hh) < (array[0].shape.center.y - array[0].shape.hh)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; body_sort_on_y(array, pivot); body_sort_on_y(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sim_Body x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].shape.center.y - array[j].shape.hh) > (x.shape.center.y - x.shape.hh))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
+
+int32 _cmp_body_x(const void * a, const void* b)
+{
+	Sim_Body* ba = (Sim_Body*)a;
+	Sim_Body* bb = (Sim_Body*)b;
+	return (ba->shape.center.x - ba->shape.hw) < (bb->shape.center.x - bb->shape.hw);
+}
+
+int32 _cmp_body_y(const void * a, const void* b)
+{
+	Sim_Body* ba = (Sim_Body*)a;
+	Sim_Body* bb = (Sim_Body*)b;
+	return (ba->shape.center.y - ba->shape.hh) < (bb->shape.center.y - bb->shape.hh);
+}
+$(end)
+
+void body_sort_on_x(Sim_Body* bodies, isize count)
+{
+	
+	_body_sort_on_x(bodies, count);
+}
+
+void body_sort_on_y(Sim_Body* bodies, isize count)
+{
+	
+	_body_sort_on_y(bodies, count);
+}
 
 
 void body_sort_static_first(Sim_Body* array, isize count) { if(count > 1) if(count > 12) { Sim_Body tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((!(array[i].flags & Body_Flag_Static)) < (!(array[0].flags & Body_Flag_Static))) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; body_sort_static_first(array, pivot); body_sort_static_first(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sim_Body x = array[i]; isize j = i - 1; while((j >= 0) && ((!(array[j].flags & Body_Flag_Static)) > (!(x.flags & Body_Flag_Static)))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
+
 
 
 void body_sort_on_id(Sim_Body* array, isize count) { if(count > 1) if(count > 12) { Sim_Body tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].id) < (array[0].id)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; body_sort_on_id(array, pivot); body_sort_on_id(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Sim_Body x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].id) > (x.id))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
@@ -3699,6 +5002,7 @@ void init_body(Sim_Body* b)
 }
 
 
+
 struct Sim_Grid_Cell
 {
 	Sim_Body* body;
@@ -3714,6 +5018,7 @@ struct Sim_Static_Grid
 	isize cells_length;
 	Vec2i size;
 };
+#line 123 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_simulation.cpp"
 
 void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, Memory_Arena* arena)
 {
@@ -3733,7 +5038,7 @@ Sim_Grid_Cell* get_next_grid_cell(Sim_Static_Grid* grid)
 {
 	if(grid->cell_storage_count >= grid->cell_storage_capacity) {
 		
-		printf("There was an error: %s \n", "Ran out of grid space");;
+		fprintf(stderr, "There was an error: %s \n", "Ran out of grid space");;
 		grid->cell_storage_count = 0;
 	}
 	Sim_Grid_Cell* cell = grid->cell_storage + grid->cell_storage_count++;
@@ -3779,6 +5084,7 @@ void build_static_grid(Sim_Static_Grid* grid, Sim_Body* bodies, isize count)
 	}
 }
 
+
 struct Simulator
 {
 	Sim_Body* static_bodies;
@@ -3793,11 +5099,12 @@ struct Simulator
 
 	isize sort_axis;
 };
+#line 204 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_simulation.cpp"
 
 Sim_Body* sim_get_next_static_body(Simulator* sim)
 {
 	if(sim->bodies_count + 1 > sim->bodies_capacity) {
-		printf("There was an error: %s \n", "Ran out of bodies");;
+		fprintf(stderr, "There was an error: %s \n", "Ran out of bodies");;
 		return NULL;
 	}
 
@@ -3811,7 +5118,7 @@ Sim_Body* sim_get_next_static_body(Simulator* sim)
 Sim_Body* sim_get_next_body(Simulator* sim)
 {
 	if(sim->bodies_count + 1 > sim->bodies_capacity) {
-		printf("There was an error: %s \n", "Ran out of bodies");;
+		fprintf(stderr, "There was an error: %s \n", "Ran out of bodies");;
 		return NULL;
 	}
 
@@ -3867,7 +5174,7 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 {
 	for(isize i = 0; i < sim->bodies_count; ++i) {
 		Sim_Body* a = sim->bodies + i;
-		if(aabb_intersect(&a->shape, &query)) {
+		if(aabb_intersect(a->shape, query)) {
 			return a;
 		}
 	}
@@ -3879,14 +5186,14 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 
 
 
-int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep)
+
+int32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, int32 sort_axis)
 {
-	if(do_sweep)
-	if(sim->sort_axis == 0) {
+	if(sort_axis == 0) {
 		if((b->shape.center.x - b->shape.hw) > (a->shape.center.x + a->shape.hw)) {
 			return -1;
 		}
-	} else if(sim->sort_axis == 1) {
+	} else if(sort_axis == 1) {
 		if((b->shape.center.y - b->shape.hh) > (a->shape.center.y + a->shape.hh)) {
 			return -1;
 		}
@@ -3907,7 +5214,28 @@ int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep
 		return 0;		
 	}
 
-	return aabb_intersect(&a->shape, &b->shape);
+	return aabb_intersect(a->shape, b->shape);
+}
+
+
+int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, int32 sort_axis)
+{
+	if((a->flags & Body_Flag_Static)) {
+		if((b->flags & Body_Flag_Static)) {
+			return 0;
+		}
+	}
+	uint64 ma = a->mask & b->group;
+	if(ma != 0) {
+		return 0;
+	}
+
+	uint64 mb = a->group & b->mask;
+	if(mb != 0) {
+		return 0;		
+	}
+
+	return aabb_intersect(a->shape, b->shape);
 }
 
 
@@ -3917,7 +5245,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 	uint32 b_is_static = (b->flags & Body_Flag_Static);
 
 	Vec2 overlap;
-	aabb_overlap(&a->shape, &b->shape, &overlap);
+	aabb_overlap(a->shape, b->shape, &overlap);
 	real ovl_mag = sqrtf(v2_dot(overlap, overlap));
 	if (ovl_mag < 0.0001f) return;
 	Vec2 normal = overlap * (1.0f / ovl_mag);
@@ -4004,6 +5332,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 		Vec2 center_sum1 = v2(0, 0);
 		Vec2 center_sum2 = v2(0, 0);
 		Vec2 variance = v2(0, 0);
+		int32 sort_axis = sim->sort_axis;
 		for(isize i = 0; i < sim->bodies_count; ++i) {
 			a = sim->bodies + i;
 
@@ -4034,7 +5363,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 					
 					do {
 						b = c->body;
-						if(_do_collide_bodies(a, b, sim, false)) 
+						if(_do_collide_bodies(a, b, sort_axis)) 
 							_separate_bodies(a, b, capture_contacts, times, sim);
 					} while(c = c->next);
 				}
@@ -4044,7 +5373,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				b = sim->bodies + j;
 
 
-				int32 out = _do_collide_bodies(a, b, sim, true);
+				int32 out = _do_collide_bodies_sweep(a, b, sort_axis);
 				if(out == -1) break;
 				else if(out == 1) {
 					_separate_bodies(a, b, capture_contacts, times, sim);
@@ -4208,9 +5537,10 @@ void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 	end_temp_arena(Game->temp_arena);
 }
 
-#line 171 "src\\rituals_main.cpp"
+#line 87 "src\\rituals_main.cpp"
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_particles.cpp"
+
 
 
 
@@ -4274,6 +5604,7 @@ struct Particle_Style
 	real skid_on_bounce_max;
 	real jitter_on_bounce_mag;
 };
+#line 66 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_particles.cpp"
 
 Particle_Style copy_particle_style(Particle_Style s,
 		Vec2 impulse_range, Vec2i time_range)
@@ -4347,6 +5678,7 @@ void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real
 }
 
 
+
 struct Emitter
 {
 	Particle* particles;
@@ -4355,6 +5687,7 @@ struct Emitter
 	Particle_Style* styles;
 	isize styles_count, styles_capacity;
 };
+#line 149 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_particles.cpp"
 
 void init_emitter(Emitter* e, isize max_particles, Memory_Arena* arena)
 {
@@ -4452,9 +5785,9 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 				if(b->group == 1) continue;
 				AABB shape = b->shape;
 				AABB point = aabb(v2(p->position), 0, 0);
-				if(aabb_intersect(&shape, &point)) {
+				if(aabb_intersect(shape, point)) {
 					Vec2 overlap;
-					aabb_overlap(&shape, &point, &overlap);
+					aabb_overlap(shape, point, &overlap);
 					Vec2 newpos = v2(p->position);
 					newpos += overlap;
 
@@ -4496,7 +5829,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 	}
 }
 
-#line 173 "src\\rituals_main.cpp"
+#line 89 "src\\rituals_main.cpp"
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world_area.cpp"
 
@@ -4514,7 +5847,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 
 
 
-typedef struct Entity Entity;
+
 struct Hitbox_Contact
 {
 	isize a_id;
@@ -4532,6 +5865,7 @@ struct Hitbox
 	uint64 group;
 	AABB box;
 };
+#line 35 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world_area.cpp"
 
 void _hitbox_sort_on_x_axis(Hitbox* array, isize count) { if(count > 1) if(count > 12) { Hitbox tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if(((array[i].box.center.x - array[i].box.hw)) < ((array[0].box.center.x - array[0].box.hw))) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; _hitbox_sort_on_x_axis(array, pivot); _hitbox_sort_on_x_axis(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Hitbox x = array[i]; isize j = i - 1; while((j >= 0) && (((array[j].box.center.x - array[j].box.hw)) > ((x.box.center.x - x.box.hw)))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
 
@@ -4543,6 +5877,8 @@ enum Entity_Flags
 	EntityFlag_Tail = (1 << 1),
 	EntityFlag_SameShadow = (1 << 2)
 };
+
+
 struct Entity
 {
 	isize id;
@@ -4573,23 +5909,27 @@ struct Entity
 	
 	Rituals_Entity_Userdata userdata;
 };
+#line 79 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world_area.cpp"
 
 
 void entity_sort_on_id(Entity* array, isize count) { if(count > 1) if(count > 12) { Entity tmp = array[0]; array[0] = array[count / 2]; array[count / 2] = tmp; isize pivot = 0; for(isize i = 1; i < count; ++i) { if((array[i].id) < (array[0].id)) { tmp = array[++pivot]; array[pivot] = array[i]; array[i] = tmp; } } tmp = array[0]; array[0] = array[pivot]; array[pivot] = tmp; entity_sort_on_id(array, pivot); entity_sort_on_id(array + pivot + 1, count - (pivot + 1)); } else for(isize i = 1; i < count; ++i) { Entity x = array[i]; isize j = i - 1; while((j >= 0) && ((array[j].id) > (x.id))) { array[j + 1] = array[j]; j--; } array[j+1] = x; } }
 isize entity_search_for_id(isize key, Entity* array, isize count) { if(count == 0) return -1; isize min = 0, max = count - 1, mid = 0; isize localkey; while(min <= max) { mid = (min + max) / 2; localkey = (array[mid].id); if(localkey == key) { return mid; } else if(localkey < key) { min = mid + 1; } else { max = mid - 1; } } return -1; }
 
-typedef struct World_Area_Stub World_Area_Stub;
+
 struct Area_Link
 {
 	Vec2i position;
 	World_Area_Stub* link;
 };
+#line 91 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world_area.cpp"
 
 enum World_Area_Biome
 {
 	AreaBiome_Grassland,
 	AreaBiome_Desert
 };
+
+
 
 
 
@@ -4630,6 +5970,7 @@ struct World_Area
 
 	Entity* player;
 };
+#line 140 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world_area.cpp"
 
 void init_world_area(World_Area* area, Memory_Arena* arena)
 {
@@ -4674,7 +6015,7 @@ void init_entity(Entity* entity)
 Entity* world_area_get_next_entity(World_Area* area)
 {
 	if(area->entities_count + 1 >= area->entities_capacity) {
-		printf("There was an error: %s \n", "Ran out of entities");;
+		fprintf(stderr, "There was an error: %s \n", "Ran out of entities");;
 		return NULL;
 	}
 
@@ -4697,8 +6038,19 @@ Entity* world_area_find_entity(World_Area* area, isize id)
 	return index == -1 ? NULL : area->entities + index;
 }
 
+
+int32 entity_id_cmp(const void* a, const void* b)
+{
+	Entity* ea = (Entity*)a;
+	Entity* eb = (Entity*)b;
+	return ea->id - eb->id;
+}
+
+
 void world_area_sort_entities_on_id(World_Area* area)
 {
+	
+	
 	entity_sort_on_id(area->entities, area->entities_count);
 }
 
@@ -4816,7 +6168,7 @@ void world_area_process_hitboxes(World_Area* area)
 				}
 			}
 
-			if(aabb_intersect(&a->box, &b->box)) {
+			if(aabb_intersect(a->box, b->box)) {
 				Hitbox_Contact* c = area->hitbox_contacts + area->hitbox_contacts_count++;
 				c->a = a->ref;
 				c->b = b->ref;
@@ -4836,7 +6188,7 @@ void world_area_process_hitboxes(World_Area* area)
 		area->hitbox_sort_axis = 1;
 	}
 }
-#line 175 "src\\rituals_main.cpp"
+#line 91 "src\\rituals_main.cpp"
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world.cpp"
 
 
@@ -4874,7 +6226,7 @@ struct World
 	Particle_Style base_style;
 	Emitter emitter;
 };
-
+#line 38 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world.cpp"
 
 isize Anim_Standing;
 isize Anim_Walking;
@@ -5102,9 +6454,9 @@ int recursively_delete_folder(char* path, bool append_base_path);
 void world_delete_self(World* world)
 {
 	char world_path[4096];
-	isize len = snprintf(world_path, 4096, "%s/%s", menu_state->save_dir, world->name);
+	isize len = snprintf(world_path, 4096, "%s/%s", Game->Menu->save_dir, world->name);
 	recursively_delete_folder(world_path, false);
-	menu_state->saves_dirty = true;
+	Game->Menu->saves_dirty = true;
 }
 
 
@@ -5265,10 +6617,12 @@ void world_area_render(World_Area* area, World* world)
 
 	render_set_current_group(1);
 	render_start();
-	snprintf(buf, 256, "Area %d | Entities %d | Frame Time %d", area->id, area->entities_count, Game->last_frame_time);
+	int32 mx, my;
+	SDL_GetMouseState(&mx, &my);
+	snprintf(buf, 256, "%d %d Area %d | Entities %d | Frame Time %d", mx, my, area->id, area->entities_count, Game->last_frame_time);
 	render_body_text(buf, v2(16, 16), true);
 	render_draw(Game->size, Game->scale);
-#line 432 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world.cpp"
+#line 434 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_world.cpp"
 
 }
 
@@ -5283,16 +6637,16 @@ void world_area_update(World_Area* area, World* world)
 	
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
-	if(!play_state->running) {
+	if(!Game->Play->running) {
 		world_area_render(area, world);
 		return;
 	}
 
-	play_state->current_time = SDL_GetTicks();
-	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
+	Game->Play->current_time = SDL_GetTicks();
+	real dt = (Game->Play->current_time - Game->Play->prev_time) / 1000.0;
 	dt = clamp(dt, 0, 1.2f);
-	play_state->accumulator += dt;
-	play_state->prev_time = play_state->current_time;
+	Game->Play->accumulator += dt;
+	Game->Play->prev_time = Game->Play->current_time;
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
 
@@ -5315,17 +6669,17 @@ void world_area_update(World_Area* area, World* world)
 	Vec2 target = area->player->body->shape.center;
 	area->target = target;
 	if(target.x < 0) {
-		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);
-		play_state->world_xy.x--;
+		world_switch_current_area(Game->Play->world, area->stub->west, Game->play_arena);
+		Game->Play->world_xy.x--;
 	} else if(target.x > area->map.w * (32)) {
-		world_switch_current_area(play_state->world, area->stub->east, Game->play_arena);
-		play_state->world_xy.x++;
+		world_switch_current_area(Game->Play->world, area->stub->east, Game->play_arena);
+		Game->Play->world_xy.x++;
 	} else if(target.y < 0) {
-		world_switch_current_area(play_state->world, area->stub->north, Game->play_arena);
-		play_state->world_xy.y--;
+		world_switch_current_area(Game->Play->world, area->stub->north, Game->play_arena);
+		Game->Play->world_xy.y--;
 	} else if(target.y > area->map.h * (32)) {
-		world_switch_current_area(play_state->world, area->stub->south, Game->play_arena);
-		play_state->world_xy.y++;
+		world_switch_current_area(Game->Play->world, area->stub->south, Game->play_arena);
+		Game->Play->world_xy.y++;
 	}
 	world_area_interact(area, world);
 	world_area_render(area, world);
@@ -5457,7 +6811,7 @@ void world_area_update(World_Area* area, World* world)
 
 
 
-#line 176 "src\\rituals_main.cpp"
+#line 92 "src\\rituals_main.cpp"
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_entity_events.cpp"
 
 
@@ -5628,9 +6982,9 @@ bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area,
 			}
 
 			if(e->health <= 0) {
-				play_state->delete_world_on_stop = true;
-				play_state->save_world_on_stop = false;
-				switch_state(Game_State_Menu);
+				Game->Play->delete_world_on_stop = true;
+				Game->Play->save_world_on_stop = false;
+				game_switch_state(Game_State_Menu);
 				return true;
 			}
 		}
@@ -5644,8 +6998,6 @@ void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, 
 		Entity* e = entities + i;
 	}
 }
-
-
 
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
@@ -5846,7 +7198,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		render_add(&shadow);
 
 
-#line 389 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_entity_events.cpp"
+#line 387 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_entity_events.cpp"
 	}
 }
 void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)
@@ -6030,100 +7382,7 @@ void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* ar
 
 	}
 }
-#line 177 "src\\rituals_main.cpp"
-
-#line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_play_state.cpp"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void init_play_state()
-{
-	clear_arena(Game->play_arena);
-	clear_arena(Game->world_arena);
-	play_state = ((Play_State*)arena_push(Game->game_arena, sizeof(Play_State)));
-	play_state->delete_world_on_stop = false;
-	play_state->save_world_on_stop = true;
-	play_state->world = ((World*)arena_push(Game->world_arena, sizeof(World)));
-	play_state->running = true;
-}
-
-void deserialize_world(World* world, FILE* world_file);
-void start_play_state(char* world_name_in)
-{
-	World* world = play_state->world;
-	isize wnl = strlen(world_name_in);
-	char* world_name = ((char*)arena_push(Game->world_arena, sizeof(char) * wnl + 1));
-	memcpy(world_name, world_name_in, wnl+1);
-	FILE* fp = get_world_file(world_name, "rb");
-
-
-
-
-
-#line 40 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_play_state.cpp"
-	{
-	
-		init_world(world, 4, 4, next_random_uint64(&Game->r), Game->world_arena);
-		generate_world(world_name, world);
-		world_start_in_area(
-				world,
-				world->area_stubs, 
-				Game->play_arena);
-	}
-}
-
-void play_state_update()
-{
-	if(Game->state != Game_State_Play) return;
-	if(((Input->scancodes[SDL_SCANCODE_ESCAPE])) == State_Just_Pressed) {
-		play_state->running = !play_state->running;
-	}
-	world_area_update(play_state->world->current_area, play_state->world);
-
-
-	if(!play_state->running) {
-		Renderer->groups[0].offset = Vec2{};
-		render_start(CurrentGroup);
-		
-		Sprite s = create_box_primitive(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
-		s.flags = Anchor_Top_Left;
-		render_add(&s);
-
-		Body_Font->color = v4(1, 1, 1, 1);
-		render_body_text("Paused", v2(32, 32), false, 4.0f);
-		if(gui_add_button(v2(32, Game->size.y / 2), "Exit to main menu", v2(144, 0))) {
-			serialize_world(play_state->world);
-			init_play_state();
-			Game->state = Game_State_Menu;
-		}
-		render_draw(Game->size, Game->scale);
-	}
-}
-
-void play_state_stop()
-{
-	printf("Stopping play state... \n");
-	if(play_state->save_world_on_stop) {
-		serialize_world(play_state->world);
-	}
-	if(play_state->delete_world_on_stop) {
-		world_delete_self(play_state->world);
-	}
-	init_play_state();
-}
-
-#line 179 "src\\rituals_main.cpp"
+#line 93 "src\\rituals_main.cpp"
 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\rituals_serialization.cpp"
 
@@ -6188,7 +7447,7 @@ int _recursive_delete(const char* last_path, isize last_path_len, char* path)
 }
 
 
-int recursively_delete_folder(char* path, bool append_base_path = false)
+int recursively_delete_folder(char* path, bool append_base_path)
 {
 	start_temp_arena(Game->temp_arena);
 	if(append_base_path) {
@@ -6707,154 +7966,7 @@ void deserialize_world(World* world, FILE* world_file)
 
 
 
-#line 181 "src\\rituals_main.cpp"
-
-void init_menu_state()
-{	
-	menu_state = ((Menu_State*)arena_push(Game->game_arena, sizeof(Menu_State)));
-	init_text_input_handle(&menu_state->handle, 256, Game->game_arena);
-	menu_state->delete_index = -1;
-
-	menu_state->save_dir_len = snprintf(menu_state->save_dir, 4096, "%ssave", Game->base_path);
-	check_dir(menu_state->save_dir);
-	tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
-}
-
-void stop_state()
-{
-	switch(Game->state) {
-		case Game_State_None:
-			break;
-		case Game_State_Menu:
-			break;
-		case Game_State_Play:
-			
-			play_state_stop();
-			break;
-		default:
-			break;
-	}
-	Game->state = Game_State_None;
-}
-
-void start_state()
-{
-
-}
-
-void switch_state(Game_State newstate)
-{
-	stop_state();
-	Game->state = newstate;
-	start_state();
-}
-
-
-bool b = false;
-real r = 0;
-void main_menu_update()
-{
-	game_set_scale(2.0f);
-	Renderer->groups[0].offset = v2(0, 0);
-	render_start();
-	
-	real lasty = 32;
-	Body_Font->color = v4(1, 1, 1, 1);
-	render_body_text("Rituals", v2(32, 32), false, 4.0f);
-	lasty += 16;
-	lasty += Body_Font->glyph_height * 4;
-	gui_add_text_input(&menu_state->handle, 
-			v2(32, lasty), 
-			v2(256, Body_Font->glyph_height + 8), 
-			"Enter new world name");
-
-	if(gui_add_button(v2(256 + 32 + 16 , lasty), "Create", v2(64, 0))) {
-		menu_state->saves_dirty = true;
-	}
-	if(Input->scancodes[SDL_SCANCODE_RETURN] == State_Just_Pressed) {
-		menu_state->saves_dirty = true;
-	}
-
-	if(menu_state->saves_dirty) {
-		tinydir_close(&menu_state->saves);
-		char buf[4096];
-	 	snprintf(buf, 4096, "%ssave/%.*s",
-				Game->base_path, 
-				menu_state->handle.buffer_length, 
-				menu_state->handle.buffer);
-		check_dir(buf);
-		
-		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
-		menu_state->handle.buffer_length = 0;
-		menu_state->saves_dirty = false;
-	}
-	lasty += 32 + 16;
-
-	for(usize i = 0; i < menu_state->saves.n_files; ++i) {
-		tinydir_file file;
-		tinydir_readfile_n(&menu_state->saves, &file, i);
-		if(file.is_dir && (file.name[0] != '.')) {
-			if(gui_add_button(v2(32, lasty), file.name, v2(144, 0))) {
-				recursively_delete_folder(file.path);
-				start_play_state(file.name);
-				Game->state = Game_State_Play;
-			}
-			if(menu_state->delete_index != i) {
-				if(gui_add_button(v2(32 + 144 + 32, lasty), "Delete", v2(64, 0))) {
-					menu_state->delete_index = i;
-				}
-			} else {
-
-				if(gui_add_button(v2(32 + 144 + 32, lasty), "Cancel", v2(64, 0))) {
-					menu_state->delete_index = -1;
-				}
-				if(gui_add_button(v2(32 + 144 + 32 + 64 + 32, lasty), "Confirm", v2(64, 0))) {
-					printf("[%s] was deleted \n", file.path);
-					recursively_delete_folder(file.path);
-					menu_state->delete_index = -1;
-					menu_state->saves_dirty = true;
-				}
-			}
-			lasty += 32;
-		}
-	}
-
-	if(menu_state->saves_dirty) {
-		tinydir_close(&menu_state->saves);
-		tinydir_open_sorted(&menu_state->saves, menu_state->save_dir);
-	}
-
-	render_draw(Game->size, Game->scale);
-}
-
-
-
-void test_update()
-{
-	game_set_scale(2.0);
-	render_start();
-
-	render_draw(Game->size, Game->scale);
-}
-
-void update()
-{
-	switch(Game->state) {
-		case Game_State_None:
-			test_update();
-			break;
-		case Game_State_Menu:
-			SDL_StartTextInput();
-			main_menu_update();
-			break;
-		case Game_State_Play:
-			SDL_StopTextInput();
-			play_state_update();
-			break;
-		default:
-			break;
-	}
-}
+#line 95 "src\\rituals_main.cpp"
 
 void load_assets()
 {
@@ -6872,169 +7984,18 @@ void load_assets()
 	init_game_registry(Registry, Game->registry_arena); 
 	register_everything_in_rituals();
 	finalize_game_registry();
-
-	Game->state = Game_State_Menu;
-	init_play_state();
-	init_menu_state();
-
-
 }
 
 
-void update_screen()
-{
-	SDL_GetWindowSize(Game->window, &Game->window_size.x, &Game->window_size.y);
-	glViewport(0, 0, Game->window_size.x, Game->window_size.y);
-	Game->size = v2(Game->window_size) * Game->scale;
-}
-
-float tt = 0;
 int main(int argc, char** argv)
 {
-	
-	printf("%d \n", (usize)&(((Sprite*)(NULL))->center));
-	
-	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		printf("There was an error: %s \n", "Could not init SDL");; 
-		printf("There was an error: %s \n", SDL_GetError());;
-		return 1;
-	}
-
-	
-	
-
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	
-		
-		SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
-
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	
-
-	int32 window_display_index = 0;
-
-	window_display_index = 1;
-#line 395 "src\\rituals_main.cpp"
-	SDL_Window* window = SDL_CreateWindow("Rituals", 
-			SDL_WINDOWPOS_CENTERED_DISPLAY(window_display_index), 
-			SDL_WINDOWPOS_CENTERED_DISPLAY(window_display_index),
-			1280, 720, 
-			SDL_WINDOW_OPENGL | 
-			SDL_WINDOW_RESIZABLE |
-			SDL_WINDOW_MOUSE_FOCUS |
-			SDL_WINDOW_INPUT_FOCUS);
-
-	if(window == NULL) {
-		printf("There was an error: %s \n", "Could not create window");;
-		printf("There was an error: %s \n", SDL_GetError());;
-		return 1;
-	}
-
-	printf("%s \n", SDL_GetError());
-	SDL_GLContext glctx = SDL_GL_CreateContext(window);
-
-	if(ogl_LoadFunctions() == ogl_LOAD_FAILED) {
-		printf("There was an error: %s \n", "Could not load OpenGL 3.3 functions...");;
-		return 1;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#line 433 "src\\rituals_main.cpp"
-
-	{
-
-
-
-
-
-
-			 
-		
-		bool gl_checks[64];
-		char* gl_names[64];
-		int gl_vals[64];
-		int gl_exp_vals[64];
-		isize gl_check_count = 0;
-
-		int _SDL_GL_RED_SIZE_val; int _SDL_GL_RED_SIZE_success = SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &_SDL_GL_RED_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_RED_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_RED_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_RED_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
-		int _SDL_GL_GREEN_SIZE_val; int _SDL_GL_GREEN_SIZE_success = SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &_SDL_GL_GREEN_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_GREEN_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_GREEN_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_GREEN_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
-		int _SDL_GL_BLUE_SIZE_val; int _SDL_GL_BLUE_SIZE_success = SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &_SDL_GL_BLUE_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_BLUE_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_BLUE_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_BLUE_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
-		int _SDL_GL_ALPHA_SIZE_val; int _SDL_GL_ALPHA_SIZE_success = SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &_SDL_GL_ALPHA_SIZE_val); gl_checks[gl_check_count++] = _SDL_GL_ALPHA_SIZE_val == 8; gl_names[gl_check_count - 1] = "SDL_GL_ALPHA_SIZE"; gl_vals[gl_check_count - 1] = _SDL_GL_ALPHA_SIZE_val; gl_exp_vals[gl_check_count - 1] = 8;;
-		int _SDL_GL_DOUBLEBUFFER_val; int _SDL_GL_DOUBLEBUFFER_success = SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &_SDL_GL_DOUBLEBUFFER_val); gl_checks[gl_check_count++] = _SDL_GL_DOUBLEBUFFER_val == 1; gl_names[gl_check_count - 1] = "SDL_GL_DOUBLEBUFFER"; gl_vals[gl_check_count - 1] = _SDL_GL_DOUBLEBUFFER_val; gl_exp_vals[gl_check_count - 1] = 1;;
-		int _SDL_GL_CONTEXT_MAJOR_VERSION_val; int _SDL_GL_CONTEXT_MAJOR_VERSION_success = SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &_SDL_GL_CONTEXT_MAJOR_VERSION_val); gl_checks[gl_check_count++] = _SDL_GL_CONTEXT_MAJOR_VERSION_val == 3; gl_names[gl_check_count - 1] = "SDL_GL_CONTEXT_MAJOR_VERSION"; gl_vals[gl_check_count - 1] = _SDL_GL_CONTEXT_MAJOR_VERSION_val; gl_exp_vals[gl_check_count - 1] = 3;;
-		int _SDL_GL_CONTEXT_MINOR_VERSION_val; int _SDL_GL_CONTEXT_MINOR_VERSION_success = SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &_SDL_GL_CONTEXT_MINOR_VERSION_val); gl_checks[gl_check_count++] = _SDL_GL_CONTEXT_MINOR_VERSION_val == 3; gl_names[gl_check_count - 1] = "SDL_GL_CONTEXT_MINOR_VERSION"; gl_vals[gl_check_count - 1] = _SDL_GL_CONTEXT_MINOR_VERSION_val; gl_exp_vals[gl_check_count - 1] = 3;;
-		int _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val; int _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_success = SDL_GL_GetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, &_SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val); gl_checks[gl_check_count++] = _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val == 1; gl_names[gl_check_count - 1] = "SDL_GL_FRAMEBUFFER_SRGB_CAPABLE"; gl_vals[gl_check_count - 1] = _SDL_GL_FRAMEBUFFER_SRGB_CAPABLE_val; gl_exp_vals[gl_check_count - 1] = 1;;
-		int _SDL_GL_ACCELERATED_VISUAL_val; int _SDL_GL_ACCELERATED_VISUAL_success = SDL_GL_GetAttribute(SDL_GL_ACCELERATED_VISUAL, &_SDL_GL_ACCELERATED_VISUAL_val); gl_checks[gl_check_count++] = _SDL_GL_ACCELERATED_VISUAL_val == 1; gl_names[gl_check_count - 1] = "SDL_GL_ACCELERATED_VISUAL"; gl_vals[gl_check_count - 1] = _SDL_GL_ACCELERATED_VISUAL_val; gl_exp_vals[gl_check_count - 1] = 1;;
-		int _SDL_GL_CONTEXT_PROFILE_MASK_val; int _SDL_GL_CONTEXT_PROFILE_MASK_success = SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &_SDL_GL_CONTEXT_PROFILE_MASK_val); gl_checks[gl_check_count++] = _SDL_GL_CONTEXT_PROFILE_MASK_val == SDL_GL_CONTEXT_PROFILE_CORE; gl_names[gl_check_count - 1] = "SDL_GL_CONTEXT_PROFILE_MASK"; gl_vals[gl_check_count - 1] = _SDL_GL_CONTEXT_PROFILE_MASK_val; gl_exp_vals[gl_check_count - 1] = SDL_GL_CONTEXT_PROFILE_CORE;;
-
-		for(isize i = 0; i < gl_check_count; ++i) {
-			printf("%s %s: wanted %d, got %d \n", 
-					gl_names[i], 
-					gl_checks[i] ? "succeeeded" : "failed", 
-					gl_exp_vals[i], 
-					gl_vals[i]);
-		}
-
-	}	
-
-	
-	Game = ((Game_Main*)calloc(sizeof(Game_Main), 1));
-	{
-		Game->last_frame_time = 1;
-		Game->window = window;
-		Game->state = Game_State_None;
-		Game->meta_arena = ((Memory_Arena*)calloc(sizeof(Memory_Arena), 1));
-		init_memory_arena(Game->meta_arena, (((isize)sizeof(Memory_Arena))) * 20);
-		Game->game_arena = new_memory_arena(((64 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-		Game->asset_arena = new_memory_arena(((512 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-		Game->temp_arena = new_memory_arena((((4 * UINT64_C(1024)) * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-		Game->play_arena = new_memory_arena((((4 * UINT64_C(1024)) * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-		Game->renderer_arena = new_memory_arena(((256 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-		Game->world_arena = new_memory_arena(((1024 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-		Game->registry_arena = new_memory_arena(((2 * UINT64_C(1024)) * UINT64_C(1024)), Game->meta_arena);
-
-		Game->base_path = SDL_GetBasePath();
-		Game->base_path_length = strlen(Game->base_path);
-
-		Game->input = ((Game_Input*)arena_push(Game->game_arena, sizeof(Game_Input)));
-		Input = Game->input;
-		Input->scancodes = ((int8*)arena_push(Game->game_arena, sizeof(int8) * SDL_NUM_SCANCODES));
-		Input->keycodes = ((int8*)arena_push(Game->game_arena, sizeof(int8) * SDL_NUM_SCANCODES));
-		Input->mouse = ((int8*)arena_push(Game->game_arena, sizeof(int8) * 16));
-		Input->mouse_pos = 	v2(0, 0);
-		Input->text = ((char*)arena_push(Game->game_arena, sizeof(char) * (1024)));
-		Input->text_count = 0;
-		Input->capture_newlines = false;
-		Input->capture_tabs = false;
-
-		init_random(&Game->r, time(NULL));
-		
-		Game->window_size = v2i(1280, 720);
-		Game->scale = 1.0f;
-
-		Game->renderer = ((OpenGL_Renderer*)arena_push(Game->game_arena, sizeof(OpenGL_Renderer)));
-
-		char* vert_src = 
+	Platform platform = {0};
+	platform.window_title = "Rituals";
+	platform.window_size = v2i(1280, 720);
+	platform.game_scale = 1.0f;
+	platform.display_index = 1;
+	platform.check_gl_attributes = false;
+	platform.vertex_shader = 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\vert.glsl"
 R"shader(
 #version 330 core
@@ -7142,9 +8103,9 @@ void main()
 }
 )shader"
 
-#line 509 "src\\rituals_main.cpp"
-			;
-		 char* frag_src = 
+#line 125 "src\\rituals_main.cpp"
+		;
+	platform.frag_shader = 
 #line 1 "c:\\users\\william\\stuff\\development\\rituals\\src\\frag.glsl"
 
 
@@ -7187,142 +8148,22 @@ void main()
 
 )shader"
 
-#line 512 "src\\rituals_main.cpp"
-			;
-		init_renderer(Game->renderer, 4, ((32 * UINT64_C(1024)) * UINT64_C(1024)), vert_src, frag_src, Game->renderer_arena);
-		
-		Game->registry = ((Game_Registry*)arena_push(Game->game_arena, sizeof(Game_Registry)));
+#line 128 "src\\rituals_main.cpp"
+		;
 
-		Registry = Game->registry;
-		Renderer = Game->renderer;
-		CurrentGroup = Renderer->groups;
+	if(platform_init(&platform)) {
+		return 1;
 	}
-
+	if(game_init(&platform)) {
+		return 1;
+	}
+	
 	load_assets();
 
-	bool running = true;
-	SDL_Event event;
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	
+	Game->state = Game_State_Menu;
+	game_start(&platform);
+	platform_quit();
 
-	play_state->current_time = SDL_GetTicks();
-	play_state->prev_time = play_state->current_time;
-	isize input_text_length = 0;
-	while(running) {
-		uint64 start_ticks = SDL_GetTicks();
-
-		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
-			int8* t = Game->input->scancodes + i;
-			if(*t == State_Just_Released) {
-				*t = State_Released;
-			} else if(*t == State_Just_Pressed) {
-				*t = State_Pressed;
-			}
-			t = Game->input->keycodes + i;
-			if(*t == State_Just_Released) {
-				*t = State_Released;
-			} else if(*t == State_Just_Pressed) {
-				*t = State_Pressed;
-			}
-		}
-		for(int64 i = 0; i < 16; ++i) {
-			int8* t = Game->input->mouse + i;
-			if(*t == State_Just_Released) {
-				*t = State_Released;
-			} else if(*t == State_Just_Pressed) {
-				*t = State_Pressed;
-			}
-		}
-		while(SDL_PollEvent(&event)) {
-			
-			switch(event.type) {
-				case SDL_QUIT:
-					stop_state();
-					running = false;
-					return 0;
-					break;
-				case SDL_WINDOWEVENT:
-					update_screen();
-					break;
-				case SDL_TEXTINPUT:
-					input_text_length = strlen(event.text.text);
-					if((input_text_length + Input->text_count) < (1024)) {
-						memcpy(Input->text + Input->text_count, 
-								event.text.text, 
-								input_text_length);
-						Input->text_count += input_text_length;
-						input_text_length = 0;
-					}
-					break;
-				case SDL_KEYDOWN:
-					Game->input->num_keys_down++;
-					if((event.key.keysym.sym == SDLK_BACKSPACE)) {
-						input_text_append_char(('\b'));
-						if(event.key.keysym.mod & KMOD_CTRL) {
-							input_text_append_char('\7');
-						}
-					} else if(event.key.keysym.sym == SDLK_RETURN || 
-							event.key.keysym.sym == SDLK_RETURN2) {
-						if(Input->capture_newlines) {
-							input_text_append_char('\n');
-						}
-					} else if(event.key.keysym.sym == SDLK_TAB) {
-						if(Input->capture_tabs) {
-							input_text_append_char('\t');
-						}
-					}
-
-					if(!event.key.repeat) {
-						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
-						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
-							Game->input->keycodes[event.key.keysym.sym] = State_Just_Pressed;
-						}
-					}
-					break;
-				case SDL_KEYUP:
-					Game->input->num_keys_down--;
-					if(!event.key.repeat) {
-						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
-						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
-							Game->input->keycodes[event.key.keysym.sym] = State_Just_Released;
-						}
-					}
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-					Game->input->num_mouse_down++;
-					Game->input->mouse[event.button.button] = State_Just_Pressed;
-					break;
-				case SDL_MOUSEBUTTONUP:
-					Game->input->num_mouse_down--;
-					Game->input->mouse[event.button.button] = State_Just_Released;
-					break;
-			}
-		}
-	
-		int mx, my;
-		SDL_GetMouseState(&mx, &my);
-		Input->mouse_x = mx;
-		Input->mouse_y = my;
-		Input->screen_mouse_pos = v2i(mx, my);
-		game_calc_mouse_pos(Renderer->groups[0].offset);
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		update();
-
-		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-
-		
-		if(frame_ticks < 16) {
-			
-			SDL_Delay(16 - frame_ticks);
-		}
-#line 642 "src\\rituals_main.cpp"
-		SDL_GL_SwapWindow(window);
-		Game->last_frame_time = SDL_GetTicks() - start_ticks;
-	}
-
-	SDL_Quit();
 	return 0;
 }
 

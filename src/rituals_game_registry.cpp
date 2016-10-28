@@ -23,6 +23,9 @@ usize hash_str(const char* str)
 	return hash;
 }
 
+
+
+#ifndef REFLECTED
 struct Game_Registry
 {
 	Tile_Info* tiles;
@@ -32,22 +35,17 @@ struct Game_Registry
 	Item_Info* items;
 	usize* items_hash;
 	isize items_count;
-	
-	
 };
-
-Game_Registry* Registry;
+#endif
 
 #define MaxRegistryInfoEntries (256)
 void init_game_registry(Game_Registry* registry, Memory_Arena* arena)
 {
-	$(exclude)
 #define _set_registry_arrays(type, base_name) do { \
 	registry->base_name = arena_push_array(arena, type, MaxRegistryInfoEntries); \
 	registry->base_name##_hash = arena_push_array(arena, usize, MaxRegistryInfoEntries); \
 	registry->base_name##_count = 0; \
 	} while(0)
-$(end)
 
 	_set_registry_arrays(Tile_Info, tiles);
 	_set_registry_arrays(Item_Info, items);
@@ -55,7 +53,6 @@ $(end)
 
 
 
-$(exclude)
 #define _game_registry__key_macro(t) (t.k)
 #define _generate_registry_lookup(lookup_func_name, sort_func_name , return_type, array_base_name) \
 return_type* lookup_func_name(const char* name) \
@@ -64,7 +61,7 @@ return_type* lookup_func_name(const char* name) \
 	isize index = usize_search(hash, Registry->array_base_name##_hash, Registry->array_base_name##_count); \
 	return Registry->array_base_name + index; \
 } \
-struct _game_registry__##return_type##_pair { return_type v; usize k; }; \
+ struct _game_registry__##return_type##_pair { return_type v; usize k; }; \
 GenerateIntrosortForType(_game_registry__##return_type##_pair_sort, _game_registry__##return_type##_pair, 12, _game_registry__key_macro) \
 void sort_func_name() \
 { \
@@ -86,10 +83,15 @@ void sort_func_name() \
 		Registry->array_base_name[i].id = i; \
 	} \
 } 
-$(end)
+
+
+$(exclude)
 
 _generate_registry_lookup(lookup_tile, sort_registered_tiles, Tile_Info, tiles) 
+
 _generate_registry_lookup(lookup_item, sort_registered_items, Item_Info, items)
+
+$(end)
 
 isize Tile_Void = 0;
 isize Tile_Sand = 0;

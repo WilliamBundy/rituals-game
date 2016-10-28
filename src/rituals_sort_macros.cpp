@@ -78,6 +78,19 @@ void func_name(T* array, isize count) \
 	} \
 }
 
+#define GenerateQsortForType(func_name, T, Cutoff, Member_Macro) \
+int _cmp_##func_name##_##t(const void* a, const void* b) \
+{ \
+	T* ta = (T*)a; \
+	T* tb = (T*)b; \
+	return Member_Macro(ta) - Member_Macro(tb); \
+} \
+void func_name(T* array, isize count) \
+{ \
+	qsort(array, count, sizeof(T), _cmp_##func_name##_##t); \
+} 
+
+ 
 // Returns -1 on fail to find.
 #define GenerateBinarySearchForType(func_name, T, K, Member_Key_Macro) \
 isize func_name(K key, T* array, isize count) \

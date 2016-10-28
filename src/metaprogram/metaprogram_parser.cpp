@@ -975,6 +975,7 @@ typedef union Struct_Member Struct_Member;
 struct Struct_Def
 {
 	char* name;
+	char* parentname;
 	Struct_Kind kind;
 
 	isize meta_index;
@@ -982,6 +983,7 @@ struct Struct_Def
 	Hash namehash;
 
 	bool is_anon_member;
+	bool is_named_child;
 
 	Struct_Member* members;
 	Struct_Kind* member_kinds;
@@ -1083,6 +1085,17 @@ void print_struct_names(Struct_Def* def, isize index, char* prefix, isize prefix
 	for(isize i = 0; i < def->member_count; ++i) {
 		if(def->member_kinds[i] != StructKind_Member) {
 			auto var = &def->members[i].anon_struct;
+
+			if(def->name[0] != '\0') {
+				if(def->is_named_child) {
+					var->def.parentname = def->parentname;
+				} else {
+					var->def.parentname = def->name;
+				}
+			} else {
+				var->def.parentname = def->parentname;
+			}
+			
 			print_struct_names(&var->def, subcount++, new_prefix, chars, suffix, all_structs, counter, arena);
 		}
 	}
@@ -1134,7 +1147,6 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 
 			printf(";\n");
 		}	
-
 	}
 	indent--;
 	print_indent(indent);
@@ -1150,7 +1162,6 @@ void print_struct(Struct_Def* def, bool as_member_struct = false, int32 indent =
 }
 
 
-// unsigned short**** thinga[400], **thingb, **thingc, a, b, c, d[3], e[44][55], f[44][22][44];
 
 Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_Arena* arena)
 {
@@ -1189,10 +1200,12 @@ Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_
 			if(head->kind != Token_Identifier) {
 				if(head->kind == Token_Semicolon) {
 					def.name = "";
+					def.is_anon_member = true;
 					var->def = def;
 					var->array_levels = 0;
 					var->array_sizes = NULL;
 					parent->member_count++;
+
 
 					return head;
 				} else {
@@ -1206,6 +1219,7 @@ Token* parse_struct_member(Lexer* lex, Struct_Def* parent, Token* start, Memory_
 				next = head->next;
 				buf[len] = '\0';
 				def.name = buf;
+				def.is_named_child = true;
 				def.namehash = head->hash;
 			}
 			head = head->next;
@@ -1323,7 +1337,7 @@ Struct_Def* find_struct_defs(Lexer* lex, Token* start, Memory_Arena* arena)
 	Token* last_open, *last_closed;
 	last_open = last_closed = NULL;
 	do {
-		parse_metaprogram_directive(head);
+		head = parse_metaprogram_directive(head);
 		if(head->kind == Token_OpenBrace) {
 			brace_depth++;
 			last_open = head;
@@ -1520,14 +1534,35 @@ struct Meta_Member
 
 void print_meta_member(Meta_Member* member, char* prefix, char* suffix)
 {
-	printf("%sMeta_Member{%d, Meta_Type_%s, %d, \"%s\", (uint64)&((%s*)NULL)->%s}%s",
+	char* name;
+	char* parentname;
+	if(member->name[0] == '\0') {
+		name = "null";
+		parentname = "_empty";
+	} else {
+		name = member->name;
+		parentname = member->parentname;
+	}
+
+	isize namelen = Min(strlen("Meta_Type_"), strlen(member->type_name));
+	bool is_toplevel = false;
+
+	for(isize i = 0; i < namelen; ++i) {
+		if(member->type_name[i] != "Meta_Type_"[i]) {
+			is_toplevel = true;
+			break;
+		}
+	}
+
+	printf("%sMeta_Member{%d, %s%s, %d, \"%s\", offsetof(%s, %s)}%s",
 			prefix,
 			member->flags, 
+			is_toplevel ? "Meta_Type_" : "",
 			member->type_name,
 			member->pointer_depth,
 			member->name,
-			member->parentname,
-			member->name,
+			parentname,
+			name,
 			suffix);
 }
 
@@ -1551,7 +1586,13 @@ void print_reflection_data(Struct_Def* def)
 		Meta_Member m = {
 			0
 		};
-		m.parentname = def->name;
+		if(def->name[0] != '\0')
+			if(def->is_named_child)
+				m.parentname = def->parentname;
+			else
+				m.parentname = def->name;
+		else 
+			m.parentname = def->parentname;
 		if(def->member_kinds[i] == StructKind_Member) {
 			auto var = &def->members[i].member_var;
 			Meta_Type* meta = var->type;
@@ -1581,7 +1622,8 @@ void print_reflection_data(Struct_Def* def)
 				m.flags = MetaFlag_IsArray;
 			}
 		}
-		print_meta_member(&m, "\t", ",\n");
+		char* suffix = i == def->member_count - 1 ? "\n" : ",\n";
+		print_meta_member(&m, "\t", suffix);
 	}
 	printf("};\n\n");
 }
@@ -1589,6 +1631,10 @@ void print_reflection_data(Struct_Def* def)
 void print_metaprogram_types()
 {
 		printf(R"foo(
+struct _empty
+{
+	int null;
+};
 struct Meta_Member
 {
 	uint64 flags;

@@ -13,6 +13,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 
+
+#ifndef REFLECTED
 struct Animation_Frame
 {
 	Vec3 position; 
@@ -22,6 +24,7 @@ struct Animation_Frame
 	Rect2 texture;
 	real sort_offset;
 };
+#endif
 
 void init_animation_frame(Animation_Frame* fr)
 {
@@ -33,6 +36,7 @@ void init_animation_frame(Animation_Frame* fr)
 	fr->sort_offset = 0;
 }
 
+#ifndef REFLECTED
 struct Animation
 {
 	isize id;
@@ -42,6 +46,7 @@ struct Animation
 	real inv_fps;
 	bool looping;
 };
+#endif
 
 void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
 {
@@ -71,6 +76,7 @@ Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame,
 	return anim;
 }
 
+#ifndef REFLECTED
 struct Animated_Sprite
 {
 	Animation** animations;
@@ -79,6 +85,7 @@ struct Animated_Sprite
 	bool running;
 	real timer;
 };	
+#endif
 
 void init_animated_sprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)
 {

@@ -4,7 +4,8 @@ if not defined DevEnvDir call "%msvcdir%vcvarsall.bat" amd64
 
 SET MAINFILEBASE=rituals_main
 SET MAINFILE=src\%MAINFILEBASE%.cpp
-SET PPC_OUT=%MAINFILEBASE%.i
+SET PPC_OUT_RAW=%MAINFILEBASE%.i
+SET PPC_OUT=rituals_ppc.cpp
 SET BASENAME=Rituals.exe
 SET OUTPUT=bin\Rituals.exe
 SET PDBOUT=bin\Rituals.pdb
@@ -35,8 +36,11 @@ cl ^
 	%MAINFILE% ^
 	/DPREPROCESSOR
 
+del %PPC_OUT%
+ren %PPC_OUT_RAW% %PPC_OUT%
+
 metaprogram -m %PPC_OUT% > src\rituals_reflection.cpp
-metaprogram -t -p %PPC_OUT% > src\rituals_types.cpp
+metaprogram -t -s -p %PPC_OUT% > src\rituals_types.cpp
 
 taskkill /IM %BASENAME% 
 ctime -begin rituals.ctm
@@ -115,7 +119,6 @@ cl ^
 	/NOLOGO ^
 	/INCREMENTAL:NO
 pushd bin
-ReM del *.pdb
 GOTO END
 
 :END

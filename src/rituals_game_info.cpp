@@ -24,6 +24,7 @@ typedef EntityOnActivateDecl((*Entity_On_Activate));
 
 typedef int32 Tile;
 
+#ifndef REFLECTED
 struct Tile_Info
 {
 	isize id;
@@ -58,6 +59,7 @@ struct Tile_State
 	isize id;
 	int32 damage;
 };
+#endif
 
 void init_tile_state(Tile_State* state, isize id)
 {
@@ -78,6 +80,7 @@ enum Item_Info_Types
 	Item_Info_Types_Count
 };
 
+#ifndef REFLECTED
 struct Item_Info
 {
 	isize id;
@@ -87,6 +90,7 @@ struct Item_Info
 
 	Rect2 texture;
 };
+#endif
 
 enum Entity_Event_Type
 {
@@ -128,69 +132,81 @@ enum Rituals_Pickup_Kind
 	PickupKind_Health
 };
 
+#ifndef REFLECTED
+struct Rituals_Bat_Userdata
+{
+    Vec2 perch;
+};
+
+struct Rituals_Snake_Userdata
+{
+    real chase_speed_modifier;
+};
+struct Rituals_Goblin_Knight_Userdata
+{
+    Vec2 patrol_start;
+    Vec2 patrol_end;
+};
+
+struct Rituals_Enemy_Userdata
+{
+    isize kind;
+    isize mode;
+    real speed;
+    real alert_dist;
+    real follow_dist;
+
+    union {
+        Rituals_Bat_Userdata bat;
+        Rituals_Snake_Userdata snake;
+        Rituals_Goblin_Knight_Userdata goblin_knight;
+    };
+};
+
+struct Rituals_Player_Userdata {
+    isize held_entity_id;
+    real heal_cooldown;
+    real heal_timer;
+    int32 heal_rate;
+    int32 heal_to_interval;
+};
+
+struct Rituals_Prop_Userdata {
+    Rituals_Entity_Kinds contains;
+    isize subtype;
+    isize amount;
+    isize quality;
+};
+
+struct Rituals_Item_Pickup_Userdata
+{
+    isize id, count;
+};
+
+struct Rituals_Health_Pickup_Userdata
+{
+    isize amount;
+};
+
+struct Rituals_Pickup_Userdata
+{
+    isize kind;
+    Rituals_Item_Pickup_Userdata item;
+    Rituals_Health_Pickup_Userdata health;
+};
+
+struct Unknown_Userdata {
+    void* ptr;
+    isize size;
+};
+
 union Rituals_Entity_Userdata
 {
-	struct {
-		Rituals_Entity_Kinds contains;
-		isize subtype;
-		isize amount;
-		isize quality;
-	} prop;
-	struct {
-		isize held_entity_id;
-		real heal_cooldown;
-		real heal_timer;
-		int32 heal_rate;
-		int32 heal_to_interval;
-		
-	} player;
-	struct {
-		isize kind;
-		isize mode;
-		real speed;
-		real alert_dist;
-		real follow_dist;
-		
-		union {
-			struct {
-				Vec2 perch;
-			} bat;
-			struct {
-				real chase_speed_modifier;
-			} snake;
-			struct {
-				Vec2 patrol_start;
-				Vec2 patrol_end;
-			} goblin_knight;
-		};
-	} enemy;
-	struct {
-		isize kind;
-		union {
-			struct {
-				isize id, count;
-			} item;
-			struct {
-				isize amount;
-			} health;
-		};
-	} pickup;
-	struct {
-		void* ptr;
-		isize size;
-	} unknown;
+    Rituals_Prop_Userdata prop;
+    Rituals_Player_Userdata player;
+    Rituals_Enemy_Userdata enemy;
+    Rituals_Pickup_Userdata pickup;
+    Unknown_Userdata unknown;
 };
+#endif
 
-
-union MyUnion
-{
-	struct {
-		real x, y, z, w;
-	};
-	struct {
-		uint32 aa, bb, cc, dd;
-	};
-	struct {
-		char* p, *q, *r, *s;
-	};
-};

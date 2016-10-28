@@ -25,6 +25,7 @@ const Rect2 Gohufont_Glyphs[] = {
 };
 $(end)
 
+#ifndef REFLECTED
 struct Spritefont
 {
 	int32 line_padding;
@@ -35,6 +36,7 @@ struct Spritefont
 	const Rect2* glyphs;
 	Vec4 color;
 };
+#endif
 
 void init_spritefont(Spritefont* font, const Rect2* glyphs)
 {
@@ -514,6 +516,7 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, i
 }
 
 
+#ifndef REFLECTED
 struct Gui_Window_Handle
 {
 	Vec2 position;
@@ -531,6 +534,7 @@ struct Gui_Text_Input_Handle
 	bool accept_newlines;
 	bool accept_tabs;
 };
+#endif 
 
 void init_text_input_handle(Gui_Text_Input_Handle* handle, char* buf, isize capacity, isize length)
 {
@@ -680,10 +684,11 @@ void gui_add_text_input(Gui_Text_Input_Handle* handle, Vec2 position, Vec2 size,
 	render_box_outline_primitive(s.position, s.size, colors, 2);
 }
 
+#ifndef REFLECTED
 struct Gui_Context
 {
 	Vec2 last_pos;
 	Vec2 next_pos;
 	isize axis;
 };
-
+#endif

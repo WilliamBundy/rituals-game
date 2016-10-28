@@ -61,6 +61,8 @@ real SpriteAnchorY[] = {
 	0.0f
 };
 
+
+#ifndef REFLECTED
 struct Sprite
 {
 	Vec2 position;
@@ -77,7 +79,9 @@ struct Sprite4
 {
 	Sprite e[4];
 };
+#endif
 #define _get_sprite_y_base(s) (s.position.y - s.center.y + s.sort_offset)
+#define _get_spritep_y_base(s) (s->position.y - s->center.y + s->sort_offset)
 GenerateIntrosortForType(sort_sprites_on_y_base, Sprite, 12, _get_sprite_y_base)
 
 void init_sprite(Sprite* s)
@@ -92,6 +96,8 @@ void init_sprite(Sprite* s)
 	s->sort_offset = 0;
 }
 
+
+#ifndef REFLECTED
 struct Render_Group
 {
 	GLuint texture;
@@ -115,6 +121,7 @@ struct OpenGL_Renderer
 	Render_Group* groups;
 	isize groups_count;
 };
+#endif
 
 void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)
 {
@@ -130,7 +137,7 @@ void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena
 
 #define _get_member_address(s, m) ((void*)&(((s*)(NULL))->m))
 #define _gl_offset(name) ((GLvoid*)(_get_member_address(Sprite, name)))
-void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, char* vertex_source, char* frag_source, Memory_Arena* arena)
+void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, const char* vertex_source, const char* frag_source, Memory_Arena* arena)
 {
 	r->groups = arena_push_array(arena, Render_Group, group_count);
 	r->groups_count = group_count;

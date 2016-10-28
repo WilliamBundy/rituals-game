@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_world_area.cpp
  */
 
-typedef struct Entity Entity;
+#ifndef REFLECTED
 struct Hitbox_Contact
 {
 	isize a_id;
@@ -31,6 +31,7 @@ struct Hitbox
 	uint64 group;
 	AABB box;
 };
+#endif
 #define _hitbox_get_x1(h) (AABB_x1(h.box))
 GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
 #define _hitbox_get_y1(h) (AABB_y1(h.box))
@@ -42,6 +43,8 @@ enum Entity_Flags
 	EntityFlag_Tail = Flag(1),
 	EntityFlag_SameShadow = Flag(2)
 };
+
+#ifndef REFLECTED
 struct Entity
 {
 	isize id;
@@ -72,17 +75,19 @@ struct Entity
 	//void* userdata;
 	Rituals_Entity_Userdata userdata;
 };
+#endif
 
 #define _entity_get_id(e) (e.id)
 GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
 GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
 
-typedef struct World_Area_Stub World_Area_Stub;
+#ifndef REFLECTED
 struct Area_Link
 {
 	Vec2i position;
 	World_Area_Stub* link;
 };
+#endif
 
 enum World_Area_Biome
 {
@@ -93,6 +98,8 @@ enum World_Area_Biome
 //#define WorldAreaTilemapWidth (64)
 //#define WorldAreaTilemapHeight (64)
 #define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight)
+
+#ifndef REFLECTED
 struct World_Area_Stub
 {
 	isize id;
@@ -129,6 +136,7 @@ struct World_Area
 
 	Entity* player;
 };
+#endif
 
 void init_world_area(World_Area* area, Memory_Arena* arena)
 {
@@ -196,8 +204,19 @@ Entity* world_area_find_entity(World_Area* area, isize id)
 	return index == -1 ? NULL : area->entities + index;
 }
 
+
+int32 entity_id_cmp(const void* a, const void* b)
+{
+	Entity* ea = (Entity*)a;
+	Entity* eb = (Entity*)b;
+	return ea->id - eb->id;
+}
+
+
 void world_area_sort_entities_on_id(World_Area* area)
 {
+	//qsort(area->entities, area->entities_count, sizeof(Entity),  &entity_id_cmp);
+	//printf("%d\n", area->entities[0].id);
 	entity_sort_on_id(area->entities, area->entities_count);
 }
 
@@ -315,7 +334,7 @@ void world_area_process_hitboxes(World_Area* area)
 				}
 			}
 
-			if(aabb_intersect(&a->box, &b->box)) {
+			if(aabb_intersect(a->box, b->box)) {
 				Hitbox_Contact* c = area->hitbox_contacts + area->hitbox_contacts_count++;
 				c->a = a->ref;
 				c->b = b->ref;

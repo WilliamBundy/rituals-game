@@ -76,6 +76,7 @@ typedef size_t usize;
 #define Gigabytes(b) (Megabytes(b) * UINT64_C(1024))
 
 #define Log_Error(ii) printf("%s \n", (ii));
+#define assert(cond) do { if(!cond) { char *p = 0; p = NULL; *p = 100; } } while(0)
 
 #include "../rituals_memory.cpp"
 #include "../rituals_sort_macros.cpp"

@@ -11,6 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 
+#ifndef REFLECTED
 struct Particle
 {
 	Vec3 position;
@@ -61,6 +62,7 @@ struct Particle_Style
 	real skid_on_bounce_max;
 	real jitter_on_bounce_mag;
 };
+#endif
 
 Particle_Style copy_particle_style(Particle_Style s,
 		Vec2 impulse_range, Vec2i time_range)
@@ -134,6 +136,7 @@ void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real
 }
 
 #define EmitterStyleCapacity (256)
+#ifndef REFLECTED
 struct Emitter
 {
 	Particle* particles;
@@ -142,6 +145,7 @@ struct Emitter
 	Particle_Style* styles;
 	isize styles_count, styles_capacity;
 };
+#endif
 
 void init_emitter(Emitter* e, isize max_particles, Memory_Arena* arena)
 {
@@ -239,9 +243,9 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 				if(b->group == 1) continue;
 				AABB shape = b->shape;
 				AABB point = aabb(v2(p->position), 0, 0);
-				if(aabb_intersect(&shape, &point)) {
+				if(aabb_intersect(shape, point)) {
 					Vec2 overlap;
-					aabb_overlap(&shape, &point, &overlap);
+					aabb_overlap(shape, point, &overlap);
 					Vec2 newpos = v2(p->position);
 					newpos += overlap;
 

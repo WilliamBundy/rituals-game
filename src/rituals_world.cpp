@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * rituals_world.cpp
  */
 
-//#ifndef REFLECTED
+#ifndef REFLECTED
 struct World
 {
 	char* name;
@@ -34,7 +34,7 @@ struct World
 	Particle_Style base_style;
 	Emitter emitter;
 };
-//#endif 
+#endif 
 
 isize Anim_Standing;
 isize Anim_Walking;
@@ -262,9 +262,9 @@ int recursively_delete_folder(char* path, bool append_base_path);
 void world_delete_self(World* world)
 {
 	char world_path[FilePathMaxLength];
-	isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", menu_state->save_dir, world->name);
+	isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", Game->Menu->save_dir, world->name);
 	recursively_delete_folder(world_path, false);
-	menu_state->saves_dirty = true;
+	Game->Menu->saves_dirty = true;
 }
 
 
@@ -425,7 +425,9 @@ void world_area_render(World_Area* area, World* world)
 
 	render_set_current_group(1);
 	render_start();
-	snprintf(buf, 256, "Area %d | Entities %d | Frame Time %d", area->id, area->entities_count, Game->last_frame_time);
+	int32 mx, my;
+	SDL_GetMouseState(&mx, &my);
+	snprintf(buf, 256, "%d %d Area %d | Entities %d | Frame Time %d", mx, my, area->id, area->entities_count, Game->last_frame_time);
 	render_body_text(buf, v2(16, 16), true);
 	render_draw(Game->size, Game->scale);
 #endif
@@ -443,16 +445,16 @@ void world_area_update(World_Area* area, World* world)
 	
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
-	if(!play_state->running) {
+	if(!Game->Play->running) {
 		world_area_render(area, world);
 		return;
 	}
 
-	play_state->current_time = SDL_GetTicks();
-	real dt = (play_state->current_time - play_state->prev_time) / 1000.0;
+	Game->Play->current_time = SDL_GetTicks();
+	real dt = (Game->Play->current_time - Game->Play->prev_time) / 1000.0;
 	dt = clamp(dt, 0, 1.2f);
-	play_state->accumulator += dt;
-	play_state->prev_time = play_state->current_time;
+	Game->Play->accumulator += dt;
+	Game->Play->prev_time = Game->Play->current_time;
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
 
@@ -475,17 +477,17 @@ void world_area_update(World_Area* area, World* world)
 	Vec2 target = area->player->body->shape.center;
 	area->target = target;
 	if(target.x < 0) {
-		world_switch_current_area(play_state->world, area->stub->west, Game->play_arena);
-		play_state->world_xy.x--;
+		world_switch_current_area(Game->Play->world, area->stub->west, Game->play_arena);
+		Game->Play->world_xy.x--;
 	} else if(target.x > area->map.w * Tile_Size) {
-		world_switch_current_area(play_state->world, area->stub->east, Game->play_arena);
-		play_state->world_xy.x++;
+		world_switch_current_area(Game->Play->world, area->stub->east, Game->play_arena);
+		Game->Play->world_xy.x++;
 	} else if(target.y < 0) {
-		world_switch_current_area(play_state->world, area->stub->north, Game->play_arena);
-		play_state->world_xy.y--;
+		world_switch_current_area(Game->Play->world, area->stub->north, Game->play_arena);
+		Game->Play->world_xy.y--;
 	} else if(target.y > area->map.h * Tile_Size) {
-		world_switch_current_area(play_state->world, area->stub->south, Game->play_arena);
-		play_state->world_xy.y++;
+		world_switch_current_area(Game->Play->world, area->stub->south, Game->play_arena);
+		Game->Play->world_xy.y++;
 	}
 	world_area_interact(area, world);
 	world_area_render(area, world);

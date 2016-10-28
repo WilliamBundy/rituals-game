@@ -22,7 +22,7 @@ enum Sim_Body_Flags
 };
 
 
-typedef struct Entity Entity;
+#ifndef REFLECTED
 struct Sim_Body
 {
 	isize id;
@@ -45,17 +45,48 @@ struct Sim_Contact
 	real mag;
 	Vec2 normal;
 };
+#endif
 
+$(exclude)
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
-GenerateIntrosortForType(body_sort_on_x, Sim_Body, 12, _body_get_min_x)
-GenerateIntrosortForType(body_sort_on_y, Sim_Body, 12, _body_get_min_y)
+GenerateIntrosortForType(_body_sort_on_x, Sim_Body, 12, _body_get_min_x)
+GenerateIntrosortForType(_body_sort_on_y, Sim_Body, 12, _body_get_min_y)
+
+
+int32 _cmp_body_x(const void * a, const void* b)
+{
+	Sim_Body* ba = (Sim_Body*)a;
+	Sim_Body* bb = (Sim_Body*)b;
+	return AABB_x1(ba->shape) < AABB_x1(bb->shape);
+}
+
+int32 _cmp_body_y(const void * a, const void* b)
+{
+	Sim_Body* ba = (Sim_Body*)a;
+	Sim_Body* bb = (Sim_Body*)b;
+	return AABB_y1(ba->shape) < AABB_y1(bb->shape);
+}
+$(end)
+
+void body_sort_on_x(Sim_Body* bodies, isize count)
+{
+	//qsort(bodies, count, sizeof(Sim_Body), &_cmp_body_x);
+	_body_sort_on_x(bodies, count);
+}
+
+void body_sort_on_y(Sim_Body* bodies, isize count)
+{
+	//qsort(bodies, count, sizeof(Sim_Body), &_cmp_body_y);
+	_body_sort_on_y(bodies, count);
+}
 
 #define _body_get_not_static(e) (!Has_Flag(e.flags, Body_Flag_Static))
 GenerateIntrosortForType(body_sort_static_first, Sim_Body, 12, _body_get_not_static)
 
 #define _body_get_id(e) (e.id)
-GenerateIntrosortForType(body_sort_on_id, Sim_Body, 12, _body_get_id)
+#define _bodyp_get_id(e) (e.id)
+GenerateIntrosortForType(body_sort_on_id, Sim_Body, 12, _bodyp_get_id)
 GenerateBinarySearchForType(body_search_for_id, Sim_Body, isize, _body_get_id)
 
 void init_body(Sim_Body* b)
@@ -72,6 +103,7 @@ void init_body(Sim_Body* b)
 }
 
 #define SimGridCellSide (Tile_Size * 4.0f)
+#ifndef REFLECTED
 struct Sim_Grid_Cell
 {
 	Sim_Body* body;
@@ -87,6 +119,7 @@ struct Sim_Static_Grid
 	isize cells_length;
 	Vec2i size;
 };
+#endif
 
 void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, Memory_Arena* arena)
 {
@@ -152,6 +185,7 @@ void build_static_grid(Sim_Static_Grid* grid, Sim_Body* bodies, isize count)
 	}
 }
 
+#ifndef REFLECTED
 struct Simulator
 {
 	Sim_Body* static_bodies;
@@ -166,6 +200,7 @@ struct Simulator
 
 	isize sort_axis;
 };
+#endif
 
 Sim_Body* sim_get_next_static_body(Simulator* sim)
 {
@@ -240,7 +275,7 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 {
 	for(isize i = 0; i < sim->bodies_count; ++i) {
 		Sim_Body* a = sim->bodies + i;
-		if(aabb_intersect(&a->shape, &query)) {
+		if(aabb_intersect(a->shape, query)) {
 			return a;
 		}
 	}
@@ -252,14 +287,14 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 #define SimIter_i (8)
 #define SimIter ((real)SimIter_i)
 #define _collision_slop (0.8f)
-int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep)
+
+int32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, int32 sort_axis)
 {
-	if(do_sweep)
-	if(sim->sort_axis == 0) {
+	if(sort_axis == 0) {
 		if(AABB_x1(b->shape) > AABB_x2(a->shape)) {
 			return -1;
 		}
-	} else if(sim->sort_axis == 1) {
+	} else if(sort_axis == 1) {
 		if(AABB_y1(b->shape) > AABB_y2(a->shape)) {
 			return -1;
 		}
@@ -280,7 +315,28 @@ int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, Simulator* sim, bool do_sweep
 		return 0;		
 	}
 
-	return aabb_intersect(&a->shape, &b->shape);
+	return aabb_intersect(a->shape, b->shape);
+}
+
+
+int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, int32 sort_axis)
+{
+	if(Has_Flag(a->flags, Body_Flag_Static)) {
+		if(Has_Flag(b->flags, Body_Flag_Static)) {
+			return 0;
+		}
+	}
+	uint64 ma = a->mask & b->group;
+	if(ma != 0) {
+		return 0;
+	}
+
+	uint64 mb = a->group & b->mask;
+	if(mb != 0) {
+		return 0;		
+	}
+
+	return aabb_intersect(a->shape, b->shape);
 }
 
 
@@ -290,7 +346,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 tim
 	uint32 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
 
 	Vec2 overlap;
-	aabb_overlap(&a->shape, &b->shape, &overlap);
+	aabb_overlap(a->shape, b->shape, &overlap);
 	real ovl_mag = sqrtf(v2_dot(overlap, overlap));
 	if (ovl_mag < 0.0001f) return;
 	Vec2 normal = overlap * (1.0f / ovl_mag);
@@ -377,6 +433,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 		Vec2 center_sum1 = v2(0, 0);
 		Vec2 center_sum2 = v2(0, 0);
 		Vec2 variance = v2(0, 0);
+		int32 sort_axis = sim->sort_axis;
 		for(isize i = 0; i < sim->bodies_count; ++i) {
 			a = sim->bodies + i;
 
@@ -407,7 +464,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 					
 					do {
 						b = c->body;
-						if(_do_collide_bodies(a, b, sim, false)) 
+						if(_do_collide_bodies(a, b, sort_axis)) 
 							_separate_bodies(a, b, capture_contacts, times, sim);
 					} while(c = c->next);
 				}
@@ -417,7 +474,7 @@ void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = t
 				b = sim->bodies + j;
 
 
-				int32 out = _do_collide_bodies(a, b, sim, true);
+				int32 out = _do_collide_bodies_sweep(a, b, sort_axis);
 				if(out == -1) break;
 				else if(out == 1) {
 					_separate_bodies(a, b, capture_contacts, times, sim);

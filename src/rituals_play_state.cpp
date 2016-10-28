@@ -14,77 +14,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 void init_play_state()
 {
-	clear_arena(Game->play_arena);
-	clear_arena(Game->world_arena);
-	play_state = arena_push_struct(Game->game_arena, Play_State);
-	play_state->delete_world_on_stop = false;
-	play_state->save_world_on_stop = true;
-	play_state->world = arena_push_struct(Game->world_arena, World);
-	play_state->running = true;
 }
 
 void deserialize_world(World* world, FILE* world_file);
 void start_play_state(char* world_name_in)
 {
-	World* world = play_state->world;
-	isize wnl = strlen(world_name_in);
-	char* world_name = arena_push_array(Game->world_arena, char, wnl + 1);
-	memcpy(world_name, world_name_in, wnl+1);
-	FILE* fp = get_world_file(world_name, "rb");
-#if 0
-	if(fp != NULL) {
-		deserialize_world(world, fp);
-		world->name = world_name;
-	} else
-#endif
-	{
-	
-		init_world(world, 4, 4, next_random_uint64(&Game->r), Game->world_arena);
-		generate_world(world_name, world);
-		world_start_in_area(
-				world,
-				world->area_stubs, 
-				Game->play_arena);
-	}
 }
 
 void play_state_update()
 {
-	if(Game->state != Game_State_Play) return;
-	if(_scancode(ESCAPE) == State_Just_Pressed) {
-		play_state->running = !play_state->running;
-	}
-	world_area_update(play_state->world->current_area, play_state->world);
-
-
-	if(!play_state->running) {
-		Renderer->groups[0].offset = Vec2{};
-		render_start(CurrentGroup);
-		
-		Sprite s = create_box_primitive(v2(-100, -100), Game->size + v2(100, 100), v4(0, 0, 0, 0.75f));
-		s.flags = Anchor_Top_Left;
-		render_add(&s);
-
-		Body_Font->color = v4(1, 1, 1, 1);
-		render_body_text("Paused", v2(32, 32), false, 4.0f);
-		if(gui_add_button(v2(32, Game->size.y / 2), "Exit to main menu", v2(144, 0))) {
-			serialize_world(play_state->world);
-			init_play_state();
-			Game->state = Game_State_Menu;
-		}
-		render_draw(Game->size, Game->scale);
-	}
 }
 
 void play_state_stop()
 {
-	printf("Stopping play state... \n");
-	if(play_state->save_world_on_stop) {
-		serialize_world(play_state->world);
-	}
-	if(play_state->delete_world_on_stop) {
-		world_delete_self(play_state->world);
-	}
-	init_play_state();
 }
 
