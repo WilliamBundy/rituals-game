@@ -1,3 +1,4 @@
+#if 0
 /* 
 Copyright (c) 2016 William Bundy
 
@@ -99,4 +100,4 @@ Memory_Arena* new_memory_arena(usize size, Memory_Arena* src)
 	init_memory_arena(arena, size);
 	return arena;
 }
-
+#endif

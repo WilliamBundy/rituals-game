@@ -87,6 +87,7 @@ typedef real32 real;
 typedef ptrdiff_t isize;
 typedef size_t usize;
 typedef int32 Tile;
+
 union Vec2
 {
 	struct {
@@ -95,6 +96,7 @@ union Vec2
 	};
 	real e[2];
 };
+
 union Vec3
 {
 	struct {
@@ -104,6 +106,7 @@ union Vec3
 	};
 	real e[3];
 };
+
 union Vec4
 {
 	struct {
@@ -114,6 +117,7 @@ union Vec4
 	};
 	real e[4];
 };
+
 union Vec2i
 {
 	struct {
@@ -122,6 +126,7 @@ union Vec2i
 	};
 	integer e[2];
 };
+
 union Vec3i
 {
 	struct {
@@ -131,6 +136,7 @@ union Vec3i
 	};
 	integer e[3];
 };
+
 union Vec4i
 {
 	struct {
@@ -141,6 +147,7 @@ union Vec4i
 	};
 	integer e[4];
 };
+
 union Rect2
 {
 	struct {
@@ -155,6 +162,7 @@ union Rect2
 	};
 	real e[4];
 };
+
 struct Rect2_Clip_Info
 {
 	Vec2 rp1;
@@ -162,6 +170,7 @@ struct Rect2_Clip_Info
 	Vec2 diff1;
 	Vec2 diff2;
 };
+
 struct Rect2i
 {
 	integer x;
@@ -169,6 +178,7 @@ struct Rect2i
 	integer w;
 	integer h;
 };
+
 union AABB
 {
 	struct {
@@ -185,6 +195,7 @@ union AABB
 	};
 	real e[4];
 };
+
 struct Memory_Arena
 {
 	uint8 *data;
@@ -193,11 +204,13 @@ struct Memory_Arena
 	isize temp_head;
 	Memory_Arena *next;
 };
+
 struct Random
 {
 	uint64 x;
 	uint64 y;
 };
+
 struct Game_Input
 {
 	isize num_keys_down;
@@ -214,6 +227,7 @@ struct Game_Input
 	char *text;
 	isize text_count;
 };
+
 struct Game_Main
 {
 	SDL_Window *window;
@@ -238,10 +252,33 @@ struct Game_Main
 	Game_Registry *registry;
 	Game_Input *input;
 	uint64 last_frame_time;
-	None_State *None;
-	Menu_State *Menu;
-	Play_State *Play;
+	_game_state_list;
+(null);
+(null);
+	Game_Main *Game;
+	OpenGL_Renderer *Renderer;
+	Render_Group *CurrentGroup;
+	Game_Input *Input;
+	Spritefont *Body_Font;
+	Spritefont *Title_Font;
+	Game_Registry *Registry;
+(null);
+	struct {
+		const char *window_title;
+		Vec2i window_size;
+		real game_scale;
+		int32 display_index;
+		bool check_gl_attributes;
+		const char *vertex_shader;
+		const char *frag_shader;
+		SDL_Window *window;
+	};
+(null);
+	int32 platform_init Platform platform if SDL_Init SDL_INIT_EVERYTHING *Log_Error;
+	Log_Error SDL_GetError;
+	return;
 };
+
 struct Platform
 {
 	const char *window_title;
@@ -253,6 +290,7 @@ struct Platform
 	const char *frag_shader;
 	SDL_Window *window;
 };
+
 struct Sprite
 {
 	Vec2 position;
@@ -264,10 +302,12 @@ struct Sprite
 	uint32 flags;
 	real sort_offset;
 };
+
 struct Sprite4
 {
 	Sprite e[4];
 };
+
 struct Render_Group
 {
 	GLuint texture;
@@ -281,6 +321,7 @@ struct Render_Group
 	isize sprites_count;
 	isize sprites_capacity;
 };
+
 struct OpenGL_Renderer
 {
 	GLuint shader_program;
@@ -293,6 +334,7 @@ struct OpenGL_Renderer
 	Render_Group *groups;
 	isize groups_count;
 };
+
 struct Animation_Frame
 {
 	Vec3 position;
@@ -302,6 +344,7 @@ struct Animation_Frame
 	Rect2 texture;
 	real sort_offset;
 };
+
 struct Animation
 {
 	isize id;
@@ -312,6 +355,7 @@ struct Animation
 	real inv_fps;
 	bool looping;
 };
+
 struct Animated_Sprite
 {
 	Animation **animations;
@@ -322,6 +366,7 @@ struct Animated_Sprite
 	bool running;
 	real timer;
 };
+
 struct Spritefont
 {
 	int32 line_padding;
@@ -332,12 +377,14 @@ struct Spritefont
 	const Rect2 *glyphs;
 	Vec4 color;
 };
+
 struct Gui_Window_Handle
 {
 	Vec2 position;
 	char *title;
 	int32 z;
 };
+
 struct Gui_Text_Input_Handle
 {
 	char *buffer;
@@ -350,26 +397,30 @@ struct Gui_Text_Input_Handle
 	bool accept_newlines;
 	bool accept_tabs;
 };
+
 struct Gui_Context
 {
 	Vec2 last_pos;
 	Vec2 next_pos;
 	isize axis;
 };
+
 struct None_State
 {
 	int32 error;
 };
+
 struct Menu_State
 {
 	int32 error;
-	char save_dir[4096];
+	char save_dir[FilePathMaxLength];
 	isize save_dir_len;
 	tinydir_dir saves;
 	bool saves_dirty;
 	Gui_Text_Input_Handle handle;
 	isize delete_index;
 };
+
 struct Play_State
 {
 	int32 error;
@@ -383,6 +434,7 @@ struct Play_State
 	bool save_world_on_stop;
 	const char *world_name_in;
 };
+
 struct Tile_Info
 {
 	isize id;
@@ -403,11 +455,13 @@ struct Tile_Info
 	bool has_top_texture;
 	bool has_bottom_texture;
 };
+
 struct Tile_State
 {
 	isize id;
 	int32 damage;
 };
+
 struct Item_Info
 {
 	isize id;
@@ -416,19 +470,23 @@ struct Item_Info
 	int32 max_stack;
 	Rect2 texture;
 };
+
 struct Rituals_Bat_Userdata
 {
 	Vec2 perch;
 };
+
 struct Rituals_Snake_Userdata
 {
 	real chase_speed_modifier;
 };
+
 struct Rituals_Goblin_Knight_Userdata
 {
 	Vec2 patrol_start;
 	Vec2 patrol_end;
 };
+
 struct Rituals_Enemy_Userdata
 {
 	isize kind;
@@ -442,6 +500,7 @@ struct Rituals_Enemy_Userdata
 		Rituals_Goblin_Knight_Userdata goblin_knight;
 	};
 };
+
 struct Rituals_Player_Userdata
 {
 	isize held_entity_id;
@@ -450,6 +509,7 @@ struct Rituals_Player_Userdata
 	int32 heal_rate;
 	int32 heal_to_interval;
 };
+
 struct Rituals_Prop_Userdata
 {
 	Rituals_Entity_Kinds contains;
@@ -457,26 +517,31 @@ struct Rituals_Prop_Userdata
 	isize amount;
 	isize quality;
 };
+
 struct Rituals_Item_Pickup_Userdata
 {
 	isize id;
 	isize count;
 };
+
 struct Rituals_Health_Pickup_Userdata
 {
 	isize amount;
 };
+
 struct Rituals_Pickup_Userdata
 {
 	isize kind;
 	Rituals_Item_Pickup_Userdata item;
 	Rituals_Health_Pickup_Userdata health;
 };
+
 struct Unknown_Userdata
 {
 	void *ptr;
 	isize size;
 };
+
 union Rituals_Entity_Userdata
 {
 	Rituals_Prop_Userdata prop;
@@ -485,6 +550,7 @@ union Rituals_Entity_Userdata
 	Rituals_Pickup_Userdata pickup;
 	Unknown_Userdata unknown;
 };
+
 struct Game_Registry
 {
 	Tile_Info *tiles;
@@ -494,6 +560,7 @@ struct Game_Registry
 	usize *items_hash;
 	isize items_count;
 };
+
 struct Tilemap
 {
 	isize w;
@@ -501,6 +568,7 @@ struct Tilemap
 	Tile *tiles;
 	Tile_State *states;
 };
+
 struct Sim_Body
 {
 	isize id;
@@ -517,6 +585,7 @@ struct Sim_Body
 	isize entity_id;
 	Entity *entity;
 };
+
 struct Sim_Contact
 {
 	isize a_id;
@@ -526,11 +595,13 @@ struct Sim_Contact
 	real mag;
 	Vec2 normal;
 };
+
 struct Sim_Grid_Cell
 {
 	Sim_Body *body;
 	Sim_Grid_Cell *next;
 };
+
 struct Sim_Static_Grid
 {
 	Sim_Grid_Cell *cell_storage;
@@ -540,6 +611,7 @@ struct Sim_Static_Grid
 	isize cells_length;
 	Vec2i size;
 };
+
 struct Simulator
 {
 	Sim_Body *static_bodies;
@@ -555,6 +627,7 @@ struct Simulator
 	isize contacts_capacity;
 	isize sort_axis;
 };
+
 struct Particle
 {
 	Vec3 position;
@@ -567,6 +640,7 @@ struct Particle
 	int32 total_time;
 	int32 style_index;
 };
+
 struct Particle_Style
 {
 	int32 id;
@@ -596,6 +670,7 @@ struct Particle_Style
 	real skid_on_bounce_max;
 	real jitter_on_bounce_mag;
 };
+
 struct Emitter
 {
 	Particle *particles;
@@ -605,6 +680,7 @@ struct Emitter
 	isize styles_count;
 	isize styles_capacity;
 };
+
 struct Hitbox_Contact
 {
 	isize a_id;
@@ -612,6 +688,7 @@ struct Hitbox_Contact
 	Entity *a;
 	Entity *b;
 };
+
 struct Hitbox
 {
 	isize id;
@@ -620,6 +697,7 @@ struct Hitbox
 	uint64 group;
 	AABB box;
 };
+
 struct Entity
 {
 	isize id;
@@ -644,11 +722,13 @@ struct Entity
 	uint64 flags;
 	Rituals_Entity_Userdata userdata;
 };
+
 struct Area_Link
 {
 	Vec2i position;
 	World_Area_Stub *link;
 };
+
 struct World_Area_Stub
 {
 	isize id;
@@ -659,6 +739,7 @@ struct World_Area_Stub
 	Area_Link east;
 	World_Area_Biome biome;
 };
+
 struct World_Area
 {
 	isize id;
@@ -685,6 +766,7 @@ struct World_Area
 	isize hitbox_contacts_capacity;
 	Entity *player;
 };
+
 struct World
 {
 	char *name;
@@ -703,6 +785,7 @@ struct World
 	Particle_Style base_style;
 	Emitter emitter;
 };
+
 real clamp_01(real x);
 real lerp(real a, real b, real t);
 void init_memory_arena(Memory_Arena* arena, usize size);
@@ -741,8 +824,6 @@ bool is_valid_filename_char(char c);
 char replace_filename_char(char c, char replace);
 isize replace_invalid_filename_chars(char* str, isize len, char replace);
 isize append_input_text(char* str, isize str_cap, isize str_len, isize insert_from_end);
-void sort_sprites_on_y_base(Sprite* array, isize count);
-void init_sprite(Sprite* s);
 void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena);
 void init_renderer(OpenGL_Renderer* r, isize group_count, isize group_size, const char* vertex_source, const char* frag_source, Memory_Arena* arena);
 Render_Group* render_group(OpenGL_Renderer* r, isize index);
@@ -840,10 +921,6 @@ void render_tilemap(Tilemap* tilemap, Vec2 pos);
 isize render_tilemap(Tilemap* tilemap, Vec2 pos, Rect2 area);
 void body_sort_on_x(Sim_Body* bodies, isize count);
 void body_sort_on_y(Sim_Body* bodies, isize count);
-void body_sort_static_first(Sim_Body* array, isize count);
-void body_sort_on_id(Sim_Body* array, isize count);
-isize body_search_for_id(isize key, Sim_Body* array, isize count);
-void init_body(Sim_Body* b);
 void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, Memory_Arena* arena);
 Sim_Grid_Cell* get_next_grid_cell(Sim_Static_Grid* grid);
 void build_static_grid(Sim_Static_Grid* grid, Sim_Body* bodies, isize count);
@@ -867,10 +944,6 @@ void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real
 void init_emitter(Emitter* e, isize max_particles, Memory_Arena* arena);
 void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle_Style style);
 void emitter_render(Emitter* e, Simulator* sim, real dt);
-void _hitbox_sort_on_x_axis(Hitbox* array, isize count);
-void _hitbox_sort_on_y_axis(Hitbox* array, isize count);
-void entity_sort_on_id(Entity* array, isize count);
-isize entity_search_for_id(isize key, Entity* array, isize count);
 void init_world_area(World_Area* area, Memory_Arena* arena);
 void init_entity(Entity* entity);
 Entity* world_area_get_next_entity(World_Area* area);

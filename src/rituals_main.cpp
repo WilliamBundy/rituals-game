@@ -1,32 +1,10 @@
-/* 
-Copyright (c) 2016 William Bundy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-/*
- * rituals_main.cpp
- */ 
-
-#ifdef PREPROCESSOR
-#define $(...) $(__VA_ARGS__)
-#else
 #define $(...)
-#define REFLECTED
-#endif
 
 
-#ifndef PREPROCESSOR
-
-#if RITUALS_WINDOWS == 1
 #include <windows.h>
 #include <Shlwapi.h>
+#include <intrin.h>
 #include <malloc.h>
-#endif
 
 //CRT imports
 #define _CRT_SECURE_NO_WARNINGS 1
@@ -40,78 +18,60 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <stddef.h>
 #include <errno.h>
 
-
-#if RITUALS_LINUX == 1
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#endif 
-
-//3rd party imports
-#if RITUALS_WINDOWS == 1
 #include <SDL.h>
-#elif RITUALS_LINUX == 1
-#include <SDL2/SDL.h>
-#endif
 #include "thirdparty.h"
-
-#endif
 
 #include "rituals_defines.h"
 
-#ifdef REFLECTED
-#include "rituals_types.cpp"
-#include "rituals_reflection.cpp"
-#endif
+#define ALLOC_CUSTOM_INTEGER_TYPES
+#define ALLOC_IMPLEMENTATION
+#define ALLOC_CPLUSPLUS_FEATURES
+#include "wb_alloc.h"
 
-#define _game_state_list \
-	_game_state(None) \
-	_game_state(Menu) \
-	_game_state(Play) \
+#define WBGL_GL_VERSION_3_3
+#define WBGL_SDL
+#define WBGL_IMPLEMENTATION
+#include "wb_gl.h"
 
+void testUpdate();
 #include "rituals_math.cpp"
-#include "rituals_game.cpp"
-
-#include "rituals_renderer.cpp"
-#include "rituals_animations.cpp"
-#include "rituals_gui.cpp"
-
-#include "rituals_game_states.cpp"
-
+//#include "rituals_renderer.cpp"
+#include "render.cpp"
 #include "rituals_game_info.cpp"
 #include "rituals_game_registry.cpp"
-
+#include "rituals_game.cpp"
+#include "rituals_animations.cpp"
+//#include "rituals_gui.cpp"
+//#include "rituals_game_states.cpp"
 #include "rituals_tilemap.cpp"
-
+struct Entity;
 #include "rituals_simulation.cpp"
-
 #include "rituals_particles.cpp"
-
+struct World;
+struct World_Area_Stub;
+World* globalWorld;
 #include "rituals_world_area.cpp"
 #include "rituals_world.cpp"
 #include "rituals_entity_events.cpp"
+//#include "rituals_serialization.cpp"
 
-#include "rituals_serialization.cpp"
+Tilemap tm;
 
-void load_assets()
+void testInit()
 {
-	isize w, h;
-	uint32 texture = ogl_load_texture("data/graphics.png", &w, &h);
-	for(isize i = 0; i < Renderer->groups_count; ++i) {
-		Renderer->groups[i].texture = texture;
-		Renderer->groups[i].texture_size.x = w;
-		Renderer->groups[i].texture_size.y = h;
-	}
-
-	Game->body_font = arena_push_struct(Game->asset_arena, Spritefont);
-	init_spritefont(Game->body_font, Gohufont_Glyphs);
-	Body_Font = Game->body_font;
-
-	init_game_registry(Registry, Game->registry_arena); 
-	register_everything_in_rituals();
-	finalize_game_registry();
+	init_tilemap(&tm, 32, 32, Game->baseArena);
+	generate_tilemap(&tm, 1000);
+	globalWorld = (World*)arenaPush(Game->gameArena, sizeof(World));
+	init_world(globalWorld, 8, 8, 100, Game->gameArena);
+	world_start_in_area(globalWorld, globalWorld->area_stubs, Game->gameArena);
 }
 
+void testUpdate()
+{
+	renderAdd(0, ColorWhite, v2(100, 100), v2(32, 32), rect2i(0, 0, 32, 32));
+	render_tilemap(Game->registry, &tm, v2(0, 0));
+	world_area_update(globalWorld->current_area, globalWorld);
+}
 
 int main(int argc, char** argv)
 {
@@ -120,13 +80,6 @@ int main(int argc, char** argv)
 	platform.window_size = v2i(1280, 720);
 	platform.game_scale = 1.0f;
 	platform.display_index = 1;
-	platform.check_gl_attributes = false;
-	platform.vertex_shader = 
-#include "vert.glsl"
-		;
-	platform.frag_shader = 
-#include "frag.glsl"
-		;
 
 	if(platform_init(&platform)) {
 		return 1;
@@ -136,9 +89,8 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	load_assets();
-
-	game_start(Game_State_Menu, &platform);
+	testInit();
+	game_start(&platform, Game);
 
 	platform_quit();
 

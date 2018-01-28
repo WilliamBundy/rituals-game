@@ -1,68 +1,53 @@
-
-/* 
-Copyright (c) 2016 William Bundy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-
-
-#ifndef REFLECTED
 struct Particle
 {
 	Vec3 position;
 	Vec3 velocity;
-	real scale;
-	real angle;
-	real angular_vel;
-	int32 frame;
-	int32 time;
-	int32 total_time;
-	int32 style_index;
+	f32 scale;
+	f32 angle;
+	f32 angular_vel;
+	i32 frame;
+	i32 time;
+	i32 total_time;
+	i32 style_index;
 };
 
 struct Particle_Style
 {
-	int32 id;
-	Rect2 texture;
+	i32 id;
+	u32 color;
+	u32 shadow_color;
+	Rect2i texture;
 	Vec2 size;
-	Vec4 color;
-	Vec4 shadow_color;
 
 	Vec3 acceleration;
 
-	real impulse_min;
-	real impulse_max;
+	f32 impulse_min;
+	f32 impulse_max;
 	
-	real angle_min;
-	real angle_max;
+	f32 angle_min;
+	f32 angle_max;
 
-	real angle_vel_min;
-	real angle_vel_max;
+	f32 angle_vel_min;
+	f32 angle_vel_max;
 
-	real scale_min;
-	real scale_max;
+	f32 scale_min;
+	f32 scale_max;
 
-	int32 frame_min;
-	int32 frame_max;
-	int32 max_frames;
-	int32 framerate;
+	i32 frame_min;
+	i32 frame_max;
+	i32 max_frames;
+	i32 framerate;
 
-	int32 time_min;
-	int32 time_max;
+	i32 time_min;
+	i32 time_max;
 
 	bool time_scaling;
 	bool time_alpha;
-	real ground_restitution;
-	real skid_on_bounce_min;
-	real skid_on_bounce_max;
-	real jitter_on_bounce_mag;
+	f32 ground_restitution;
+	f32 skid_on_bounce_min;
+	f32 skid_on_bounce_max;
+	f32 jitter_on_bounce_mag;
 };
-#endif
 
 Particle_Style copy_particle_style(Particle_Style s,
 		Vec2 impulse_range, Vec2i time_range)
@@ -75,24 +60,25 @@ Particle_Style copy_particle_style(Particle_Style s,
 	return s;
 }
 
+//TODO(will) Add particle styles to the registry
 Particle_Style make_particle_style(
-		Rect2 texture, 
+		Rect2i texture, 
 		Vec2 size, 
-		Vec4 color, 
-		Vec4 shadow_color,
+		u32 color, 
+		u32 shadow_color,
 		Vec3 acl, 
 		Vec2 impulse_range, 
 		Vec2 angle_range, 
 		Vec2 angle_vel_range, 
 		Vec2 scale_range, 
 		Vec2i frame_range, 
-		int32 max_frames, 
-		int32 framerate, 
+		i32 max_frames, 
+		i32 framerate, 
 		Vec2i time_range, 
 		bool time_scaling,
-		real ground_restitution,
+		f32 ground_restitution,
 		Vec2 skid_on_bounce_range,
-		real jitter_on_bounce_mag)
+		f32 jitter_on_bounce_mag)
 {
 	Particle_Style s;
 	s.texture = texture;
@@ -122,7 +108,7 @@ Particle_Style make_particle_style(
 	return s;
 }
 
-void init_particle(Particle* p, Vec3 pos, Vec3 vel, real scale, real angle, real anglev, int32 frame, int32 time, int32 style_index)
+void init_particle(Particle* p, Vec3 pos, Vec3 vel, f32 scale, f32 angle, f32 anglev, i32 frame, i32 time, i32 style_index)
 {
 	p->position = pos;
 	p->velocity = vel;
@@ -147,13 +133,14 @@ struct Emitter
 };
 #endif
 
-void init_emitter(Emitter* e, isize max_particles, Memory_Arena* arena)
+void init_emitter(Emitter* e, isize max_particles, MemoryArena* arena)
 {
 	e->particles_count = 0; 
 	e->styles_capacity = EmitterStyleCapacity;
-	e->styles = arena_push_array(arena, Particle_Style, EmitterStyleCapacity);
+	e->styles = (Particle_Style*)arenaPush(arena,
+			sizeof(Particle_Style) *  EmitterStyleCapacity);
 	e->particles_capacity = max_particles;
-	e->particles = arena_push_array(arena, Particle, max_particles);
+	e->particles = (Particle*)arenaPush(arena, sizeof(Particle) * max_particles);
 }
 
 void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle_Style style) 
@@ -170,9 +157,9 @@ void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle
 		isize next_particle = e->particles_count++;
 		next_particle %= e->particles_capacity;
 		Particle* p = e->particles + next_particle;
-		real mag = rand_range(style.impulse_min, style.impulse_max);
+		f32 mag = rand_range(style.impulse_min, style.impulse_max);
 		Vec2 impulse = v2_from_angle(rand_range(angle_range.x, angle_range.y)) * mag;
-		real quarter_h = pos.z / 4;
+		f32 quarter_h = pos.z / 4;
 		init_particle(p, pos,
 				v3(impulse, rand_range(-quarter_h, quarter_h)), 
 				rand_range(style.scale_min, style.scale_max), 
@@ -184,7 +171,7 @@ void emitter_spawn(Emitter* e, Vec3 pos, Vec2 angle_range, isize count, Particle
 	}
 }
 
-void emitter_render(Emitter* e, Simulator* sim, real dt)
+void emitter_render(Emitter* e, Simulator* sim, f32 dt)
 {
 	if(e == NULL || e->particles == NULL) return;
 
@@ -203,13 +190,13 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		if(style.id != p->style_index) {
 			style = e->styles[p->style_index];
 		}
-		real tscale = (real)p->time / (real)p->total_time;
+		f32 tscale = (f32)p->time / (f32)p->total_time;
 		tscale /= 2;
 		tscale += 0.5f;
 		p->time--;
 
 		Sprite s;
-		init_sprite(&s);
+		wInitSprite(&s);
 		Vec3 prev_vel = p->velocity;
 		p->velocity += style.acceleration * dt;
 		p->position += (p->velocity + prev_vel) * 0.5f * dt;
@@ -266,7 +253,7 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		}
 
 		p->angle += p->angular_vel * dt;
-		s.position = v2(p->position.x, p->position.y - p->position.z);
+		s.pos = v2(p->position.x, p->position.y - p->position.z);
 		s.sort_offset = p->position.z;
 		s.angle = p->angle;
 		s.size = style.size * p->scale * tscale;
@@ -274,13 +261,18 @@ void emitter_render(Emitter* e, Simulator* sim, real dt)
 		s.texture.x += s.texture.w * p->frame;
 		s.color = style.color;
 		if(style.time_alpha) {
-			s.color.w *= tscale;
+			f32 a = (f32)(s.color & 0xFF) / 255.0;
+			a *= tscale;
+			s.color |= (u8)(a * 255.0);
+			//s.color. *= tscale;
 		}
 		render_add(&s);
-		s.position = v2(p->position.x, p->position.y);
+		s.pos= v2(p->position.x, p->position.y);
 		s.color = style.shadow_color;
 		if(style.time_alpha) {
-			s.color.w *= tscale;
+			f32 a = (f32)(s.color & 0xFF) / 255.0;
+			a *= tscale;
+			s.color |= (u8)(a * 255.0);
 		}
 		s.sort_offset = -1;
 		render_add(&s);

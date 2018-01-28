@@ -14,19 +14,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */ 
 
 
-inline real clamp(real x, real min, real max)
+inline f32 clamp(f32 x, f32 min, f32 max)
 {
 	if(x < min) x = min;
 	else if(x > max) x = max;
 	return x;
 }
 
-real clamp_01(real x)
+f32 clamp_01(f32 x)
 {
 	return clamp(x, 0.0f, 1.0f);	
 }
 
-real lerp(real a, real b, real t)
+f32 lerp(f32 a, f32 b, f32 t)
 {
 	return (1.0f - t) * a + t * b;
 }
@@ -37,50 +37,50 @@ real lerp(real a, real b, real t)
 union Vec2 
 {
 	struct {
-		real x, y;
+		f32 x, y;
 	};
-	real e[2];
+	f32 e[2];
 };
 
 union Vec3
 {
 	struct {
-		real x, y, z;
+		f32 x, y, z;
 	};
-	real e[3];
+	f32 e[3];
 };
 
 union Vec4
 {
 	struct {
-		real x, y, z, w;
+		f32 x, y, z, w;
 	};
-	real e[4];
+	f32 e[4];
 	
 };
 
 union Vec2i
 {
 	struct {
-		integer x, y;
+		i32 x, y;
 	};
-	integer e[2];
+	i32 e[2];
 };
 
 union Vec3i
 {
 	struct {
-		integer x, y, z;
+		i32 x, y, z;
 	};
-	integer e[3];
+	i32 e[3];
 };
 
 union Vec4i
 {
 	struct {
-		integer x, y, z, w;
+		i32 x, y, z, w;
 	};
-	integer e[4];
+	i32 e[4];
 	
 };
 
@@ -88,40 +88,40 @@ union Vec4i
 
 /* v* functions */
 
-static inline Vec2 v2(real x, real y)
+static inline Vec2 v2(f32 x, f32 y)
 {
 	return Vec2{x, y};
 }
 
-static inline Vec3 v3(real x, real y, real z)
+static inline Vec3 v3(f32 x, f32 y, f32 z)
 {
 	return Vec3{
 		x, y, z
 	};
 }
 
-static inline Vec4 v4(real x, real y, real z, real w)
+static inline Vec4 v4(f32 x, f32 y, f32 z, f32 w)
 {
 	return Vec4{
 		x, y, z, w
 	};
 }
 
-static inline Vec2i v2i(integer x, integer y)
+static inline Vec2i v2i(i32 x, i32 y)
 {
 	return Vec2i {
 		x, y
 	};
 }
 
-static inline Vec3i v3i(integer x, integer y, integer z)
+static inline Vec3i v3i(i32 x, i32 y, i32 z)
 {
 	return Vec3i{
 		x, y, z
 	};
 }
 
-static inline Vec4i v4i(integer x, integer y, integer z, integer w)
+static inline Vec4i v4i(i32 x, i32 y, i32 z, i32 w)
 {
 	return Vec4i{
 		x, y, z, w
@@ -150,7 +150,7 @@ static inline Vec3 v3(Vec2 vi)
     return v3(vi.x, vi.y, 0);
 }
 
-static inline Vec3 v3(Vec2 vi, real z)
+static inline Vec3 v3(Vec2 vi, f32 z)
 {
     return v3(vi.x, vi.y, z);
 }
@@ -165,7 +165,7 @@ static inline Vec4 v4(Vec2 vi)
     return v4(vi.x, vi.y, 0, 0);
 }
 
-static inline Vec4 v4(Vec2 vi, real z, real w)
+static inline Vec4 v4(Vec2 vi, f32 z, f32 w)
 {
     return v4(vi.x, vi.y, z, w);
 }
@@ -175,24 +175,24 @@ static inline Vec4 v4(Vec3 vi)
     return v4(vi.x, vi.y, vi.z, 0);
 }
 
-static inline Vec4 v4(Vec3 vi, real w)
+static inline Vec4 v4(Vec3 vi, f32 w)
 {
     return v4(vi.x, vi.y, vi.z, w);
 }
 
 static inline Vec2i v2i(Vec2 vi)
 {
-    return v2i((integer)vi.x, (integer)vi.y);
+    return v2i((i32)vi.x, (i32)vi.y);
 }
 
 static inline Vec3i v3i(Vec3 vi)
 {
-    return v3i((integer)vi.x, (integer)vi.y, (integer)vi.z);
+    return v3i((i32)vi.x, (i32)vi.y, (i32)vi.z);
 }
 
 static inline Vec4i v4i(Vec4 vi)
 {
-    return v4i((integer)vi.x, (integer)vi.y, (integer)vi.z, (integer)vi.w);
+    return v4i((i32)vi.x, (i32)vi.y, (i32)vi.z, (i32)vi.w);
 }
 #endif
 
@@ -226,18 +226,18 @@ static inline Vec2 v2_add(Vec2 a, Vec2 b)
 	return Vec2{a.x + b.x, a.y + b.y};
 }
 
-static inline Vec2 v2_add_scaled(Vec2 a, Vec2 b, real scale)
+static inline Vec2 v2_add_scaled(Vec2 a, Vec2 b, f32 scale)
 {
 	return Vec2{a.x + b.x * scale, a.y + b.y * scale};
 }
 
 
-static inline Vec2 v2_mul(Vec2 a, real s)
+static inline Vec2 v2_mul(Vec2 a, f32 s)
 {
 	return Vec2{a.x * s, a.y * s};
 }
 
-static inline Vec2 v2_div(Vec2 a, real s)
+static inline Vec2 v2_div(Vec2 a, f32 s)
 {
 	return v2_mul(a, 1.0f / s);
 }
@@ -264,17 +264,17 @@ static inline Vec3 v3_add(Vec3 a, Vec3 b)
 	return Vec3{a.x + b.x, a.y + b.y, a.z + b.z};
 }
 
-static inline Vec3 v3_add_scaled(Vec3 a, Vec3 b, real scale)
+static inline Vec3 v3_add_scaled(Vec3 a, Vec3 b, f32 scale)
 {
 	return Vec3{a.x + b.x * scale, a.y + b.y * scale, a.z + b.z * scale};
 }
 
-static inline Vec3 v3_mul(Vec3 a, real s)
+static inline Vec3 v3_mul(Vec3 a, f32 s)
 {
 	return Vec3{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3 v3_div(Vec3 a, real s)
+static inline Vec3 v3_div(Vec3 a, f32 s)
 {
 	return v3_mul(a, 1.0f/s);
 }
@@ -296,7 +296,7 @@ static inline Vec4 v4_add(Vec4 a, Vec4 b)
 	return Vec4{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
 }
 
-static inline Vec4 v4_add_scaled(Vec4 a, Vec4 b, real scale)
+static inline Vec4 v4_add_scaled(Vec4 a, Vec4 b, f32 scale)
 {
 	return Vec4{a.x + b.x * scale, a.y + b.y * scale, a.z + b.z * scale, a.w + b.w * scale};
 }
@@ -311,12 +311,12 @@ static inline Vec4 v4_compenent_mul(Vec4 a, Vec4 b)
 	return Vec4{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-static inline Vec4 v4_mul(Vec4 a, real b)
+static inline Vec4 v4_mul(Vec4 a, f32 b)
 {
 	return Vec4{a.x * b, a.y * b, a.z * b, a.w * b};
 }
 
-static inline Vec4 v4_div(Vec4 a, real b)
+static inline Vec4 v4_div(Vec4 a, f32 b)
 {
 	return  v4_mul(a, 1.0f/b);
 }
@@ -338,31 +338,31 @@ static inline Vec2i v2i_add(Vec2i a, Vec2i b)
 	return Vec2i{a.x + b.x, a.y + b.y};
 }
 
-static inline Vec2i v2i_add_scaled(Vec2i a, Vec2i b, real scale)
+static inline Vec2i v2i_add_scaled(Vec2i a, Vec2i b, f32 scale)
 {
-	return Vec2i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale)};
+	return Vec2i{a.x + (i32)(b.x * scale), a.y + (i32)(b.y * scale)};
 }
-static inline Vec2i v2i_addi_scaled(Vec2i a, Vec2i b, integer scale)
+static inline Vec2i v2i_addi_scaled(Vec2i a, Vec2i b, i32 scale)
 {
-	return Vec2i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale)};
-}
-
-static inline Vec2i v2i_mul(Vec2i a, real s)
-{
-	return Vec2i{(integer)(a.x * s), (integer)(a.y * s)};
+	return Vec2i{a.x + (i32)(b.x * scale), a.y + (i32)(b.y * scale)};
 }
 
-static inline Vec2i v2i_muli(Vec2i a, integer s)
+static inline Vec2i v2i_mul(Vec2i a, f32 s)
 {
-	return Vec2i{(integer)(a.x * s), (integer)(a.y * s)};
+	return Vec2i{(i32)(a.x * s), (i32)(a.y * s)};
 }
 
-static inline Vec2i v2i_div(Vec2i a, real s)
+static inline Vec2i v2i_muli(Vec2i a, i32 s)
+{
+	return Vec2i{(i32)(a.x * s), (i32)(a.y * s)};
+}
+
+static inline Vec2i v2i_div(Vec2i a, f32 s)
 {
 	return v2i_mul(a, 1.0f / s);
 }
 
-static inline Vec2i v2i_divi(Vec2i a, integer s)
+static inline Vec2i v2i_divi(Vec2i a, i32 s)
 {
 	return Vec2i{a.x / s, a.y / s};
 }
@@ -390,32 +390,32 @@ static inline Vec3i v3i_add(Vec3i a, Vec3i b)
 	return Vec3i{a.x + b.x, a.y + b.y, a.z + b.z};
 }
 
-static inline Vec3i v3i_add_scaled(Vec3i a, Vec3i b, real scale)
+static inline Vec3i v3i_add_scaled(Vec3i a, Vec3i b, f32 scale)
 {
-	return Vec3i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale)};
+	return Vec3i{a.x + (i32)(b.x * scale), a.y + (i32)(b.y * scale), a.z + (i32)(b.z * scale)};
 }
 
-static inline Vec3i v3i_addi_scaled(Vec3i a, Vec3i b, integer scale)
+static inline Vec3i v3i_addi_scaled(Vec3i a, Vec3i b, i32 scale)
 {
-	return Vec3i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale)};
+	return Vec3i{a.x + (i32)(b.x * scale), a.y + (i32)(b.y * scale), a.z + (i32)(b.z * scale)};
 }
 
-static inline Vec3i v3i_mul(Vec3i a, real s)
+static inline Vec3i v3i_mul(Vec3i a, f32 s)
 {
-	return Vec3i{(integer)(a.x * s), (integer)(a.y * s), (integer)(a.z * s)};
+	return Vec3i{(i32)(a.x * s), (i32)(a.y * s), (i32)(a.z * s)};
 }
 
-static inline Vec3i v3i_muli(Vec3i a, integer s)
+static inline Vec3i v3i_muli(Vec3i a, i32 s)
 {
 	return Vec3i{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3i v3i_div(Vec3i a, real s)
+static inline Vec3i v3i_div(Vec3i a, f32 s)
 {
 	return v3i_mul(a, 1.0f/s);
 }
 
-static inline Vec3i v3i_divi(Vec3i a, integer s)
+static inline Vec3i v3i_divi(Vec3i a, i32 s)
 {
 	return Vec3i{a.x / s, a.y / s, a.z / s};
 }
@@ -438,14 +438,14 @@ static inline Vec4i v4i_add(Vec4i a, Vec4i b)
 	return Vec4i{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
 }
 
-static inline Vec4i v4i_add_scaled(Vec4i a, Vec4i b, real scale)
+static inline Vec4i v4i_add_scaled(Vec4i a, Vec4i b, f32 scale)
 {
-	return Vec4i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale), a.w + (integer)(b.w * scale)};
+	return Vec4i{a.x + (i32)(b.x * scale), a.y + (i32)(b.y * scale), a.z + (i32)(b.z * scale), a.w + (i32)(b.w * scale)};
 }
 
-static inline Vec4i v4i_addi_scaled(Vec4i a, Vec4i b, integer scale)
+static inline Vec4i v4i_addi_scaled(Vec4i a, Vec4i b, i32 scale)
 {
-	return Vec4i{a.x + (integer)(b.x * scale), a.y + (integer)(b.y * scale), a.z + (integer)(b.z * scale), a.w + (integer)(b.w * scale)};
+	return Vec4i{a.x + (i32)(b.x * scale), a.y + (i32)(b.y * scale), a.z + (i32)(b.z * scale), a.w + (i32)(b.w * scale)};
 }
 
 static inline Vec4i v4i_sub(Vec4i a, Vec4i b)
@@ -458,21 +458,21 @@ static inline Vec4i v4i_compenent_mul(Vec4i a, Vec4i b)
 	return Vec4i{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-static inline Vec4i v4i_mul(Vec4i a, real b)
+static inline Vec4i v4i_mul(Vec4i a, f32 b)
 {
-	return Vec4i{(integer)(a.x * b), (integer)(a.y * b), (integer)(a.z * b), (integer)(a.w * b)};
+	return Vec4i{(i32)(a.x * b), (i32)(a.y * b), (i32)(a.z * b), (i32)(a.w * b)};
 }
-static inline Vec4i v4i_muli(Vec4i a, integer b)
+static inline Vec4i v4i_muli(Vec4i a, i32 b)
 {
-	return Vec4i{(integer)(a.x * b), (integer)(a.y * b), (integer)(a.z * b), (integer)(a.w * b)};
-}
-
-static inline Vec4i v4i_divi(Vec4i a, real b)
-{
-	return Vec4i{(integer)(a.x / b), (integer)(a.y / b), (integer)(a.z / b), (integer)(a.w / b)};
+	return Vec4i{(i32)(a.x * b), (i32)(a.y * b), (i32)(a.z * b), (i32)(a.w * b)};
 }
 
-static inline Vec4i v4i_div(Vec4i a, real b)
+static inline Vec4i v4i_divi(Vec4i a, f32 b)
+{
+	return Vec4i{(i32)(a.x / b), (i32)(a.y / b), (i32)(a.z / b), (i32)(a.w / b)};
+}
+
+static inline Vec4i v4i_div(Vec4i a, f32 b)
 {
 	return  v4i_mul(a, 1.0f/b);
 }
@@ -497,17 +497,17 @@ static inline Vec2 operator+(Vec2 a, Vec2 b)
 	return Vec2{a.x + b.x, a.y + b.y};
 }
 
-static inline Vec2 operator*(Vec2 a, real s)
+static inline Vec2 operator*(Vec2 a, f32 s)
 {
 	return Vec2{a.x * s, a.y * s};
 }
 
-static inline Vec2 operator*(real s, Vec2 a)
+static inline Vec2 operator*(f32 s, Vec2 a)
 {
 	return Vec2{a.x * s, a.y * s};
 }
 
-static inline Vec2 operator/(Vec2 a, real s)
+static inline Vec2 operator/(Vec2 a, f32 s)
 {
 	return a * (1.0f / s);
 }
@@ -529,7 +529,7 @@ static inline Vec2& operator-=(Vec2& a, Vec2 b)
 	return a;
 }
 
-static inline Vec2& operator*=(Vec2& a, real b)
+static inline Vec2& operator*=(Vec2& a, f32 b)
 {
 	a = a * b;
 	return a;
@@ -541,7 +541,7 @@ static inline Vec2& operator*=(Vec2& a, Vec2 b)
 	return a;
 }
 
-static inline Vec2& operator/=(Vec2& a, real b)
+static inline Vec2& operator/=(Vec2& a, f32 b)
 {
 	a = a / b;
 	return a;
@@ -564,17 +564,17 @@ static inline Vec3 operator+(Vec3 a, Vec3 b)
 	return Vec3{a.x + b.x, a.y + b.y, a.z + b.z};
 }
 
-static inline Vec3 operator*(Vec3 a, real s)
+static inline Vec3 operator*(Vec3 a, f32 s)
 {
 	return Vec3{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3 operator*(real s, Vec3 a)
+static inline Vec3 operator*(f32 s, Vec3 a)
 {
 	return Vec3{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3 operator/(Vec3 a, real s)
+static inline Vec3 operator/(Vec3 a, f32 s)
 {
 	return a * (1.0f / s);
 }
@@ -596,7 +596,7 @@ static inline Vec3& operator-=(Vec3& a, Vec3 b)
 	return a;
 }
 
-static inline Vec3& operator*=(Vec3& a, real b)
+static inline Vec3& operator*=(Vec3& a, f32 b)
 {
 	a = a * b;
 	return a;
@@ -608,7 +608,7 @@ static inline Vec3& operator*=(Vec3& a, Vec3 b)
 	return a;
 }
 
-static inline Vec3& operator/=(Vec3& a, real b)
+static inline Vec3& operator/=(Vec3& a, f32 b)
 {
 	a = a / b;
 	return a;
@@ -637,15 +637,15 @@ static inline Vec4 operator*(Vec4 a, Vec4 b)
 	return Vec4{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-static inline Vec4 operator*(Vec4 a, real b)
+static inline Vec4 operator*(Vec4 a, f32 b)
 {
 	return Vec4{a.x * b, a.y * b, a.z * b, a.w * b};
 }
-static inline Vec4 operator*(real b, Vec4 a) 
+static inline Vec4 operator*(f32 b, Vec4 a) 
 {
 	return a * b;
 }
-static inline Vec4 operator/(Vec4 a, real b)
+static inline Vec4 operator/(Vec4 a, f32 b)
 {
 	return a * (1.0f/b);
 }
@@ -662,13 +662,13 @@ static inline Vec4 operator-=(Vec4& a, Vec4 b)
     return a;
 }
 
-static inline Vec4 operator*=(Vec4& a, real b)
+static inline Vec4 operator*=(Vec4& a, f32 b)
 {
 	a = a * b;
 	return a;
 }
 
-static inline Vec4 operator/=(Vec4& a, real b)
+static inline Vec4 operator/=(Vec4& a, f32 b)
 {
 	a = a / b;
 	return a;
@@ -698,17 +698,17 @@ static inline Vec2i operator+(Vec2i a, Vec2i b)
 	return Vec2i{a.x + b.x, a.y + b.y};
 }
 
-static inline Vec2i operator*(Vec2i a, integer s)
+static inline Vec2i operator*(Vec2i a, i32 s)
 {
 	return Vec2i{a.x * s, a.y * s};
 }
 
-static inline Vec2i operator*(integer s, Vec2i a)
+static inline Vec2i operator*(i32 s, Vec2i a)
 {
 	return Vec2i{a.x * s, a.y * s};
 }
 
-static inline Vec2i operator/(Vec2i a, integer s)
+static inline Vec2i operator/(Vec2i a, i32 s)
 {
 	return a * (1.0f / s);
 }
@@ -730,7 +730,7 @@ static inline Vec2i& operator-=(Vec2i& a, Vec2i b)
 	return a;
 }
 
-static inline Vec2i& operator*=(Vec2i& a, integer b)
+static inline Vec2i& operator*=(Vec2i& a, i32 b)
 {
 	a = a * b;
 	return a;
@@ -742,7 +742,7 @@ static inline Vec2i& operator*=(Vec2i& a, Vec2i b)
 	return a;
 }
 
-static inline Vec2i& operator/=(Vec2i& a, integer b)
+static inline Vec2i& operator/=(Vec2i& a, i32 b)
 {
 	a = a / b;
 	return a;
@@ -765,17 +765,17 @@ static inline Vec3i operator+(Vec3i a, Vec3i b)
 	return Vec3i{a.x + b.x, a.y + b.y, a.z + b.z};
 }
 
-static inline Vec3i operator*(Vec3i a, integer s)
+static inline Vec3i operator*(Vec3i a, i32 s)
 {
 	return Vec3i{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3i operator*(integer s, Vec3i a)
+static inline Vec3i operator*(i32 s, Vec3i a)
 {
 	return Vec3i{a.x * s, a.y * s, a.z * s};
 }
 
-static inline Vec3i operator/(Vec3i a, integer s)
+static inline Vec3i operator/(Vec3i a, i32 s)
 {
 	return a * (1.0f / s);
 }
@@ -797,7 +797,7 @@ static inline Vec3i& operator-=(Vec3i& a, Vec3i b)
 	return a;
 }
 
-static inline Vec3i& operator*=(Vec3i& a, integer b)
+static inline Vec3i& operator*=(Vec3i& a, i32 b)
 {
 	a = a * b;
 	return a;
@@ -809,7 +809,7 @@ static inline Vec3i& operator*=(Vec3i& a, Vec3i b)
 	return a;
 }
 
-static inline Vec3i& operator/=(Vec3i& a, integer b)
+static inline Vec3i& operator/=(Vec3i& a, i32 b)
 {
 	a = a / b;
 	return a;
@@ -837,17 +837,17 @@ static inline Vec4i operator*(Vec4i a, Vec4i b)
 	return Vec4i{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-static inline Vec4i operator*(Vec4i a, integer b)
+static inline Vec4i operator*(Vec4i a, i32 b)
 {
 	return Vec4i{a.x * b, a.y * b, a.z * b, a.w * b};
 }
 
-static inline Vec4i operator*(integer b, Vec4i a) 
+static inline Vec4i operator*(i32 b, Vec4i a) 
 {
 	return a * b;
 }
 
-static inline Vec4i operator/(Vec4i a, integer b)
+static inline Vec4i operator/(Vec4i a, i32 b)
 {
 	return a * (1.0f/b);
 }
@@ -864,13 +864,13 @@ static inline Vec4i operator-=(Vec4i& a, Vec4i b)
     return a;
 }
 
-static inline Vec4i operator*=(Vec4i& a, integer b)
+static inline Vec4i operator*=(Vec4i& a, i32 b)
 {
 	a = a * b;
 	return a;
 }
 
-static inline Vec4i operator/=(Vec4i& a, integer b)
+static inline Vec4i operator/=(Vec4i& a, i32 b)
 {
 	a = a / b;
 	return a;
@@ -893,56 +893,56 @@ static inline Vec2 v2_perpendicular(Vec2 v)
 	};
 }
 
-static inline real v2_dot(Vec2 a, Vec2 b)
+static inline f32 v2_dot(Vec2 a, Vec2 b)
 {
 	return a.x * b.x + a.y * b.y;
 }
 
-static inline real v2_len_sq(Vec2 a)
+static inline f32 v2_len_sq(Vec2 a)
 {
 	return a.x * a.x + a.y * a.y;
 }
 
-static inline real v2_len(Vec2 a)
+static inline f32 v2_len(Vec2 a)
 {
     return sqrtf(v2_len_sq(a));
 }
 
-static inline real v2_cross(Vec2 a, Vec2 b)
+static inline f32 v2_cross(Vec2 a, Vec2 b)
 {
 	return a.x * b.y - a.y * b.x;
 }
 
-static inline Vec2 v2_from_angle(real normal)
+static inline Vec2 v2_from_angle(f32 normal)
 {
 	return Vec2 {
 		cosf(normal), sinf(normal)
 	};
 }
 
-static inline real v2_to_angle(Vec2 v)
+static inline f32 v2_to_angle(Vec2 v)
 {
 	return atan2f(v.y, v.x);
 }
 
 static inline Vec2 v2_normalize(Vec2 v)
 {
-	real mag = sqrt(v.x*v.x + v.y * v.y);
+	f32 mag = sqrt(v.x*v.x + v.y * v.y);
 	return v2(v.x / mag, v.y / mag);
 }
 
 
-static inline real v3_dot(Vec3 a, Vec3 b)
+static inline f32 v3_dot(Vec3 a, Vec3 b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-static inline real v3_len_sq(Vec3 a)
+static inline f32 v3_len_sq(Vec3 a)
 {
 	return a.x * a.x + a.y * a.y + a.z * a.z;
 }
 
-static inline real v3_len(Vec3 a)
+static inline f32 v3_len(Vec3 a)
 {
 	return sqrtf(v3_len_sq(a));
 }
@@ -960,41 +960,41 @@ static inline Vec3 v3_cross(Vec3 a, Vec3 b)
 
 static inline Vec3 v3_normalize(Vec3 v)
 {
-	real mag = v3_len(v);
+	f32 mag = v3_len(v);
 	return v3(v.x / mag, v.y / mag, v.z / mag);
 }
 
-static inline real v4_dot(Vec4 a, Vec4 b)
+static inline f32 v4_dot(Vec4 a, Vec4 b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-static inline real v4_len_sq(Vec4 a)
+static inline f32 v4_len_sq(Vec4 a)
 {
 	return a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
 }
 
-static inline real v4_len(Vec4 a)
+static inline f32 v4_len(Vec4 a)
 {
 	return sqrtf(v4_len_sq(a));
 }
 
 static inline Vec4 v4_normalize(Vec4 v)
 {
-	real mag = v4_len(v);
+	f32 mag = v4_len(v);
 	return v4(v.x / mag, v.y / mag, v.z / mag, v.w / mag);
 }
 
-static inline Vec4 hex_to_v4(uint32 rgba)
+static inline Vec4 hex_to_v4(u32 rgba)
 {
-#define _c(n) (uint8)((rgba >> (n)) & 0xFF)
-	uint8 r = _c(24);
-	uint8 g = _c(16);
-	uint8 b = _c(8);
-	uint8 a = _c(0);
+#define _c(n) (u8)((rgba >> (n)) & 0xFF)
+	u8 r = _c(24);
+	u8 g = _c(16);
+	u8 b = _c(8);
+	u8 a = _c(0);
 #undef _c
 	Vec4 color;
-#define _f(n) ((real)(n)/255.0f)
+#define _f(n) ((f32)(n)/255.0f)
 	color.x = _f(r);
 	color.y = _f(g);
 	color.z = _f(b);
@@ -1010,12 +1010,12 @@ static inline Vec4 hex_to_v4(uint32 rgba)
 union Rect2
 {
 	struct {
-		real x, y, w, h;
+		f32 x, y, w, h;
 	};
 	struct {
 		Vec2 position, size;
 	};
-	real e[4];
+	f32 e[4];
 };
 
 struct Rect2_Clip_Info
@@ -1028,7 +1028,7 @@ struct Rect2_Clip_Info
 
 struct Rect2i
 {
-	integer x, y, w, h;
+	i16 x, y, w, h;
 };
 
 union AABB
@@ -1037,14 +1037,14 @@ union AABB
 		Vec2 center;
 		union {
 			struct {
-				real hw, hh;
+				f32 hw, hh;
 			};
 			struct {
 				Vec2 hext;
 			};
 		};
 	};
-	real e[4];
+	f32 e[4];
 };
 #endif
 
@@ -1059,21 +1059,21 @@ static inline bool operator==(Rect2 a, Rect2 b)
 	return (a.x == b.x) && (a.y == b.y) && (a.w == b.w) && (a.h == b.h);
 }
 
-static inline AABB aabb(Vec2 c, real hw, real hh)
+static inline AABB aabb(Vec2 c, f32 hw, f32 hh)
 {
 	return AABB{
 		c, hw, hh
 	};
 }
 
-static inline AABB aabb(real x, real y, real hw, real hh)
+static inline AABB aabb(f32 x, f32 y, f32 hw, f32 hh)
 {
 	return AABB{
 		v2(x, y), hw, hh
 	};
 }
 
-static inline Rect2 rect2(real x, real y, real w, real h)
+static inline Rect2 rect2(f32 x, f32 y, f32 w, f32 h)
 {
 	return Rect2{
 		x, y, w, h
@@ -1087,7 +1087,7 @@ static inline Rect2 rect2(Vec2 topleft, Vec2 size)
 	};
 }
 
-static inline Rect2i rect2i(integer x, integer y, integer w, integer h)
+static inline Rect2i rect2i(i16 x, i16 y, i16 w, i16 h)
 {
 	return Rect2i {
 		x, y, w, h
@@ -1133,7 +1133,7 @@ static inline bool rect_contains_point(Rect2 r, Vec2 p)
 		   (p.x < (r.x+r.w)) && (p.y < (r.y + r.h));
 }
 
-static inline bool aabb_intersect_f(real dx, real w, real dy, real h)
+static inline bool aabb_intersect_f(f32 dx, f32 w, f32 dy, f32 h)
 {
 	if(fabsf(dx) > (w)) return false;
 	if(fabsf(dy) > (h)) return false;
@@ -1149,8 +1149,8 @@ static inline bool aabb_intersect(AABB a, AABB b)
 
 static inline Vec2 aabb_overlap_v2(AABB a, AABB b)
 {
-	real sx = (a.hw + b.hw) - fabsf(b.center.x - a.center.x);
-	real sy = (a.hh + b.hh) - fabsf(b.center.y - a.center.y);
+	f32 sx = (a.hw + b.hw) - fabsf(b.center.x - a.center.x);
+	f32 sy = (a.hh + b.hh) - fabsf(b.center.y - a.center.y);
 	if(sx > sy) {
 		sx = 0;
 		if(a.center.y > b.center.y) {
@@ -1167,8 +1167,8 @@ static inline Vec2 aabb_overlap_v2(AABB a, AABB b)
 
 static inline void aabb_overlap(AABB a, AABB b, Vec2* s)
 {
-	real sx = (a.hw + b.hw) - fabsf(b.center.x - a.center.x);
-	real sy = (a.hh + b.hh) - fabsf(b.center.y - a.center.y);
+	f32 sx = (a.hw + b.hw) - fabsf(b.center.x - a.center.x);
+	f32 sy = (a.hh + b.hh) - fabsf(b.center.y - a.center.y);
 	if(sx > sy) {
 		sx = 0;
 		if(a.center.y > b.center.y) {
@@ -1218,7 +1218,13 @@ static inline AABB extents_to_aabb(Vec2 tl, Vec2 br)
 	a.center = tl + a.hext;
 	return a;
 }
-static inline AABB extents_to_aabb(real left, real top, real right, real bottom)
+static inline AABB extents_to_aabb(f32 left, f32 top, f32 right, f32 bottom)
 {
 	return extents_to_aabb(v2(left, top), v2(right, bottom));	
 }
+
+
+#define ColorWhite (0xFFFFFFFF)
+#define ColorMediumGrey (0xAAAAAAFF)
+#define ColorBlack (0x000000FF)
+

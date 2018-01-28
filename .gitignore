@@ -1,3 +1,7 @@
+usr/
+.vs/
+bin/.vs/
+bin/Debug/
 # Object files
 *.o
 *.ko

@@ -1,30 +1,12 @@
-/* 
-Copyright (c) 2016 William Bundy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-/*
- * rituals_animations.cpp
- */
-
-
-
-#ifndef REFLECTED
 struct Animation_Frame
 {
 	Vec3 position; 
-	real angle;
+	f32 angle;
 	Vec4 color;
 	Vec2 size;
-	Rect2 texture;
-	real sort_offset;
+	Rect2i texture;
+	f32 sort_offset;
 };
-#endif
 
 void init_animation_frame(Animation_Frame* fr)
 {
@@ -32,26 +14,24 @@ void init_animation_frame(Animation_Frame* fr)
 	fr->angle = 0;
 	fr->color = v4(1, 1, 1, 1);
 	fr->size = v2(0, 0);
-	fr->texture = rect2(0, 0, 0, 0);
+	fr->texture = rect2i(0, 0, 0, 0);
 	fr->sort_offset = 0;
 }
 
-#ifndef REFLECTED
 struct Animation
 {
 	isize id;
 	Animation_Frame* frames;
 	isize frames_count, frames_capacity;
-	real fps;
-	real inv_fps;
+	f32 fps;
+	f32 inv_fps;
 	bool looping;
 };
-#endif
 
-void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
+void init_animation(Animation* a, f32 fps, isize capacity, MemoryArena* arena)
 {
 	a->id = -1;
-	a->frames = arena_push_array(arena, Animation_Frame, capacity);
+	a->frames = (Animation_Frame*)arenaPush(arena, sizeof(Animation_Frame)* capacity);
 	a->frames_count = 0;
 	a->frames_capacity = 0;
 	a->fps = fps;
@@ -59,9 +39,9 @@ void init_animation(Animation* a, real fps, isize capacity, Memory_Arena* arena)
 	a->looping = true;
 }
 
-Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame, isize count) 
+Animation* make_animaiton_from_strip(MemoryArena* arena, f32 fps, Rect2i frame, isize count) 
 {
-	Animation* anim = arena_push_struct(arena, Animation);
+	Animation* anim = (Animation*)arenaPush(arena, sizeof(Animation));
 	init_animation(anim, fps, count, arena);
 	anim->frames_count = count;
 
@@ -69,7 +49,7 @@ Animation* make_animaiton_from_strip(Memory_Arena* arena, real fps, Rect2 frame,
 		Animation_Frame* fr = anim->frames + i;
 		init_animation_frame(fr);
 		fr->texture = frame;
-		fr->size = frame.size;
+		fr->size = v2(frame.w, frame.h);
 		frame.x += frame.w;
 	}
 
@@ -83,13 +63,13 @@ struct Animated_Sprite
 	isize animations_count, animations_capacity;
 	isize current_animation, current_frame;
 	bool running;
-	real timer;
+	f32 timer;
 };	
 #endif
 
-void init_animated_sprite(Animated_Sprite* s, isize capacity, Memory_Arena* arena)
+void init_animated_sprite(Animated_Sprite* s, isize capacity, MemoryArena* arena)
 {
-	s->animations = arena_push_array(arena, Animation*, capacity);
+	s->animations = (Animation**)arenaPush(arena, sizeof(Animation*) * capacity);
 	s->animations_count = 0;
 	s->animations_capacity = capacity;
 	s->running = true;
@@ -98,7 +78,7 @@ void init_animated_sprite(Animated_Sprite* s, isize capacity, Memory_Arena* aren
 	s->current_animation = -1;
 }
 
-void animated_sprite_update(Animated_Sprite* s, real timestep)
+void animated_sprite_update(Animated_Sprite* s, f32 timestep)
 {
 	s->timer += timestep;
 	Animation* anim = s->animations[s->current_animation];

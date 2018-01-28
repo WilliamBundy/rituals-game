@@ -1,18 +1,3 @@
-/* 
-Copyright (c) 2016 William Bundy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-/* 
- * rituals_entity_events.cpp
- *
- */ 
-
 void rituals_prop_drop_on_break(World_Area* area, Entity* a) 
 {
 	if(a->kind != EntityKind_Prop) {
@@ -38,14 +23,14 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 						auto eud = &e->userdata.pickup;
 						eud->kind = PickupKind_Health;
 						eud->health.amount = p->quality;
-						real size_mag = (a->body->shape.hw + a->body->shape.hh);
+						f32 size_mag = (a->body->shape.hw + a->body->shape.hh);
 						e->body->shape.center = pos + v2(
 								rand_range(&Game->r, -1, 1) * size_mag,
 								rand_range(&Game->r, -1, 1) * size_mag
 								);
 						e->body->shape.hext = v2(4,4);
-						e->sprite.flags = Anchor_Bottom;
-						e->sprite.texture = rect2(
+						e->sprite.flags = Anchor_BottomCenter;
+						e->sprite.texture = rect2i(
 								9*32, 0, 16, 16);
 						e->sprite.size = v2(8, 8);
 						e->body->group = 1;
@@ -66,13 +51,13 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	Entity* e = world_area_get_next_entity(area);
 	e->kind = EntityKind_Enemy;
 	e->userdata.enemy.kind = enemykind;
-	e->sprite.texture = rect2(
+	e->sprite.texture = rect2i(
 			enemykind * 32, 10*32, 32, 32);
 	e->sprite.size = v2(32, 32);
 	e->hitbox.box = aabb(v2(0, e->sprite.size.y * -0.5f), 16, 16);
 	e->hitbox.mask = Flag(2);
 	e->body->shape.center = position;
-	e->sprite.flags = Anchor_Bottom;
+	e->sprite.flags = Anchor_BottomCenter;
 	e->body->shape.hext = v2(8, 5);
 	e->body->group = 2;
 	e->attack = 5;
@@ -115,8 +100,8 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 			e->health = 50;
 			break;
 		case EnemyKind_Goblin_Knight:
-			enemy->goblin_knight.patrol_start = e->sprite.position;
-			enemy->goblin_knight.patrol_end = e->sprite.position + v2(512, 0);
+			enemy->goblin_knight.patrol_start = e->sprite.pos;
+			enemy->goblin_knight.patrol_end = e->sprite.pos + v2(512, 0);
 			enemy->alert_dist = 128;
 			enemy->follow_dist = 800;
 			enemy->speed = 250;
@@ -135,7 +120,7 @@ void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)
 {
 	if(e->kind == EntityKind_Bullet) {
 			emitter_spawn(&world->emitter, 
-					v3(e->sprite.position, 16), 
+					v3(e->sprite.pos,  16), 
 					v2(-Math_Pi, Math_Pi),
 					4,
 					copy_particle_style(world->base_style, v2(50, 150), v2i(10, 45)));
@@ -152,11 +137,11 @@ bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area,
 				p->heal_timer -= TimeStep;
 			}
 
-			int32 last_health = e->health;
-			int32 ivl = p->heal_to_interval;
+			i32 last_health = e->health;
+			i32 ivl = p->heal_to_interval;
 			if(last_health % ivl != 0)  {
 				if(p->heal_timer <= 0) {
-					int32 new_health = e->health + p->heal_rate;
+					i32 new_health = e->health + p->heal_rate;
 					if(((new_health % ivl) < (last_health % ivl))) {
 						while(new_health % ivl != 0) {
 							new_health--;
@@ -167,9 +152,9 @@ bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area,
 			}
 
 			if(e->health <= 0) {
-				Game->Play->delete_world_on_stop = true;
-				Game->Play->save_world_on_stop = false;
-				game_switch_state(Game_State_Menu);
+				//Game->Play->delete_world_on_stop = true;
+				//Game->Play->save_world_on_stop = false;
+				//game_switch_state(Game_State_Menu);
 				return true;
 			}
 		}
@@ -186,25 +171,26 @@ void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, 
 
 void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
+	Game_Registry * Registry = Game->registry;
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 		e->walk_impulse = Vec2{};	
 		if(e->kind == EntityKind_Static || e->kind == EntityKind_Prop) {
 			continue;
 		} else if(e->kind == EntityKind_Player) {
-			real movespeed = 800;
+			f32 movespeed = 800;
 			Vec2 move_impulse = v2(0, 0);
 
-			if(_check(LEFT, A, State_Pressed)) {
+			if(_check(LEFT, A, Button_Down)) {
 				move_impulse.x -= movespeed;
 			}
-			if(_check(RIGHT, D, State_Pressed)) {
+			if(_check(RIGHT, D, Button_Down)) {
 				move_impulse.x += movespeed;
 			}
-			if(_check(UP, W, State_Pressed)) {
+			if(_check(UP, W, Button_Down)) {
 				move_impulse.y -= movespeed;
 			}
-			if(_check(DOWN, S, State_Pressed)) {
+			if(_check(DOWN, S, Button_Down)) {
 				move_impulse.y += movespeed;
 			}
 
@@ -225,7 +211,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 			auto enemy = &e->userdata.enemy;
 			Vec2 walk = Vec2{};
 			Vec2 dpos = e->body->shape.center - area->player->body->shape.center;
-			real mag = v2_dot(dpos, dpos);
+			f32 mag = v2_dot(dpos, dpos);
 
 			switch(enemy->kind) {
 				case EnemyKind_Slime:
@@ -237,7 +223,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 						}
 					} else if(enemy->mode == 1) {
 						if(mag < (enemy->follow_dist * enemy->follow_dist)) {
-							real angle = atan2f(dpos.y, dpos.x);
+							f32 angle = atan2f(dpos.y, dpos.x);
 							walk.x = cosf(angle) * -enemy->speed;
 							walk.y = sinf(angle) * -enemy->speed;
 						} else {
@@ -251,10 +237,10 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 				case EnemyKind_Bat:
 					if(enemy->mode == 0) {
 						dpos = e->body->shape.center - enemy->bat.perch;
-						real player_dist = mag;
+						f32 player_dist = mag;
 						mag = v2_dot(dpos, dpos);
 						if(mag > 16) {
-							real angle = atan2f(dpos.y, dpos.x);
+							f32 angle = atan2f(dpos.y, dpos.x);
 							walk.x = cosf(angle) * -enemy->speed;
 							walk.y = sinf(angle) * -enemy->speed;
 						} else if(player_dist < (enemy->alert_dist * enemy->alert_dist)) {
@@ -262,9 +248,9 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 						}
 					} else if(enemy->mode == 1) {
 						Vec2 perch_dpos = e->body->shape.center - enemy->bat.perch;
-						real perch_dist2 = v2_dot(perch_dpos, perch_dpos);
+						f32 perch_dist2 = v2_dot(perch_dpos, perch_dpos);
 						if(perch_dist2 < (enemy->follow_dist * enemy->follow_dist)) {
-							real angle = atan2f(dpos.y, dpos.x);
+							f32 angle = atan2f(dpos.y, dpos.x);
 							walk.x = cosf(angle) * -enemy->speed;
 							walk.y = sinf(angle) * -enemy->speed;
 						} else {
@@ -299,65 +285,65 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)
 {
 	Sprite shadow;
-	init_sprite(&shadow);
+	wInitSprite(&shadow);
 	shadow.flags = Anchor_Center;
-	shadow.texture = rect2(96, 16, 32, 16);
-	shadow.color.w = 0.3f;
-	real render_distance = Game->size.x + 256;
+	shadow.texture = rect2i(96, 16, 32, 16);
+	shadow.color = 0x55;
+	f32 render_distance = Game->size.x + 256;
 	render_distance *= render_distance;
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 		
 		if(e->facing == -1) {
-			Enable_Flag(e->sprite.flags, SpriteFlag_FlipHoriz);
+			Enable_Flag(e->sprite.flags, Sprite_FlipHoriz);
 		} else if(e->facing == 1) {
-			Disable_Flag(e->sprite.flags, SpriteFlag_FlipHoriz);
+			Disable_Flag(e->sprite.flags, Sprite_FlipHoriz);
 		}
 
 		Sim_Body* b = e->body;
 		if (b != NULL) {
-			e->sprite.position = b->shape.center;
-			e->sprite.position.y += b->shape.hh;
+			e->sprite.pos = b->shape.center;
+			e->sprite.pos.y += b->shape.hh;
 			if(Has_Flag(e->flags, EntityFlag_Tail)) {
 				Vec2 v = b->velocity / 30.0f; 
 				Sprite s = e->sprite;
 				for(isize i = 0; i < 16; ++i) {
 					Sprite ss = s;
-					ss.position.y -= e->z;
+					ss.pos.y -= e->z;
 					render_add(&ss);
-					s.position -= v / 16;
-					s.color = Color_White;
-					s.color.w = lerp(1.0f, 0.0f, i/16.0);
-					s.color.w *= s.color.w;
+					s.pos -= v / 16;
+					s.color = ColorWhite;
+					//s.color.w = lerp(1.0f, 0.0f, i/16.0);
+					//s.color.w *= s.color.w;
 					s.sort_offset -= 10;
 				}
 			}
 		}
 
-		Vec2 dv_player = area->player->sprite.position - e->sprite.position;
-		real dist_player = v2_dot(dv_player, dv_player);
+		Vec2 dv_player = area->player->sprite.pos - e->sprite.pos;
+		f32 dist_player = v2_dot(dv_player, dv_player);
 		if(dist_player > 
 			(render_distance + e->sprite.size.x * e->sprite.size.x)) {
 			continue;
 		}
 
-		shadow.position = e->sprite.position;
+		shadow.pos = e->sprite.pos;
 
 		Sprite s = e->sprite;
-		s.position.y -= e->z;
+		s.pos.y -= e->z;
 		s.sort_offset += e->z;
 		if(e->anim != NULL) {
 			if(e->anim->current_animation != -1) {
 				animated_sprite_update(e->anim, TimeStep);
 				Animation* anim = e->anim->animations[e->anim->current_animation];
 				Animation_Frame* frame = anim->frames + e->anim->current_frame;
-				s.position += v2(frame->position);
+				s.pos += v2(frame->position);
 				s.angle += frame->angle;
-				s.color *= frame->color;
+				//s.color *= frame->color;
 				s.size = frame->size;
 				s.texture = frame->texture;
 				s.sort_offset += frame->sort_offset;
-				s.position.y -= frame->position.z;
+				s.pos.y -= frame->position.z;
 				s.sort_offset += frame->position.z;
 			}
 		}
@@ -367,17 +353,17 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 		shadow.sort_offset = -4;
 		if(Has_Flag(e->flags, EntityFlag_SameShadow)) {
 			shadow = s;
-			shadow.position = e->sprite.position;
+			shadow.pos = e->sprite.pos;
 			shadow.sort_offset = -1;
-			shadow.color = v4(0, 0, 0, 0.3f);
+			shadow.color = 0x55;
 			shadow.flags = e->sprite.flags;
 			shadow.size *= e->shadow_scale;
 		} else {
 			shadow.size = e->sprite.size * 0.75f * e->shadow_scale;
 			shadow.size.y = shadow.size.x / 2;
 			shadow.flags = Anchor_Center;
-			shadow.texture = rect2(96, 16, 32, 16);
-			shadow.color.w = 0.3f;
+			shadow.texture = rect2i(96, 16, 32, 16);
+			//shadow.color.w = 0.3f;
 			shadow.sort_offset += e->sprite.sort_offset;
 		}
 		render_add(&shadow);
@@ -393,32 +379,32 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 		if(e->kind == EntityKind_Player) {
 			Sim_Body* player = e->body;
 			auto ud = &e->userdata.player;
-			if(Input->scancodes[SDL_SCANCODE_SPACE] >= State_Pressed) {
+			if(Input->scancodes[SDL_SCANCODE_SPACE] >= Button_Down) {
 				Sprite s;
-				init_sprite(&s);
-				s.position = player->shape.center;
+				wInitSprite(&s);
+				s.pos = player->shape.center;
 				s.size = v2(16, 16);
-				s.texture = rect2(64, 0, 16, 16);
-				s.color = v4(1, 1, 1, 1);
+				s.texture = rect2i(64, 0, 16, 16);
+				s.color = ColorWhite;
 				switch(e->direction) {
 					case Direction_North:
-						s.position.y -= s.size.y + player->shape.hh;
+						s.pos.y -= s.size.y + player->shape.hh;
 						break;
 					case Direction_South:
-						s.position.y += s.size.y + player->shape.hh;
+						s.pos.y += s.size.y + player->shape.hh;
 						break;
 					case Direction_East:
-						s.position.x += s.size.x + player->shape.hw;
+						s.pos.x += s.size.x + player->shape.hw;
 						break;
 					case Direction_West:
-						s.position.x -= s.size.x + player->shape.hh;
+						s.pos.x -= s.size.x + player->shape.hh;
 						break;
 				}
 
-				if(Input->scancodes[SDL_SCANCODE_SPACE] == State_Just_Pressed) {
+				if(Input->scancodes[SDL_SCANCODE_SPACE] == Button_JustDown) {
 					//TODO(will) implement good space queries	
 					Sim_Body* touching = sim_query_aabb(&area->sim, 
-							aabb(s.position, s.size.x / 2, s.size.y / 2));
+							aabb(s.pos, s.size.x / 2, s.size.y / 2));
 					if(touching != NULL) {
 						if(!Has_Flag(touching->flags, Body_Flag_Static)) 
 							ud->held_entity_id = touching->entity_id;
@@ -450,7 +436,7 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 					}
 
 					Vec2 impulse = (target - b->shape.center);
-					if(v2_dot(impulse, impulse) > (4 * Tile_Size * Tile_Size)) {
+					if(v2_dot(impulse, impulse) > (4 * TiSz * TiSz)) {
 						ud->held_entity_id = -1;
 					}
 					impulse *= 60;
@@ -494,7 +480,7 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 					if(b->attack_timer <= 0.0f) {
 						b->attack_timer = b->attack_interval;
 						a->health -= b->attack;
-						real angle = v2_to_angle(b->walk_impulse);
+						f32 angle = v2_to_angle(b->walk_impulse);
 						angle += rand_range(&Game->r, -10, 10) * Math_DegToRad;
 						a->body->velocity += (v2_from_angle(angle) * b->knockback);
 						a->userdata.player.heal_timer = a->userdata.player.heal_cooldown;

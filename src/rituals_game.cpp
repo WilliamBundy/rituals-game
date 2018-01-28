@@ -1,13 +1,3 @@
-/* 
-Copyright (c) 2016 William Bundy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
 /*
  * rituals_game.cpp
  * Contains a bunch of misc stuff and game struct.
@@ -31,99 +21,113 @@ $(end)
 #include "rituals_memory.cpp"
 #include "rituals_random.cpp"
 // Input stuff
-enum Button_State
-{
-	State_Just_Released = -1,
-	State_Released = 0,
-	State_Pressed = 1,
-	State_Just_Pressed = 2,
+const char* GLES2_frag = "" "#version 100\n"
+"precision mediump float;\n"
+"varying float fKind;\n"
+"varying vec2 fScale;\n"
+"varying vec2 fUV;\n"
+"varying vec4 fColor;\n"
+"uniform float uPxRange;\n"
+"uniform vec2 uInvTextureSize;\n"
+"uniform vec4 uTint;\n"
+"uniform sampler2D uTexture;\n"
+"float median(float a, float b, float c)\n"
+"{\n"
+"	return max(min(a, b), min(max(a, b), c));\n"
+"}\n"
+"vec2 subpixelAA(vec2 pixel, float zoom)\n"
+"{\n"
+"	vec2 uv = floor(pixel) + 0.5;\n"
+"	return uv + 1.0 - clamp((1.0 - fract(pixel)) * zoom, 0.0, 1.0);\n"
+"}\n"
+"void main()\n"
+"{\n"
+"	if(fKind < 10.0) {\n"
+"		//vec4 dist = texture2D(uTexture, fUV * uInvTextureSize);\n"
+"		//float m = median(dist.x, dist.y, dist.z);\n"
+"		//float smoothing = 0.25 / (uPxRange * fScale.x);\n"
+"		//float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, m);\n"
+"		//gl_FragColor = vec4(1, 1, 1, alpha) * uTint * fColor;\n"
+"		vec2 msdfUnit = uPxRange * uInvTextureSize;\n"
+"		vec4 sdfVal = texture2D(uTexture, fUV * uInvTextureSize);\n"
+"		float sigDist = median(sdfVal.r, sdfVal.g, sdfVal.b) - 0.5;\n"
+"		sigDist *= dot(msdfUnit, 0.5/vec2(fKind / 1000.0));\n"
+"		float opacity = clamp(sigDist + 0.5, 0.0, 1.0);\n"
+"		gl_FragColor = vec4(1, 1, 1, opacity) * uTint * fColor;\n"
+"	} else {\n"
+"		vec4 lcolor = fColor;\n"
+"		if(fKind < 20.0) {\n"
+"			vec2 uv;\n"
+"			if(fKind > 15.0) {\n"
+"				uv = subpixelAA(fUV, fScale.x);\n"
+"			} else {\n"
+"				uv = floor(fUV) + 0.5;\n"
+"			}\n"
+"			lcolor *= texture2D(uTexture, uv * uInvTextureSize);\n"
+"		}\n"
+"		gl_FragColor = lcolor * uTint;\n"
+"	}\n"
+"}\n"
+;
+const char* GLES2_vert = "" "#version 100\n"
+"attribute float vKind;\n"
+"attribute vec2 vPos;\n"
+"attribute vec2 vUV;\n"
+"attribute vec2 vScale;\n"
+"attribute vec4 vColor;\n"
+"varying float fKind;\n"
+"varying vec2 fScale;\n"
+"varying vec2 fUV;\n"
+"varying vec4 fColor;\n"
+"void main()\n"
+"{\n"
+"	gl_Position = vec4(vPos, 0, 1);\n"
+"	fUV = vUV;\n"
+"	fScale = vScale;\n"
+"	fKind = vKind;\n"
+"	fColor = vColor.wzyx;\n"
+"}\n"
+;
 
-	Button_State_Count
-};
 
-#define InputTextCapacity (1024)
-#ifndef REFLECTED
-struct Game_Input
-{
-	isize num_keys_down;
-	isize num_mouse_down;
-	int8* scancodes;
-	int8* keycodes;
-	int8* mouse;
-	int32 mouse_x;
-	int32 mouse_y;
-	Vec2i screen_mouse_pos;
-	Vec2 mouse_pos;
-	bool capture_tabs;
-	bool capture_newlines;
-	char* text;
-	isize text_count;
-};
-#endif
-
-#define _game_state(name, ...) Game_State_##name,
-enum Game_State
-{
-	_game_state_list
-};
-#undef _game_state
-
-#define _game_state(name, ...) name##_State* name;
-#ifndef REFLECTED
+#include "rituals_input.cpp"
 struct Game_Main
 {
 	SDL_Window* window;
-	OpenGL_Renderer* renderer;
-	Game_State state;
-	real scale;
+	i32 state;
+	f32 scale;
 	Vec2 size;
 	Vec2i window_size;
 
-	Memory_Arena* meta_arena;
-	Memory_Arena* asset_arena;
-	Memory_Arena* game_arena;
-	Memory_Arena* temp_arena;
-	Memory_Arena* renderer_arena;
-
-	//TODO(will) possibly come up with another type of arena for storing
-	// static game info: world areas, loaded tile types, etc
-	Memory_Arena* registry_arena;
-	Memory_Arena* world_arena;
-	Memory_Arena* play_arena;
+	MemoryArena* baseArena;
+	MemoryArena* gameArena;
+	MemoryArena* tempArena;
 
 	const char* base_path;
 	isize base_path_length;
 
-	Spritefont* body_font;
-	Spritefont* title_font;
+	//Spritefont* body_font;
+	//Spritefont* title_font;
 
 	Random r;
 
 	Game_Registry* registry;
+	
+	wRenderGroup* render;
 
 	Game_Input* input; 
-	uint64 last_frame_time;
-
-	_game_state_list
+	isize last_frame_time;
 };
-#endif
-#undef _game_state
 
 Game_Main* Game;
-OpenGL_Renderer* Renderer;
-Render_Group* CurrentGroup;
 Game_Input* Input;
-Spritefont* Body_Font;
-Spritefont* Title_Font;
-Game_Registry* Registry;
 
-#ifndef REFLECTED
 struct Platform
 {
 	const char* window_title;
 	Vec2i window_size;
-	real game_scale;
-	int32 display_index;
+	f32 game_scale;
+	i32 display_index;
 
 	bool check_gl_attributes;
 
@@ -132,9 +136,8 @@ struct Platform
 
 	SDL_Window* window;
 };
-#endif
 
-int32 platform_init(Platform* platform)
+i32 platform_init(Platform* platform)
 {
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		Log_Error("Could not init SDL"); 
@@ -146,8 +149,8 @@ int32 platform_init(Platform* platform)
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 	SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
@@ -168,99 +171,51 @@ int32 platform_init(Platform* platform)
 	}
 	platform->window = window;
 	SDL_GLContext glctx = SDL_GL_CreateContext(window);
-	if(ogl_LoadFunctions() == ogl_LOAD_FAILED) {
-		Log_Error("Could not load OpenGL 3.3 functions...");
-		return 1;
-	}
+	wbgl_load(NULL);
 
-	if(platform->check_gl_attributes) {
-#define _check_gl_attribute(attr, val) int _##attr##_val; \
-	int _##attr##_success = SDL_GL_GetAttribute(attr, &_##attr##_val); \
-	gl_checks[gl_check_count++] = _##attr##_val == val; \
-	gl_names[gl_check_count - 1] = #attr; \
-	gl_vals[gl_check_count - 1] = _##attr##_val; \
-	gl_exp_vals[gl_check_count - 1] = val; 
-			 
-		//check if we got everything
-		bool gl_checks[64];
-		char* gl_names[64];
-		int gl_vals[64];
-		int gl_exp_vals[64];
-		isize gl_check_count = 0;
-
-		_check_gl_attribute(SDL_GL_RED_SIZE, 8);
-		_check_gl_attribute(SDL_GL_GREEN_SIZE, 8);
-		_check_gl_attribute(SDL_GL_BLUE_SIZE, 8);
-		_check_gl_attribute(SDL_GL_ALPHA_SIZE, 8);
-		_check_gl_attribute(SDL_GL_DOUBLEBUFFER, 1);
-		_check_gl_attribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		_check_gl_attribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		_check_gl_attribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
-		_check_gl_attribute(SDL_GL_ACCELERATED_VISUAL, 1);
-		_check_gl_attribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-		for(isize i = 0; i < gl_check_count; ++i) {
-			printf("%s %s: wanted %d, got %d \n", 
-					gl_names[i], 
-					gl_checks[i] ? "succeeeded" : "failed", 
-					gl_exp_vals[i], 
-					gl_vals[i]);
-		}
-	}	
 	return 0;
 }
 
 
-int32 game_init(Platform* platform)
+i32 game_init(Platform* platform)
 {
 	Game = Allocate(Game_Main, 1);
 	Game->last_frame_time = 1;
 	Game->window = platform->window;
-	Game->state = Game_State_None;
-	Game->meta_arena = Allocate(Memory_Arena, 1);
-	init_memory_arena(Game->meta_arena, isz(Memory_Arena) * 20);
-	Game->game_arena = new_memory_arena(Megabytes(64), Game->meta_arena);
-	Game->asset_arena = new_memory_arena(Megabytes(512), Game->meta_arena);
-	Game->temp_arena = new_memory_arena(Gigabytes(4), Game->meta_arena);
-	Game->play_arena = new_memory_arena(Gigabytes(4), Game->meta_arena);
-	Game->renderer_arena = new_memory_arena(Megabytes(256), Game->meta_arena);
-	Game->world_arena = new_memory_arena(Megabytes(1024), Game->meta_arena);
-	Game->registry_arena = new_memory_arena(Megabytes(2), Game->meta_arena);
+	Game->state = 0;
+
+	MemoryInfo mi = getMemoryInfo();
+	Game->baseArena = arenaBootstrap(mi, 0);
+	Game->gameArena = arenaBootstrap(mi, 0);
+	Game->tempArena = arenaBootstrap(mi, 0);
 
 	Game->base_path = SDL_GetBasePath();
 	Game->base_path_length = strlen(Game->base_path);
 
-	Game->input = arena_push_struct(Game->game_arena, Game_Input);
-
+	Game->input = arenaPush<Game_Input, 1>(Game->baseArena);
+	input_init(Game->input, Game->baseArena);
 	Input = Game->input;
-	Input->scancodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
-	Input->keycodes = arena_push_array(Game->game_arena, int8, SDL_NUM_SCANCODES);
-	Input->mouse = arena_push_array(Game->game_arena, int8, 16);
-	Input->mouse_pos = v2(0, 0);
-	Input->text = arena_push_array(Game->game_arena, char, InputTextCapacity);
-	Input->text_count = 0;
-	Input->capture_newlines = false;
-	Input->capture_tabs = false;
 
 	init_random(&Game->r, time(NULL));
 	//TODO(will) load window settings from file
 	Game->window_size = platform->window_size;
 	Game->scale = platform->game_scale;
 
-	Game->renderer = arena_push_struct(Game->game_arena, OpenGL_Renderer);
-	init_renderer(Game->renderer, 
-			4, 
-			Megabytes(32), 
-			platform->vertex_shader,
-			platform->frag_shader, 
-			Game->renderer_arena);
 
-	Game->registry = arena_push_struct(Game->game_arena, Game_Registry);
+	Game->registry = (Game_Registry*)arenaPush(Game->baseArena, sizeof(Game_Registry));
+	Game_Registry* registry = Game->registry;
+	registryInit(registry, 256, Game->baseArena);
+	register_everything_in_rituals(registry);
+	
+	Game->render = (wRenderGroup*)arenaPush(Game->baseArena, sizeof(wRenderGroup));
+	Game->render->shader = (wShader*)arenaPush(Game->baseArena, sizeof(wShader));
+	wInitDefaultShader(GLES2_vert, GLES2_frag, Game->render->shader);
+	
+	Game->render->texture = wLoadTexture(Game->base_path, "data/graphics.png", Game->baseArena);
 
-	Registry = Game->registry;
-	Renderer = Game->renderer;
-	CurrentGroup = Renderer->groups;
-	game_allocate_states();
+	wGroupInit(Game->render, 8192, Game->render->shader, Game->render->texture);
+	
+
 	return 0;
 }
 
@@ -271,47 +226,46 @@ void game_update_screen()
 	Game->size = v2(Game->window_size) * Game->scale;
 }
 
-int32 game_start(Platform* platform)
+Sprite* renderAdd(i32 flags, u32 color, Vec2 pos, Vec2 size, Rect2i t);
+i32 game_start(Platform* platform, Game_Main* game)
 {
-	game_init_states();
-	game_start_state();
 	bool running = true;
 	SDL_Event event;
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	//glClearColor(1, 1, 1, 1);
+	//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0, 0, 0, 1);
 
-		printf("running...");
-	isize input_text_length = 0;
 	while(running) {
-		uint64 start_ticks = SDL_GetTicks();
+		usize start_ticks = SDL_GetTicks();
 
-		for(int64 i = 0; i < SDL_NUM_SCANCODES; ++i) {
-			int8* t = Game->input->scancodes + i;
-			if(*t == State_Just_Released) {
-				*t = State_Released;
-			} else if(*t == State_Just_Pressed) {
-				*t = State_Pressed;
+		for(isize i = 0; i < SDL_NUM_SCANCODES; ++i) {
+			i8* t = game->input->scancodes + i;
+			if(*t == Button_JustUp) {
+				*t = Button_Up;
+			} else if(*t == Button_JustDown) {
+				*t = Button_Down;
 			}
-			t = Game->input->keycodes + i;
-			if(*t == State_Just_Released) {
-				*t = State_Released;
-			} else if(*t == State_Just_Pressed) {
-				*t = State_Pressed;
+			t = game->input->keycodes + i;
+			if(*t == Button_JustUp) {
+				*t = Button_Up;
+			} else if(*t == Button_JustDown) {
+				*t = Button_Down;
 			}
 		}
-		for(int64 i = 0; i < 16; ++i) {
-			int8* t = Game->input->mouse + i;
-			if(*t == State_Just_Released) {
-				*t = State_Released;
-			} else if(*t == State_Just_Pressed) {
-				*t = State_Pressed;
+		for(isize i = 0; i < 16; ++i) {
+			i8* t = game->input->mouse + i;
+			if(*t == Button_JustUp) {
+				*t = Button_Up;
+			} else if(*t == Button_JustDown) {
+				*t = Button_Down;
 			}
 		}
 		while(SDL_PollEvent(&event)) {
 			//TODO(will) handle text input
+			Game_Input* input = game->input;
+			isize textlen = 0;
 			switch(event.type) {
 				case SDL_QUIT:
-					game_stop_state();
+					//game_stop_state();
 					running = false;
 					return 0;
 					break;
@@ -319,80 +273,82 @@ int32 game_start(Platform* platform)
 					game_update_screen();
 					break;
 				case SDL_TEXTINPUT:
-					input_text_length = strlen(event.text.text);
-					if((input_text_length + Input->text_count) < InputTextCapacity) {
-						memcpy(Input->text + Input->text_count, 
+					textlen = strlen(event.text.text);
+					if((textlen + input->text_count) < InputTextCapacity) {
+						memcpy(input->text + input->text_count, 
 								event.text.text, 
-								input_text_length);
-						Input->text_count += input_text_length;
-						input_text_length = 0;
+								textlen);
+						input->text_count += textlen;
+						textlen = 0;
 					}
 					break;
 				case SDL_KEYDOWN:
-					Game->input->num_keys_down++;
+					input->num_keys_down++;
 					if((event.key.keysym.sym == SDLK_BACKSPACE)) {
-						input_text_append_char(Backspace);
+						input_text_append_char(input, Backspace);
 						if(event.key.keysym.mod & KMOD_CTRL) {
-							input_text_append_char('\7');
+							input_text_append_char(input, '\7');
 						}
 					} else if(event.key.keysym.sym == SDLK_RETURN || 
 							event.key.keysym.sym == SDLK_RETURN2) {
-						if(Input->capture_newlines) {
-							input_text_append_char('\n');
+						if(input->capture_newlines) {
+							input_text_append_char(input, '\n');
 						}
 					} else if(event.key.keysym.sym == SDLK_TAB) {
-						if(Input->capture_tabs) {
-							input_text_append_char('\t');
+						if(input->capture_tabs) {
+							input_text_append_char(input, '\t');
 						}
 					}
 
 					if(!event.key.repeat) {
-						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Pressed;
+						auto keysym = event.key.keysym;
+						input->scancodes[keysym.scancode] = Button_JustDown;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
-							Game->input->keycodes[event.key.keysym.sym] = State_Just_Pressed;
+							input->keycodes[keysym.sym] = Button_JustDown;
 						}
 					}
 					break;
 				case SDL_KEYUP:
-					Game->input->num_keys_down--;
+					input->num_keys_down--;
 					if(!event.key.repeat) {
-						Game->input->scancodes[event.key.keysym.scancode] = State_Just_Released;
+						auto keysym = event.key.keysym;
+						input->scancodes[keysym.scancode] = Button_JustUp;
 						if(event.key.keysym.sym < SDL_NUM_SCANCODES) {
-							Game->input->keycodes[event.key.keysym.sym] = State_Just_Released;
+							input->keycodes[keysym.sym] = Button_JustUp;
 						}
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					Game->input->num_mouse_down++;
-					Game->input->mouse[event.button.button] = State_Just_Pressed;
+					input->num_mouse_down++;
+					input->mouse[event.button.button] = Button_JustDown;
 					break;
 				case SDL_MOUSEBUTTONUP:
-					Game->input->num_mouse_down--;
-					Game->input->mouse[event.button.button] = State_Just_Released;
+					input->num_mouse_down--;
+					input->mouse[event.button.button] = Button_JustUp;
 					break;
 			}
 		}
 	
 		int mx, my;
 		SDL_GetMouseState(&mx, &my);
-		Input->mouse_x = mx;
-		Input->mouse_y = my;
-		Input->screen_mouse_pos = v2i(mx, my);
-		game_calc_mouse_pos(Renderer->groups[0].offset);
+		game->input->mouse_x = mx;
+		game->input->mouse_y = my;
+		game->input->screen_mouse_pos = v2i(mx, my);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT |
+				GL_DEPTH_BUFFER_BIT |
+				GL_STENCIL_BUFFER_BIT);
 
-		game_update_state();
+		testUpdate();
 
-		uint64 frame_ticks = SDL_GetTicks() - start_ticks;
-#if 1
-		//60hz lock?
+		wGroupDraw(game->size.x, game->size.y, game->render);
+		usize frame_ticks = SDL_GetTicks() - start_ticks;
+
 		if(frame_ticks < 16) {
-			SDL_Delay(16 - frame_ticks);
+			SDL_Delay((u32)(16 - frame_ticks));
 		}
-#endif
-		SDL_GL_SwapWindow(Game->window);
-		Game->last_frame_time = SDL_GetTicks() - start_ticks;
+		SDL_GL_SwapWindow(game->window);
+		game->last_frame_time = SDL_GetTicks() - start_ticks;
 	}
 	return 0;
 }
@@ -404,87 +360,37 @@ void platform_quit()
 
 
 
-void game_switch_state(Game_State state)
+void game_switch_state(i32 state)
 {
-	game_stop_state();
-	Game->state = state;
-	game_start_state();
 }
 
-#define start_state(state) game_start_##state##_state()
-#define update_state(state) game_update_##state##_state()
-#define init_state(state) game_init_##state##_state()
-#define stop_state(state) game_stop_##state##_state()
-#define free_state(state) game_free_##state##_state()
-
-#define _game_state(name, ...) Game->name = arena_push_struct(Game->game_arena, name##_State);
-void game_allocate_states()
+f64 next_random_double()
 {
-	_game_state_list
-}
-#undef _game_state
-
-#define _game_state(name, ...) game_init_##name##_state();
-void game_init_states()
-{
-	_game_state_list
-}
-#undef _game_state
-
-#define _game_state(name, ...) case Game_State_##name: game_start_##name##_state(); break;
-void game_start_state()
-{
-	switch(Game->state) {
-		_game_state_list
-	}
-}
-#undef _game_state
-
-#define _game_state(name, ...) case Game_State_##name: game_update_##name##_state(); break;
-void game_update_state()
-{
-	switch(Game->state) {
-		_game_state_list
-	}
-}
-#undef _game_state
-
-#define _game_state(name, ...) case Game_State_##name: game_stop_##name##_state(); break;
-void game_stop_state()
-{
-	switch(Game->state) {
-		_game_state_list
-	}
-}
-#undef _game_state
-
-real64 next_random_double()
-{
-	uint64 x = next_random_uint64(&Game->r);
-	return (real64)x / UINT64_MAX;
+	usize x = next_random_u64(&Game->r);
+	return (f64)x / (f64)UINT64_MAX;
 }
 
-real32 next_random_float()
+f32 next_random_float()
 {
-	return (real32)(next_random_double(&Game->r));
+	return (f32)(next_random_double(&Game->r));
 }
 
-real next_random() 
+f32 next_random() 
 {
-	return (real)(next_random_double(&Game->r));
+	return (f32)(next_random_double(&Game->r));
 }
 
-real rand_range(real min, real max)
+f32 rand_range(f32 min, f32 max)
 {
 	return next_random_double(&Game->r) * (max - min) + min;
 }
 
-int32 rand_range_int(real min, real max)
+i32 rand_range_int(f32 min, f32 max)
 {
-	return (int32)(next_random_double(&Game->r) * (max - min + 1) + min);
+	return (i32)(next_random_double(&Game->r) * (max - min + 1) + min);
 }
 
-void game_set_scale(real scale)
+void game_set_scale(f32 scale)
 {
 	Game->scale = scale;
 	Game->size = v2(Game->window_size) * (1.0f / Game->scale);
@@ -494,15 +400,6 @@ void game_calc_mouse_pos(Vec2 offset)
 {
 	Input->mouse_pos = v2(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale) + offset;
 }
-
-
-void input_text_append_char(char c)
-{
-	if((Input->text_count + 1) < InputTextCapacity) {
-		Input->text[Input->text_count++] = c;
-	}
-}
-
 
 bool is_valid_filename_char(char c)
 {
@@ -535,84 +432,6 @@ isize replace_invalid_filename_chars(char* str, isize len, char replace)
 	return len;
 }
 
-isize append_input_text(char* str, isize str_cap, isize str_len, isize insert_from_end=0)
-{
-	if(Input->text_count <= 0) return str_len;
-	isize index = str_len;
-	start_temp_arena(Game->temp_arena);
-	char* extra_chars = NULL;
-	if((insert_from_end <= str_len) && (insert_from_end != 0)) {
-		index -= insert_from_end;
-		if(index >= 0) {
-			extra_chars = arena_push_array(Game->temp_arena, char, insert_from_end + 32);
-			memset(extra_chars, 0, insert_from_end + 32);
-			memcpy(extra_chars, str + index, insert_from_end);
-			extra_chars[insert_from_end] = '\0';
-		} else {
-			index = 0;
-		}
-	}
-
-	if((str_len + Input->text_count) > str_cap) {
-		if(Input->text[0] != '\b')
-			Input->text_count = str_cap - str_len;
-	}
-	isize bufsize = Input->text_count + str_len;
-	char* buffer = arena_push_array(Game->temp_arena, char, bufsize + 32);
-	memset(buffer, 0, bufsize);
-	memcpy(buffer, str, index);
-	memcpy(buffer + index, Input->text, Input->text_count);
-	if(extra_chars != NULL) {
-		memcpy(buffer + index + Input->text_count, extra_chars, insert_from_end);
-	}
-
-	isize idx = 0;
-	bool contains_bs = false;
-	char* buffer2 = NULL; 
-	for(isize i = 0; i < Input->text_count; ++i) {
-		if(Input->text[i] == Backspace) {
-			contains_bs = true;
-			break;
-		}
-	}
-	contains_bs = true;
-	if(contains_bs) {
-		buffer2 = arena_push_array(Game->temp_arena, char, bufsize + 32);
-		memset(buffer2, 0, bufsize);
-		for(isize i = 0; i < bufsize; ++i) {
-			if(buffer[i] != Backspace) {
-				buffer2[idx] = buffer[i];
-				idx++;
-			} else if(idx != 0) {
-				if(buffer[i+1] == '\7') {
-					while(idx >= 0 && isspace(buffer[idx])) idx--;
-					while(idx >= 0 && !isspace(buffer[idx])) idx--;
-					while(idx >= 0 && isspace(buffer[idx])) idx--;
-					idx++;
-					i++;
-				} else {
-					idx--;
-				}
-			} else {
-				if(buffer[i] == Backspace && buffer[i+1] == '\7') {
-					i++;
-				}
-			}
-		}
-	} else {
-		buffer2 = buffer;
-		idx = str_len + Input->text_count;
-	}
-	memcpy(str, buffer2, idx);
-	
-	Input->text_count = 0;
-	if(idx > str_cap) {
-		idx = str_cap;
-	}
-	end_temp_arena(Game->temp_arena);
-	return idx;
-}
-
 enum Direction 
 {
 	Direction_North,
@@ -620,4 +439,22 @@ enum Direction
 	Direction_East,
 	Direction_West
 };
+
+void render_add(wSprite* sprite)
+{
+	Sprite* ws = wGetSprite(Game->render);
+	*ws = *sprite;
+}
+
+Sprite* renderAdd(
+		i32 flags,
+		u32 color,
+		Vec2 pos, Vec2 size, Rect2i t)
+{
+	return wGroupAddRaw(Game->render,
+			flags, color,
+			pos.x, pos.y, 
+			size.x, size.y,
+			t.x, t.y, t.w, t.h);
+}
 

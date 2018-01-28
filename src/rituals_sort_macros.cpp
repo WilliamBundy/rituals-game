@@ -117,18 +117,5 @@ isize func_name(K key, T* array, isize count) \
 #define _generate_sort_and_search_for_numeric_type(t) \
 	GenerateQuicksortForType(t##_sort, t, _passthru_macro) \
 	GenerateBinarySearchForType(t##_search, t, t, _passthru_macro) 
-_generate_sort_and_search_for_numeric_type(real);
-_generate_sort_and_search_for_numeric_type(real32);
-_generate_sort_and_search_for_numeric_type(real64);
-_generate_sort_and_search_for_numeric_type(uint8);
-_generate_sort_and_search_for_numeric_type(uint16);
-_generate_sort_and_search_for_numeric_type(uint32);
-_generate_sort_and_search_for_numeric_type(uint64);
-_generate_sort_and_search_for_numeric_type(int8);
-_generate_sort_and_search_for_numeric_type(int16);
-_generate_sort_and_search_for_numeric_type(int32);
-_generate_sort_and_search_for_numeric_type(int64);
-_generate_sort_and_search_for_numeric_type(usize);
-_generate_sort_and_search_for_numeric_type(isize);
-
+_generate_sort_and_search_for_numeric_type(f32);
 

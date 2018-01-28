@@ -35,8 +35,10 @@ int delete_folder(char* path, isize path_length)
 #endif
 }
 
+
 int _recursive_delete(const char* last_path, isize last_path_len, char* path)
 {
+	/*
 	isize buf_size = last_path_len + 1 + strlen(path);
 	char* buf = arena_push_array(Game->temp_arena, char, buf_size);
 	isize len = snprintf(buf, FilePathMaxLength, "%.*s/%s", last_path_len, last_path, path);
@@ -57,18 +59,20 @@ int _recursive_delete(const char* last_path, isize last_path_len, char* path)
 	delete_folder(buf, len);
 		
 	return 1;
+	*/
+	return 0;
 }
 
 
 int recursively_delete_folder(char* path, bool append_base_path)
 {
-	start_temp_arena(Game->temp_arena);
+	arenaStartTemp(Game->tempArena);
 	if(append_base_path) {
 		_recursive_delete(Game->base_path, Game->base_path_length-1, path); 
 	} else {
 		_recursive_delete(path, strlen(path), "");
 	}
-	end_temp_arena(Game->temp_arena);
+	arenaEndTemp(Game->tempArena);
 	return 1;
 }
 
@@ -95,16 +99,17 @@ void check_dir(char* dir)
 #endif 
 }
 
+#if 0
 void serialize_tile_state(Tile_State* state, FILE* file)
 {
 	fwrite(&state->id, sizeof(isize), 1, file);
-	fwrite(&state->damage, sizeof(int32), 1, file);
+	fwrite(&state->damage, sizeof(i32), 1, file);
 }
 
 void deserialize_tile_state(Tile_State* state, FILE* file)
 {
 	fread(&state->id, sizeof(isize), 1, file);
-	fread(&state->damage, sizeof(int32), 1, file);
+	fread(&state->damage, sizeof(i32), 1, file);
 }
 
 void deserialize_tilemap(Tilemap* map, FILE* file, Memory_Arena* arena)
@@ -196,7 +201,7 @@ void serialize_sprite(Sprite* s, FILE* file)
 	fwrite(&s->size.e, sizeof(real), 2, file);
 	fwrite(&s->texture.e, sizeof(real), 4, file);
 	fwrite(&s->color.e, sizeof(real), 4, file);
-	fwrite(&s->flags, sizeof(uint32), 1, file);
+	fwrite(&s->flags, sizeof(ui32), 1, file);
 	fwrite(&s->sort_offset, sizeof(real), 1, file);
 }
 
@@ -208,7 +213,7 @@ void deserialize_sprite(Sprite* s, FILE* file)
 	fread(&s->size.e, sizeof(real), 2, file);
 	fread(&s->texture.e, sizeof(real), 4, file);
 	fread(&s->color.e, sizeof(real), 4, file);
-	fread(&s->flags, sizeof(uint32), 1, file);
+	fread(&s->flags, sizeof(ui32), 1, file);
 	fread(&s->sort_offset, sizeof(real), 1, file);
 }
 
@@ -284,14 +289,14 @@ void deserialize_entity(Entity* entity, FILE* file)
 	deserialize_sprite(&entity->sprite, file);
 
 	deserialize_hitbox(&entity->hitbox, file);
-	fread(&entity->health, sizeof(int32), 1, file);
-	fread(&entity->attack, sizeof(int32), 1, file);
+	fread(&entity->health, sizeof(i32), 1, file);
+	fread(&entity->attack, sizeof(i32), 1, file);
 	fread(&entity->attack_interval, sizeof(real), 1, file);
 	fread(&entity->attack_timer, sizeof(real), 1, file);
 	fread(&entity->knockback, sizeof(real), 1, file);
 
-	fread(&entity->counter, sizeof(int32), 1, file);
-	fread(&entity->facing, sizeof(int32), 1, file);
+	fread(&entity->counter, sizeof(i32), 1, file);
+	fread(&entity->facing, sizeof(i32), 1, file);
 	//TODO(will) standardize size of enum?
 	fread(&entity->direction, sizeof(Direction), 1, file);
 	fread(&entity->kind, sizeof(isize), 1, file);
@@ -405,14 +410,14 @@ void serialize_entity(Entity* entity, FILE* file)
 	serialize_sprite(&entity->sprite, file);
 
 	serialize_hitbox(&entity->hitbox, file);
-	fwrite(&entity->health, sizeof(int32), 1, file);
-	fwrite(&entity->attack, sizeof(int32), 1, file);
+	fwrite(&entity->health, sizeof(i32), 1, file);
+	fwrite(&entity->attack, sizeof(i32), 1, file);
 	fwrite(&entity->attack_interval, sizeof(real), 1, file);
 	fwrite(&entity->attack_timer, sizeof(real), 1, file);
 	fwrite(&entity->knockback, sizeof(real), 1, file);
 
-	fwrite(&entity->counter, sizeof(int32), 1, file);
-	fwrite(&entity->facing, sizeof(int32), 1, file);
+	fwrite(&entity->counter, sizeof(i32), 1, file);
+	fwrite(&entity->facing, sizeof(i32), 1, file);
 	//TODO(will) standardize size of enum?
 	fwrite(&entity->direction, sizeof(Direction), 1, file);
 	fwrite(&entity->kind, sizeof(isize), 1, file);
@@ -440,15 +445,15 @@ void serialize_area(World_Area* area, FILE* area_file)
 
 void serialize_area_link(Area_Link* link, FILE* fp)
 {
-	fwrite(&link->position.x, sizeof(int32), 1, fp);
-	fwrite(&link->position.y, sizeof(int32), 1, fp);
+	fwrite(&link->position.x, sizeof(i32), 1, fp);
+	fwrite(&link->position.y, sizeof(i32), 1, fp);
 	fwrite(&link->link->id, sizeof(isize), 1, fp);
 }
 
 void deserialize_area_link(Area_Link* link, World* world, FILE* fp)
 {
-	fread(&link->position.x, sizeof(int32), 1, fp);
-	fread(&link->position.y, sizeof(int32), 1, fp);
+	fread(&link->position.x, sizeof(i32), 1, fp);
+	fread(&link->position.y, sizeof(i32), 1, fp);
 	isize linkid = 0;
 	fread(&linkid, sizeof(isize), 1, fp);
 	link->link = world->area_stubs + linkid;
@@ -475,11 +480,11 @@ void deserialize_world_area_stub(World_Area_Stub* stub, World* world, FILE* fp)
 	deserialize_area_link(&stub->west, world, fp);
 	fread(&stub->biome, sizeof(World_Area_Biome), 1, fp);
 }
-
-
+#endif
 
 FILE* get_world_file(const char* name, const char* mode)
 {
+	/*
 	char save_dir[FilePathMaxLength];
 	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
 	check_dir(save_dir);
@@ -492,10 +497,13 @@ FILE* get_world_file(const char* name, const char* mode)
 	//printf("%s\n", save_dir);
 	FILE* world_file = fopen(save_dir, mode);
 	return world_file;
+	*/
+	return NULL;
 }
 
 FILE* get_area_file(const char* name, isize id, const char* mode)
 {
+	/*
 	char save_dir[FilePathMaxLength];
 	snprintf(save_dir, FilePathMaxLength, "%ssave/", Game->base_path);
 	check_dir(save_dir);
@@ -511,10 +519,13 @@ FILE* get_area_file(const char* name, isize id, const char* mode)
 
 	FILE* area_file = fopen(save_dir, mode);
 	return area_file;
+	*/
+	return NULL;
 }
 
 void serialize_world(World* world)
 {
+	/*
 	world_area_deinit_player(world->current_area);
 	printf("saving %d current_area_id\n", world->current_area->id);
 	if(world->name[0] == '\0') {
@@ -550,10 +561,12 @@ void serialize_world(World* world)
 	} else {
 		printf("Could not open world file \n");
 	}
+	*/
 }
 
 void deserialize_world(World* world, FILE* world_file)
 {
+	/*
 	isize namelen = 0;
 	fread(&namelen, sizeof(isize), 1, world_file);
 	world->name = arena_push_array(Game->world_arena, char, namelen+1);
@@ -575,6 +588,7 @@ void deserialize_world(World* world, FILE* world_file)
 	printf("loading %d current_area_id\n", current_area_id);
 	world_start_in_area(world, world->area_stubs + current_area_id, Game->play_arena);
 	fclose(world_file);
+	*/
 }
 
 
