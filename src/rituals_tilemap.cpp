@@ -1,11 +1,13 @@
 //#define TiSz (32.0f)
 typedef i32 Tile;
+#ifndef WirmphtEnabled
 struct Tilemap
 {
 	isize w, h;
 	Tile* tiles;
 	Tile_State* states;
 };
+#endif
 
 #define WorldAreaTilemapWidth (64)
 #define WorldAreaTilemapHeight (64)
@@ -96,7 +98,7 @@ void update_tile_state_at(Game_Registry* Registry, Tilemap* map, Vec2 pos)
 
 void render_tilemap(Game_Registry* Registry, Tilemap* tilemap, Vec2 pos)
 {
-	wSprite s;
+	Sprite s;
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
 			Tile_Info* t = Registry->tiles + tilemap->tiles[i * tilemap->w + j];

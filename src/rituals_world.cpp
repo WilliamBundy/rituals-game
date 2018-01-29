@@ -1,14 +1,14 @@
-
+#ifndef WirmphtEnabled
 struct World
 {
 	char* name;
 
-	World_Area_Stub* area_stubs;
+	WorldAreaStub* area_stubs;
 	isize next_area_id;
 	isize areas_count, areas_capacity;
 	isize areas_width, areas_height;
 
-	World_Area* current_area;
+	WorldArea* current_area;
 	usize seed;
 
 	Entity global_player_entity;
@@ -20,16 +20,16 @@ struct World
 	Particle_Style base_style;
 	Emitter emitter;
 };
-
+#endif
 isize Anim_Standing;
 isize Anim_Walking;
-
 
 void init_world(World* world, isize width, isize height, usize seed, MemoryArena* arena)
 {
 	world->seed = seed;
 	world->areas_capacity = width * height * 2;
-	world->area_stubs = (World_Area_Stub*)arenaPush(arena, sizeof(World_Area_Stub) * world->areas_capacity);
+	world->area_stubs = (WorldAreaStub*)arenaPush(arena, 
+			sizeof(WorldAreaStub) * world->areas_capacity);
 	world->areas_count = 0;
 	world->areas_width = width;
 	world->areas_height = height;
@@ -46,8 +46,11 @@ void init_world(World* world, isize width, isize height, usize seed, MemoryArena
 	e->sprite.texture = rect2i(0, 0, 32, 32);
 	e->anim = (Animated_Sprite*)arenaPush(arena, sizeof(Animated_Sprite)); 
 	init_animated_sprite(e->anim, 64, arena);
-	Anim_Standing = add_animation(e->anim, make_animaiton_from_strip(arena, 12, rect2i(0, 0, 32, 32), 1));
-	Anim_Walking = add_animation(e->anim, make_animaiton_from_strip(arena, 12, rect2i(0, 11 * 32, 32, 32), 4));
+
+	Anim_Standing = add_animation(e->anim, 
+			make_animaiton_from_strip(arena, 12, rect2i(0, 0, 32, 32), 1));
+	Anim_Walking = add_animation(e->anim, 
+			make_animaiton_from_strip(arena, 12, rect2i(0, 11 * 32, 32, 32), 4));
 	
 	b->shape.hext = v2(5, 5);
 	e->hitbox.box.hext = b->shape.hext + v2(1, 1);
@@ -65,11 +68,10 @@ void init_world(World* world, isize width, isize height, usize seed, MemoryArena
 	p->heal_to_interval = 25;
 	p->heal_timer = 0;
 
-	init_emitter(&world->emitter, 8192, arena);
 }
 
 //Make a player struct?
-void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=true)
+void world_area_init_player(WorldArea* area, Vec2i tile_pos, bool move_player=true)
 {
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
@@ -84,7 +86,7 @@ void world_area_init_player(World_Area* area, Vec2i tile_pos, bool move_player=t
 	area->target = player->shape.center;
 }
 
-void world_area_deinit_player(World_Area* area, bool move_player=true)
+void world_area_deinit_player(WorldArea* area, bool move_player=true)
 {
 	Entity* player_entity = world_area_find_entity(area, 0);
 	Sim_Body* player = sim_find_body(&area->sim, player_entity->body_id);
@@ -92,36 +94,11 @@ void world_area_deinit_player(World_Area* area, bool move_player=true)
 	area->world->global_player_body = *player;
 }
 
-//void deserialize_area(World_Area* area, FILE* file, MemoryArena* arena);
-FILE* get_area_file(const char* name, isize id, const char* mode);
-FILE* get_world_file(const char* name, const char* mode);
-int check_path(char* path);
-World_Area* world_load_area(World* world, isize id, MemoryArena* arena)
-{
-	return NULL;
-	/*
-	FILE* fp = get_area_file(world->name, id, "rb");
-	World_Area* area = NULL;
-	if(fp != NULL) {
-		area = (World_Area*)arenaPush(arena, sizeof(World_Area));
-		//deserialize_area(area, fp, arena);
-		area->world = world;
-		area->stub = world->area_stubs + id;
-		for(isize i = 0; i < area->entities_count; ++i) {
-			Entity* e = area->entities + i;
-		}
-		world_area_synchronize_entities_and_bodies(area);
-
-		fclose(fp);
-	}
-
-	return area;
-	*/
-}
+//void deserialize_area(WorldArea* area, FILE* file, MemoryArena* arena);
 
 //TODO(will) call init_world_area on area before calling
-Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position);
-void generate_world_area(Game_Registry* Registry, World* world, World_Area* area, World_Area_Stub* stub)
+Entity* rituals_spawn_enemy(WorldArea* area, isize enemykind, Vec2 position);
+void generate_world_area(Game_Registry* Registry, World* world, WorldArea* area, WorldAreaStub* stub)
 {
 	area->stub = stub;
 	area->world = world;
@@ -131,7 +108,7 @@ void generate_world_area(Game_Registry* Registry, World* world, World_Area* area
 	generate_tilemap(&area->map, stub->seed);
 	area->id = stub->id;
 	//Spawn boxes
-	for(isize i = 0; i < WorldAreaTilemapWidth * 4; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = rect2i(8*32, 16, 32, 48);
@@ -157,7 +134,7 @@ void generate_world_area(Game_Registry* Registry, World* world, World_Area* area
 	}
 
 	//Spawn trees
-	for(isize i = 0; i < WorldAreaTilemapWidth; ++i) {
+	for(isize i = 0; i < WorldAreaTilemapWidth/4; ++i) {
 		Entity* e = world_area_get_next_entity(area);
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		e->sprite.texture = rect2i(0, 5*32, 96, 144);
@@ -194,18 +171,13 @@ void generate_world_area(Game_Registry* Registry, World* world, World_Area* area
 	generate_statics_for_tilemap(Registry, &area->sim, &area->map, Game->tempArena);
 }
 
-//void serialize_world(World* world);
 void world_switch_current_area(World* world, Area_Link link, MemoryArena* arena)
 {
 	if(link.link == NULL) return;
 	world_area_deinit_player(world->current_area);
-	//TODO(will) free old current area
-	
-//	serialize_world(world);
-	//arenaCl(arena);
-	World_Area* new_area = world_load_area(world, link.link->id, arena);
+	WorldArea* new_area = NULL;
 	if(new_area == NULL) {
-		new_area = (World_Area*)arenaPush(arena, sizeof(World_Area));
+		new_area = (WorldArea*)arenaPush(arena, sizeof(WorldArea));
 		init_world_area(new_area, arena);
 		generate_world_area(Game->registry, world, new_area, link.link);
 	}
@@ -213,32 +185,22 @@ void world_switch_current_area(World* world, Area_Link link, MemoryArena* arena)
 	world->current_area = new_area;
 }
 
-void world_start_in_area(World* world, World_Area_Stub* area, MemoryArena* arena)
+void world_start_in_area(World* world, WorldAreaStub* area, MemoryArena* arena)
 {
-	World_Area* new_area = world_load_area(world, area->id, arena);
+	WorldArea* new_area = NULL;
 	if(new_area == NULL) {
-		new_area = (World_Area*)arenaPush(arena, sizeof(World_Area));
+		new_area = (WorldArea*)arenaPush(arena, sizeof(WorldArea));
 		init_world_area(new_area, arena);
 		generate_world_area(Game->registry,world, new_area, area);
-		world_area_init_player(new_area, v2i(WorldAreaTilemapWidth / 2, WorldAreaTilemapHeight /2));
+		world_area_init_player(new_area, 
+				v2i(WorldAreaTilemapWidth / 2,
+					WorldAreaTilemapHeight /2));
 	} else {
 		world_area_init_player(new_area, v2i(0, 0),  false);
 	}
 	world_area_synchronize_entities_and_bodies(new_area);
 	world->current_area = new_area;
 }
-
-int recursively_delete_folder(char* path, bool append_base_path);
-void world_delete_self(World* world)
-{
-	/*
-	char world_path[FilePathMaxLength];
-	isize len = snprintf(world_path, FilePathMaxLength, "%s/%s", Game->Menu->save_dir, world->name);
-	recursively_delete_folder(world_path, false);
-	Game->Menu->saves_dirty = true;
-	*/
-}
-
 
 void generate_world(char* name, World* world)
 {
@@ -247,13 +209,17 @@ void generate_world(char* name, World* world)
 	for(isize i = 0; i < world->areas_height; ++i) {
 		for(isize j = 0; j < world->areas_width; ++j) {
 			isize index = i * world->areas_width + j;
-			World_Area_Stub* stub = world->area_stubs + world->areas_count++; 
+			WorldAreaStub* stub = world->area_stubs + world->areas_count++; 
 			stub->id = world->next_area_id++;
 			stub->seed = world->seed + stub->id;
-			isize north_link = modulus(i - 1, world->areas_height) * world->areas_width + j;
-			isize south_link = modulus(i + 1, world->areas_height) * world->areas_width + j;
-			isize west_link = i * world->areas_width + modulus(j - 1, world->areas_width);
-			isize east_link = i * world->areas_width + modulus(j + 1, world->areas_width);
+			isize north_link = modulus(i - 1, world->areas_height) * 
+				world->areas_width + j;
+			isize south_link = modulus(i + 1, world->areas_height) * 
+				world->areas_width + j;
+			isize west_link = i * world->areas_width + 
+				modulus(j - 1, world->areas_width);
+			isize east_link = i * world->areas_width + 
+				modulus(j + 1, world->areas_width);
 
 			stub->north = Area_Link {
 				v2i(WorldAreaTilemapWidth / 2,  WorldAreaTilemapHeight - 1), 
@@ -276,72 +242,66 @@ void generate_world(char* name, World* world)
 	}
 }
 
-//TODO(will) Implement packages -- hook up using function pointers
-//For the time being we're just going to use forward declarations
-void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world);
-void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world);
-void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world);
-
-void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world);
-void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world);
-
-bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world);
-void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world);
-
-void rituals_on_destroy_entity(Entity* entity, World_Area* area, World* world);
-void rituals_on_activate_entity(Entity* entity, World_Area* area, World* world);
-
-void world_area_walk_entities(World_Area* area, World* world)
+void world_area_walk_entities(WorldArea* area, World* world)
 {
-	rituals_walk_entities(area->entities, area->entities_count, area, world);
+	rituals_walk_entities(area->entities, area->entities_count, 
+			area, world);
 }
 
-void world_area_animate_entities(World_Area* area, World* world)
+void world_area_animate_entities(WorldArea* area, World* world)
 {
-	rituals_animate_entities(area->entities, area->entities_count, area, world);
+	rituals_animate_entities(area->entities, area->entities_count,
+			area, world);
 }
 
-bool world_area_frametick_entities(World_Area* area, World* world)
+bool world_area_frametick_entities(WorldArea* area, World* world)
 {
-	return rituals_frametick_entities(area->entities, area->entities_count, area, world);
+	return rituals_frametick_entities(area->entities, area->entities_count,
+			area, world);
 }
 
-void world_area_slowtick_entities(World_Area* area, World* world)
+void world_area_slowtick_entities(WorldArea* area, World* world)
 {
-	rituals_frametick_entities(area->entities, area->entities_count, area, world);
+	rituals_frametick_entities(area->entities, area->entities_count, 
+			area, world);
 }
 
-void world_area_on_destroy_entity(Entity* e, World_Area* area, World* world)
+void world_area_on_destroy_entity(Entity* e, WorldArea* area, World* world)
 {
 	rituals_on_destroy_entity(e, area, world);	
 }
 
-void world_area_on_activate_entity(Entity* e, World_Area* area, World* world)
+void world_area_on_activate_entity(Entity* e, WorldArea* area, World* world)
 {
 	rituals_on_activate_entity(e, area, world);
 }
 
-void world_area_hit_entities(World_Area* area, World* world)
+void world_area_hit_entities(WorldArea* area, World* world)
 {
-	rituals_hit_entities(area->hitbox_contacts, area->hitbox_contacts_count, area, world);
+	rituals_hit_entities(area->hitbox_contacts, area->hitbox_contacts_count,
+			area, world);
 }
 
-void world_area_contact_entities(World_Area* area, World* world)
+void world_area_contact_entities(WorldArea* area, World* world)
 {
-	rituals_contact_entities(area->sim.contacts, area->sim.contacts_count, area, world);
+	rituals_contact_entities(area->sim.contacts, area->sim.contacts_count, 
+			area, world);
 }
 
-void world_area_interact(World_Area* area, World* world)
+void world_area_interact(WorldArea* area, World* world)
 {
-	rituals_interact_entities(area->entities, area->entities_count, area, world);
+	rituals_interact_entities(area->entities, area->entities_count,
+			area, world);
 }
 
-void world_area_render(World_Area* area, World* world)
+void world_area_render(WorldArea* area, World* world)
 {	
 	//render_set_current_group(0);
 	Vec2 target = area->target;
+	Game->render->scale = 2;
 	area->offset += (target - area->offset) * 0.1f;
-	area->offset -= Game->size * 0.5f;
+	area->offset -= (Game->size * 0.5f) / Game->render->scale;
+	
 	if(area->offset.x < 0) 
 		area->offset.x = 0;
 	else if((area->offset.x + Game->size.x) > area->map.w * TiSz)
@@ -351,81 +311,29 @@ void world_area_render(World_Area* area, World* world)
 		area->offset.y = 0;
 	else if((area->offset.y + Game->size.y) > area->map.h * TiSz)
 		area->offset.y = area->map.h * TiSz - Game->size.y;
-
-	//CurrentGroup->offset = area->offset;
-	area->offset += Game->size * 0.5f;
-
+	Game->render->offsetX = area->offset.x * 2;
+	Game->render->offsetY = area->offset.y * 2;
+	area->offset += (Game->size * 0.5f) / Game->render->scale;
 
 	Rect2 screen = rect2(
-			area->offset.x - Game->size.x / 2,
-			area->offset.y - Game->size.y / 2, 
+			area->offset.x - Game->size.x / (2 * Game->render->scale),
+			area->offset.y - Game->size.y / (2 * Game->render->scale),  
 			Game->size.x, Game->size.y);
 
 	isize sprite_count_offset = render_tilemap(Game->registry, &area->map, v2(0,0), screen);
 
 	world_area_animate_entities(area, world);
-
-	emitter_render(&world->emitter, &area->sim,  TimeStep);
-
-	//render_sort(sprite_count_offset);
-	char buf[256];
-	//Gui_TextBackgroundColor = v4(0, 0, 0, 0.4f);
-
-#if 1
-	for(isize i = 0; i < area->entities_count; ++i) {
-		Entity* e = area->entities + i;
-		if(e->kind != EntityKind_Enemy && e->kind != EntityKind_Player) continue;
-		//snprintf(buf, 256, "%d %d/%d %d", e->kind, e->id, e->body_id, e->health);
-		isize len = snprintf(buf, 256, "%d", e->health);
-		//render_body_text(buf, e->sprite.position - v2(Body_Font->glyph_width * len / 4, e->sprite.size.y + 16), true, 0.5f);
-	}
-#endif 
-#if 0
-	for(isize i = 0; i < area->sim.bodies_count; ++i) {
-		Sim_Body* b = area->sim.bodies + i;
-
-		if (b == NULL) continue;
-		render_box_outline_primitive(b->shape.center, b->shape.hext * 2, v4(.6f, 1, .6f, 1), 1);	
-	//	isize len = snprintf(buf, 256, "%d", b->group);
-	//	render_body_text(buf, b->shape.center - v2(Body_Font->glyph_width * len / 2, 0), true);
-	}
-#endif
-	//render_draw(Game->size, Game->scale);
-
-#if 1
-
-	//render_set_current_group(1);
-	//render_start();
-	i32 mx, my;
-	SDL_GetMouseState(&mx, &my);
-	snprintf(buf, 256, "%d %d Area %d | Entities %d | Frame Time %d", mx, my, area->id, area->entities_count, Game->last_frame_time);
-	//render_body_text(buf, v2(16, 16), true);
-	//render_draw(Game->size, Game->scale);
-#endif
-
+	wGroupSort(Game->render, sprite_count_offset, Game->render->count);
 }
 
 
 void init_play_state();
 int recursively_delete_folder(char* path, bool append_base_path);
-void world_area_update(World_Area* area, World* world)
+void world_area_update(WorldArea* area, World* world)
 {
-	//game_set_scale(2);
-	//game_calc_mouse_pos(area->offset - Game->size * 0.5f);
-	//Simulation timing
-	
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
-	/*
-	if(!Game->Play->running) {
-		world_area_render(area, world);
-		return;
-	}
-	*/
 
-	//Game->Play->current_time = SDL_GetTicks();
-	//f32 dt = (Game->Play->current_time - Game->Play->prev_time) / 1000.0;
-	//dt = clamp(dt, 0, 1.2f);
 	f32 dt = 1.0 / 60.0f;
 	world_area_synchronize_entities_and_bodies(area);
 	area->player = world_area_find_entity(area, 0);
@@ -450,16 +358,12 @@ void world_area_update(World_Area* area, World* world)
 	area->target = target;
 	if(target.x < 0) {
 		world_switch_current_area(globalWorld, area->stub->west, Game->gameArena);
-		//Game->Play->world_xy.x--;
 	} else if(target.x > area->map.w * TiSz) {
 		world_switch_current_area(globalWorld, area->stub->east, Game->gameArena);
-		//Game->Play->world_xy.x++;
 	} else if(target.y < 0) {
 		world_switch_current_area(globalWorld, area->stub->north, Game->gameArena);
-		//Game->Play->world_xy.y--;
 	} else if(target.y > area->map.h * TiSz) {
 		world_switch_current_area(globalWorld, area->stub->south, Game->gameArena);
-		//Game->Play->world_xy.y++;
 	}
 	world_area_interact(area, world);
 	world_area_render(area, world);
@@ -472,8 +376,7 @@ void world_area_update(World_Area* area, World* world)
 		for(isize i = 0; i < 2; ++i) {
 			Entity* e = world_area_get_next_entity(area);
 			e->kind = EntityKind_Bullet;
-			//e->sprite = create_box_primitive(area->player->sprite.pos, v2(2, 2), v4(1, 0.25f, 0, 1));
-			e->sprite = wSpriteMake(Sprite_NoTexture, ColorWhite, 
+			e->sprite = spriteMake(Sprite_NoTexture, ColorWhite, 
 					area->player->sprite.pos, 2, 2, 0, 0, 0, 0);
 			e->sprite.pos += v2(
 					rand_range(&Game->r, -3, 3),

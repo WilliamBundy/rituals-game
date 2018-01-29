@@ -14,7 +14,7 @@ all: start debug_game end
 
 
 debug_game:
-#	$(wirmpht) -p -s -t src/rituals_main.cpp > src/rituals_types.cpp
+	$(wirmpht) -p -s -t src/rituals_main.cpp > src/rituals_types.cpp
 	cl $(ccflags) /I"msvc_libs/include/" src/rituals_main.cpp \
 		/Fe"bin/Rituals.exe" /Fd"bin/Rituals.pdb" \
 		/DRITUALS_WINDOWS \

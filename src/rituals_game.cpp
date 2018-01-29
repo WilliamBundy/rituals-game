@@ -1,96 +1,6 @@
-/*
- * rituals_game.cpp
- * Contains a bunch of misc stuff and game struct.
- *  - Macros for sort/search functions: DIY hashtables
- *  - Memory allocators: linear (Memory_Arena), pool? free list?
- *  - Random functions: one of the xorshift style ones, splitmix too
- *  - ButtonState enum
- *  - Game_Input struct: stores all game input stuff
- *  - Game_Assets typedef: DECLARE THIS YOURSELF LATER
- *  - Game struct: where everything is kept
- */
-
-
-// Generic error logging define
-// TODO(will) implement better error logging
 #define Log_Error(e) fprintf(stderr, "There was an error: %s \n", e);
 
-$(exclude)
-#include "rituals_sort_macros.cpp"
-$(end)
-#include "rituals_memory.cpp"
-#include "rituals_random.cpp"
-// Input stuff
-const char* GLES2_frag = "" "#version 100\n"
-"precision mediump float;\n"
-"varying float fKind;\n"
-"varying vec2 fScale;\n"
-"varying vec2 fUV;\n"
-"varying vec4 fColor;\n"
-"uniform float uPxRange;\n"
-"uniform vec2 uInvTextureSize;\n"
-"uniform vec4 uTint;\n"
-"uniform sampler2D uTexture;\n"
-"float median(float a, float b, float c)\n"
-"{\n"
-"	return max(min(a, b), min(max(a, b), c));\n"
-"}\n"
-"vec2 subpixelAA(vec2 pixel, float zoom)\n"
-"{\n"
-"	vec2 uv = floor(pixel) + 0.5;\n"
-"	return uv + 1.0 - clamp((1.0 - fract(pixel)) * zoom, 0.0, 1.0);\n"
-"}\n"
-"void main()\n"
-"{\n"
-"	if(fKind < 10.0) {\n"
-"		//vec4 dist = texture2D(uTexture, fUV * uInvTextureSize);\n"
-"		//float m = median(dist.x, dist.y, dist.z);\n"
-"		//float smoothing = 0.25 / (uPxRange * fScale.x);\n"
-"		//float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, m);\n"
-"		//gl_FragColor = vec4(1, 1, 1, alpha) * uTint * fColor;\n"
-"		vec2 msdfUnit = uPxRange * uInvTextureSize;\n"
-"		vec4 sdfVal = texture2D(uTexture, fUV * uInvTextureSize);\n"
-"		float sigDist = median(sdfVal.r, sdfVal.g, sdfVal.b) - 0.5;\n"
-"		sigDist *= dot(msdfUnit, 0.5/vec2(fKind / 1000.0));\n"
-"		float opacity = clamp(sigDist + 0.5, 0.0, 1.0);\n"
-"		gl_FragColor = vec4(1, 1, 1, opacity) * uTint * fColor;\n"
-"	} else {\n"
-"		vec4 lcolor = fColor;\n"
-"		if(fKind < 20.0) {\n"
-"			vec2 uv;\n"
-"			if(fKind > 15.0) {\n"
-"				uv = subpixelAA(fUV, fScale.x);\n"
-"			} else {\n"
-"				uv = floor(fUV) + 0.5;\n"
-"			}\n"
-"			lcolor *= texture2D(uTexture, uv * uInvTextureSize);\n"
-"		}\n"
-"		gl_FragColor = lcolor * uTint;\n"
-"	}\n"
-"}\n"
-;
-const char* GLES2_vert = "" "#version 100\n"
-"attribute float vKind;\n"
-"attribute vec2 vPos;\n"
-"attribute vec2 vUV;\n"
-"attribute vec2 vScale;\n"
-"attribute vec4 vColor;\n"
-"varying float fKind;\n"
-"varying vec2 fScale;\n"
-"varying vec2 fUV;\n"
-"varying vec4 fColor;\n"
-"void main()\n"
-"{\n"
-"	gl_Position = vec4(vPos, 0, 1);\n"
-"	fUV = vUV;\n"
-"	fScale = vScale;\n"
-"	fKind = vKind;\n"
-"	fColor = vColor.wzyx;\n"
-"}\n"
-;
-
-
-#include "rituals_input.cpp"
+#ifndef WirmphtEnabled
 struct Game_Main
 {
 	SDL_Window* window;
@@ -106,9 +16,6 @@ struct Game_Main
 	const char* base_path;
 	isize base_path_length;
 
-	//Spritefont* body_font;
-	//Spritefont* title_font;
-
 	Random r;
 
 	Game_Registry* registry;
@@ -118,9 +25,6 @@ struct Game_Main
 	Game_Input* input; 
 	isize last_frame_time;
 };
-
-Game_Main* Game;
-Game_Input* Input;
 
 struct Platform
 {
@@ -136,6 +40,10 @@ struct Platform
 
 	SDL_Window* window;
 };
+#endif
+
+Game_Main* Game;
+Game_Input* Input;
 
 i32 platform_init(Platform* platform)
 {
@@ -233,6 +141,7 @@ i32 game_start(Platform* platform, Game_Main* game)
 	SDL_Event event;
 	//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClearColor(0, 0, 0, 1);
+	SDL_GL_SetSwapInterval(-1);
 
 	while(running) {
 		usize start_ticks = SDL_GetTicks();
@@ -344,9 +253,11 @@ i32 game_start(Platform* platform, Game_Main* game)
 		wGroupDraw(game->size.x, game->size.y, game->render);
 		usize frame_ticks = SDL_GetTicks() - start_ticks;
 
+		/*
 		if(frame_ticks < 16) {
 			SDL_Delay((u32)(16 - frame_ticks));
 		}
+		*/
 		SDL_GL_SwapWindow(game->window);
 		game->last_frame_time = SDL_GetTicks() - start_ticks;
 	}
@@ -440,7 +351,7 @@ enum Direction
 	Direction_West
 };
 
-void render_add(wSprite* sprite)
+void render_add(Sprite* sprite)
 {
 	Sprite* ws = wGetSprite(Game->render);
 	*ws = *sprite;

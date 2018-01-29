@@ -1,3 +1,4 @@
+#ifndef WirmphtEnabled
 struct Animation_Frame
 {
 	Vec3 position; 
@@ -7,6 +8,27 @@ struct Animation_Frame
 	Rect2i texture;
 	f32 sort_offset;
 };
+
+struct Animated_Sprite
+{
+	Animation** animations;
+	isize animations_count, animations_capacity;
+	isize current_animation, current_frame;
+	bool running;
+	f32 timer;
+};	
+
+struct Animation
+{
+	isize id;
+	Animation_Frame* frames;
+	isize frames_count, frames_capacity;
+	f32 fps;
+	f32 inv_fps;
+	bool looping;
+};
+#endif
+
 
 void init_animation_frame(Animation_Frame* fr)
 {
@@ -18,15 +40,6 @@ void init_animation_frame(Animation_Frame* fr)
 	fr->sort_offset = 0;
 }
 
-struct Animation
-{
-	isize id;
-	Animation_Frame* frames;
-	isize frames_count, frames_capacity;
-	f32 fps;
-	f32 inv_fps;
-	bool looping;
-};
 
 void init_animation(Animation* a, f32 fps, isize capacity, MemoryArena* arena)
 {
@@ -55,17 +68,6 @@ Animation* make_animaiton_from_strip(MemoryArena* arena, f32 fps, Rect2i frame, 
 
 	return anim;
 }
-
-#ifndef REFLECTED
-struct Animated_Sprite
-{
-	Animation** animations;
-	isize animations_count, animations_capacity;
-	isize current_animation, current_frame;
-	bool running;
-	f32 timer;
-};	
-#endif
 
 void init_animated_sprite(Animated_Sprite* s, isize capacity, MemoryArena* arena)
 {

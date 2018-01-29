@@ -13,7 +13,7 @@ static inline u64 _rotate_left(const u64 t, i64 k)
 	return (t << k) | (t >> (64 - k));
 }
 
-#ifndef REFLECTED
+#ifndef WirmphtEnabled
 struct Random
 {
 	u64 x, y;

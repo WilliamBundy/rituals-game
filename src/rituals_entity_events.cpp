@@ -1,4 +1,4 @@
-void rituals_prop_drop_on_break(World_Area* area, Entity* a) 
+void rituals_prop_drop_on_break(WorldArea* area, Entity* a) 
 {
 	if(a->kind != EntityKind_Prop) {
 		printf("Could not drop on break: recieved entity type %d", a->kind);
@@ -46,7 +46,7 @@ void rituals_prop_drop_on_break(World_Area* area, Entity* a)
 }
 
 
-Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position) 
+Entity* rituals_spawn_enemy(WorldArea* area, isize enemykind, Vec2 position) 
 {
 	Entity* e = world_area_get_next_entity(area);
 	e->kind = EntityKind_Enemy;
@@ -111,12 +111,12 @@ Entity* rituals_spawn_enemy(World_Area* area, isize enemykind, Vec2 position)
 	return e;
 }
 
-void rituals_on_activate_entity(Entity* entity, World_Area* area, World* world)
+void rituals_on_activate_entity(Entity* entity, WorldArea* area, World* world)
 {
 
 }
 
-void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)
+void rituals_on_destroy_entity(Entity* e, WorldArea* area, World* world)
 {
 	if(e->kind == EntityKind_Bullet) {
 			emitter_spawn(&world->emitter, 
@@ -127,7 +127,7 @@ void rituals_on_destroy_entity(Entity* e, World_Area* area, World* world)
 	}
 }
 
-bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area, World* world)
+bool rituals_frametick_entities(Entity* entities, isize count, WorldArea* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
@@ -162,14 +162,14 @@ bool rituals_frametick_entities(Entity* entities, isize count, World_Area* area,
 	return false;
 }
 
-void rituals_slowtick_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_slowtick_entities(Entity* entities, isize count, WorldArea* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
 	}
 }
 
-void rituals_walk_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_walk_entities(Entity* entities, isize count, WorldArea* area, World* world)
 {
 	Game_Registry * Registry = Game->registry;
 	for(isize i = 0; i < count; ++i) {
@@ -282,7 +282,7 @@ void rituals_walk_entities(Entity* entities, isize count, World_Area* area, Worl
 	}
 }
 
-void rituals_animate_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_animate_entities(Entity* entities, isize count, WorldArea* area, World* world)
 {
 	Sprite shadow;
 	wInitSprite(&shadow);
@@ -322,8 +322,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 
 		Vec2 dv_player = area->player->sprite.pos - e->sprite.pos;
 		f32 dist_player = v2_dot(dv_player, dv_player);
-		if(dist_player > 
-			(render_distance + e->sprite.size.x * e->sprite.size.x)) {
+		if(dist_player > render_distance) {
 			continue;
 		}
 
@@ -372,7 +371,7 @@ void rituals_animate_entities(Entity* entities, isize count, World_Area* area, W
 #endif
 	}
 }
-void rituals_interact_entities(Entity* entities, isize count, World_Area* area, World* world)
+void rituals_interact_entities(Entity* entities, isize count, WorldArea* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
 		Entity* e = entities + i;
@@ -448,7 +447,7 @@ void rituals_interact_entities(Entity* entities, isize count, World_Area* area, 
 	}
 }
 
-void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* area, World* world)
+void rituals_hit_entities(Hitbox_Contact* contacts, isize count, WorldArea* area, World* world)
 {
 	for(isize i = 0; i < count; ++i) {
 		Hitbox_Contact* c = contacts + i;
@@ -509,14 +508,14 @@ void rituals_hit_entities(Hitbox_Contact* contacts, isize count, World_Area* are
 	}
 }
 
-void rituals_entity_on_contact_terrain(Entity* e, World_Area* area, World* world)
+void rituals_entity_on_contact_terrain(Entity* e, WorldArea* area, World* world)
 {
 	if(e->kind == EntityKind_Bullet) {
 		world_area_remove_entity(area, e);
 	}
 }
 
-void rituals_contact_entities(Sim_Contact* contacts, isize count, World_Area* area, World* world)
+void rituals_contact_entities(Sim_Contact* contacts, isize count, WorldArea* area, World* world)
 {
 	Simulator* sim = &area->sim;
 	for(isize i = 0; i < count; ++i) {

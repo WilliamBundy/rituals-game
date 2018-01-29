@@ -1,3 +1,4 @@
+#ifndef WirmphtEnabled
 struct Particle
 {
 	Vec3 position;
@@ -48,7 +49,7 @@ struct Particle_Style
 	f32 skid_on_bounce_max;
 	f32 jitter_on_bounce_mag;
 };
-
+#endif
 Particle_Style copy_particle_style(Particle_Style s,
 		Vec2 impulse_range, Vec2i time_range)
 		 
@@ -122,7 +123,7 @@ void init_particle(Particle* p, Vec3 pos, Vec3 vel, f32 scale, f32 angle, f32 an
 }
 
 #define EmitterStyleCapacity (256)
-#ifndef REFLECTED
+#ifndef WirmphtEnabled
 struct Emitter
 {
 	Particle* particles;

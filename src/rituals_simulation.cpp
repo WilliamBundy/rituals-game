@@ -1,4 +1,4 @@
-enum Sim_Body_Flags
+enum 
 {
 	Body_Flag_None,
 	Body_Flag_Static = Flag(1),
@@ -7,8 +7,8 @@ enum Sim_Body_Flags
 	Body_Flag_Always_Contact = Flag(4),
 };
 
-
-#ifndef REFLECTED
+#define SimGridCellSide (TiSz * 4.0f)
+#ifndef WirmphtEnabled
 struct Sim_Body
 {
 	isize id;
@@ -31,39 +31,51 @@ struct Sim_Contact
 	f32 mag;
 	Vec2 normal;
 };
+
+struct Sim_Grid_Cell
+{
+	Sim_Body* body;
+	Sim_Grid_Cell* next;
+};
+
+struct Sim_Static_Grid
+{
+	Sim_Grid_Cell* cell_storage;
+	isize cell_storage_count, cell_storage_capacity;
+
+	Sim_Grid_Cell** cells;
+	isize cells_length;
+	Vec2i size;
+};
+
+struct Simulator
+{
+	Sim_Body* static_bodies;
+	isize static_bodies_count, static_bodies_capacity;
+
+	Sim_Static_Grid* grid;
+
+	Sim_Body* bodies;
+	isize bodies_count, bodies_capacity, next_body_id;
+	Sim_Contact* contacts;
+	isize contacts_count, contacts_capacity;
+
+	isize sort_axis;
+};
 #endif
 
-$(exclude)
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
 GenerateIntrosortForType(_body_sort_on_x, Sim_Body, 12, _body_get_min_x)
 GenerateIntrosortForType(_body_sort_on_y, Sim_Body, 12, _body_get_min_y)
 
-
-i32 _cmp_body_x(const void * a, const void* b)
-{
-	Sim_Body* ba = (Sim_Body*)a;
-	Sim_Body* bb = (Sim_Body*)b;
-	return AABB_x1(ba->shape) < AABB_x1(bb->shape);
-}
-
-i32 _cmp_body_y(const void * a, const void* b)
-{
-	Sim_Body* ba = (Sim_Body*)a;
-	Sim_Body* bb = (Sim_Body*)b;
-	return AABB_y1(ba->shape) < AABB_y1(bb->shape);
-}
-$(end)
-
 void body_sort_on_x(Sim_Body* bodies, isize count)
 {
-	//qsort(bodies, count, sizeof(Sim_Body), &_cmp_body_x);
 	_body_sort_on_x(bodies, count);
 }
 
 void body_sort_on_y(Sim_Body* bodies, isize count)
 {
-	//qsort(bodies, count, sizeof(Sim_Body), &_cmp_body_y);
 	_body_sort_on_y(bodies, count);
 }
 
@@ -88,33 +100,19 @@ void init_body(Sim_Body* b)
 	b->group = 0;
 }
 
-#define SimGridCellSide (TiSz * 4.0f)
-struct Sim_Grid_Cell
-{
-	Sim_Body* body;
-	Sim_Grid_Cell* next;
-};
-
-struct Sim_Static_Grid
-{
-	Sim_Grid_Cell* cell_storage;
-	isize cell_storage_count, cell_storage_capacity;
-
-	Sim_Grid_Cell** cells;
-	isize cells_length;
-	Vec2i size;
-};
 
 void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, MemoryArena* arena)
 {
-	grid->cell_storage = (Sim_Grid_Cell*)arenaPush(arena, sizeof(Sim_Grid_Cell) * capacity);
+	grid->cell_storage = (Sim_Grid_Cell*)arenaPush(arena, 
+			sizeof(Sim_Grid_Cell) * capacity);
 	grid->cell_storage_capacity = capacity;
 	grid->cell_storage_count = 0;
 
 	size.x += 1;
 	size.y += 1;
 
-	grid->cells = (Sim_Grid_Cell**)arenaPush(arena, sizeof(Sim_Grid_Cell*) * size.x * size.y);
+	grid->cells = (Sim_Grid_Cell**)arenaPush(arena,
+			sizeof(Sim_Grid_Cell*) * size.x * size.y);
 	grid->size = size;
 	grid->cells_length = size.x * size.y;
 }
@@ -168,23 +166,6 @@ void build_static_grid(Sim_Static_Grid* grid, Sim_Body* bodies, isize count)
 		}
 	}
 }
-
-#ifndef REFLECTED
-struct Simulator
-{
-	Sim_Body* static_bodies;
-	isize static_bodies_count, static_bodies_capacity;
-
-	Sim_Static_Grid* grid;
-
-	Sim_Body* bodies;
-	isize bodies_count, bodies_capacity, next_body_id;
-	Sim_Contact* contacts;
-	isize contacts_count, contacts_capacity;
-
-	isize sort_axis;
-};
-#endif
 
 Sim_Body* sim_get_next_static_body(Simulator* sim)
 {
@@ -266,7 +247,6 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 	return NULL;
 }
 
-
 #define TimeStep (1.0f/60.0f)
 #define SimIter_i (8)
 #define SimIter ((f32)SimIter_i)
@@ -302,7 +282,6 @@ i32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, i32 sort_axis)
 	return aabb_intersect(a->shape, b->shape);
 }
 
-
 i32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, i32 sort_axis)
 {
 	if(Has_Flag(a->flags, Body_Flag_Static)) {
@@ -322,7 +301,6 @@ i32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, i32 sort_axis)
 
 	return aabb_intersect(a->shape, b->shape);
 }
-
 
 void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times, Simulator* sim)
 {
@@ -355,7 +333,6 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times
 			sim->contacts[sim->contacts_count++] = c;
 		}
 	}
-
 
 	if(Has_Flag(a->flags, Body_Flag_Sensor) ||
 			Has_Flag(b->flags, Body_Flag_Sensor)) {

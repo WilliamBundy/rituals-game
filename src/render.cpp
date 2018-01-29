@@ -1,5 +1,5 @@
-typedef struct wSprite Sprite;
-struct wSprite
+#ifndef WirmphtEnabled
+struct Sprite
 {
 	i32 flags;
 	u32 color;
@@ -44,7 +44,7 @@ struct wTexture
 	u32 glIndex;
 };
 
-struct wSpriteList
+struct SpriteList
 {
 	i32 start, count;
 	f32 l, b, r, t;
@@ -66,12 +66,13 @@ struct wRenderGroup
 
 	float sdfPxRange;
 
-	wSprite* sprites;
+	Sprite* sprites;
 	wVertex* verts;
 	u16* indices;
 	i32 count, capacity;
 };
-
+#endif 
+typedef struct Sprite Sprite;
 enum SpriteFlags
 {
 	Anchor_Center = 0,
@@ -163,7 +164,7 @@ void wInitDefaultShader(const char* vertShader, const char* fragShader, wShader*
 	shader->uPxRange = glGetUniformLocation(shader->program, "uPxRange");
 }
 
-void wInitSprite(wSprite* s)
+void wInitSprite(Sprite* s)
 {
 	s->flags = 0;
 	s->color = 0xFFFFFFFF;
@@ -177,7 +178,7 @@ void wInitSprite(wSprite* s)
 	s->sdf = 1.0f;
 }
 
-wSprite* wGroupAddRaw(
+Sprite* wGroupAddRaw(
 		wRenderGroup* group,
 		i32 flags,
 		u32 color,
@@ -185,7 +186,7 @@ wSprite* wGroupAddRaw(
 		f32 w, f32 h,
 		i16 tx, i16 ty, i16 tw, i16 th)
 {
-	wSprite s;
+	Sprite s;
 	wInitSprite(&s);
 	s.flags = flags;
 	s.color = color;
@@ -200,14 +201,14 @@ wSprite* wGroupAddRaw(
 	return group->sprites + group->count - 1;
 }
 
-wSprite wSpriteMake(
+Sprite spriteMake(
 		i32 flags,
 		u32 color,
 		Vec2 pos, 
 		f32 w, f32 h,
 		i16 tx, i16 ty, i16 tw, i16 th)
 {
-	wSprite s;
+	Sprite s;
 	wInitSprite(&s);
 	s.flags = flags;
 	s.color = color;
@@ -221,10 +222,9 @@ wSprite wSpriteMake(
 	return s;
 }
 
-
-wSprite* wGetSprite(wRenderGroup* group)
+Sprite* wGetSprite(wRenderGroup* group)
 {
-	wSprite* s = group->sprites + group->count++;
+	Sprite* s = group->sprites + group->count++;
 	wInitSprite(s);
 	return s;
 }
@@ -247,7 +247,7 @@ void wGroupInit(wRenderGroup* group, i32 cap, wShader* shader, wTexture* texture
 	}
 
 	group->capacity = cap;
-	group->sprites = (wSprite*)malloc(sizeof(wSprite) * group->capacity);
+	group->sprites = (Sprite*)malloc(sizeof(Sprite) * group->capacity);
 	group->verts = (wVertex*)malloc(sizeof(wVertex) * 4 * group->capacity);
 	group->indices = (u16*)malloc(sizeof(u16) * 6 * group->capacity);
 	group->count = 0;
@@ -282,6 +282,26 @@ void wGroupInit(wRenderGroup* group, i32 cap, wShader* shader, wTexture* texture
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+
+#define GetSpriteSortIndex(s) (s.pos.y + s.sort_offset)
+void wGroupSort(wRenderGroup* group, isize start, isize end)
+{
+	Sprite* array = group->sprites + start;
+	isize count = end - start;
+	for(isize i = 1; i < count; ++i) {
+		isize j = i - 1;
+		f32 tempY = GetSpriteSortIndex(array[i]);
+		if(GetSpriteSortIndex(array[j]) > tempY) {
+			Sprite temp = array[i];
+			while((j >= 0) && (GetSpriteSortIndex(array[j]) > tempY)) {
+				array[j + 1] = array[j];
+				j--;
+			}
+			array[j + 1] = temp;
+		}
+	}
+}
+
 float SoffsetX[] = {0.0, 0.5, 0.0, -0.5, -0.5, -0.5,  0.0,  0.5, 0.5};
 float SoffsetY[] = {0.0, 0.5, 0.5,  0.5,  0.0, -0.5, -0.5, -0.5, 0.0};
 
@@ -294,7 +314,7 @@ void groupProcessSprites(f32 width, f32 height, wRenderGroup* group)
 	vf128 viewportXs = _mm_set_ps1(1.0f / width);
 	vf128 viewportYs = _mm_set_ps1(1.0f / height);
 	for(isize i = 0; i < group->count; ++i) {
-		wSprite* s = group->sprites + i;
+		Sprite* s = group->sprites + i;
 		if(s->flags & Sprite_Hidden) continue;
 		isize i4 = i * 4;
 		wVertex* p = group->verts + i4;

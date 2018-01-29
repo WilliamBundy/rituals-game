@@ -1,3 +1,11 @@
+enum Entity_Flags
+{
+	EntityFlag_None,
+	EntityFlag_Tail = Flag(1),
+	EntityFlag_SameShadow = Flag(2)
+};
+ 
+#ifndef WirmphtEnabled
 struct Hitbox_Contact
 {
 	isize a_id;
@@ -16,17 +24,7 @@ struct Hitbox
 	AABB box;
 };
 
-#define _hitbox_get_x1(h) (AABB_x1(h.box))
-GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
-#define _hitbox_get_y1(h) (AABB_y1(h.box))
-GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
 
-enum Entity_Flags
-{
-	EntityFlag_None,
-	EntityFlag_Tail = Flag(1),
-	EntityFlag_SameShadow = Flag(2)
-};
 
 struct Entity
 {
@@ -59,27 +57,19 @@ struct Entity
 	Rituals_Entity_Userdata userdata;
 };
 
-#define _entity_get_id(e) (e.id)
-GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
-GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
-
 struct Area_Link
 {
 	Vec2i position;
-	World_Area_Stub* link;
+	WorldAreaStub* link;
 };
 
-enum World_Area_Biome
+enum WorldArea_Biome
 {
 	AreaBiome_Grassland,
 	AreaBiome_Desert
 };
 
-//#define WorldAreaTilemapWidth (64)
-//#define WorldAreaTilemapHeight (64)
-#define WorldAreaEntityCapacity (16384)
-
-struct World_Area_Stub
+struct WorldAreaStub
 {
 	isize id;
 	usize seed;
@@ -87,13 +77,13 @@ struct World_Area_Stub
 	Area_Link south;
 	Area_Link west;
 	Area_Link east;
-	World_Area_Biome biome;
+	WorldArea_Biome biome;
 };
 
-struct World_Area
+struct WorldArea
 {
 	isize id;
-	World_Area_Stub* stub;
+	WorldAreaStub* stub;
 	World* world;
 	Simulator sim;
 	Tilemap map;
@@ -115,8 +105,22 @@ struct World_Area
 
 	Entity* player;
 };
+#endif
 
-void init_world_area(World_Area* area, MemoryArena* arena)
+
+#define _hitbox_get_x1(h) (AABB_x1(h.box))
+GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
+#define _hitbox_get_y1(h) (AABB_y1(h.box))
+GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
+#define _entity_get_id(e) (e.id)
+GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
+GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
+
+//#define WorldAreaTilemapWidth (64)
+//#define WorldAreaTilemapHeight (64)
+#define WorldAreaEntityCapacity (16384)
+
+void init_world_area(WorldArea* area, MemoryArena* arena)
 {
 	init_simulator(&area->sim, WorldAreaEntityCapacity, arena);
 	init_tilemap(&area->map, 
@@ -156,7 +160,7 @@ void init_entity(Entity* entity)
 	entity->anim = NULL;
 }
 
-Entity* world_area_get_next_entity(World_Area* area)
+Entity* world_area_get_next_entity(WorldArea* area)
 {
 	if(area->entities_count + 1 >= area->entities_capacity) {
 		Log_Error("Ran out of entities");
@@ -173,7 +177,7 @@ Entity* world_area_get_next_entity(World_Area* area)
 	return e;
 }
 
-Entity* world_area_find_entity(World_Area* area, isize id)
+Entity* world_area_find_entity(WorldArea* area, isize id)
 {
 	if(area->entities_dirty) {
 		entity_sort_on_id(area->entities, area->entities_count);
@@ -191,14 +195,14 @@ i32 entity_id_cmp(const void* a, const void* b)
 }
 
 
-void world_area_sort_entities_on_id(World_Area* area)
+void world_area_sort_entities_on_id(WorldArea* area)
 {
 	//qsort(area->entities, area->entities_count, sizeof(Entity),  &entity_id_cmp);
 	//printf("%d\n", area->entities[0].id);
 	entity_sort_on_id(area->entities, area->entities_count);
 }
 
-void world_area_synchronize_entities_and_bodies(World_Area* area)
+void world_area_synchronize_entities_and_bodies(WorldArea* area)
 {
 	world_area_sort_entities_on_id(area);
 	sim_sort_bodies_on_id(&area->sim);
@@ -216,7 +220,7 @@ void world_area_synchronize_entities_and_bodies(World_Area* area)
 
 
 //Returns 1 if failed
-bool world_area_remove_entity(World_Area* area, Entity* entity)
+bool world_area_remove_entity(WorldArea* area, Entity* entity)
 {
 	if(area->removed_entities_count >= area->removed_entities_capacity) {
 		printf("Ran out of room for removing entities\n");
@@ -226,8 +230,8 @@ bool world_area_remove_entity(World_Area* area, Entity* entity)
 	return false;
 }
 
-void world_area_on_destroy_entity(Entity* e, World_Area* area, World* world);
-void world_area_remove_entity_internal(World_Area* area, isize id)
+void world_area_on_destroy_entity(Entity* e, WorldArea* area, World* world);
+void world_area_remove_entity_internal(WorldArea* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
 	if(index == -1) {
@@ -240,7 +244,7 @@ void world_area_remove_entity_internal(World_Area* area, isize id)
 	world_area_synchronize_entities_and_bodies(area);
 }
 
-void world_area_process_removed_entities(World_Area* area)
+void world_area_process_removed_entities(WorldArea* area)
 {
 	for(isize i = 0; i < area->removed_entities_count; ++i) {
 		isize e = area->removed_entities[i];
@@ -248,7 +252,7 @@ void world_area_process_removed_entities(World_Area* area)
 	}
 	area->removed_entities_count = 0;
 }
-void world_area_build_hitboxes(World_Area* area)
+void world_area_build_hitboxes(WorldArea* area)
 {
 	area->hitboxes_count = 0;
 	for(isize i = 0; i < area->entities_count; ++i) {
@@ -270,7 +274,7 @@ void world_area_build_hitboxes(World_Area* area)
 	}
 }
 
-void world_area_process_hitboxes(World_Area* area)
+void world_area_process_hitboxes(WorldArea* area)
 {
 	if(area->hitboxes_count == 0) return;
 

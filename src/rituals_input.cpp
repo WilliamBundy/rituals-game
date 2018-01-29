@@ -9,6 +9,7 @@ enum Button_State
 };
 
 #define InputTextCapacity (1024)
+#ifndef WirmphtEnabled
 struct Game_Input
 {
 	isize num_keys_down;
@@ -25,7 +26,7 @@ struct Game_Input
 	char* text;
 	isize text_count;
 };
-
+#endif
 void input_init(Game_Input* input, MemoryArena* arena)
 {
 	input->scancodes = arenaPush<i8, SDL_NUM_SCANCODES>(arena);

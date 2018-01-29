@@ -33,7 +33,7 @@ f32 lerp(f32 a, f32 b, f32 t)
 
 
 
-#ifndef REFLECTED
+#ifndef WirmphtEnabled
 union Vec2 
 {
 	struct {
@@ -1006,7 +1006,7 @@ static inline Vec4 hex_to_v4(u32 rgba)
 
 
 
-#ifndef REFLECTED
+#ifndef WirmphtEnabled
 union Rect2
 {
 	struct {
