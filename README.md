@@ -1,22 +1,21 @@
 # [Rituals](rituals.handmade.network)
-A free, open source Zelda-like survival/adventure game
+A Zelda-like survival/adventure game, 
 
-This repository is up early to satisfy the "Public Git Repository" tier on my [Patreon](http://patreon.com/williambundy).
+## Notes:
 
-(9/30) I've moved this repository to git.handmadedev.org! (but don't worry, I push to github too)
+It's hard to admit this project is largely discontinued, but I've not been motivated
+to work on it for a long time. I don't think this source particularly represents 
+my current coding style/ability, and, though I've recently waded through it again,
+I don't think much of it is salvagable for new projects. 
 
-### by William Bundy
- - @William_Bundy on twitter
-
-## Stream
-I stream Rituals' development regularly at [my twitch channel](http://twitch.tv/williambundy). My stream schedule is "sometime before 2PM Pacific" every day except Monday. This usually means around 11AM
+The latest commit is largely gutted of all gameplay and UI code, with an unfinished
+rewrite of the physics code in progress. 
 
 ## License
-Rituals' source is licensed under the MIT license. Feel free to learn as much as you can from it.
-I'm planning to relicence the game under something without a "redistribute the LICENSE.txt" clause; expect an update in the future where I do so.
+Rituals' source is licensed under the MIT license. 
 
 ## How to build (windows)
- 1. Install Visual Studio (I'm using 2015)
+ 1. Install Visual Studio (I'm using 2017)
  2. Change the msvcdir variable in make.bat, if necessary
  3. Download SDL2's development libraries
  4. Set LIBRARIES and INCLUDES in make.bat to point to those
@@ -29,11 +28,4 @@ I'm planning to relicence the game under something without a "redistribute the L
  2. Make sure you have sdl2-config
  2. On macOS, add -framework opengl to the makefile
  3. Run make.
-
-## How to play
-The game is currently in heavy development ("pre-alpha"), so there is very little to actually play:
- - Use the WASD keys to move.
- - Shoot some kind of... shotgun type weapon with left click.
- - Press F to whack the ground. If a tile breaks, bare earth is revealed underneath.
- - Press and hold Space to grab an entity in the direction you are facing.
 

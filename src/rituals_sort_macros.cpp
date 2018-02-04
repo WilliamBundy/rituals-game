@@ -1,3 +1,14 @@
+/* 
+Copyright (c) 2016 William Bundy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+// Sort/Search macros
 #define GenerateQuicksortForType(func_name, T, Member_Macro) \
 void func_name(T* array, isize count) \
 { \
@@ -21,7 +32,7 @@ void func_name(T* array, isize count) \
 	} \
 }
 
-#define GenerateInsertionSortForType(func_name, T, Member_Macro, M_T) \
+#define GenerateInsertionSortForType(func_name, T, Member_Macro) \
 void func_name(T* array, isize count) \
 { \
 	for(isize i = 1; i < count; ++i) { \
@@ -34,6 +45,7 @@ void func_name(T* array, isize count) \
 		array[j+1] = x; \
 	} \
 }
+
 #define GenerateIntrosortForType(func_name, T, Cutoff, Member_Macro) \
 void func_name(T* array, isize count) \
 { \
@@ -105,5 +117,18 @@ isize func_name(K key, T* array, isize count) \
 #define _generate_sort_and_search_for_numeric_type(t) \
 	GenerateQuicksortForType(t##_sort, t, _passthru_macro) \
 	GenerateBinarySearchForType(t##_search, t, t, _passthru_macro) 
-_generate_sort_and_search_for_numeric_type(f32);
+_generate_sort_and_search_for_numeric_type(real);
+_generate_sort_and_search_for_numeric_type(real32);
+_generate_sort_and_search_for_numeric_type(real64);
+_generate_sort_and_search_for_numeric_type(uint8);
+_generate_sort_and_search_for_numeric_type(uint16);
+_generate_sort_and_search_for_numeric_type(uint32);
+_generate_sort_and_search_for_numeric_type(uint64);
+_generate_sort_and_search_for_numeric_type(int8);
+_generate_sort_and_search_for_numeric_type(int16);
+_generate_sort_and_search_for_numeric_type(int32);
+_generate_sort_and_search_for_numeric_type(int64);
+_generate_sort_and_search_for_numeric_type(usize);
+_generate_sort_and_search_for_numeric_type(isize);
+
 

@@ -1,0 +1,3 @@
+make meta
+
+make debug

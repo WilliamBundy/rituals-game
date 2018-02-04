@@ -28,11 +28,11 @@ $(end)
 #ifndef REFLECTED
 struct Spritefont
 {
-	i32 line_padding;
-	i32 character_padding;
-	i32 tab_size;
+	int32 line_padding;
+	int32 character_padding;
+	int32 tab_size;
 
-	i32 glyph_width, glyph_height;
+	int32 glyph_width, glyph_height;
 	const Rect2* glyphs;
 	Vec4 color;
 };
@@ -49,9 +49,9 @@ void init_spritefont(Spritefont* font, const Rect2* glyphs)
 	font->color = v4(1, 1, 1, 1);
 }
 
-static inline i32 dec_str_to_int(char* str, isize len)
+static inline int32 dec_str_to_int(char* str, isize len)
 {
-	i32 result = 0;
+	int32 result = 0;
 	for(isize i = 0; i < len; ++i) {
 		result = result * 10 + str[i] - '0';
 	}
@@ -67,7 +67,7 @@ Vec2 spritefont_size_text(Spritefont* font, char* text, isize len)
 {
 	Vec2 position = v2(0, font->glyph_height);
 	Vec2 size = v2(font->glyph_width, font->glyph_height);
-	i32 wrapped = 0;
+	int32 wrapped = 0;
 	for(isize i = 0; i < len; ++i) {
 		char c = text[i];
 		
@@ -100,16 +100,16 @@ Vec2 spritefont_size_text(Spritefont* font, char* text)
 void spritefont_render_text(Spritefont* font,
 		char* text, isize len, 
 		Vec2 position, 
-		i32 max_width, 
-		i32 anchor,
-		f32 scale,
-		Vec2* region)
+		int32 max_width = -1, 
+		Sprite_Anchor anchor = Anchor_Top_Left,
+		real scale = 1.0f,
+		Vec2* region = NULL)
 {
 	Vec2 initial_pos = position;
 	position = v2(0, 0);
 	Vec2 size = v2(font->glyph_width, font->glyph_height);
 	Sprite s;
-	i32 wrapped = 0;
+	int32 wrapped = 0;
 	for(isize i = 0; i < len; ++i) {
 		char c = text[i];
 		
@@ -158,16 +158,16 @@ void spritefont_render_text(Spritefont* font,
 void spritefont_render_text_ex(Spritefont* font,
 		char* text, isize len, 
 		Vec2 position, 
-		i32 max_width = -1, 
+		int32 max_width = -1, 
 		Sprite_Anchor anchor = Anchor_Top_Left,
-		f32 scale = 1.0f,
+		real scale = 1.0f,
 		Vec2* region = NULL)
 {
 	Vec2 initial_pos = position;
 	position = v2(0, 0);
 	Vec2 size = v2(font->glyph_width, font->glyph_height);
 	Sprite s;
-	i32 wrapped = 0;
+	int32 wrapped = 0;
 	isize wordstart = -1;
 	for(isize i = 0; i < len; ++i) {
 		char c = text[i];
@@ -197,7 +197,7 @@ void spritefont_render_text_ex(Spritefont* font,
 		} else {
 			if(isspace(c) || (i==len-1)) {
 				isize chars = i - wordstart;
-				f32 word_width = (chars * font->glyph_width) * scale;
+				real word_width = (chars * font->glyph_width) * scale;
 				if((max_width > 0) && ((position.x + word_width) > (max_width))) {
 					position.y += font->glyph_height + font->line_padding;
 					position.x = 0;
@@ -248,14 +248,14 @@ void spritefont_render_text_ex(Spritefont* font,
 	}
 }
 
-void spritefont_render_text(Spritefont* font, char* text, Vec2 position, Sprite_Anchor anchor = Anchor_Top_Left, f32 scale = 1.0f)
+void spritefont_render_text(Spritefont* font, char* text, Vec2 position, Sprite_Anchor anchor = Anchor_Top_Left, real scale = 1.0f)
 {
 	spritefont_render_text(font,
 		text, strlen(text), 
 		position,-1,  anchor, scale);
 }
 
-void spritefont_render_text_background(Spritefont* font, char* text, Vec2 position, f32 scale, Vec4 background) 
+void spritefont_render_text_background(Spritefont* font, char* text, Vec2 position, real scale, Vec4 background) 
 {
 	Vec2 text_size = spritefont_size_text(font, text) * scale;
 	Sprite s; 
@@ -270,7 +270,7 @@ void spritefont_render_text_background(Spritefont* font, char* text, Vec2 positi
 
 }
 Vec4 Gui_TextBackgroundColor = Vec4{0, 0, 0, 0.8f};
-void render_body_text(char* text, Vec2 position, bool background=false, f32 scale = 1.0f)
+void render_body_text(char* text, Vec2 position, bool background=false, real scale = 1.0f)
 {
 	if(background) {
 		spritefont_render_text_background(Body_Font, text, position, scale, Gui_TextBackgroundColor);
@@ -283,7 +283,7 @@ void render_title_text(char* text, Vec2 position)
 	spritefont_render_text(Title_Font, text, position);
 }
 
-#define _color(x, y, z, w) Vec4{ (f32)(x), (f32)(y), (f32)(z), (f32)(w) }
+#define _color(x, y, z, w) Vec4{ (real)(x), (real)(y), (real)(z), (real)(w) }
 
 bool gui_query_mouse(Rect2 region, Vec2 parent)
 {
@@ -337,9 +337,11 @@ Vec4 Gui_TextInputOutlineRestColor2 = _color(0.4, 0.4, 0.4, 1) * Gui_Tint;
 Vec4 Gui_TextInputOutlineHotColor2 = _color(0.7, 0.7, 0.7, 1) * Gui_Tint;
 Vec4 Gui_TextInputOutlineActiveColor2 = _color(0.7, 0.7, 0.7, 1) * Gui_Tint;
 
+
+
 bool gui_add_button(Vec2 position, char* text, Vec2 minimum_size)
 {
-	i32 state = 0;
+	int32 state = 0;
 
 	Vec2 txs = spritefont_size_text(Body_Font, text, strlen(text));
 	if(txs.x < minimum_size.x) txs.x = minimum_size.x;
@@ -404,7 +406,7 @@ bool gui_add_checkbox(Vec2 position, char* text, bool* value)
 	return *value;
 }
 
-void gui_add_slider(Vec2 position, Vec2 size, char* label, f32 min, f32 max, int precision, f32* in_value, bool* active, bool show_bounds = false)
+void gui_add_slider(Vec2 position, Vec2 size, char* label, real min, real max, int precision, real* in_value, bool* active, bool show_bounds = false)
 {
 	Sprite bg = create_box_primitive(position, size, Gui_ButtonDownColor);
 	bg.flags = Anchor_Top_Left;
@@ -456,8 +458,8 @@ void gui_add_slider(Vec2 position, Vec2 size, char* label, f32 min, f32 max, int
 
 	}
 
-	f32 value = 0;
-	f32 perc = .5; 
+	real value = 0;
+	real perc = .5; 
 	if(in_value != NULL) {
 		value = *in_value;
 		perc = (value - min) / (max - min);
@@ -519,7 +521,7 @@ struct Gui_Window_Handle
 {
 	Vec2 position;
 	char* title;
-	i32 z;
+	int32 z;
 };
 
 struct Gui_Text_Input_Handle
@@ -548,7 +550,7 @@ void init_text_input_handle(Gui_Text_Input_Handle* handle, char* buf, isize capa
 	handle->buffer_length = length;
 }
 
-void init_text_input_handle(Gui_Text_Input_Handle* handle, f32 width, Memory_Arena* arena)
+void init_text_input_handle(Gui_Text_Input_Handle* handle, real width, Memory_Arena* arena)
 {
 	isize max_chars_by_width = (isize)(width / Body_Font->glyph_width);
 	isize buffer_capacity = max_chars_by_width * 2;

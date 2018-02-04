@@ -8,22 +8,34 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-/*
- * thirdparty.h
- * Wrangle all the stuff in thirdparty/ for easy includes
- *
- */
+R"shader(
+#version 330 core
+in vec2 f_pixel;
+in vec2 f_texcoords;
+in vec4 f_color;
 
-$(exclude)
-#pragma once
+uniform vec2 u_texturesize;
+uniform float u_night_amount;
+uniform float u_night_cutoff;
+uniform sampler2D u_texture0;
 
-#define STB_IMAGE_IMPLEMENTATION
-#define STBI_ONLY_PNG
-#include "thirdparty/stb_image.h"
+out vec4 final_color;
 
-#include "thirdparty/gl_core_3_3.h"
-#include "thirdparty/gl_core_3_3.c"
+void main()
+{
+	vec4 color = texture(u_texture0, f_texcoords) * f_color;
 
-#include "thirdparty/tinydir.h"
-$(end)
+	// Nighttime effect
+	// Darkens everything except very light colors.
+	float avg = (color.r + color.g + color.b) / 3;
+	//avg *= avg;
+	if(avg < u_night_cutoff) {
+		color.rgb *= u_night_amount;
+	}
+
+	final_color = color;
+
+}
+
+)shader"
 

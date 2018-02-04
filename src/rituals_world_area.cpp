@@ -1,11 +1,19 @@
-enum Entity_Flags
-{
-	EntityFlag_None,
-	EntityFlag_Tail = Flag(1),
-	EntityFlag_SameShadow = Flag(2)
-};
- 
-#ifndef WirmphtEnabled
+
+/* 
+Copyright (c) 2016 William Bundy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+/*
+ * rituals_world_area.cpp
+ */
+
+#ifndef REFLECTED
 struct Hitbox_Contact
 {
 	isize a_id;
@@ -19,13 +27,24 @@ struct Hitbox
 {
 	isize id;
 	Entity* ref;
-	u64 mask;
-	u64 group;
+	uint64 mask;
+	uint64 group;
 	AABB box;
 };
+#endif
+#define _hitbox_get_x1(h) (AABB_x1(h.box))
+GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
+#define _hitbox_get_y1(h) (AABB_y1(h.box))
+GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
 
+enum Entity_Flags
+{
+	EntityFlag_None,
+	EntityFlag_Tail = Flag(1),
+	EntityFlag_SameShadow = Flag(2)
+};
 
-
+#ifndef REFLECTED
 struct Entity
 {
 	isize id;
@@ -34,42 +53,54 @@ struct Entity
 	Vec2 walk_impulse;
 
 	Hitbox hitbox;
-	i32 health;
-	i32 attack;
-	f32 attack_interval;
-	f32 attack_timer;
-	f32 knockback;
+	int32 health;
+	int32 attack;
+	real attack_interval;
+	real attack_timer;
+	real knockback;
 
 	Animated_Sprite* anim;
 	Sprite sprite;
-	f32 z;
-	f32 shadow_scale;
+	real z;
+	real shadow_scale;
 	isize kind;
 
-	i32 counter;
+	int32 counter;
 
-	i32 facing;
+	int32 facing;
 	Direction direction;
 
-	u64 events;
-	u64 flags;
+	uint64 events;
+	uint64 flags;
 	//void* userdata;
 	Rituals_Entity_Userdata userdata;
 };
+#endif
 
+#define _entity_get_id(e) (e.id)
+GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
+GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
+
+#ifndef REFLECTED
 struct Area_Link
 {
 	Vec2i position;
-	WorldAreaStub* link;
+	World_Area_Stub* link;
 };
+#endif
 
-enum WorldArea_Biome
+enum World_Area_Biome
 {
 	AreaBiome_Grassland,
 	AreaBiome_Desert
 };
 
-struct WorldAreaStub
+//#define WorldAreaTilemapWidth (64)
+//#define WorldAreaTilemapHeight (64)
+#define WorldAreaEntityCapacity (WorldAreaTilemapWidth * WorldAreaTilemapHeight)
+
+#ifndef REFLECTED
+struct World_Area_Stub
 {
 	isize id;
 	usize seed;
@@ -77,13 +108,13 @@ struct WorldAreaStub
 	Area_Link south;
 	Area_Link west;
 	Area_Link east;
-	WorldArea_Biome biome;
+	World_Area_Biome biome;
 };
 
-struct WorldArea
+struct World_Area
 {
 	isize id;
-	WorldAreaStub* stub;
+	World_Area_Stub* stub;
 	World* world;
 	Simulator sim;
 	Tilemap map;
@@ -99,7 +130,7 @@ struct WorldArea
 
 	Hitbox* hitboxes;
 	isize hitboxes_count, hitboxes_capacity;
-	i32 hitbox_sort_axis;
+	int32 hitbox_sort_axis;
 	Hitbox_Contact* hitbox_contacts;
 	isize hitbox_contacts_count, hitbox_contacts_capacity;
 
@@ -107,20 +138,7 @@ struct WorldArea
 };
 #endif
 
-
-#define _hitbox_get_x1(h) (AABB_x1(h.box))
-GenerateIntrosortForType(_hitbox_sort_on_x_axis, Hitbox, 12, _hitbox_get_x1)
-#define _hitbox_get_y1(h) (AABB_y1(h.box))
-GenerateIntrosortForType(_hitbox_sort_on_y_axis, Hitbox, 12, _hitbox_get_y1)
-#define _entity_get_id(e) (e.id)
-GenerateIntrosortForType(entity_sort_on_id, Entity, 12,  _entity_get_id)
-GenerateBinarySearchForType(entity_search_for_id, Entity, isize, _entity_get_id)
-
-//#define WorldAreaTilemapWidth (64)
-//#define WorldAreaTilemapHeight (64)
-#define WorldAreaEntityCapacity (16384)
-
-void init_world_area(WorldArea* area, MemoryArena* arena)
+void init_world_area(World_Area* area, Memory_Arena* arena)
 {
 	init_simulator(&area->sim, WorldAreaEntityCapacity, arena);
 	init_tilemap(&area->map, 
@@ -129,18 +147,18 @@ void init_world_area(WorldArea* area, MemoryArena* arena)
 			arena);
 
 	area->id = -1;
-	area->entities = (Entity*)arenaPush(arena, sizeof(Entity) *  WorldAreaEntityCapacity);
+	area->entities = arena_push_array(arena, Entity, WorldAreaEntityCapacity);
 	area->entities_count = 0;
 	area->entities_capacity = WorldAreaEntityCapacity;
 	area->removed_entities_capacity = 256;
-	area->removed_entities = (isize*)arenaPush(arena, sizeof(isize) *  WorldAreaEntityCapacity);
+	area->removed_entities = arena_push_array(arena, isize, WorldAreaEntityCapacity);
 	area->removed_entities_count = 0;
 	area->next_entity_id = 0;
 	area->entities_dirty = false;
-	area->hitboxes = (Hitbox*)arenaPush(arena, sizeof(Hitbox) *  WorldAreaEntityCapacity);
+	area->hitboxes = arena_push_array(arena, Hitbox, WorldAreaEntityCapacity);
 	area->hitboxes_count = 0;
 	area->hitboxes_capacity = WorldAreaEntityCapacity;
-	area->hitbox_contacts = (Hitbox_Contact*)arenaPush(arena, sizeof(Hitbox_Contact) * WorldAreaEntityCapacity);
+	area->hitbox_contacts = arena_push_array(arena, Hitbox_Contact, WorldAreaEntityCapacity);
 	area->hitbox_contacts_count = 0;
 	area->hitbox_contacts_capacity = WorldAreaEntityCapacity;
 }
@@ -149,7 +167,7 @@ void init_entity(Entity* entity)
 {
 	entity->id = 0;
 	entity->body_id = 0;
-	wInitSprite(&entity->sprite);
+	init_sprite(&entity->sprite);
 	entity->counter = 0;
 	entity->health = 100;
 	entity->attack = 0;
@@ -160,7 +178,7 @@ void init_entity(Entity* entity)
 	entity->anim = NULL;
 }
 
-Entity* world_area_get_next_entity(WorldArea* area)
+Entity* world_area_get_next_entity(World_Area* area)
 {
 	if(area->entities_count + 1 >= area->entities_capacity) {
 		Log_Error("Ran out of entities");
@@ -172,12 +190,12 @@ Entity* world_area_get_next_entity(WorldArea* area)
 	e->body = sim_get_next_body(&area->sim);
 	e->body_id = e->body->id;
 	e->id = area->next_entity_id++;
-	//e->body->entity = e;
+	e->body->entity = e;
 	e->body->entity_id = e->id;
 	return e;
 }
 
-Entity* world_area_find_entity(WorldArea* area, isize id)
+Entity* world_area_find_entity(World_Area* area, isize id)
 {
 	if(area->entities_dirty) {
 		entity_sort_on_id(area->entities, area->entities_count);
@@ -187,7 +205,7 @@ Entity* world_area_find_entity(WorldArea* area, isize id)
 }
 
 
-i32 entity_id_cmp(const void* a, const void* b)
+int32 entity_id_cmp(const void* a, const void* b)
 {
 	Entity* ea = (Entity*)a;
 	Entity* eb = (Entity*)b;
@@ -195,14 +213,14 @@ i32 entity_id_cmp(const void* a, const void* b)
 }
 
 
-void world_area_sort_entities_on_id(WorldArea* area)
+void world_area_sort_entities_on_id(World_Area* area)
 {
 	//qsort(area->entities, area->entities_count, sizeof(Entity),  &entity_id_cmp);
 	//printf("%d\n", area->entities[0].id);
 	entity_sort_on_id(area->entities, area->entities_count);
 }
 
-void world_area_synchronize_entities_and_bodies(WorldArea* area)
+void world_area_synchronize_entities_and_bodies(World_Area* area)
 {
 	world_area_sort_entities_on_id(area);
 	sim_sort_bodies_on_id(&area->sim);
@@ -211,7 +229,7 @@ void world_area_synchronize_entities_and_bodies(WorldArea* area)
 		if(e->body_id == -1) continue;
 		Sim_Body* b = sim_find_body(&area->sim, e->body_id);
 		if(b == NULL) continue;
-		//b->entity = e;
+		b->entity = e;
 		b->entity_id = e->id;
 		e->body = b;
 	}
@@ -220,7 +238,7 @@ void world_area_synchronize_entities_and_bodies(WorldArea* area)
 
 
 //Returns 1 if failed
-bool world_area_remove_entity(WorldArea* area, Entity* entity)
+bool world_area_remove_entity(World_Area* area, Entity* entity)
 {
 	if(area->removed_entities_count >= area->removed_entities_capacity) {
 		printf("Ran out of room for removing entities\n");
@@ -230,8 +248,8 @@ bool world_area_remove_entity(WorldArea* area, Entity* entity)
 	return false;
 }
 
-void world_area_on_destroy_entity(Entity* e, WorldArea* area, World* world);
-void world_area_remove_entity_internal(WorldArea* area, isize id)
+void world_area_on_destroy_entity(Entity* e, World_Area* area, World* world);
+void world_area_remove_entity_internal(World_Area* area, isize id)
 {
 	isize index = entity_search_for_id(id, area->entities, area->entities_count);
 	if(index == -1) {
@@ -244,7 +262,7 @@ void world_area_remove_entity_internal(WorldArea* area, isize id)
 	world_area_synchronize_entities_and_bodies(area);
 }
 
-void world_area_process_removed_entities(WorldArea* area)
+void world_area_process_removed_entities(World_Area* area)
 {
 	for(isize i = 0; i < area->removed_entities_count; ++i) {
 		isize e = area->removed_entities[i];
@@ -252,7 +270,7 @@ void world_area_process_removed_entities(WorldArea* area)
 	}
 	area->removed_entities_count = 0;
 }
-void world_area_build_hitboxes(WorldArea* area)
+void world_area_build_hitboxes(World_Area* area)
 {
 	area->hitboxes_count = 0;
 	for(isize i = 0; i < area->entities_count; ++i) {
@@ -262,7 +280,7 @@ void world_area_build_hitboxes(WorldArea* area)
 		h->id = e->id;
 		h->ref = e;
 		AABB box = e->hitbox.box;
-		h->box.center = e->sprite.pos + box.center;
+		h->box.center = e->sprite.position + box.center;
 		//if the entity's box is set
 		if(v2_dot(box.hext, box.hext) > 1) {
 			h->box.hext = box.hext;
@@ -274,7 +292,7 @@ void world_area_build_hitboxes(WorldArea* area)
 	}
 }
 
-void world_area_process_hitboxes(WorldArea* area)
+void world_area_process_hitboxes(World_Area* area)
 {
 	if(area->hitboxes_count == 0) return;
 
@@ -300,8 +318,8 @@ void world_area_process_hitboxes(WorldArea* area)
 			//if(!(a->mask == 0 && b->mask == 0)) {
 				//if(!(a->mask & b->mask)) break;
 			//}
-			u64 ma = a->mask & b->group;
-			u64 mb = a->group & b->mask;
+			uint64 ma = a->mask & b->group;
+			uint64 mb = a->group & b->mask;
 			if(ma != 0 || mb != 0) {
 				continue;		
 			}

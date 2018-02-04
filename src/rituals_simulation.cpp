@@ -1,4 +1,18 @@
-enum 
+/* 
+Copyright (c) 2016 William Bundy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+/*
+ * rituals_simulation.cpp
+ */
+
+enum Sim_Body_Flags
 {
 	Body_Flag_None,
 	Body_Flag_Static = Flag(1),
@@ -7,17 +21,17 @@ enum
 	Body_Flag_Always_Contact = Flag(4),
 };
 
-#define SimGridCellSide (TiSz * 4.0f)
-#ifndef WirmphtEnabled
+
+#ifndef REFLECTED
 struct Sim_Body
 {
 	isize id;
 	AABB shape;
 	Vec2 velocity, force, collision_vel;
-	f32 inv_mass, restitution, damping;
-	u64 flags;
-	u64 group;
-	u64 mask;
+	real inv_mass, restitution, damping;
+	uint64 flags;
+	uint64 group;
+	uint64 mask;
 	isize entity_id;
 	Entity* entity;
 };
@@ -28,54 +42,42 @@ struct Sim_Contact
 	isize b_id;
 	Sim_Body* static_b;
 	Vec2 overlap;
-	f32 mag;
+	real mag;
 	Vec2 normal;
-};
-
-struct Sim_Grid_Cell
-{
-	Sim_Body* body;
-	Sim_Grid_Cell* next;
-};
-
-struct Sim_Static_Grid
-{
-	Sim_Grid_Cell* cell_storage;
-	isize cell_storage_count, cell_storage_capacity;
-
-	Sim_Grid_Cell** cells;
-	isize cells_length;
-	Vec2i size;
-};
-
-struct Simulator
-{
-	Sim_Body* static_bodies;
-	isize static_bodies_count, static_bodies_capacity;
-
-	Sim_Static_Grid* grid;
-
-	Sim_Body* bodies;
-	isize bodies_count, bodies_capacity, next_body_id;
-	Sim_Contact* contacts;
-	isize contacts_count, contacts_capacity;
-
-	isize sort_axis;
 };
 #endif
 
+$(exclude)
 #define _body_get_min_x(e) (e.shape.center.x - e.shape.hw)
 #define _body_get_min_y(e) (e.shape.center.y - e.shape.hh)
 GenerateIntrosortForType(_body_sort_on_x, Sim_Body, 12, _body_get_min_x)
 GenerateIntrosortForType(_body_sort_on_y, Sim_Body, 12, _body_get_min_y)
 
+
+int32 _cmp_body_x(const void * a, const void* b)
+{
+	Sim_Body* ba = (Sim_Body*)a;
+	Sim_Body* bb = (Sim_Body*)b;
+	return AABB_x1(ba->shape) < AABB_x1(bb->shape);
+}
+
+int32 _cmp_body_y(const void * a, const void* b)
+{
+	Sim_Body* ba = (Sim_Body*)a;
+	Sim_Body* bb = (Sim_Body*)b;
+	return AABB_y1(ba->shape) < AABB_y1(bb->shape);
+}
+$(end)
+
 void body_sort_on_x(Sim_Body* bodies, isize count)
 {
+	//qsort(bodies, count, sizeof(Sim_Body), &_cmp_body_x);
 	_body_sort_on_x(bodies, count);
 }
 
 void body_sort_on_y(Sim_Body* bodies, isize count)
 {
+	//qsort(bodies, count, sizeof(Sim_Body), &_cmp_body_y);
 	_body_sort_on_y(bodies, count);
 }
 
@@ -100,19 +102,35 @@ void init_body(Sim_Body* b)
 	b->group = 0;
 }
 
-
-void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, MemoryArena* arena)
+#define SimGridCellSide (Tile_Size * 4.0f)
+#ifndef REFLECTED
+struct Sim_Grid_Cell
 {
-	grid->cell_storage = (Sim_Grid_Cell*)arenaPush(arena, 
-			sizeof(Sim_Grid_Cell) * capacity);
+	Sim_Body* body;
+	Sim_Grid_Cell* next;
+};
+
+struct Sim_Static_Grid
+{
+	Sim_Grid_Cell* cell_storage;
+	isize cell_storage_count, cell_storage_capacity;
+
+	Sim_Grid_Cell** cells;
+	isize cells_length;
+	Vec2i size;
+};
+#endif
+
+void init_static_grid(Sim_Static_Grid* grid, Vec2i size, isize capacity, Memory_Arena* arena)
+{
+	grid->cell_storage = arena_push_array(arena, Sim_Grid_Cell, capacity);
 	grid->cell_storage_capacity = capacity;
 	grid->cell_storage_count = 0;
 
 	size.x += 1;
 	size.y += 1;
 
-	grid->cells = (Sim_Grid_Cell**)arenaPush(arena,
-			sizeof(Sim_Grid_Cell*) * size.x * size.y);
+	grid->cells = arena_push_array(arena, Sim_Grid_Cell*, size.x * size.y);
 	grid->size = size;
 	grid->cells_length = size.x * size.y;
 }
@@ -167,6 +185,23 @@ void build_static_grid(Sim_Static_Grid* grid, Sim_Body* bodies, isize count)
 	}
 }
 
+#ifndef REFLECTED
+struct Simulator
+{
+	Sim_Body* static_bodies;
+	isize static_bodies_count, static_bodies_capacity;
+
+	Sim_Static_Grid* grid;
+
+	Sim_Body* bodies;
+	isize bodies_count, bodies_capacity, next_body_id;
+	Sim_Contact* contacts;
+	isize contacts_count, contacts_capacity;
+
+	isize sort_axis;
+};
+#endif
+
 Sim_Body* sim_get_next_static_body(Simulator* sim)
 {
 	if(sim->bodies_count + 1 > sim->bodies_capacity) {
@@ -196,7 +231,7 @@ Sim_Body* sim_get_next_body(Simulator* sim)
 	return e;
 }
 
-void init_simulator(Simulator* sim, isize cap, MemoryArena* arena)
+void init_simulator(Simulator* sim, isize cap, Memory_Arena* arena)
 {
 	sim->bodies_count = 0;
 	sim->bodies_capacity = cap;
@@ -204,12 +239,12 @@ void init_simulator(Simulator* sim, isize cap, MemoryArena* arena)
 	sim->static_bodies_count = 0;
 	sim->sort_axis = 0;
 	sim->next_body_id = 0;
-	sim->grid = (Sim_Static_Grid*)arenaPush(arena, sizeof(Sim_Static_Grid));
+	sim->grid = arena_push_struct(arena, Sim_Static_Grid);
 	init_static_grid(sim->grid, v2i(WorldAreaTilemapWidth/4, WorldAreaTilemapHeight/4), cap ,arena);
-	sim->bodies = (Sim_Body*)arenaPush(arena, sizeof(Sim_Body)* cap);
-	sim->static_bodies = (Sim_Body*)arenaPush(arena, sizeof(Sim_Body) * cap);
+	sim->bodies = arena_push_array(arena, Sim_Body, cap);
+	sim->static_bodies = arena_push_array(arena, Sim_Body, cap);
 	sim->contacts_capacity = Max(512, cap / 16);
-	sim->contacts = (Sim_Contact*)arenaPush(arena, sizeof(Sim_Contact) * sim->contacts_capacity);
+	sim->contacts = arena_push_array(arena, Sim_Contact, sim->contacts_capacity);
 	
 }
 
@@ -247,12 +282,13 @@ Sim_Body* sim_query_aabb(Simulator* sim, AABB query)
 	return NULL;
 }
 
+
 #define TimeStep (1.0f/60.0f)
 #define SimIter_i (8)
-#define SimIter ((f32)SimIter_i)
+#define SimIter ((real)SimIter_i)
 #define _collision_slop (0.8f)
 
-i32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, i32 sort_axis)
+int32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, int32 sort_axis)
 {
 	if(sort_axis == 0) {
 		if(AABB_x1(b->shape) > AABB_x2(a->shape)) {
@@ -269,12 +305,12 @@ i32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, i32 sort_axis)
 			return 0;
 		}
 	}
-	u64 ma = a->mask & b->group;
+	uint64 ma = a->mask & b->group;
 	if(ma != 0) {
 		return 0;
 	}
 
-	u64 mb = a->group & b->mask;
+	uint64 mb = a->group & b->mask;
 	if(mb != 0) {
 		return 0;		
 	}
@@ -282,19 +318,20 @@ i32 _do_collide_bodies_sweep(Sim_Body* a, Sim_Body* b, i32 sort_axis)
 	return aabb_intersect(a->shape, b->shape);
 }
 
-i32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, i32 sort_axis)
+
+int32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, int32 sort_axis)
 {
 	if(Has_Flag(a->flags, Body_Flag_Static)) {
 		if(Has_Flag(b->flags, Body_Flag_Static)) {
 			return 0;
 		}
 	}
-	u64 ma = a->mask & b->group;
+	uint64 ma = a->mask & b->group;
 	if(ma != 0) {
 		return 0;
 	}
 
-	u64 mb = a->group & b->mask;
+	uint64 mb = a->group & b->mask;
 	if(mb != 0) {
 		return 0;		
 	}
@@ -302,14 +339,15 @@ i32 _do_collide_bodies(Sim_Body* a, Sim_Body* b, i32 sort_axis)
 	return aabb_intersect(a->shape, b->shape);
 }
 
-void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times, Simulator* sim)
+
+void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, int32 times, Simulator* sim)
 {
-	u32 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
-	u32 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
+	uint32 a_is_static = Has_Flag(a->flags, Body_Flag_Static);
+	uint32 b_is_static = Has_Flag(b->flags, Body_Flag_Static);
 
 	Vec2 overlap;
 	aabb_overlap(a->shape, b->shape, &overlap);
-	f32 ovl_mag = sqrtf(v2_dot(overlap, overlap));
+	real ovl_mag = sqrtf(v2_dot(overlap, overlap));
 	if (ovl_mag < 0.0001f) return;
 	Vec2 normal = overlap * (1.0f / ovl_mag);
 
@@ -334,6 +372,7 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times
 		}
 	}
 
+
 	if(Has_Flag(a->flags, Body_Flag_Sensor) ||
 			Has_Flag(b->flags, Body_Flag_Sensor)) {
 		return;
@@ -341,11 +380,11 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times
 	if(a_is_static && !b_is_static) {
 		b->shape.center += overlap;
 		Vec2 relative_velocity = b->velocity;
-		f32 velocity_on_normal = v2_dot(relative_velocity, normal);
+		real velocity_on_normal = v2_dot(relative_velocity, normal);
 		if(velocity_on_normal > 0) return;
 
-		f32 e = Min(a->restitution, b->restitution);
-		f32 mag = -1.0f * (1.0f + e) * velocity_on_normal;
+		real e = Min(a->restitution, b->restitution);
+		real mag = -1.0f * (1.0f + e) * velocity_on_normal;
 		mag /= b->inv_mass;
 		Vec2 impulse = mag * normal;
 		b->collision_vel += b->inv_mass * impulse;
@@ -353,11 +392,11 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times
 		a->shape.center -= overlap;
 
 		Vec2 relative_velocity = -a->velocity;
-		f32 velocity_on_normal = v2_dot(relative_velocity, normal);
+		real velocity_on_normal = v2_dot(relative_velocity, normal);
 		if(velocity_on_normal > 0) return;
 
-		f32 e = Min(a->restitution, b->restitution);
-		f32 mag = -1.0f * (1.0f + e) * velocity_on_normal;
+		real e = Min(a->restitution, b->restitution);
+		real mag = -1.0f * (1.0f + e) * velocity_on_normal;
 		mag /= a->inv_mass + 0;
 		Vec2 impulse = mag * normal;
 		a->collision_vel -= a->inv_mass * impulse;
@@ -368,11 +407,11 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times
 		b->shape.center += b->inv_mass * separation;
 
 		Vec2 relative_velocity = b->velocity - a->velocity;
-		f32 velocity_on_normal = v2_dot(relative_velocity, normal);
+		real velocity_on_normal = v2_dot(relative_velocity, normal);
 		if(velocity_on_normal > 0) return;
 
-		f32 e = Min(a->restitution, b->restitution);
-		f32 mag = -1.0f * (1.0f + e) * velocity_on_normal;
+		real e = Min(a->restitution, b->restitution);
+		real mag = -1.0f * (1.0f + e) * velocity_on_normal;
 		mag /= a->inv_mass + b->inv_mass;
 		Vec2 impulse = mag * normal;
 		a->collision_vel -= a->inv_mass * impulse;
@@ -380,9 +419,8 @@ void _separate_bodies(Sim_Body* a, Sim_Body* b, bool capture_contacts, i32 times
 	}
 }
 
-void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
+void sim_update(Simulator* sim, Tilemap* map, real dt, bool capture_contacts = true)
 {
-	bool capture_contacts = true;
 	if(capture_contacts)
 		sim->contacts_count = 0;
 	Sim_Body *a, *b;
@@ -395,7 +433,7 @@ void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
 		Vec2 center_sum1 = v2(0, 0);
 		Vec2 center_sum2 = v2(0, 0);
 		Vec2 variance = v2(0, 0);
-		i32 sort_axis = sim->sort_axis;
+		int32 sort_axis = sim->sort_axis;
 		for(isize i = 0; i < sim->bodies_count; ++i) {
 			a = sim->bodies + i;
 
@@ -436,7 +474,7 @@ void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
 				b = sim->bodies + j;
 
 
-				i32 out = _do_collide_bodies_sweep(a, b, sort_axis);
+				int32 out = _do_collide_bodies_sweep(a, b, sort_axis);
 				if(out == -1) break;
 				else if(out == 1) {
 					_separate_bodies(a, b, capture_contacts, times, sim);
@@ -466,7 +504,7 @@ void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
 			a->shape.center += a->collision_vel / SimIter * dt;
 			a->velocity = new_vel;
 			Tile_Info* tile = Registry->tiles + tilemap_get_at(map, a->shape.center);
-			f32 damping = 1.0f;
+			real damping = 1.0f;
 			if(Has_Flag(a->flags, Body_Flag_No_Friction)) {
 				damping = a->damping;
 			} else {
@@ -487,7 +525,7 @@ void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
 
 isize _tw, _th;
 Tile* _tiles;
-Tile_Info* _get_at(Game_Registry* Registry, isize x, isize y)
+Tile_Info* _get_at(isize x, isize y)
 {
 	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return Registry->tiles;
 	isize index = y * _tw + x;
@@ -496,38 +534,37 @@ Tile_Info* _get_at(Game_Registry* Registry, isize x, isize y)
 
 }
 
-void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilemap* tilemap, MemoryArena* tempArena)
+void generate_statics_for_tilemap(Simulator* sim, Tilemap* tilemap)
 {
-	return;
-	arenaStartTemp(tempArena);
+	start_temp_arena(Game->temp_arena);
 	_tw = tilemap->w;
 	_th = tilemap->h;
 	isize map_size = tilemap->w * tilemap->h;
-	Tile* tiles = (Tile*)arenaPush(tempArena, sizeof(Tile) * (map_size + 1));
+	Tile* tiles = arena_push_array(Game->temp_arena, Tile, map_size + 1);
 	memcpy(tiles, tilemap->tiles, sizeof(Tile) * map_size);
 	_tiles = tiles;
 	isize work = 0;
 
-	Rect2i* rects = (Rect2i*)arenaPush(tempArena, sizeof(Rect2i) * (map_size + 1));
+	Rect2i* rects = arena_push_array(Game->temp_arena, Rect2i, map_size / 2);
 	isize rects_count = 0;
 	isize last_rects = 0;
 	do {
 		last_rects = rects_count;
 		for(isize y = 0; y < tilemap->h; ++y) {
 			for(isize x = 0; x < tilemap->w; ++x) {
-				if(_get_at(Registry, x, y)->solid) {
-					if(!_get_at(Registry, x, y - 1)->solid) {
+				if(_get_at(x, y)->solid) {
+					if(!_get_at(x, y - 1)->solid) {
 						Rect2i* r = rects + rects_count++;
 						r->x = x;
 						r->y = y;
 						r->w = 1;
 						r->h = 1;
 						Tile_Info *first, *here, *up;
-						first = _get_at(Registry, x, y);
+						first = _get_at(x, y);
 						do {
 							x++;
-							here = _get_at(Registry, x, y);
-							up = _get_at(Registry, x, y-1);
+							here = _get_at(x, y);
+							up = _get_at(x, y-1);
 						}
 						while(  here->solid && !up->solid &&
 								(here->body_mask == first->body_mask) &&
@@ -548,10 +585,10 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 			bool solid = true;
 			isize y = r->y;
 			Tile_Info *first, *here;
-			first = _get_at(Registry, r->x, r->y);
+			first = _get_at(r->x, r->y);
 			while(solid && (y < tilemap->h)) {
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
-					here = _get_at(Registry, r->x + local_x, y + 1);
+					here = _get_at(r->x + local_x, y + 1);
 					solid = solid && here->solid &&
 						(here->body_mask == first->body_mask) &&
 						(here->body_group == first->body_group);
@@ -576,19 +613,19 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 		}
 		work = 0;
 		for(isize i = 0; i < map_size; ++i) {
-			work += (i32)(Registry->tiles[tiles[i]].solid);
+			work += (int32)(Registry->tiles[tiles[i]].solid);
 		}
 	} while(work);
 	
 	_tiles = tilemap->tiles;
 	for(isize i = 0; i < rects_count; ++i) {
 		Rect2i* r = rects + i;
-		Tile_Info* first = _get_at(Registry, r->x, r->y);
+		Tile_Info* first = _get_at(r->x, r->y);
 		Sim_Body* e = sim_get_next_static_body(sim);
-		e->shape.center.x = (r->x + r->w / 2.0f) * TiSz;//+ hTiSz;
-		e->shape.center.y = (r->y + r->h / 2.0f) * TiSz;// + hTiSz;
-		e->shape.hw = r->w * hTiSz;
-		e->shape.hh = r->h * hTiSz;
+		e->shape.center.x = (r->x + r->w / 2.0f) * Tile_Size;//+ Half_TS;
+		e->shape.center.y = (r->y + r->h / 2.0f) * Tile_Size;// + Half_TS;
+		e->shape.hw = r->w * Half_TS;
+		e->shape.hh = r->h * Half_TS;
 		e->restitution = 0.3f;
 		e->inv_mass = 0.0f;
 		e->flags = Body_Flag_Static;
@@ -598,6 +635,6 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 
 	build_static_grid(sim->grid, sim->static_bodies, sim->static_bodies_count);
 
-	arenaEndTemp(tempArena);
+	end_temp_arena(Game->temp_arena);
 }
 

@@ -10,33 +10,36 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #pragma once
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
+typedef int8_t int8;
+typedef int16_t int16;
+typedef int32_t int32;
+typedef int64_t int64;
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
 
 typedef float real32;
 typedef double real64;
 
-typedef float f32;
-typedef double f64;
+#define RITUALS_USE_FLOAT32
+#ifdef RITUALS_USE_FLOAT32
+typedef real32 real;
+#else
+$(exclude)
+typedef real64 real;
+$(end)
+#endif
 
-typedef __m128 vf128;
 
-union vf32x4
-{
-	vf128 v;
-	f32 f[4];
-};
 
-#define ShuffleToByte(x, y, z, w) (((x)<<6) | ((y)<<4) | ((z)<<2) | w)
-#define vfShuffle(a, x, y, z, w) _mm_shuffle_ps(a, a, ShuffleToByte(x, y, z, w))
+typedef int32 integer;
+typedef real32 real;
 
+
+//Some defines
+//TODO(will): use this as all floating point sizes
 typedef ptrdiff_t isize;
 typedef size_t usize;
 

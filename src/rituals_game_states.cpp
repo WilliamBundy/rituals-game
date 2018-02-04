@@ -11,7 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #ifndef REFLECTED
 struct None_State
 {
-	i32 error;
+	int32 error;
 };
 #endif 
 
@@ -44,7 +44,7 @@ void game_free_None_state()
 #ifndef REFLECTED
 struct Menu_State
 {
-	i32 error;
+	int32 error;
 	char save_dir[FilePathMaxLength];
 	isize save_dir_len;
 	tinydir_dir saves;
@@ -162,7 +162,7 @@ void game_free_Menu_state()
 #ifndef REFLECTED
 struct Play_State
 {
-	i32 error;
+	int32 error;
 	usize current_time = 0, prev_time = 0;
 	real accumulator = 0;
 	World* world;

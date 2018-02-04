@@ -97,6 +97,7 @@ void init_sprite(Sprite* s)
 }
 
 
+#ifndef REFLECTED
 struct Render_Group
 {
 	GLuint texture;
@@ -120,6 +121,7 @@ struct OpenGL_Renderer
 	Render_Group* groups;
 	isize groups_count;
 };
+#endif
 
 void init_group(Render_Group* group, isize sprites_capacity, Memory_Arena* arena)
 {
