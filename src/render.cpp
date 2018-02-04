@@ -72,6 +72,7 @@ struct wRenderGroup
 	i32 count, capacity;
 };
 #endif 
+
 typedef struct Sprite Sprite;
 enum SpriteFlags
 {
@@ -175,6 +176,7 @@ void wInitSprite(Sprite* s)
 	s->ty = 0;
 	s->tw = 0;
 	s->th = 0;
+	s->angle = 0;
 	s->sdf = 1.0f;
 }
 
@@ -371,6 +373,30 @@ void groupProcessSprites(f32 width, f32 height, wRenderGroup* group)
 			ys = _mm_mul_ps(ys, scaleYs);
 		}
 
+		if(s->angle != 0) {
+			vf128 lsin, lcos;
+			//wb_sincos_ps(_mm_set_ps1(-s->angle), &lsin, &lcos);
+			lsin = _mm_set1_ps(sinf(-s->angle));
+			lcos = _mm_set1_ps(cosf(s->angle));
+
+			vf128 centerX = _mm_set_ps1(s->cx);
+			vf128 centerY = _mm_set_ps1(s->cy);
+
+			xs = _mm_sub_ps(xs, centerX);
+			ys = _mm_sub_ps(ys, centerY);
+			
+			vf128 cxs = _mm_mul_ps(lcos, xs);
+			vf128 sxs = _mm_mul_ps(lsin, xs);
+
+			vf128 cys = _mm_mul_ps(lcos, ys);
+			vf128 sys = _mm_mul_ps(lsin, ys);
+
+			xs = _mm_add_ps(cxs, sys);
+			ys = _mm_sub_ps(cys, sxs);
+
+			xs = _mm_add_ps(xs, centerX);
+			ys = _mm_add_ps(ys, centerY);
+		}
 		{
 			vf128 pxs = _mm_set_ps1(s->pos.x);
 			pxs = _mm_mul_ps(pxs, groupScale);

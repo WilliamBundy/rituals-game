@@ -1,19 +1,3 @@
-/* 
-Copyright (c) 2016 William Bundy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-/*
- * rituals_math.cpp
- * where all the math and geometry 
- */ 
-
-
 inline f32 clamp(f32 x, f32 min, f32 max)
 {
 	if(x < min) x = min;
@@ -29,6 +13,17 @@ f32 clamp_01(f32 x)
 f32 lerp(f32 a, f32 b, f32 t)
 {
 	return (1.0f - t) * a + t * b;
+}
+
+static inline
+f32 wmaxf(f32 x, f32 y)
+{
+	return x > y ? x : y;
+}
+static inline
+f32 wminf(f32 x, f32 y)
+{
+	return x < y ? x : y;
 }
 
 
@@ -512,6 +507,11 @@ static inline Vec2 operator/(Vec2 a, f32 s)
 	return a * (1.0f / s);
 }
 
+static inline Vec2 operator/(Vec2 a, Vec2 b)
+{
+	return v2(a.x / b.x, a.y / b.y);
+}
+
 static inline Vec2 operator*(Vec2 a, Vec2 b)
 {
 	return Vec2{a.x * b.x, a.y * b.y};
@@ -893,6 +893,47 @@ static inline Vec2 v2_perpendicular(Vec2 v)
 	};
 }
 
+static inline Vec2 v2_rot_add(Vec2 a, Vec2 b)
+{
+	Vec2 c;
+	//cosine(a + b) = cos(a)*cos(b)-sin(a)*sin(b)
+	//sin(a + b) = sin(a)*cos(b)+cos(a)*sinb
+	c.x = a.x * b.x - a.y * b.y;
+	c.y = a.y * b.x + a.x * b.y;
+	return c;
+}
+
+static inline Vec2 v2_rot_sub(Vec2 a, Vec2 b)
+{
+	Vec2 c;
+	c.x = a.x * b.x + a.y * b.y;
+	c.y = a.y * b.x - a.x * b.y;
+	return c;
+}
+
+// I think these are right handed, so for 
+// graphical transforms, you need to use the negative angle
+static inline
+Vec2 v2Rotate(Vec2 a, Vec2 rot)
+{
+	Vec2 v;
+	v.x = rot.x * a.x + rot.y * a.y;
+	v.y = -rot.y * a.x + rot.x * a.y;
+	return v;
+}
+
+static inline
+Vec2 v2RotateOrigin(Vec2 a, Vec2 rot, Vec2 orig)
+{
+	Vec2 v;
+	a.x -= orig.x;
+	a.y -= orig.y;
+	v.x = rot.x * a.x + rot.y * a.y;
+	v.y = -rot.y * a.x + rot.x * a.y;
+	return v2_add(v, orig);
+}
+
+
 static inline f32 v2_dot(Vec2 a, Vec2 b)
 {
 	return a.x * b.x + a.y * b.y;
@@ -911,6 +952,16 @@ static inline f32 v2_len(Vec2 a)
 static inline f32 v2_cross(Vec2 a, Vec2 b)
 {
 	return a.x * b.y - a.y * b.x;
+}
+
+static inline Vec2 v2_cross2(Vec2 a, f32 s)
+{
+	return v2(s * a.y, -s * a.x);
+}
+
+static inline Vec2 v2_cross3(f32 s, Vec2 a)
+{
+	return v2(-s * a.y, s * a.x);
 }
 
 static inline Vec2 v2_from_angle(f32 normal)
@@ -1052,7 +1103,6 @@ union AABB
 #define AABB_x2(b) (b.center.x + b.hw)
 #define AABB_y1(b) (b.center.y - b.hh)
 #define AABB_y2(b) (b.center.y + b.hh)
-
 
 static inline bool operator==(Rect2 a, Rect2 b)
 {
@@ -1221,6 +1271,14 @@ static inline AABB extents_to_aabb(Vec2 tl, Vec2 br)
 static inline AABB extents_to_aabb(f32 left, f32 top, f32 right, f32 bottom)
 {
 	return extents_to_aabb(v2(left, top), v2(right, bottom));	
+}
+
+static inline i32 vaabbContains(Vec2 pos, Vec2 size, Vec2 p)
+{
+	return p.x > pos.x - size.x &&
+		p.x < pos.x + size.x &&
+		p.y > pos.y - size.y &&
+		p.y < pos.y + size.y;
 }
 
 

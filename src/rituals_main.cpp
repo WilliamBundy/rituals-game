@@ -51,24 +51,91 @@ World* globalWorld;
 #include "rituals_game.cpp"
 #include "rituals_animations.cpp"
 #include "rituals_tilemap.cpp"
-#include "rituals_simulation.cpp"
-#include "rituals_particles.cpp"
-#include "rituals_world_area.cpp"
-#include "rituals_world.cpp"
-#include "rituals_entity_events.cpp"
+//#include "rituals_simulation.cpp"
+//#include "rituals_particles.cpp"
+#include "sim.cpp"
 
+SimWorld* sim;
+SimBody* box;
+SimBody* ground;
 void testInit()
 {
-	//init_tilemap(&tm, 32, 32, Game->baseArena);
-	//generate_tilemap(&tm, 1000);
-	globalWorld = (World*)arenaPush(Game->gameArena, sizeof(World));
-	init_world(globalWorld, 8, 8, 100, Game->gameArena);
-	world_start_in_area(globalWorld, globalWorld->area_stubs, Game->gameArena);
+	sim = simNew(4096);
+	box = simCreateBox(sim, v2(100, 100), v2(50, 50));
+	for(isize i = 0; i < 20; ++i) {
+		SimBody* b = simCreateBox(sim, v2(i * 50, 100), v2(50, 60));
+		b = simCreateBox(sim, v2(i * 55, 50), v2(56, 50));
+	}
+
+	/*
+	ground = simCreateBox(sim, v2(-1000, 700), v2(4280, 50));
+	simAttachBox(sim, ground, v2(0, 0), v2(1280, 50));
+	simAttachBox(sim, ground, v2(0, 0), v2(50, 720));
+	simAttachBox(sim, ground, v2(1230, 0), v2(50, 720));
+	ground->invMass = 0;
+	*/
 }
 
+
+SimBody* mouseBody = NULL;
+Vec2 mouseDiff;
 void testUpdate()
 {
-	world_area_update(globalWorld->current_area, globalWorld);
+	SimBody* b;
+	Vec2 mouse = v2(Input->mouse_x, Input->mouse_y);
+	if(!mouseBody && Input->mouse[1]) {
+		for(isize j = 0; j < sim->shapeCount; ++j) {
+			SimShape* s = sim->shapes[j];
+			if(s->body->invMass == 0) continue;
+
+			if(vaabbContains(s->pos + s->body->pos, s->size, mouse)) {
+				mouseBody = s->body;
+				mouseDiff = mouse - s->body->pos;
+			}
+		}
+	} else if (!Input->mouse[1]) {
+		mouseBody = NULL;
+		mouseDiff = v2(0, 0);
+	}
+
+	if(mouseBody) {
+		mouseBody->vel = ((mouse - mouseDiff) - mouseBody->pos) * 4; 
+	}
+
+	for(isize j = 0; j < sim->bodyCount; ++j) {
+		b = sim->bodies[j];
+		for(isize i = 0; i < b->shapeCount; ++i) {
+			SimShape* shape = b->shapes[i];
+			u32 c = 0xFFFFFF77;
+			if(b == box) c = 0x33FF33FF;
+			Sprite* s = renderAdd(Sprite_NoTexture, c, 
+					b->pos + shape->pos, shape->size * 2, 
+					rect2i(0, 0, 0, 0));
+		}
+	}
+
+	{
+		f32 move = 40;
+		Vec2 v = v2(0, 0);
+		if(Input->scancodes[SDL_SCANCODE_A] >= Button_Down) {
+			v.x -= move;
+		}
+		if(Input->scancodes[SDL_SCANCODE_D] >= Button_Down) {
+			v.x += move;
+		}
+		if(Input->scancodes[SDL_SCANCODE_W] >= Button_Down) {
+			v.y -= move;
+		}
+		if(Input->scancodes[SDL_SCANCODE_S] >= Button_Down) {
+			v.y += move;
+		}
+
+		box->vel += v;
+		Game->render->offsetX = box->pos.x - Game->size.x / 2;
+		Game->render->offsetY = box->pos.y - Game->size.y / 2;
+	}
+
+	simUpdate(sim, 1.0f/60.0f);
 }
 
 int main(int argc, char** argv)

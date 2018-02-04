@@ -361,14 +361,18 @@ ALLOC_API
 void taggedFree(TaggedHeap* heap, isize tag);
 
 #ifdef ALLOC_CPLUSPLUS_FEATURES
-template<typename T, int n = 1>
+template<typename T, int n>
 ALLOC_API 
 T* arenaPushEx(MemoryArena* arena, 
 		ALLOC_EXTENDED_INFO extended);
 
-template<typename T, int n = 1>
+template<typename T, int n>
 ALLOC_API 
 T* arenaPush(MemoryArena* arena);
+
+template<typename T>
+ALLOC_API 
+T* arenaPush(MemoryArena* arena, isize n = 1);
 
 template<typename T>
 ALLOC_API 
@@ -1439,9 +1443,24 @@ T* arenaPushEx(MemoryArena* arena,
 	return reinterpret_cast<T*>(arenaPushEx(arena, sizeof(T) * n, extended));
 }
 
+template<typename T>
+ALLOC_API 
+T* arenaPushEx(MemoryArena* arena, 
+		ALLOC_EXTENDED_INFO extended)
+{
+	return reinterpret_cast<T*>(arenaPushEx(arena, sizeof(T) * n, extended));
+}
+
 template<typename T, int n>
 ALLOC_API 
 T* arenaPush(MemoryArena* arena)
+{
+	return reinterpret_cast<T*>(arenaPush(arena, sizeof(T) * n));
+}
+
+template<typename T>
+ALLOC_API 
+T* arenaPush(MemoryArena* arena, isize n)
 {
 	return reinterpret_cast<T*>(arenaPush(arena, sizeof(T) * n));
 }

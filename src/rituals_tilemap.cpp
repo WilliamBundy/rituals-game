@@ -5,7 +5,7 @@ struct Tilemap
 {
 	isize w, h;
 	Tile* tiles;
-	Tile_State* states;
+	TileState* states;
 };
 #endif
 
@@ -17,7 +17,7 @@ void init_tilemap(Tilemap* tilemap, isize w, isize h, MemoryArena* arena)
 	tilemap->w = w;
 	tilemap->h = h;
 	tilemap->tiles = (Tile*)arenaPush(arena, sizeof(Tile) * w * h);
-	tilemap->states = (Tile_State*)arenaPush(arena, sizeof(Tile_State) * w * h);
+	tilemap->states = (TileState*)arenaPush(arena, sizeof(TileState) * w * h);
 }
 
 void generate_tilemap(Tilemap* tilemap, u64 seed)
@@ -41,14 +41,14 @@ Tile tilemap_get_at(Tilemap* tilemap, Vec2 pos)
 	return tilemap_get_at(tilemap, x, y);
 }
 
-Tile_State* tilemap_get_state_at(Tilemap* tilemap, isize x, isize y)
+TileState* tilemap_get_state_at(Tilemap* tilemap, isize x, isize y)
 {
 	isize i = y * tilemap->w + x;
 	if(i < 0 || i >= (tilemap->w * tilemap->h)) return NULL;
 	return tilemap->states + i;
 }
 
-Tile_State* tilemap_get_state_at(Tilemap* tilemap, Vec2 pos)
+TileState* tilemap_get_state_at(Tilemap* tilemap, Vec2 pos)
 {
 	isize x = (isize)(pos.x / TiSz);
 	isize y = (isize)(pos.y / TiSz);
@@ -72,15 +72,15 @@ bool tilemap_set_at(Tilemap* tilemap, Vec2 pos, Tile value)
 
 void update_tile_state_at(Game_Registry* Registry, Tilemap* map, isize x, isize y)
 {
-	Tile_State* state = tilemap_get_state_at(map, x, y);
+	TileState* state = tilemap_get_state_at(map, x, y);
 	if(state != NULL) {
-		Tile_Info* info = Registry->tiles + tilemap_get_at(map, x, y);
-		if(info->immune_to_damage) {
+		TileInfo* info = Registry->tiles + tilemap_get_at(map, x, y);
+		if(info->immuneToDamage) {
 			state->damage = 0;
 		} else {
-			if(state->damage >= info->max_damage) {
-				init_tile_state(state, info->break_to_id);
-				tilemap_set_at(map, x, y, info->break_to_id);
+			if(state->damage >= info->maxDamage) {
+				initTileState(state, info->breakToId);
+				tilemap_set_at(map, x, y, info->breakToId);
 			}
 		}
 
@@ -101,7 +101,7 @@ void render_tilemap(Game_Registry* Registry, Tilemap* tilemap, Vec2 pos)
 	Sprite s;
 	for(isize i = 0; i < tilemap->h; ++i) {
 		for(isize j = 0; j < tilemap->w; ++j) {
-			Tile_Info* t = Registry->tiles + tilemap->tiles[i * tilemap->w + j];
+			TileInfo* t = Registry->tiles + tilemap->tiles[i * tilemap->w + j];
 			wInitSprite(&s);
 			s.flags = Sprite_NoAA;
 			s.pos = v2(j*TiSz, i*TiSz) + pos;
@@ -126,22 +126,22 @@ isize render_tilemap(Game_Registry* Registry, Tilemap* tilemap, Vec2 pos, Rect2 
 	for(isize i = starty; i < endy; ++i) {
 		for(isize j = startx; j < endx; ++j) {
 			Tile tile = tilemap->tiles[i * tilemap->w + j];
-			Tile_Info* t = Registry->tiles + tile;
+			TileInfo* t = Registry->tiles + tile;
 			wInitSprite(&s);
 			s.pos = v2(j*TiSz + hTiSz, i*TiSz + hTiSz) + pos;
 			s.size = v2(TiSz, TiSz);
 
-			if(t->has_bottom_texture && tilemap_get_at(tilemap, j, i + 1) != tile) {
-				s.texture = t->bottom_texture;
+			if(t->hasBottomTexture && tilemap_get_at(tilemap, j, i + 1) != tile) {
+				s.texture = t->bottomTexture;
 			} else {
 				s.texture = t->texture;
 				render_add(&s);
 			}
 			render_add(&s);
 
-			Tile_State* state = tilemap->states + (i * tilemap->w + j);
+			TileState* state = tilemap->states + (i * tilemap->w + j);
 			if(state->damage > 0) {
-				f32 dmgp = (f32)(state->damage) / (f32)(t->max_damage);
+				f32 dmgp = (f32)(state->damage) / (f32)(t->maxDamage);
 				dmgp *= 3;
 				i32 frame = (i32)dmgp;
 				s.texture = _tile_texture((5 + frame), 0);
@@ -155,12 +155,12 @@ isize render_tilemap(Game_Registry* Registry, Tilemap* tilemap, Vec2 pos, Rect2 
 				Tile tile = tilemap->tiles[i * tilemap->w + j];
 				Tile bottom_tile = tilemap_get_at(tilemap, j, i + 1);
 				if(tile != bottom_tile) {
-					Tile_Info* bottom = Registry->tiles + tilemap_get_at(tilemap, j, i + 1);
-					if(bottom->has_top_texture) {
+					TileInfo* bottom = Registry->tiles + tilemap_get_at(tilemap, j, i + 1);
+					if(bottom->hasTopTexture) {
 						wInitSprite(&s);
 						s.pos = v2(j*TiSz + hTiSz, (i+1)*TiSz) + pos;
 						s.size = v2(TiSz, TiSz);
-						s.texture = bottom->top_texture;
+						s.texture = bottom->topTexture;
 						s.flags = Anchor_BottomCenter;
 						s.sort_offset = 4;
 						render_add(&s);

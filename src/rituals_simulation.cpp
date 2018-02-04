@@ -465,7 +465,7 @@ void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
 			a->shape.center += dpos * dt;
 			a->shape.center += a->collision_vel / SimIter * dt;
 			a->velocity = new_vel;
-			Tile_Info* tile = Registry->tiles + tilemap_get_at(map, a->shape.center);
+			TileInfo* tile = Registry->tiles + tilemap_get_at(map, a->shape.center);
 			f32 damping = 1.0f;
 			if(Has_Flag(a->flags, Body_Flag_No_Friction)) {
 				damping = a->damping;
@@ -487,7 +487,7 @@ void sim_update(Game_Registry* Registry, Simulator* sim, Tilemap* map, f32 dt)
 
 isize _tw, _th;
 Tile* _tiles;
-Tile_Info* _get_at(Game_Registry* Registry, isize x, isize y)
+TileInfo* _get_at(Game_Registry* Registry, isize x, isize y)
 {
 	if((x < 0) || (x > _tw) || (y < 0) || (y > _th)) return Registry->tiles;
 	isize index = y * _tw + x;
@@ -522,7 +522,7 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 						r->y = y;
 						r->w = 1;
 						r->h = 1;
-						Tile_Info *first, *here, *up;
+						TileInfo *first, *here, *up;
 						first = _get_at(Registry, x, y);
 						do {
 							x++;
@@ -530,8 +530,8 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 							up = _get_at(Registry, x, y-1);
 						}
 						while(  here->solid && !up->solid &&
-								(here->body_mask == first->body_mask) &&
-								(here->body_group == first->body_group) &&
+								(here->bodyMask == first->bodyMask) &&
+								(here->bodyGroup == first->bodyGroup) &&
 								(x < tilemap->w));
 
 
@@ -547,14 +547,14 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 			Rect2i* r = rects + i;
 			bool solid = true;
 			isize y = r->y;
-			Tile_Info *first, *here;
+			TileInfo *first, *here;
 			first = _get_at(Registry, r->x, r->y);
 			while(solid && (y < tilemap->h)) {
 				for(isize local_x = 0; local_x < r->w; ++local_x) {
 					here = _get_at(Registry, r->x + local_x, y + 1);
 					solid = solid && here->solid &&
-						(here->body_mask == first->body_mask) &&
-						(here->body_group == first->body_group);
+						(here->bodyMask == first->bodyMask) &&
+						(here->bodyGroup == first->bodyGroup);
 					if(!solid) break;
 				}
 				if(solid) {
@@ -583,7 +583,7 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 	_tiles = tilemap->tiles;
 	for(isize i = 0; i < rects_count; ++i) {
 		Rect2i* r = rects + i;
-		Tile_Info* first = _get_at(Registry, r->x, r->y);
+		TileInfo* first = _get_at(Registry, r->x, r->y);
 		Sim_Body* e = sim_get_next_static_body(sim);
 		e->shape.center.x = (r->x + r->w / 2.0f) * TiSz;//+ hTiSz;
 		e->shape.center.y = (r->y + r->h / 2.0f) * TiSz;// + hTiSz;
@@ -592,8 +592,8 @@ void generate_statics_for_tilemap(Game_Registry* Registry, Simulator* sim, Tilem
 		e->restitution = 0.3f;
 		e->inv_mass = 0.0f;
 		e->flags = Body_Flag_Static;
-		e->group = first->body_group;
-		e->mask = first->body_mask;
+		e->group = first->bodyGroup;
+		e->mask = first->bodyMask;
 	}
 
 	build_static_grid(sim->grid, sim->static_bodies, sim->static_bodies_count);

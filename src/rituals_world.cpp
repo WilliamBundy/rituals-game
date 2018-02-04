@@ -67,7 +67,6 @@ void init_world(World* world, isize width, isize height, usize seed, MemoryArena
 	p->heal_rate = 1;
 	p->heal_to_interval = 25;
 	p->heal_timer = 0;
-
 }
 
 //Make a player struct?

@@ -243,6 +243,7 @@ i32 game_start(Platform* platform, Game_Main* game)
 		game->input->mouse_x = mx;
 		game->input->mouse_y = my;
 		game->input->screen_mouse_pos = v2i(mx, my);
+		game->input->mouse_pos = v2(mx, my);
 
 		glClear(GL_COLOR_BUFFER_BIT |
 				GL_DEPTH_BUFFER_BIT |
@@ -309,7 +310,7 @@ void game_set_scale(f32 scale)
 
 void game_calc_mouse_pos(Vec2 offset)
 {
-	Input->mouse_pos = v2(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale) + offset;
+	//Input->mouse_pos = v2(Input->mouse_x / Game->scale, Input->mouse_y / Game->scale) + offset;
 }
 
 bool is_valid_filename_char(char c)
