@@ -8,8 +8,7 @@ to work on it for a long time. I don't think this source particularly represents
 my current coding style/ability, and, though I've recently waded through it again,
 I don't think much of it is salvagable for new projects. 
 
-The latest commit is largely gutted of all gameplay and UI code, with an unfinished
-rewrite of the physics code in progress. 
+This commit represents the last playable build before I started playing around with cleaning up in the dev branch.
 
 ## License
 Rituals' source is licensed under the MIT license. 
@@ -20,9 +19,13 @@ Rituals' source is licensed under the MIT license.
  3. Download SDL2's development libraries
  4. Set LIBRARIES and INCLUDES in make.bat to point to those
  5. You probably want to delete the line "start python autogit.py" in make.bat too
- 6. Run make.bat
+ 6. Run make_from_scratch.bat
+ 7. Run make.bat
 
 ## How to build (other OSes)
+
+(It's entirely possible this doesn't work anymore)
+
  1. Install clang or gcc
  2. Install SDL2 development packages for your distro, or the SDL2 framework for OSX
  2. Make sure you have sdl2-config
